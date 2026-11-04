@@ -25,7 +25,7 @@
   --muted: #475569;
   --subtle: #5a6577;
 
-  /* Brand (IIT Delhi / ScAI colours can be set from Admin → Site settings → Site-wide → Colours) */
+  /* Brand (the colours can be set from Admin → Site settings → Site-wide → Colours) */
   --brand: #3b5bdb;
   --brand-strong: #2a44b8;
   --brand-fg: #ffffff;
@@ -251,7 +251,7 @@
   zoom: var(--fit-zoom);
 }
 
-/* The header grows a little less: laid out at 1360px or wider, the full ScAI wordmark keeps its room (min-[1360px] in SiteHeader). */
+/* The header grows a little less than the page on wide screens, so its logos and links keep their room. */
 @utility fit-header {
   zoom: max(1, calc(var(--fit-zoom) * 1280 / 1360));
 }
@@ -714,14 +714,14 @@ dialog::backdrop { background: rgb(10 15 30 / 0.45); }
   .reg-choice-ring { animation: spin-slow 5s linear infinite; will-change: transform; }
 }
 [data-placard] .reg-choice:not(:hover, :focus-visible) .reg-choice-ring { opacity: 0.22; animation-play-state: paused; }
-[data-placard="workshop"] .reg-choice[data-placard-key="workshop"] .reg-choice-ring,
-[data-placard="hackathon"] .reg-choice[data-placard-key="hackathon"] .reg-choice-ring { opacity: 1; animation-play-state: running; }
-[data-placard="workshop"] .reg-choice[data-placard-key="workshop"],
-[data-placard="hackathon"] .reg-choice[data-placard-key="hackathon"] {
+[data-placard="professionals"] .reg-choice[data-placard-key="professionals"] .reg-choice-ring,
+[data-placard="workspace"] .reg-choice[data-placard-key="workspace"] .reg-choice-ring { opacity: 1; animation-play-state: running; }
+[data-placard="professionals"] .reg-choice[data-placard-key="professionals"],
+[data-placard="workspace"] .reg-choice[data-placard-key="workspace"] {
   box-shadow: 0 18px 40px -22px color-mix(in oklab, var(--accent) 85%, transparent), var(--card-shadow);
 }
 
-/* Home speakers (SpeakerCarousel.tsx): a cover flow. Every slide shares one grid cell and is moved out to its
+/* Home trainers (TrainerCarousel.tsx): a cover flow. Every slide shares one grid cell and is moved out to its
    place (--off: 0 in front, ±1, ±2…; --abs its distance) and turned to face the front; --drag follows a swipe.
    Two cards either side on wide screens, one on narrower ones. The front card's edge spins; the others are
    dimmed by a veil that lifts a little under the pointer. */

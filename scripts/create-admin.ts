@@ -1,8 +1,8 @@
 /**
  * Create an admin-panel user, or reset the password of an existing one.
  *
- *   npm run create-admin -- --email you@iitd.ac.in --name "Your Name"
- *   npm run create-admin -- --email editor@iitd.ac.in --role editor
+ *   npm run create-admin -- --email you@daffodilvarsity.edu.bd --name "Your Name"
+ *   npm run create-admin -- --email editor@daffodilvarsity.edu.bd --role editor
  *
  * The password is asked for without echoing it. On servers without an
  * interactive terminal, pass --password (it may end up in shell history).

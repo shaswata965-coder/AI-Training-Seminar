@@ -15,7 +15,7 @@ import { checkRegistration } from "@/lib/server/validation";
 const accepted = () => json({ data: { regId: null, emailSent: true } }, { status: 201 });
 
 /**
- * Workshop registration (built-in form). With e-mail set up, the answer is the
+ * Training registration (built-in form). With e-mail set up, the answer is the
  * same whether or not the address was already registered (the ID goes to the
  * inbox, and an earlier registration's confirmation is sent again), so the
  * form can't be used to find out who has registered.

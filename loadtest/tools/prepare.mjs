@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 /*
- * Gets a load-test database ready: empties it, stores the default content and the sample speakers,
- * programme and partners (so pages are as full as they will be during the event), opens both
- * registrations, publishes the programme, and creates the organiser account the k6 scripts sign in with.
+ * Gets a load-test database ready: empties it, stores the default content (trainers, schedule) and the
+ * samples (past participants, labs, partners), so pages are as full as they will be, opens registration,
+ * publishes the schedule, and creates the organiser account the k6 scripts sign in with.
  *
  *   node loadtest/tools/prepare.mjs        (MONGODB_URI, default mongodb://127.0.0.1:27017/aaiw-loadtest)
  *
@@ -24,12 +24,12 @@ await db.dropDatabase();
 console.log(`Emptied database "${db.databaseName}".`);
 
 const npm = (...args) => execFileSync("npm", ["run", "--silent", ...args], { stdio: ["ignore", "inherit", "inherit"], env: { ...process.env, MONGODB_URI: uri, NODE_ENV: "production" } });
-npm("seed"); // default content, and every index (one registration per e-mail, one team per name)
-npm("seed:demo"); // speakers, a two-day programme, partners …
+npm("seed"); // default content (trainers, the tentative schedule), and every index (one registration per e-mail)
+npm("seed:demo"); // past participants, labs, demos, partners …
 npm("create-admin", "--", "--email", admin.email, "--name", "Load test organiser", "--role", "admin", "--password", admin.password);
 
-// Both registrations open with no deadline, and the programme published (calendar and PDF have sessions).
-const open = { "data.workshopStatus": "open", "data.workshopUrl": "", "data.workshopDeadline": "", "data.hackathonStatus": "open", "data.hackathonUrl": "", "data.hackathonDeadline": "", "data.programmeStatus": "final" };
+// Registration open with no deadline, and the schedule published (calendar and PDF have sessions).
+const open = { "data.workshopStatus": "open", "data.workshopUrl": "", "data.workshopDeadline": "", "data.programmeStatus": "final" };
 await db.collection("singletons").updateOne({ key: "settings" }, { $set: open });
-console.log("Opened workshop and hackathon registration; programme status final.");
+console.log("Opened registration; schedule status final.");
 await mongoose.disconnect();

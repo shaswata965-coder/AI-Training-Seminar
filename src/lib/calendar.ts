@@ -17,10 +17,10 @@ export function icsDate(d: Date) {
   return `${d.getUTCFullYear()}${pad(d.getUTCMonth() + 1)}${pad(d.getUTCDate())}T${pad(d.getUTCHours())}${pad(d.getUTCMinutes())}${pad(d.getUTCSeconds())}Z`;
 }
 
-/** 20261215 for all-day events (date in IST). */
+/** 20261215 for all-day events (date in BST). */
 function ymdCompact(d: Date) {
-  const ist = new Date(d.getTime() + 330 * 60_000);
-  return `${ist.getUTCFullYear()}${pad(ist.getUTCMonth() + 1)}${pad(ist.getUTCDate())}`;
+  const local = new Date(d.getTime() + 360 * 60_000);
+  return `${local.getUTCFullYear()}${pad(local.getUTCMonth() + 1)}${pad(local.getUTCDate())}`;
 }
 
 function escapeIcs(s: string) {
@@ -44,8 +44,8 @@ function fold(line: string) {
   return out.join("\r\n");
 }
 
-export function buildIcs(events: CalEvent[], calName = "Agentic AI Workshop 2026", stamp = new Date()) {
-  const lines = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//IIT Delhi ScAI//Agentic AI Workshop//EN", "CALSCALE:GREGORIAN", "METHOD:PUBLISH", `X-WR-CALNAME:${escapeIcs(calName)}`];
+export function buildIcs(events: CalEvent[], calName = "DIU AI Training Seminars", stamp = new Date()) {
+  const lines = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//Daffodil International University CSE//AI Training Seminars//EN", "CALSCALE:GREGORIAN", "METHOD:PUBLISH", `X-WR-CALNAME:${escapeIcs(calName)}`];
   for (const e of events) {
     lines.push(
       "BEGIN:VEVENT",
@@ -81,7 +81,7 @@ export function googleCalendarUrl({ title, start, end, details = "", location = 
   } else {
     dates = `${icsDate(start)}/${icsDate(end)}`;
   }
-  const p = new URLSearchParams({ action: "TEMPLATE", text: title, dates, details, location, ctz: "Asia/Kolkata" });
+  const p = new URLSearchParams({ action: "TEMPLATE", text: title, dates, details, location, ctz: "Asia/Dhaka" });
   return `https://calendar.google.com/calendar/render?${p.toString()}`;
 }
 

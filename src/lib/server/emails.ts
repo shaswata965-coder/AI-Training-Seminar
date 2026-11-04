@@ -1,6 +1,6 @@
 import "server-only";
 import { buildIcs } from "@/lib/calendar";
-import type { HackathonInfo, SiteSettings } from "@/lib/content/types";
+import type { SiteSettings } from "@/lib/content/types";
 import { replyBy } from "@/lib/copy";
 import { eventDays, venueLine } from "@/lib/event";
 import { formatDateRange } from "@/lib/format";
@@ -27,10 +27,10 @@ const box = (inner: string) => `<div style="margin:18px 0;padding:16px 18px;bord
 const button = (href: string, label: string) =>
   `<a href="${href}" style="display:inline-block;margin-top:8px;padding:12px 20px;border-radius:999px;background:#3b5bdb;color:#ffffff;text-decoration:none;font-weight:600">${esc(label)}</a>`;
 
-export function workshopIcs(s: SiteSettings) {
+export function trainingIcs(s: SiteSettings) {
   return buildIcs(
     eventDays(s).map((d) => ({
-      uid: `aaiw-day-${d.day}@${new URL(absoluteUrl("/")).hostname}`,
+      uid: `diu-ai-training-day-${d.day}@${new URL(absoluteUrl("/")).hostname}`,
       title: `${s.eventName}, Day ${d.day}`,
       start: d.start,
       end: d.end,
@@ -49,10 +49,10 @@ export function registrationEmail(s: SiteSettings, r: { name: string; email: str
 <p>Thank you for registering for the <strong>${esc(s.eventName)}</strong>. ${esc(review)}</p>
 ${box(`<p style="margin:0;font-size:13px;color:#64748b">Your registration ID</p><p style="margin:4px 0 0;font-size:22px;font-weight:700;letter-spacing:.06em;color:#3b5bdb">${esc(r.regId)}</p>`)}
 <p><strong>When:</strong> ${esc(dates)}<br/><strong>Where:</strong> ${esc(venueLine(s))}</p>
-<p>Keep this registration ID: once your place is confirmed, carry it and a valid photo ID for campus entry. The exact hall and any updates will be shared on the website and by e-mail.</p>
+<p>Keep this registration ID: once your place is confirmed, carry it and a valid photo ID to the campus gate, and bring a charged laptop to the hands-on sessions. The exact room and any updates will be shared on the website and by e-mail.</p>
 ${s.confirmationNote ? `<p>${esc(s.confirmationNote)}</p>` : ""}
 <p>We've attached a calendar file so you can keep the dates free. To build your own agenda of sessions, sign in on the website with this e-mail address and your registration ID.</p>
-<p>${button(absoluteUrl("/programme"), "View the programme")}</p>
+<p>${button(absoluteUrl("/programme"), "View the schedule")}</p>
 <p style="margin-top:24px">Best wishes,<br/>The organising team</p>`;
   const text = `Hi ${r.name},
 
@@ -62,10 +62,10 @@ Your registration ID: ${r.regId}
 When: ${dates}
 Where: ${venueLine(s)}
 
-Keep this registration ID: once your place is confirmed, carry it and a valid photo ID for campus entry.
+Keep this registration ID: once your place is confirmed, carry it and a valid photo ID to the campus gate, and bring a charged laptop.
 ${s.confirmationNote ? `\n${s.confirmationNote}\n` : ""}
 To build your own agenda, sign in on the website with this e-mail address and your registration ID.
-Programme: ${absoluteUrl("/programme")}
+Schedule: ${absoluteUrl("/programme")}
 
 The organising team`;
   return {
@@ -74,39 +74,12 @@ The organising team`;
     html: layout(s, "We've received your registration", body),
     text,
     replyTo: s.contactEmail || undefined,
-    attachments: [{ filename: "agentic-ai-workshop-2026.ics", content: workshopIcs(s), contentType: "text/calendar; charset=utf-8; method=PUBLISH" }],
+    attachments: [{ filename: "diu-ai-training.ics", content: trainingIcs(s), contentType: "text/calendar; charset=utf-8; method=PUBLISH" }],
     visitor: true,
   };
 }
 
-export function hackathonEmail(s: SiteSettings, h: HackathonInfo, t: { teamName: string; regId: string; leaderName: string; leaderEmail: string; members: { name: string; email: string }[] }): MailInput {
-  const list = t.members.map((m) => `<li>${esc(m.name)} &lt;${esc(m.email)}&gt;</li>`).join("");
-  const body = `<p>Hi ${esc(t.leaderName)},</p>
-<p>Your team <strong>${esc(t.teamName)}</strong> is registered for the <strong>${esc(h.title)}</strong>.</p>
-${box(`<p style="margin:0;font-size:13px;color:#64748b">Team registration ID</p><p style="margin:4px 0 0;font-size:22px;font-weight:700;letter-spacing:.06em;color:#3b5bdb">${esc(t.regId)}</p>`)}
-${h.question ? `<p><strong>The question every team answers:</strong> ${esc(h.question)}</p>
-` : ""}<p><strong>Team members</strong></p><ul>${list}</ul>
-<p>Keep an eye on the hackathon page for the idea-submission date, rules and timeline. Each member can sign in on the website with their own e-mail address and this team ID to build an agenda of workshop sessions.</p>
-<p>${button(absoluteUrl("/hackathon"), "Hackathon details")}</p>
-<p style="margin-top:24px">Happy building!<br/>The organising team</p>`;
-  const text = `Hi ${t.leaderName},
-
-Your team "${t.teamName}" is registered for the ${h.title}.
-Team registration ID: ${t.regId}
-${h.question ? `The question every team answers: ${h.question}\n` : ""}Members:
-${t.members.map((m) => `- ${m.name} <${m.email}>`).join("\n")}
-
-Details: ${absoluteUrl("/hackathon")}
-Each member can sign in on the website with their own e-mail address and this team ID to build an agenda of workshop sessions.
-
-The organising team`;
-  // Every member gets a copy, so the whole team has the team ID.
-  const lead = t.leaderEmail.toLowerCase();
-  const cc = [...new Set(t.members.map((m) => m.email.trim().toLowerCase()).filter((e) => e && e !== lead))];
-  return { to: t.leaderEmail, cc, subject: `Team registered: ${t.teamName} (${t.regId})`, html: layout(s, "Your team is registered", body), text, replyTo: s.contactEmail || undefined, visitor: true };
-}
-
-const ENQUIRY_LABEL = { contact: "message", exhibitor: "exhibitor enquiry", sponsor: "sponsorship enquiry" } as const;
+const ENQUIRY_LABEL = { contact: "message", sponsor: "partnership enquiry" } as const;
 
 /**
  * The acknowledgement goes to whatever address was typed into the form, so it

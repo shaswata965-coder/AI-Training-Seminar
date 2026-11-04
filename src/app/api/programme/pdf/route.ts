@@ -6,7 +6,7 @@ export async function GET() {
   return new Response(new Blob([bytes as BlobPart], { type: "application/pdf" }), {
     headers: {
       "Content-Type": "application/pdf",
-      "Content-Disposition": 'attachment; filename="agentic-ai-workshop-2026-programme.pdf"',
+      "Content-Disposition": 'attachment; filename="diu-ai-training-schedule.pdf"',
       "Cache-Control": "public, max-age=300",
     },
   });

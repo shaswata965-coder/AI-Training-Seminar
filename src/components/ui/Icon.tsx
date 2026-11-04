@@ -1,11 +1,14 @@
 import {
+  Award,
   BriefcaseBusiness,
   CalendarDays,
+  Clock,
   CodeXml,
   FlaskConical,
   GraduationCap,
   HeartPulse,
   Landmark,
+  Laptop,
   Mic,
   MonitorPlay,
   Rocket,
@@ -32,6 +35,9 @@ const ICONS: Record<string, LucideIcon> = {
   code: CodeXml,
   landmark: Landmark,
   heart: HeartPulse,
+  laptop: Laptop,
+  award: Award,
+  clock: Clock,
 };
 
 export function CmsIcon({ name, size = 20, className }: { name?: string; size?: number; className?: string }) {

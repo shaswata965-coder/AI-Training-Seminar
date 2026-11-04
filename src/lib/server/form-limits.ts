@@ -9,33 +9,30 @@ import { hit, isLimited } from "./rate-limit";
  *   - per IP address as a whole: a ceiling high enough for a campus, hostel or office network where dozens
  *     of people share one address, and low enough to stop one machine flooding the forms (and the event's
  *     mail server, which sends a confirmation for each).
- * Networks listed in RATE_LIMIT_EXEMPT skip the second layer: the institute's own network, or the venue's
- * during the hackathon, where hundreds of people may register or write in at once. Load-tested in
+ * Networks listed in RATE_LIMIT_EXEMPT skip the second layer: the university's own network, or a computer
+ * lab's during a session, where a whole batch may register or write in at once. Load-tested in
  * docs/LOAD_TEST_REPORT.md (finding 1).
  */
 
-export type FormKind = "register" | "hackathon" | "enquiry";
+export type FormKind = "register" | "enquiry";
 
 const MINUTE = 60_000;
 const LIMITS: Record<FormKind, { windowMs: number; perPerson: number; perAddress: number }> = {
   register: { windowMs: 15 * MINUTE, perPerson: 8, perAddress: 100 },
-  hackathon: { windowMs: 15 * MINUTE, perPerson: 6, perAddress: 40 },
   enquiry: { windowMs: 10 * MINUTE, perPerson: 5, perAddress: 40 },
 };
 
-/** The e-mail address a submission is from: the hackathon team lead's, or the form's own. */
-function emailOf(form: FormKind, body: unknown): string {
+/** The e-mail address a submission is from. */
+function emailOf(body: unknown): string {
   if (!isRecord(body)) return "";
-  const lead = Array.isArray(body.members) && isRecord(body.members[0]) ? body.members[0].email : "";
-  const email = form === "hackathon" ? lead : body.email;
-  return typeof email === "string" ? email.trim().toLowerCase().slice(0, 200) : "";
+  return typeof body.email === "string" ? body.email.trim().toLowerCase().slice(0, 200) : "";
 }
 
 /** Count one submission of `form` (whatever its body), unless the person or their address is over the limit. */
 export function formLimit(req: Request, form: FormKind, body: unknown): { ok: boolean; retryAfter: number } {
   const { windowMs, perPerson, perAddress } = LIMITS[form];
   const ip = clientIp(req);
-  const keys: [string, number][] = [[`${form}-person:${ip}:${emailOf(form, body)}`, perPerson]];
+  const keys: [string, number][] = [[`${form}-person:${ip}:${emailOf(body)}`, perPerson]];
   if (!isExempt(ip)) keys.push([`${form}:${ip}`, perAddress]);
   const over = keys.map(([key, limit]) => isLimited(key, limit, windowMs)).filter((s) => s.limited);
   if (over.length) return { ok: false, retryAfter: Math.max(...over.map((s) => s.retryAfter)) };

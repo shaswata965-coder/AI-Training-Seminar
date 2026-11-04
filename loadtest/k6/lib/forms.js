@@ -1,5 +1,5 @@
 /*
- * The three public forms: workshop registration, hackathon team registration and enquiries. Payloads
+ * The public forms: training registration and enquiries. Payloads
  * are what the site's own forms send with their built-in fields (src/lib/forms.ts; choices must be among
  * a field's options), with made-up people whose addresses are unique to the run, and every answer is
  * sorted into an outcome (see `thresholds` in config.js).
@@ -17,52 +17,37 @@ export const peopleRegistered = new Counter("people_registered");
 export const peopleBlocked = new Counter("people_blocked");
 export const submitTime = new Trend("submit_time", true);
 
-const FIRST = ["Aarav", "Priya", "Rohan", "Ananya", "Vikram", "Meera", "Kabir", "Isha", "Arjun", "Diya", "Sahil", "Nisha", "Farhan", "Lakshmi", "Tenzin", "Grace"];
-const LAST = ["Sharma", "Iyer", "Gupta", "Reddy", "Singh", "Nair", "Banerjee", "Khan", "Das", "Patel", "Menon", "Joshi", "Bhat", "Kaur"];
-const ORGS = ["IIT Delhi", "IIT Bombay", "IIIT Hyderabad", "University of Delhi", "Delhi Technological University", "NSUT", "Jamia Millia Islamia", "IIT Kanpur", "Ashoka University", "AIIMS New Delhi", "A healthcare start-up", "Microsoft Research India", "TCS Research"];
-const CATEGORIES = ["Student", "Student", "Student", "Researcher / postdoc", "Faculty", "Industry practitioner", "Startup founder / team", "Investor", "Other"];
-const THEMES = ["Healthcare", "Scientific Discovery", "Enterprise"];
-const CITIES = ["New Delhi", "Gurugram", "Noida", "Mumbai", "Bengaluru", "Hyderabad", "Kolkata", "Chennai", "Pune"];
+const FIRST = ["Ayesha", "Rahim", "Nusrat", "Tanvir", "Farhana", "Imran", "Sadia", "Karim", "Tasnim", "Arif", "Mitu", "Shakil", "Rumana", "Sabbir", "Lamia", "Fahim"];
+const LAST = ["Rahman", "Hossain", "Ahmed", "Islam", "Chowdhury", "Khan", "Akter", "Alam", "Sarker", "Das", "Roy", "Uddin", "Haque", "Begum"];
+const ORGS = ["Daffodil International University", "A Dhaka bank", "A garments exporter", "A telecom company", "A software firm", "A government office", "An NGO", "A school in Savar", "A start-up", "A hospital"];
+const CATEGORIES = ["Student", "Student", "Faculty / teacher", "Working professional", "Working professional", "Government / NGO staff", "Entrepreneur / business owner", "Other"];
+const PROGRAMMES = ["AI for Professionals", "AI for Workspace"];
+const CITIES = ["Dhaka", "Savar", "Gazipur", "Narayanganj", "Chattogram", "Sylhet"];
 
 const digits = (n) => Array.from({ length: n }, () => Math.floor(Math.random() * 10)).join("");
 
 /** A made-up person. `id` must be unique in the run. */
 export function person(id) {
   const name = `${pick(FIRST)} ${pick(LAST)}`;
-  return { name, email: `aaiw-${RUN_ID}-${id}@example.com`, phone: `+91 9${digits(9)}`, organisation: pick(ORGS) };
+  return { name, email: `aaiw-${RUN_ID}-${id}@example.com`, phone: `+880 17${digits(8)}`, organisation: pick(ORGS) };
 }
 
 export function workshopPayload(id) {
   const p = person(id);
   return {
     ...p,
-    designation: pick(["PhD student", "B.Tech student", "Data scientist", "Professor", "Founder", ""]),
+    designation: pick(["Assistant Manager", "BSc student", "Lecturer", "Officer", "Founder", ""]),
     category: pick(CATEGORIES),
     city: pick(CITIES),
-    country: "India",
-    interests: THEMES.filter(() => Math.random() < 0.5),
+    // At least one programme: the field is required.
+    interests: Math.random() < 0.3 ? PROGRAMMES : [pick(PROGRAMMES)],
+    experience: pick(["Never or hardly ever", "Now and then", "Every week", "Every day"]),
     tutorials: Math.random() < 0.6,
-    hackathonInterest: Math.random() < 0.3,
-    dietary: pick(["", "Vegetarian", "Vegan", "Jain"]),
     accessibility: "",
-    heardFrom: pick(["Social media", "E-mail", "Colleague or friend", "IIT Delhi / ScAI website", "Other"]),
-    message: Math.random() < 0.2 ? "Looking forward to the sessions on agents in healthcare." : "",
+    heardFrom: pick(["Social media", "E-mail", "Colleague or friend", "DIU website", "Other"]),
+    message: Math.random() < 0.2 ? "I'd like to use AI for the reports I write every week." : "",
     consent: true,
     website: "", // the honeypot the real form leaves empty
-  };
-}
-
-export function hackathonPayload(id) {
-  const size = 1 + Math.floor(Math.random() * 6);
-  const members = Array.from({ length: size }, (_, i) => ({ ...person(`${id}-m${i}`), role: i === 0 ? "Team lead" : pick(["Developer", "Designer", "ML engineer", "Domain expert"]) }));
-  return {
-    teamName: `LT ${RUN_ID} ${id}`.slice(0, 60),
-    members,
-    ideaTitle: "Agents that triage clinic queues",
-    ideaSummary: "A multi-agent assistant that reads intake forms, checks history and books follow-ups, with a clinician in the loop.",
-    githubUrl: Math.random() < 0.5 ? `https://github.com/example/aaiw-${id}` : "",
-    consent: true,
-    website: "",
   };
 }
 
@@ -74,13 +59,13 @@ export function enquiryPayload(id, type = "contact") {
     email: p.email,
     organisation: type === "contact" ? "" : pick(ORGS),
     phone: p.phone,
-    subject: type === "contact" ? "Question about the workshop" : "Exhibiting at the workshop",
+    subject: type === "contact" ? "Question about the training" : "Partnering with the training",
     message: "Hello, could you share more details about the schedule and accommodation near the venue? Thank you.",
     website: "",
   };
 }
 
-const ENDPOINT = { workshop: "/api/register", hackathon: "/api/hackathon/register", enquiry: "/api/enquiries" };
+const ENDPOINT = { workshop: "/api/register", enquiry: "/api/enquiries" };
 
 function postParams(form, from) {
   return {
@@ -105,7 +90,7 @@ function postParams(form, from) {
 function outcomeOf(res, { repeat }) {
   if (res.status === 201) return "ok";
   if (res.status === 429) return "rate_limited";
-  // A repeat from the same person: the hackathon form refuses the team again, as designed.
+  // A repeat from the same person, refused as designed.
   if (res.status === 409 && repeat) return "duplicate";
   return "error";
 }

@@ -56,7 +56,7 @@ function Sessions() {
                 {s.current ? <span className="ml-2 text-xs font-semibold text-mint-ink">This browser</span> : null}
               </span>
               <span className="block text-xs text-muted">
-                Signed in {s.createdAt ? formatDateTime(s.createdAt) : "-"} IST · last active {formatDateTime(s.lastSeenAt)} IST
+                Signed in {s.createdAt ? formatDateTime(s.createdAt) : "-"} BST · last active {formatDateTime(s.lastSeenAt)} BST
               </span>
             </span>
           </li>

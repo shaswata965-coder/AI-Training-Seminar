@@ -3,7 +3,7 @@
 import { ArrowLeft, ArrowRight, CalendarDays, Globe, GraduationCap, MapPin, Mic2, Search, Star, Users } from "lucide-react";
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { MoreSpeakersCard } from "@/components/home/SpeakersPreview";
+import { MoreTrainersCard } from "@/components/home/TrainersPreview";
 import { Avatar } from "@/components/ui/Avatar";
 import { Badge } from "@/components/ui/Badge";
 import { GitHubIcon, LinkedInIcon, XIcon } from "@/components/ui/BrandIcons";
@@ -13,22 +13,23 @@ import { RichText } from "@/components/ui/RichText";
 import { SlidingPill, useSlidingPill } from "@/components/ui/SlidingPill";
 import { cn } from "@/lib/cn";
 import { replaceQuery, useUrlParam } from "@/lib/client-hooks";
-import { SPEAKER_CATEGORY_META, THEME_META } from "@/lib/content/constants";
-import type { Session, Speaker } from "@/lib/content/types";
+import { TRAINER_CATEGORIES, TRAINER_CATEGORY_META, THEME_META } from "@/lib/content/constants";
+import type { Session, Trainer } from "@/lib/content/types";
 import { timeRange } from "@/lib/format";
+import { OPEN_TRAINER_EVENT } from "./OpenProfile";
 
-export interface SpeakerSession extends Pick<Session, "id" | "title" | "type" | "theme" | "day" | "start" | "end" | "room" | "speakers" | "panelists" | "moderator"> {
+export interface TrainerSession extends Pick<Session, "id" | "title" | "type" | "theme" | "day" | "start" | "end" | "room" | "trainers" | "panelists" | "moderator"> {
   dayLabel: string;
 }
 
-const FILTERS = [
-  { id: "all", label: "All" },
-  { id: "academia", label: "Academia" },
-  { id: "industry", label: "Industry" },
-  { id: "panelist", label: "Panelists" },
+/** Filters: every trainer, each programme's (General trainers teach both), and each label when there is more than one. */
+type Filter = "all" | "professionals" | "workspace" | (typeof TRAINER_CATEGORIES)[number];
+const PROGRAMME_FILTERS = [
+  { id: "professionals", label: THEME_META.professionals.short },
+  { id: "workspace", label: THEME_META.workspace.short },
 ] as const;
 
-function Links({ sp }: { sp: Speaker }) {
+function Links({ sp }: { sp: Trainer }) {
   const items = [
     { href: sp.website, label: "Website", Icon: Globe },
     { href: sp.linkedin, label: "LinkedIn", Icon: LinkedInIcon },
@@ -59,47 +60,66 @@ function Links({ sp }: { sp: Speaker }) {
   );
 }
 
-export function SpeakersView({
-  speakers,
+export function TrainersView({
+  trainers,
   sessions,
   showMore,
   more,
 }: {
-  speakers: Speaker[];
-  sessions: SpeakerSession[];
+  trainers: Trainer[];
+  sessions: TrainerSession[];
   showMore: boolean;
-  /** The “More speakers to be announced” card, from Site settings → Home → Speakers. */
+  /** The “More trainers to be announced” card, from Site settings → Home → Trainers. */
   more: { title: string; text: string };
 }) {
-  const [filter, setFilter] = useState<(typeof FILTERS)[number]["id"]>("all");
+  const [filter, setFilter] = useState<Filter>("all");
+  const labels = TRAINER_CATEGORIES.filter((k) => trainers.some((t) => t.category === k));
+  const FILTERS: { id: Filter; label: string }[] = [
+    { id: "all", label: "All" },
+    ...PROGRAMME_FILTERS,
+    ...(labels.length > 1 ? labels.map((k) => ({ id: k, label: TRAINER_CATEGORY_META[k].label })) : []),
+  ];
   const { listRef, pillRef } = useSlidingPill(filter, '[aria-selected="true"]');
   const [q, setQ] = useState("");
-  const urlSlug = useUrlParam("speaker");
+  const urlSlug = useUrlParam("trainer");
   const [slugChoice, setOpenSlug] = useState<string | null | undefined>(undefined);
 
-  const bySlug = useMemo(() => Object.fromEntries(speakers.map((s) => [s.slug, s])), [speakers]);
-  const byId = useMemo(() => Object.fromEntries(speakers.map((s) => [s.id, s])), [speakers]);
+  const bySlug = useMemo(() => Object.fromEntries(trainers.map((s) => [s.slug, s])), [trainers]);
+  const byId = useMemo(() => Object.fromEntries(trainers.map((s) => [s.id, s])), [trainers]);
   const panels = sessions.filter((s) => s.type === "panel");
 
-  const isPanelist = useCallback((sp: Speaker) => sp.category === "panelist" || panels.some((p) => p.panelists.includes(sp.id) || p.moderator === sp.id), [panels]);
+  // Discussions with someone on them; the others are listed in the schedule only.
+  const staffed = panels.filter((p) => p.moderator || p.panelists.length);
 
-  const shown = speakers.filter((sp) => {
-    if (filter === "panelist" ? !isPanelist(sp) : filter !== "all" && sp.category !== filter) return false;
+  const shown = trainers.filter((sp) => {
+    if (filter === "professionals" || filter === "workspace") {
+      if (sp.theme !== filter && sp.theme !== "general" && sp.theme) return false;
+    } else if (filter !== "all" && sp.category !== filter) return false;
     const needle = q.trim().toLowerCase();
-    return !needle || `${sp.name} ${sp.affiliation} ${sp.designation} ${sp.talkTitle}`.toLowerCase().includes(needle);
+    return !needle || `${sp.name} ${sp.affiliation} ${sp.designation} ${sp.expertise}`.toLowerCase().includes(needle);
   });
 
   const open = useCallback((slug: string | null) => {
     setOpenSlug(slug);
-    replaceQuery((p) => (slug ? p.set("speaker", slug) : p.delete("speaker")));
+    replaceQuery((p) => (slug ? p.set("trainer", slug) : p.delete("trainer")));
   }, []);
 
-  // Deep link: /speakers?speaker=slug opens that profile.
+  // The lead trainer's spotlight above the grid opens profiles here (OpenProfileButton).
+  useEffect(() => {
+    const onOpen = (e: Event) => {
+      const slug = (e as CustomEvent<string>).detail;
+      if (typeof slug === "string" && bySlug[slug]) open(slug);
+    };
+    window.addEventListener(OPEN_TRAINER_EVENT, onOpen);
+    return () => window.removeEventListener(OPEN_TRAINER_EVENT, onOpen);
+  }, [bySlug, open]);
+
+  // Deep link: /trainers?trainer=slug opens that profile.
   const openSlug = slugChoice === undefined ? (urlSlug && bySlug[urlSlug] ? urlSlug : null) : slugChoice;
 
   const current = openSlug ? bySlug[openSlug] : undefined;
   const idx = current ? shown.findIndex((s) => s.slug === current.slug) : -1;
-  const list = idx >= 0 ? shown : speakers;
+  const list = idx >= 0 ? shown : trainers;
   const pos = current ? list.findIndex((s) => s.slug === current.slug) : -1;
   const go = (d: number) => {
     if (pos < 0 || list.length < 2) return;
@@ -116,12 +136,12 @@ export function SpeakersView({
     return () => window.removeEventListener("keydown", onKey);
   });
 
-  const appearances = current ? sessions.filter((s) => s.speakers.includes(current.id) || s.panelists.includes(current.id) || s.moderator === current.id) : [];
+  const appearances = current ? sessions.filter((s) => s.trainers.includes(current.id) || s.panelists.includes(current.id) || s.moderator === current.id) : [];
 
   return (
     <div>
       <div className="flex flex-wrap items-center gap-3">
-        <div ref={listRef} role="tablist" aria-label="Filter speakers" className="group/seg relative isolate inline-flex flex-wrap gap-1 rounded-[1rem] border border-border bg-surface p-1 shadow-card">
+        <div ref={listRef} role="tablist" aria-label="Filter trainers" className="group/seg relative isolate inline-flex flex-wrap gap-1 rounded-[1rem] border border-border bg-surface p-1 shadow-card">
           <SlidingPill pillRef={pillRef} shape="rounded-[0.7rem]" className="bg-accent-soft ring-1 ring-[color-mix(in_oklab,var(--accent)_45%,transparent)] ring-inset" />
           {FILTERS.map((f) => (
             <button
@@ -143,25 +163,24 @@ export function SpeakersView({
           ))}
         </div>
         <label className="relative ml-auto w-full max-w-xs">
-          <span className="sr-only">Search speakers</span>
+          <span className="sr-only">Search trainers</span>
           <Search size={18} aria-hidden className="pointer-events-none absolute top-1/2 left-3.5 -translate-y-1/2 text-subtle" />
           <input
             type="search"
             value={q}
             onChange={(e) => setQ(e.target.value)}
-            placeholder="Search by name or affiliation"
+            placeholder="Search by name or expertise"
             className="h-11 w-full rounded-xl border border-border bg-surface pr-4 pl-10 text-[15px] focus:border-brand focus:ring-4 focus:ring-[color-mix(in_oklab,var(--brand)_18%,transparent)] focus:outline-none"
           />
         </label>
       </div>
 
-      <h2 className="sr-only">Speakers</h2>
       <p className="sr-only" role="status">
-        {shown.length === 1 ? "1 speaker shown" : `${shown.length} speakers shown`}
+        {shown.length === 1 ? "1 trainer shown" : `${shown.length} trainers shown`}
       </p>
       <ul className="mt-8 grid grid-cols-1 gap-5 min-[480px]:grid-cols-2 lg:grid-cols-4">
         {shown.map((sp) => {
-          const cat = SPEAKER_CATEGORY_META[sp.category] ?? SPEAKER_CATEGORY_META.academia;
+          const cat = TRAINER_CATEGORY_META[sp.category] ?? TRAINER_CATEGORY_META.faculty;
           return (
             <li key={sp.id}>
               <PersonCard
@@ -170,44 +189,44 @@ export function SpeakersView({
                 photo={sp.photo}
                 title={sp.designation}
                 subtitle={sp.affiliation}
-                label={sp.keynote ? "Keynote" : cat.label}
-                labelTone={sp.keynote ? "butter" : cat.tone}
+                label={sp.lead ? "Lead trainer" : cat.label}
+                labelTone={sp.lead ? "butter" : cat.tone}
                 className={`tone-${cat.tone}`}
                 highlight={
-                  sp.keynote ? (
+                  sp.lead ? (
                     <span className="grid h-8 w-8 place-items-center rounded-full bg-butter text-[#5b3d00] shadow-card ring-2 ring-surface">
                       <Star size={15} aria-hidden fill="currentColor" />
                     </span>
                   ) : null
                 }
-                footer={sp.talkTitle ? <p className="line-clamp-2 text-sm font-medium text-accent-ink">“{sp.talkTitle}”</p> : <p className="text-sm font-semibold text-accent-ink">View profile</p>}
+                footer={sp.expertise ? <p className="line-clamp-2 text-sm font-medium text-accent-ink">{sp.expertise}</p> : <p className="text-sm font-semibold text-accent-ink">View profile</p>}
               />
             </li>
           );
         })}
         {showMore && filter === "all" && !q ? (
           <li>
-            <MoreSpeakersCard title={more.title} text={more.text} />
+            <MoreTrainersCard title={more.title} text={more.text} />
           </li>
         ) : null}
       </ul>
-      {!shown.length && (filter !== "all" || q) ? <p className="mt-6 rounded-2xl border border-dashed border-border-strong p-8 text-center text-muted">No speakers match your filters yet.</p> : null}
+      {!shown.length && (filter !== "all" || q) ? <p className="mt-6 rounded-2xl border border-dashed border-border-strong p-8 text-center text-muted">No trainers match your filters yet.</p> : null}
 
-      {/* Panel discussions */}
+      {/* Discussions with their moderators and panelists, once they are named. */}
+      {staffed.length ? (
       <section id="panels" aria-labelledby="panels-title" className="mt-20 scroll-mt-28">
         <h2 id="panels-title" className="font-display text-3xl font-bold text-fg">
-          Panel discussions
+          Discussions
         </h2>
-        {panels.length ? (
           <ul className="mt-6 grid gap-4 lg:grid-cols-2">
-            {panels.map((p) => {
+            {staffed.map((p) => {
               const theme = THEME_META[p.theme] ?? THEME_META.general;
               const moderator = p.moderator ? byId[p.moderator] : undefined;
               return (
                 <li key={p.id} data-glow="" className={`tone-${theme.tone} card p-6`}>
                   <div className="flex flex-wrap items-center gap-2">
                     <Badge tone="peach" size="xs" dot>
-                      Panel
+                      Discussion
                     </Badge>
                     <Badge tone={theme.tone} size="xs">
                       {theme.short}
@@ -257,27 +276,25 @@ export function SpeakersView({
               );
             })}
           </ul>
-        ) : (
-          <p className="mt-4 max-w-2xl text-muted">Panel topics, moderators and panelists will be announced along with the programme.</p>
-        )}
       </section>
+      ) : null}
 
-      <Modal open={Boolean(current)} onClose={() => open(null)} labelledBy="speaker-modal-title" size="xl">
+      <Modal open={Boolean(current)} onClose={() => open(null)} labelledBy="trainer-modal-title" size="xl">
         {current ? (
           <div>
-            <div className={`tone-${(SPEAKER_CATEGORY_META[current.category] ?? SPEAKER_CATEGORY_META.academia).tone} relative overflow-hidden rounded-t-[1.75rem] bg-accent-soft px-6 pt-8 pb-6 sm:px-10`}>
+            <div className={`tone-${(TRAINER_CATEGORY_META[current.category] ?? TRAINER_CATEGORY_META.faculty).tone} relative overflow-hidden rounded-t-[1.75rem] bg-accent-soft px-6 pt-8 pb-6 sm:px-10`}>
               <div aria-hidden className="bg-dots absolute inset-0 opacity-60" />
               <div className="relative flex flex-col items-start gap-5 sm:flex-row sm:items-center">
                 <Avatar name={current.name} src={current.photo} size={120} className="ring-4 ring-surface" />
                 <div>
                   <div className="flex flex-wrap gap-2">
-                    {current.keynote ? (
+                    {current.lead ? (
                       <Badge tone="butter" size="xs">
-                        Keynote speaker
+                        Lead trainer
                       </Badge>
                     ) : null}
-                    <Badge tone={(SPEAKER_CATEGORY_META[current.category] ?? SPEAKER_CATEGORY_META.academia).tone} size="xs">
-                      {(SPEAKER_CATEGORY_META[current.category] ?? SPEAKER_CATEGORY_META.academia).label}
+                    <Badge tone={(TRAINER_CATEGORY_META[current.category] ?? TRAINER_CATEGORY_META.faculty).tone} size="xs">
+                      {(TRAINER_CATEGORY_META[current.category] ?? TRAINER_CATEGORY_META.faculty).label}
                     </Badge>
                     {current.theme && current.theme !== "general" ? (
                       <Badge tone="neutral" size="xs">
@@ -285,7 +302,7 @@ export function SpeakersView({
                       </Badge>
                     ) : null}
                   </div>
-                  <h2 id="speaker-modal-title" className="mt-2 font-display text-3xl font-bold text-fg">
+                  <h2 id="trainer-modal-title" className="mt-2 font-display text-3xl font-bold text-fg">
                     {current.name}
                   </h2>
                   <p className="text-muted">{[current.designation, current.affiliation].filter(Boolean).join(", ")}</p>
@@ -294,22 +311,22 @@ export function SpeakersView({
             </div>
             <div className="grid gap-6 px-6 py-6 sm:px-10 sm:py-8">
               <Links sp={current} />
-              {current.talkTitle ? (
+              {current.expertise || current.teaching ? (
                 <div className="rounded-2xl border border-border bg-surface-2 p-5">
-                  <p className="text-xs font-bold tracking-[0.14em] text-subtle uppercase">Talk</p>
-                  <p className="mt-1 font-display text-xl font-semibold text-fg">{current.talkTitle}</p>
-                  <RichText text={current.talkAbstract} className="mt-2 text-[15px] leading-relaxed text-muted" />
+                  <p className="text-xs font-bold tracking-[0.14em] text-subtle uppercase">{current.expertise ? "Expertise" : "Teaches"}</p>
+                  {current.expertise ? <p className="mt-1 font-display text-xl font-semibold text-fg">{current.expertise}</p> : null}
+                  <RichText text={current.teaching} className="mt-2 text-[15px] leading-relaxed text-muted" />
                 </div>
               ) : null}
               {current.bio ? (
                 <div>
-                  <p className="text-xs font-bold tracking-[0.14em] text-subtle uppercase">Bio</p>
+                  <p className="text-xs font-bold tracking-[0.14em] text-subtle uppercase">Profile</p>
                   <RichText text={current.bio} className="mt-2 text-[15px] leading-relaxed text-muted" />
                 </div>
               ) : null}
               {appearances.length ? (
                 <div>
-                  <p className="text-xs font-bold tracking-[0.14em] text-subtle uppercase">In the programme</p>
+                  <p className="text-xs font-bold tracking-[0.14em] text-subtle uppercase">In the schedule</p>
                   <ul className="mt-2 grid gap-2">
                     {appearances.map((a) => (
                       <li key={a.id}>

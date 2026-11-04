@@ -88,9 +88,8 @@ export interface RegistrationDoc {
   country: string;
   interests: string[];
   tutorials: boolean;
-  hackathonInterest: boolean;
-  /** "Yes" or "No": whether they would like to present a poster at the poster session. */
-  presentPoster: string;
+  /** Their experience with AI tools so far, from the registration form. */
+  experience: string;
   dietary: string;
   accessibility: string;
   heardFrom: string;
@@ -113,11 +112,10 @@ const registrationSchema = new Schema<RegistrationDoc>(
     designation: { type: String, default: "" },
     category: { type: String, default: "other" },
     city: { type: String, default: "" },
-    country: { type: String, default: "India" },
+    country: { type: String, default: "Bangladesh" },
     interests: { type: [String], default: [] },
     tutorials: { type: Boolean, default: false },
-    hackathonInterest: { type: Boolean, default: false },
-    presentPoster: { type: String, default: "" },
+    experience: { type: String, default: "" },
     dietary: { type: String, default: "" },
     accessibility: { type: String, default: "" },
     heardFrom: { type: String, default: "" },
@@ -133,74 +131,10 @@ const registrationSchema = new Schema<RegistrationDoc>(
 export const Registration =
   (mongoose.models.Registration as Model<RegistrationDoc>) ?? mongoose.model<RegistrationDoc>("Registration", registrationSchema);
 
-export interface TeamMember {
-  name: string;
-  email: string;
-  phone: string;
-  organisation: string;
-  role: string;
-  answers: Record<string, unknown>;
-}
-export interface HackathonRegistrationDoc {
-  regId: string;
-  teamName: string;
-  teamKey: string;
-  /** The theme picked by teams that registered while the hackathon had one track per theme; empty since. */
-  track: string;
-  members: TeamMember[];
-  leaderEmail: string;
-  ideaTitle: string;
-  ideaSummary: string;
-  githubUrl: string;
-  consent: boolean;
-  answers: Record<string, unknown>;
-  status: "registered" | "shortlisted" | "not-shortlisted" | "withdrawn";
-  emailSent: boolean;
-  notes: string;
-  createdAt?: Date;
-}
-const hackathonRegistrationSchema = new Schema<HackathonRegistrationDoc>(
-  {
-    regId: { type: String, required: true, unique: true },
-    teamName: { type: String, required: true, trim: true },
-    teamKey: { type: String, required: true, unique: true },
-    track: { type: String, default: "" },
-    members: {
-      type: [
-        new Schema<TeamMember>(
-          {
-            name: { type: String, required: true },
-            email: { type: String, required: true, lowercase: true },
-            phone: { type: String, default: "" },
-            organisation: { type: String, default: "" },
-            role: { type: String, default: "" },
-            answers: { type: Schema.Types.Mixed, default: {} },
-          },
-          { _id: false },
-        ),
-      ],
-      default: [],
-    },
-    leaderEmail: { type: String, required: true, lowercase: true, index: true },
-    ideaTitle: { type: String, default: "" },
-    ideaSummary: { type: String, default: "" },
-    githubUrl: { type: String, default: "" },
-    consent: { type: Boolean, default: false },
-    answers: { type: Schema.Types.Mixed, default: {} },
-    status: { type: String, enum: ["registered", "shortlisted", "not-shortlisted", "withdrawn"], default: "registered" },
-    emailSent: { type: Boolean, default: false },
-    notes: { type: String, default: "" },
-  },
-  { timestamps: true },
-);
-export const HackathonRegistration =
-  (mongoose.models.HackathonRegistration as Model<HackathonRegistrationDoc>) ??
-  mongoose.model<HackathonRegistrationDoc>("HackathonRegistration", hackathonRegistrationSchema);
-
 /* ------------------------------------------------------------- Enquiries -- */
 
 export interface EnquiryDoc {
-  type: "contact" | "exhibitor" | "sponsor";
+  type: "contact" | "sponsor";
   name: string;
   email: string;
   organisation: string;
@@ -214,7 +148,7 @@ export interface EnquiryDoc {
 }
 const enquirySchema = new Schema<EnquiryDoc>(
   {
-    type: { type: String, enum: ["contact", "exhibitor", "sponsor"], default: "contact", index: true },
+    type: { type: String, enum: ["contact", "sponsor"], default: "contact", index: true },
     name: { type: String, required: true, trim: true },
     email: { type: String, required: true, lowercase: true, trim: true },
     organisation: { type: String, default: "" },
@@ -298,7 +232,7 @@ export interface VisitorSessionDoc {
   _id: string;
   email: string;
   name: string;
-  /** How they signed in: "team" (admin panel account), "workshop", "hackathon" or a people group (judge, mentor…). */
+  /** How they signed in: "team" (admin panel account), "workshop" (a registrant) or a people group (faculty, volunteer…). */
   kind: string;
   expiresAt: Date;
   createdAt?: Date;

@@ -48,10 +48,8 @@ export const thresholds = {
   "submissions{outcome:ok}": ["count>=0"],
   "submissions{outcome:duplicate}": ["count>=0"],
   "people_registered{form:workshop}": ["count>=0"],
-  "people_registered{form:hackathon}": ["count>=0"],
   "people_registered{form:enquiry}": ["count>=0"],
   "people_blocked{form:workshop}": ["count>=0"],
-  "people_blocked{form:hackathon}": ["count>=0"],
   "people_blocked{form:enquiry}": ["count>=0"],
 };
 

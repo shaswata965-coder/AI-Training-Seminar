@@ -17,7 +17,7 @@ import { isShown } from "@/lib/schema/section-order";
 
 export async function generateMetadata(): Promise<Metadata> {
   const s = await getSettings();
-  return { title: "Organisers", description: `Faculty organisers, student organisers and volunteers of the ${s.eventName}.`, alternates: { canonical: absoluteUrl("/organisers") } };
+  return { title: "Organisers", description: `Faculty coordinators, student organisers and volunteers of the ${s.eventName}.`, alternates: { canonical: absoluteUrl("/organisers") } };
 }
 
 function Grid({ people, label, tone }: { people: Person[]; label: string; tone: Tone }) {
@@ -74,18 +74,19 @@ export default async function OrganisersPage() {
         s={s}
         page="organisers"
         sections={{
-          faculty: (
+          // A group with nobody in it yet is left out (volunteers get a "coming soon" card instead).
+          faculty: faculty.length ? (
             <Section edit="organisers.faculty" tone={fa.tone} bg={fa.background} labelledBy="faculty-title">
               <SectionHeading id="faculty-title" eyebrow={fa.eyebrow} title={fa.title} />
               <Grid people={faculty} label={fa.card} tone={fa.tone} />
             </Section>
-          ),
-          students: (
+          ) : null,
+          students: students.length ? (
             <Section edit="organisers.students" tone={stu.tone} bg={stu.background} labelledBy="students-title">
               <SectionHeading id="students-title" eyebrow={stu.eyebrow} title={stu.title} />
               <Grid people={students} label={stu.card} tone={stu.tone} />
             </Section>
-          ),
+          ) : null,
           volunteers: (
             <Section edit="organisers.volunteers" tone={vo.tone} bg={vo.background} labelledBy="volunteers-title">
               <SectionHeading id="volunteers-title" eyebrow={vo.eyebrow} title={vo.title} description={vo.description} />

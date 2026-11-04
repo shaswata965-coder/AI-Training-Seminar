@@ -13,14 +13,13 @@ Chromium (Playwright probe) ─────────────┘          
 
 | Script | Who | Shape |
 | --- | --- | --- |
-| [`k6/daily.js`](k6/daily.js) | An ordinary day: **100 people** on the site at once | 1 min ramp, 8 min at 100, 1 min down. Each visit lands on a page with nothing cached and views 1 to 4 more; 4 % register for the workshop, 1 % the hackathon, 2 % send a message, 4 % download the PDF, 4 % a calendar entry. One organiser in the admin panel. |
-| [`k6/submission.js`](k6/submission.js) | The submission rush: **2,000 people** registering at once | All 2,000 arrive within 60 s (a deadline, or the link going round), so all are on the site together. Each opens the form (60 % directly, 40 % through the home page), fills it in for 20 to 60 s and sends it: workshop 75 %, hackathon team of 1 to 6 people 20 %, contact form 5 %. 3 % send it from two tabs at once and 2 % again later. Three organisers watch the registrations and download CSVs. |
-| [`k6/contest.js`](k6/contest.js) | The hackathon: **300 participants**, peaking at **400** | 1 min ramp, 5 min at 300, 2 min at 400, back to 300. Mostly the hackathon page, the home page's announcements and the programme, the PDF and calendar entries; 30 % of visits with nothing cached. An organiser posts an announcement every 2 minutes (each one re-renders the home page for everyone); two more keep the admin panel open. |
+| [`k6/daily.js`](k6/daily.js) | An ordinary day: **100 people** on the site at once | 1 min ramp, 8 min at 100, 1 min down. Each visit lands on a page with nothing cached and views 1 to 4 more; 5 % register for the training, 2 % send a message, 4 % download the PDF, 4 % a calendar entry. One organiser in the admin panel. |
+| [`k6/submission.js`](k6/submission.js) | The submission rush: **2,000 people** registering at once | All 2,000 arrive within 60 s (a deadline, or the link going round), so all are on the site together. Each opens the form (60 % directly, 40 % through the home page), fills it in for 20 to 60 s and sends it: training registration 92 %, contact form 8 %. 3 % send it from two tabs at once and 2 % again later. Three organisers watch the registrations and download CSVs. |
 
 ### Client IP addresses
 
-The site rate-limits its forms per person and per client IP (`src/lib/server/form-limits.ts`: 8 workshop
-registrations, 6 hackathon teams and 5 messages per person, 100, 40 and 40 per address, per 10 to 15 minutes;
+The site rate-limits its forms per person and per client IP (`src/lib/server/form-limits.ts`: 8
+registrations and 5 messages per person, 100 and 40 per address, per 10 to 15 minutes;
 none per address for networks in `RATE_LIMIT_EXEMPT`), so the same users can get very different results
 depending on how many addresses they come from. Each scenario runs in these modes:
 
@@ -89,7 +88,7 @@ SERVER_CPUS=0,1 K6_CPUS=2,3 loadtest/run.sh submission:distinct submission:share
 SCALE=0.05 PACE=0.2 loadtest/run.sh daily:distinct                         # quick smoke run
 NGINX_PROFILE=plain LABEL=plain loadtest/run.sh submission:distinct         # with the README's earlier nginx
 ARRIVAL=600 LABEL=10min loadtest/run.sh submission:distinct                 # the 2,000 arrive over 10 minutes
-RATE_LIMIT_EXEMPT=127.20.0.1 LABEL=exempt loadtest/run.sh contest:shared   # the shared address exempt
+RATE_LIMIT_EXEMPT=127.20.0.1 LABEL=exempt loadtest/run.sh submission:shared   # the shared address exempt
 ```
 
 `run.sh` starts a fresh stack for every run ([`stack/up.sh`](stack/up.sh): nginx, `next start`, the SMTP sink),

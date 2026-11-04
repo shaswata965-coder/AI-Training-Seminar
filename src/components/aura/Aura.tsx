@@ -26,7 +26,7 @@ const FLY_ANIMATIONS = new Set(["aura-fly-in", "aura-zip-in", "aura-drift-in"]);
 
 const BadgeContext = createContext(true);
 
-/** Whether the Auras inside wear the IIT Delhi badge on their chest (they do unless told otherwise). */
+/** Whether the Auras inside wear the DIU badge on their chest (they do unless told otherwise). */
 export function AuraBadge({ wear, children }: { wear: boolean; children: ReactNode }) {
   return <BadgeContext.Provider value={wear}>{children}</BadgeContext.Provider>;
 }

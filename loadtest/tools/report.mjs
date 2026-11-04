@@ -6,8 +6,8 @@
  *
  * Reads, from <run-dir>: summary.json (k6), smtp-stats.json, monitor.jsonl, probe.jsonl, nginx-access.log,
  * nginx-error.log and next.log. Checks in MongoDB (MONGODB_URI) that:
- *   - every person k6 saw registered is stored exactly once (workshop: one per e-mail address;
- *     hackathon: one per team, and nobody in two teams) and every saved enquiry is stored;
+ *   - every person k6 saw registered is stored exactly once (one registration per e-mail address) and
+ *     every saved enquiry is stored;
  *   - the confirmation e-mails and organiser notices reached the SMTP sink, and no visitor address got
  *     more than the site's limit of 3 a day.
  * Writes report.json and report.md to <run-dir> and exits non-zero if a check fails.
@@ -31,7 +31,6 @@ const metric = (key) => summary?.metrics[key]?.values ?? {};
 const k6count = (key) => metric(key).count ?? 0;
 const expected = {
   workshop: k6count("people_registered{form:workshop}"),
-  hackathon: k6count("people_registered{form:hackathon}"),
   enquiries: k6count("submissions{form:enquiry,outcome:ok}"),
 };
 const failedThresholds = summary
@@ -47,27 +46,18 @@ async function readDb() {
   const out = {
     stored: {
       workshop: await db.collection("registrations").countDocuments(),
-      hackathon: await db.collection("hackathonregistrations").countDocuments(),
       enquiries: await db.collection("enquiries").countDocuments(),
     },
     dupEmails: await duplicates("registrations", "$email"),
-    dupTeams: await duplicates("hackathonregistrations", "$teamKey"),
-    inTwoTeams: (
-      await db
-        .collection("hackathonregistrations")
-        .aggregate([{ $unwind: "$members" }, { $group: { _id: "$members.email", teams: { $addToSet: "$_id" } } }, { $match: { "teams.1": { $exists: true } } }])
-        .toArray()
-    ).length,
     emailSentFlags: {
       workshop: await db.collection("registrations").countDocuments({ emailSent: true }),
-      hackathon: await db.collection("hackathonregistrations").countDocuments({ emailSent: true }),
     },
   };
   await mongoose.disconnect();
   return out;
 }
 const dbState = process.argv.includes("--reuse-db") ? json("report.json").db : await readDb();
-const { stored, dupEmails, dupTeams, inTwoTeams, emailSentFlags } = dbState;
+const { stored, dupEmails, emailSentFlags } = dbState;
 
 /* ---- E-mail -------------------------------------------------------------------------------------- */
 const smtp = json("smtp-stats.json") ?? { byKind: {}, perRecipient: {} };
@@ -114,7 +104,7 @@ const nginxErrors = {
 /* ---- Next.js log --------------------------------------------------------------------------------- */
 const nextLog = lines("next.log");
 const nextErrors = {
-  serverErrors: nextLog.filter((l) => /^\s*(⨯|Error|\[register\]|\[hackathon\/register\]|\[enquiries\])/.test(l)).length,
+  serverErrors: nextLog.filter((l) => /^\s*(⨯|Error|\[register\]|\[enquiries\])/.test(l)).length,
   mailFailures: nextLog.filter((l) => l.includes("[mail] failed")).length,
   mailLimited: nextLog.filter((l) => l.includes("[mail] daily limit")).length,
   fallbackContent: nextLog.filter((l) => l.includes("using fallback content")).length,
@@ -156,14 +146,9 @@ const browser = probe.length
 const checks = [
   // The browser probe registers for the workshop too.
   ["every registered person is stored once (workshop)", stored.workshop === expected.workshop + (browser?.registered ?? 0), `${stored.workshop} stored, ${expected.workshop} expected from k6 + ${browser?.registered ?? 0} from the browser probe`],
-  ["every registered team is stored once (hackathon)", stored.hackathon === expected.hackathon, `${stored.hackathon} stored, ${expected.hackathon} expected`],
   ["every saved enquiry is stored", stored.enquiries === expected.enquiries, `${stored.enquiries} stored, ${expected.enquiries} expected`],
   ["no e-mail address registered twice", dupEmails === 0, `${dupEmails} duplicates`],
-  ["no team name registered twice", dupTeams === 0, `${dupTeams} duplicates`],
-  ["nobody in two teams", inTwoTeams === 0, `${inTwoTeams} people`],
   ["a confirmation e-mail for every workshop registration", kind("workshop-confirmation") >= stored.workshop && emailSentFlags.workshop === stored.workshop, `${kind("workshop-confirmation")} sent, ${emailSentFlags.workshop}/${stored.workshop} marked sent`],
-  ["a confirmation e-mail for every team", kind("team-confirmation") === stored.hackathon && emailSentFlags.hackathon === stored.hackathon, `${kind("team-confirmation")} sent, ${emailSentFlags.hackathon}/${stored.hackathon} marked sent`],
-  ["organisers told of every team", kind("organiser-team-notice") === stored.hackathon, `${kind("organiser-team-notice")} notices`],
   ["an acknowledgement and an organiser notice for every enquiry", kind("enquiry-ack") === stored.enquiries && kind("organiser-enquiry-notice") === stored.enquiries, `${kind("enquiry-ack")} acks, ${kind("organiser-enquiry-notice")} notices`],
   ["no visitor address got more than 3 e-mails", visitorMax <= 3, `max ${visitorMax}`],
   ["no server errors (5xx) at nginx", !Object.keys(statuses).some((s) => s >= 500), Object.entries(statuses).filter(([s]) => s >= 500).map(([s, n]) => `${s}×${n}`).join(", ") || "none"],

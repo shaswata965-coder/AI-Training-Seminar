@@ -6,22 +6,21 @@ import { Section, SectionHeading } from "@/components/ui/Section";
 import { SESSION_TYPE_META, THEME_META, type SessionType } from "@/lib/content/constants";
 import type { Session, SiteSettings } from "@/lib/content/types";
 import { copy, plural } from "@/lib/copy";
-import { eventDays, hackathonShown } from "@/lib/event";
+import { eventDays } from "@/lib/event";
 import { eventDayLabel, formatDate, timeRange } from "@/lib/format";
 
 /** The session formats explained on the page, and where to read more about each. */
-const FORMATS: { type: SessionType & ("keynote" | "talk" | "panel" | "tutorial" | "demo" | "hackathon"); href?: string }[] = [
+const FORMATS: { type: SessionType & ("keynote" | "talk" | "panel" | "tutorial" | "demo"); href?: string }[] = [
   { type: "keynote" },
-  { type: "talk", href: "/speakers" },
-  { type: "panel", href: "/speakers#panels" },
+  { type: "talk", href: "/trainers" },
+  { type: "panel" },
   { type: "tutorial", href: "/tutorials" },
   { type: "demo", href: "/tutorials#demos" },
-  { type: "hackathon", href: "#hackathon" },
 ];
 
 const hhmm = (d: Date) => formatDate(d.toISOString(), { hour: "2-digit", minute: "2-digit", hour12: false });
 
-/** The programme in numbers: each day, the session formats and the themes, before the full schedule. */
+/** The batch in numbers: each day, the session formats and the programmes, before the full schedule. */
 export function ProgrammeOverview({ s, sessions, tba }: { s: SiteSettings; sessions: Session[]; tba: boolean }) {
   const shown = tba ? [] : sessions;
   const talks = shown.filter((x) => x.type !== "break");
@@ -62,7 +61,7 @@ export function ProgrammeOverview({ s, sessions, tba }: { s: SiteSettings; sessi
                 <p className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-muted">
                   <span className="inline-flex items-center gap-1.5 tabular">
                     <Clock size={14} aria-hidden className="text-accent-ink" />
-                    {d.hours} IST
+                    {d.hours} BST
                   </span>
                   <span>{d.count ? plural(d.count, "session") : c.noSessions}</span>
                 </p>
@@ -85,7 +84,7 @@ export function ProgrammeOverview({ s, sessions, tba }: { s: SiteSettings; sessi
         <div>
           <h3 className="font-mono text-[11px] font-bold tracking-[0.16em] text-subtle uppercase">{c.formats}</h3>
           <ul className="mt-3 divide-y divide-border overflow-hidden rounded-3xl border border-border bg-surface">
-            {FORMATS.filter((f) => f.type !== "hackathon" || hackathonShown(s)).map((f) => {
+            {FORMATS.map((f) => {
               const meta = SESSION_TYPE_META[f.type];
               const n = count(f.type);
               const body = (

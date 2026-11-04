@@ -6,14 +6,14 @@ import { AuraHead } from "@/components/aura/AuraHead";
 import { SlidingPill, useSlidingPill } from "@/components/ui/SlidingPill";
 import { cn } from "@/lib/cn";
 import type { SiteSettings } from "@/lib/content/types";
-import { AIRPORT, AREA_LABELS, CAMPUS, GREEN, MAP_H, MAP_W, METRO, PLACES, RIVER, ROADS, ROUTES, RUNWAYS, VENUE, type Mode, type Place, type PlaceKind } from "./delhi-map";
+import { AIRPORT, AREA_LABELS, CAMPUS, GREEN, MAP_H, MAP_W, METRO, PLACES, RIVER, ROADS, ROUTES, RUNWAYS, VENUE, type Mode, type Place, type PlaceKind } from "./dhaka-map";
 import { routeUrl } from "./links";
 
 const MODE: Record<Mode, { Icon: LucideIcon; label: string; hint: string }> = {
-  air: { Icon: Plane, label: "By air", hint: "IGI Airport" },
-  rail: { Icon: TrainFront, label: "By train", hint: "New Delhi · Nizamuddin" },
-  metro: { Icon: TramFront, label: "By metro", hint: "Yellow & Magenta lines" },
-  road: { Icon: Car, label: "By road", hint: "Cab, auto or car" },
+  air: { Icon: Plane, label: "By air", hint: "Shahjalal Airport" },
+  rail: { Icon: TrainFront, label: "By train", hint: "Airport station" },
+  metro: { Icon: TramFront, label: "By metro rail", hint: "MRT Line 6" },
+  road: { Icon: Car, label: "By road", hint: "Bus, car or CNG" },
 };
 
 const KIND_ICON: Record<PlaceKind, LucideIcon> = { venue: School, air: Plane, rail: TrainFront, metro: TramFront, road: Car, sight: Landmark };
@@ -22,9 +22,9 @@ const pct = (v: number, of: number) => `${(v / of) * 100}%`;
 const ease = (t: number) => 0.5 - Math.cos(Math.PI * t) / 2;
 
 /**
- * The home page's Venue & travel map: a schematic of South and Central Delhi with IIT Delhi in it.
+ * The home page's Venue & travel map: a schematic of north-west Dhaka with Daffodil Smart City in it.
  * Pick how you are arriving (the routes come from Site settings → Venue → Getting here) and
- * a small Aura travels the route to campus, drawing it as she goes; the metro lines that matter
+ * a small Aura travels the route to campus, drawing it as she goes; the metro line, when it matters,
  * light up. Pins on the map pick a route too. Without JavaScript or with reduced motion the route
  * is simply drawn. `children` go under the map and the route (the venue card on the home page).
  */

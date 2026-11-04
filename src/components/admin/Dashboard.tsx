@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowRight, CalendarDays, Download, FlaskConical, Inbox, ListChecks, Mail, Megaphone, Mic, RefreshCw, Settings, Ticket, Trophy } from "lucide-react";
+import { ArrowRight, Award, CalendarDays, Download, FlaskConical, Inbox, ListChecks, Mail, Megaphone, Mic, RefreshCw, Settings, Ticket } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import { Aura } from "@/components/aura/Aura";
@@ -17,7 +17,6 @@ import { VolunteerHome } from "./VolunteerHome";
 interface Stats {
   workshop: number;
   workshopWeek: number;
-  teams: number;
   enquiriesNew: number;
   enquiriesTotal: number;
   byCategory: { category: string; count: number }[];
@@ -41,16 +40,16 @@ export function Dashboard() {
 function StaffDashboard({ me, data, error }: { me: AdminMe; data: Stats | null; error: string | null }) {
   const eventName = useEventName();
   const tiles = [
-    { label: "Workshop registrations", value: data?.workshop, note: data ? `+${data.workshopWeek} this week` : "", Icon: Ticket, tone: "tone-peach", href: "/admin/registrations" },
-    { label: "Hackathon teams", value: data?.teams, note: "", Icon: Trophy, tone: "tone-aqua", href: "/admin/registrations?type=hackathon" },
+    { label: "Registrations", value: data?.workshop, note: data ? `+${data.workshopWeek} this week` : "", Icon: Ticket, tone: "tone-peach", href: "/admin/registrations" },
+    { label: "Past participants", value: data?.counts?.participants, note: "", Icon: Award, tone: "tone-aqua", href: "/admin/content/participants" },
     { label: "New enquiries", value: data?.enquiriesNew, note: data ? `${data.enquiriesTotal} in total` : "", Icon: Inbox, tone: "tone-blush", href: "/admin/enquiries" },
-    { label: "Speakers", value: data?.counts?.speakers, note: "", Icon: Mic, tone: "tone-lilac", href: "/admin/content/speakers" },
+    { label: "Trainers", value: data?.counts?.trainers, note: "", Icon: Mic, tone: "tone-lilac", href: "/admin/content/trainers" },
   ];
   const max = Math.max(1, ...(data?.byCategory.map((c) => c.count) ?? [1]));
   const quick = [
     { href: "/admin/content/announcements", label: "Post an announcement", Icon: Megaphone },
-    { href: "/admin/content/sessions", label: "Edit the programme", Icon: CalendarDays },
-    { href: "/admin/content/speakers", label: "Add a speaker", Icon: Mic },
+    { href: "/admin/content/sessions", label: "Edit the schedule", Icon: CalendarDays },
+    { href: "/admin/content/trainers", label: "Add a trainer", Icon: Mic },
     { href: "/admin/settings", label: "Registration & dates", Icon: Settings },
   ];
 
@@ -152,7 +151,7 @@ function StaffDashboard({ me, data, error }: { me: AdminMe; data: Stats | null; 
                       <span className="block truncate text-muted">{e.organisation || "-"}</span>
                     </span>
                     <span className="flex shrink-0 items-center gap-2">
-                      <Badge tone={e.type === "sponsor" ? "butter" : e.type === "exhibitor" ? "peach" : "azure"} size="xs">
+                      <Badge tone={e.type === "sponsor" ? "butter" : "azure"} size="xs">
                         {e.type}
                       </Badge>
                       {e.status === "new" ? (

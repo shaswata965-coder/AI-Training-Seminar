@@ -37,7 +37,7 @@ export function summarise(scenario) {
       "  Submissions      saved  duplicate  rate-limited  error",
       `  answers        ${n(count(data, "submissions{outcome:ok}")).padStart(7)}  ${n(count(data, "submissions{outcome:duplicate}")).padStart(9)}  ${n(count(data, "submissions{outcome:rate_limited}")).padStart(12)}  ${n(count(data, "submissions{outcome:error}")).padStart(5)}`,
       "  People           registered  blocked",
-      ...["workshop", "hackathon", "enquiry"].map((f) => `  ${f.padEnd(15)} ${n(count(data, `people_registered{form:${f}}`)).padStart(10)}  ${n(count(data, `people_blocked{form:${f}}`)).padStart(7)}`),
+      ...["workshop", "enquiry"].map((f) => `  ${f.padEnd(15)} ${n(count(data, `people_registered{form:${f}}`)).padStart(10)}  ${n(count(data, `people_blocked{form:${f}}`)).padStart(7)}`),
       "",
       failed.length ? `  FAILED thresholds:\n${failed.map((f) => `    ✗ ${f}`).join("\n")}` : "  All thresholds met.",
     ].filter((l) => l !== null);

@@ -1,4 +1,4 @@
-import { ArrowRight, ArrowUpRight, Ticket, Trophy } from "lucide-react";
+import { ArrowRight, ArrowUpRight, BriefcaseBusiness, Laptop } from "lucide-react";
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { DeadlineGate } from "@/components/forms/DeadlineGate";
@@ -6,7 +6,7 @@ import { cn } from "@/lib/cn";
 import type { RegistrationStatus, Tone } from "@/lib/content/constants";
 import type { SiteSettings } from "@/lib/content/types";
 import { copy } from "@/lib/copy";
-import { hackathonRegistrationHref, hackathonShown, registrationHref } from "@/lib/event";
+import { registrationHref } from "@/lib/event";
 import { formatDate } from "@/lib/format";
 import type { PageCopy } from "@/lib/schema/page-copy";
 import type { PlacardKey } from "./HeroPlacards";
@@ -58,53 +58,51 @@ interface Choice {
   deadline: string;
 }
 
+/** The registration form with a programme ticked; an external form is linked as it is. */
+function programmeHref(s: SiteSettings, programme: PlacardKey) {
+  const href = registrationHref(s);
+  return href === "/register" ? `/register?programme=${programme}` : href;
+}
+
 /**
- * Along the foot of the home hero: a short heading and one compact ticket for each registration, so attending
- * the workshop and joining the hackathon read as two separate things without taking over the hero. The whole
- * ticket is the link. Its spinning edge lights up on the ticket whose placard Aura is holding up (the hero
- * section's data-placard, set by HeroPlacards), and pointing at a ticket brings its placard up.
+ * Along the foot of the home hero: a short heading and one compact ticket for each programme, both leading to
+ * the one registration form with that programme ticked. The whole ticket is the link. Its spinning edge lights
+ * up on the ticket whose placard Aura is holding up (the hero section's data-placard, set by HeroPlacards), and
+ * pointing at a ticket brings its placard up.
  */
 export function RegisterChooser({ s, className }: { s: SiteSettings; className?: string }) {
   const c = copy(s, "homeRegister");
   const choices: Choice[] = [
     {
-      key: "workshop",
-      tone: c.workshopTone,
-      icon: <Ticket size={22} aria-hidden />,
-      kicker: c.workshopKicker,
-      title: c.workshopTitle,
-      href: registrationHref(s),
+      key: "professionals",
+      tone: c.professionalsTone,
+      icon: <BriefcaseBusiness size={22} aria-hidden />,
+      kicker: c.professionalsKicker,
+      title: c.professionalsTitle,
+      href: programmeHref(s, "professionals"),
       status: s.workshopStatus,
       deadline: s.workshopDeadline,
     },
-    // The hackathon's ticket only while it is shown; the workshop's alone gets its own heading.
-    ...(hackathonShown(s)
-      ? [
-          {
-            key: "hackathon" as const,
-            tone: c.hackathonTone,
-            icon: <Trophy size={22} aria-hidden />,
-            kicker: c.hackathonKicker,
-            title: c.hackathonTitle,
-            href: hackathonRegistrationHref(s),
-            status: s.hackathonStatus,
-            deadline: s.hackathonDeadline,
-          },
-        ]
-      : []),
+    {
+      key: "workspace",
+      tone: c.workspaceTone,
+      icon: <Laptop size={22} aria-hidden />,
+      kicker: c.workspaceKicker,
+      title: c.workspaceTitle,
+      href: programmeHref(s, "workspace"),
+      status: s.workshopStatus,
+      deadline: s.workshopDeadline,
+    },
   ];
-  const solo = choices.length === 1;
-  const title = solo ? c.soloTitle : c.title;
-  const description = solo ? c.soloDescription : c.description;
   return (
     <div data-edit="home.register" data-graph-avoid="" className={cn("grid gap-4 lg:grid-cols-[15.5rem_1fr] lg:items-center lg:gap-6", className)}>
       <div>
         <h2 id="register-choice-title" className="font-display text-xl font-bold text-fg">
-          {title}
+          {c.title}
         </h2>
-        {description ? <p className="mt-1 text-sm text-muted">{description}</p> : null}
+        {c.description ? <p className="mt-1 text-sm text-muted">{c.description}</p> : null}
       </div>
-      <ul aria-labelledby="register-choice-title" className={cn("grid gap-3 sm:gap-4", solo ? "sm:max-w-xl" : "sm:grid-cols-2")}>
+      <ul aria-labelledby="register-choice-title" className={"grid gap-3 sm:grid-cols-2 sm:gap-4"}>
         {choices.map((x) => {
           const external = /^https?:/.test(x.href);
           const body = (

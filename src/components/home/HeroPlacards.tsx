@@ -1,6 +1,6 @@
 "use client";
 
-import { Ticket, Trophy } from "lucide-react";
+import { BriefcaseBusiness, Laptop } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Aura } from "@/components/aura/Aura";
 import { SlidingPill, useSlidingPill } from "@/components/ui/SlidingPill";
@@ -9,7 +9,7 @@ import { cn } from "@/lib/cn";
 import type { RegistrationStatus, Tone } from "@/lib/content/constants";
 import { deadlinePassed } from "@/lib/event";
 
-export type PlacardKey = "workshop" | "hackathon";
+export type PlacardKey = "professionals" | "workspace";
 
 export interface HeroPlacard {
   key: PlacardKey;
@@ -22,10 +22,10 @@ export interface HeroPlacard {
   deadline: string;
 }
 
-const ICONS = { workshop: Ticket, hackathon: Trophy } as const;
+const ICONS = { professionals: BriefcaseBusiness, workspace: Laptop } as const;
 
 /**
- * The hero's Aura, holding up the workshop's and the hackathon's registration placards in turn. A placard
+ * The hero's Aura, holding up the two programmes' registration placards in turn. A placard
  * stays up while the bar on its switch fills (CSS, so it pauses with the page's other animations, and while
  * the pointer or focus is on Aura, the switch or a registration card); pointing at a registration card below
  * (`data-placard-key`) brings its placard up. With reduced motion the bar never runs, so only the switch and
@@ -51,7 +51,7 @@ export function HeroPlacards({ placards, words }: { placards: HeroPlacard[]; wor
         interactive
         entrance="load"
         placard={text}
-        label={text ? `Aura, the workshop's agentic AI guide, holding a placard: “${text}”` : undefined}
+        label={text ? `Aura, the training programme's AI guide, holding a placard: “${text}”` : undefined}
         className="max-w-[78vw]"
       />
     ),

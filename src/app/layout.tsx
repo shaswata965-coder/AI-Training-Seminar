@@ -18,7 +18,7 @@ const outfit = localFont({ src: "./fonts/outfit-latin-var.woff2", weight: "100 9
 
 export async function generateMetadata(): Promise<Metadata> {
   const s = await getSettings();
-  const title = `${s.eventName} · IIT Delhi`;
+  const title = `${s.eventName} · Daffodil International University`;
   const description = s.description || s.tagline;
   return {
     metadataBase: new URL(`${SITE_ORIGIN}${BASE_PATH}/`),
@@ -26,13 +26,13 @@ export async function generateMetadata(): Promise<Metadata> {
     description,
     keywords: s.keywords,
     applicationName: s.eventName,
-    authors: [{ name: "IIT Delhi & Yardi School of Artificial Intelligence" }],
+    authors: [{ name: s.organisedBy || "Daffodil International University" }],
     openGraph: {
       type: "website",
       siteName: s.eventName,
       title,
       description,
-      locale: "en_IN",
+      locale: "en_BD",
       ...(s.ogImage ? { images: [{ url: withBase(s.ogImage), width: 1200, height: 630 }] } : {}),
     },
     twitter: {
@@ -86,7 +86,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
   const gaId = /^G-[A-Z0-9]{4,}$/.test(s.gaId) ? s.gaId : /^G-[A-Z0-9]{4,}$/.test(process.env.NEXT_PUBLIC_GA_ID ?? "") ? process.env.NEXT_PUBLIC_GA_ID : "";
   const brandCss = themeStyle(s);
   return (
-    <html lang="en-IN" suppressHydrationWarning className={`${inter.variable} ${outfit.variable}`}>
+    <html lang="en" suppressHydrationWarning className={`${inter.variable} ${outfit.variable}`}>
       <head>
         {/* Lets CSS hide things that JS will animate in, so without JS nothing stays hidden. */}
         <Script id="js-flag" strategy="beforeInteractive">{`document.documentElement.classList.add("js")`}</Script>

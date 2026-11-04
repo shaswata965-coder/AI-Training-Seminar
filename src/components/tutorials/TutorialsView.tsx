@@ -27,7 +27,7 @@ function materialIcon(url: string, label: string) {
 }
 
 export function TutorialsView({ tutorials, demos }: { tutorials: Tutorial[]; demos: Demo[] }) {
-  // An old link's earlier theme key ("entrepreneurship") filters by the current one.
+  // A link with another name for a programme ("workplace") filters by its current key.
   const urlTheme = currentThemeKey(useUrlParam("theme") ?? "");
   const [choice, setTheme] = useState<ThemeKey | "all" | null>(null);
   const theme = choice ?? (urlTheme && (THEME_KEYS as readonly string[]).includes(urlTheme) ? (urlTheme as ThemeKey) : "all");
@@ -42,7 +42,7 @@ export function TutorialsView({ tutorials, demos }: { tutorials: Tutorial[]; dem
   return (
     <div>
       {themes.length > 1 ? (
-        <div className="mb-10 flex flex-wrap gap-2" role="group" aria-label="Filter by theme">
+        <div className="mb-10 flex flex-wrap gap-2" role="group" aria-label="Filter by programme">
           {(["all", ...themes] as const).map((t) => (
             <button
               key={t}
@@ -56,7 +56,7 @@ export function TutorialsView({ tutorials, demos }: { tutorials: Tutorial[]; dem
                 theme === t ? "bg-accent-soft text-accent-ink border-[color-mix(in_oklab,var(--accent)_55%,transparent)] [--key-edge:color-mix(in_oklab,var(--accent)_70%,var(--accent-ink))]" : "key-line border-border bg-surface text-muted hover:text-fg",
               )}
             >
-              {t === "all" ? "All themes" : THEME_META[t].short}
+              {t === "all" ? "All programmes" : THEME_META[t].short}
             </button>
           ))}
         </div>
@@ -64,7 +64,7 @@ export function TutorialsView({ tutorials, demos }: { tutorials: Tutorial[]; dem
 
       <section id="tutorials" aria-labelledby="tutorials-title" className="scroll-mt-28">
         <h2 id="tutorials-title" className="font-display text-3xl font-bold text-fg">
-          Tutorials
+          Hands-on labs
         </h2>
         {tShown.length ? (
           <ul className="mt-6 grid gap-5 lg:grid-cols-2">
@@ -156,8 +156,8 @@ export function TutorialsView({ tutorials, demos }: { tutorials: Tutorial[]; dem
           <div className="card mt-6 flex flex-col items-center gap-5 p-8 text-center sm:flex-row sm:text-left">
             <Aura variant="tutorials" size={150} />
             <div>
-              <p className="font-display text-xl font-semibold text-fg">{tutorials.length ? "No tutorials for this theme yet" : "Tutorial line-up coming soon"}</p>
-              <p className="mt-1 max-w-lg text-muted">Titles, instructors, prerequisites (laptop, software, accounts) and material links will be published here.</p>
+              <p className="font-display text-xl font-semibold text-fg">{tutorials.length ? "No labs for this programme yet" : "Lab line-up coming soon"}</p>
+              <p className="mt-1 max-w-lg text-muted">Titles, trainers, prerequisites (laptop, software, accounts) and material links will be published here.</p>
             </div>
           </div>
         )}
@@ -208,8 +208,8 @@ export function TutorialsView({ tutorials, demos }: { tutorials: Tutorial[]; dem
           <div className="card mt-6 flex flex-col items-center gap-5 p-8 text-center sm:flex-row sm:text-left">
             <Aura variant="demos" size={150} />
             <div>
-              <p className="font-display text-xl font-semibold text-fg">{demos.length ? "No demos for this theme yet" : "Demo list coming soon"}</p>
-              <p className="mt-1 max-w-lg text-muted">Teams and companies demoing agents live at the workshop will be listed here with images and videos.</p>
+              <p className="font-display text-xl font-semibold text-fg">{demos.length ? "No demos for this programme yet" : "Demo list coming soon"}</p>
+              <p className="mt-1 max-w-lg text-muted">Live demos of AI tools from the sessions will be listed here with images and videos.</p>
             </div>
           </div>
         )}

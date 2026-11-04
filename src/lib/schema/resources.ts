@@ -11,8 +11,8 @@ import {
   REGISTRATION_STATUSES,
   SESSION_TYPE_META,
   SESSION_TYPES,
-  SPEAKER_CATEGORIES,
-  SPEAKER_CATEGORY_META,
+  TRAINER_CATEGORIES,
+  TRAINER_CATEGORY_META,
   SPONSOR_TIER_META,
   SPONSOR_TIERS,
   THEME_KEYS,
@@ -49,8 +49,11 @@ import {
 
 export const themeOptions = opts(THEME_KEYS, (k) => THEME_META[k].short);
 const dayOptions = [
-  { value: "1", label: "Day 1 · Tue 15 Dec" },
-  { value: "2", label: "Day 2 · Wed 16 Dec" },
+  { value: "1", label: "Day 1" },
+  { value: "2", label: "Day 2" },
+  { value: "3", label: "Day 3" },
+  { value: "4", label: "Day 4" },
+  { value: "5", label: "Day 5" },
 ];
 const published = bool("published", "Published (visible on the website)");
 const order = num("order", "Display order", { help: "Lower numbers appear first.", width: "third" });
@@ -66,7 +69,8 @@ export type AdminIcon =
   | "users"
   | "help"
   | "image"
-  | "video";
+  | "video"
+  | "award";
 
 export interface Column {
   key: string;
@@ -81,7 +85,7 @@ export interface CollectionDef {
   singular: string;
   description: string;
   icon: AdminIcon;
-  group: "Content" | "Programme" | "People" | "Post-event";
+  group: "Content" | "Programme" | "People" | "Past batches";
   fields: FieldDef[];
   columns: Column[];
   sort: Record<string, 1 | -1>;
@@ -115,7 +119,7 @@ export const COLLECTIONS: CollectionDef[] = [
     fields: [
       text("title", "Title", { required: true, maxLength: 140 }),
       textarea("body", "Message", { maxLength: 1200, rows: 4 }),
-      datetime("date", "Date", { required: true, width: "half", help: "Indian Standard Time." }),
+      datetime("date", "Date", { required: true, width: "half", help: "Bangladesh Standard Time." }),
       select("tone", "Style", [
         { value: "info", label: "Information" },
         { value: "important", label: "Important" },
@@ -128,40 +132,41 @@ export const COLLECTIONS: CollectionDef[] = [
     ],
   },
   {
-    key: "speakers",
-    model: "Speaker",
-    label: "Speakers",
-    singular: "Speaker",
-    description: "Academic and industry speakers and panelists. Their cards appear on the Speakers page; featured speakers also appear on the home page.",
+    key: "trainers",
+    model: "Trainer",
+    label: "Trainers",
+    singular: "Trainer",
+    description: "The trainers of both programmes. Their cards appear on the Trainers page, the lead trainer in the spotlight at its top; featured trainers also appear on the home page.",
     icon: "mic",
     group: "Programme",
     titleKey: "name",
     slugFrom: "name",
-    tags: ["speakers"],
-    publicPath: "/speakers",
+    tags: ["trainers"],
+    publicPath: "/trainers",
     sort: { order: 1, name: 1 },
-    defaults: { published: true, featured: false, category: "academia", order: 100 },
+    defaults: { published: true, featured: false, category: "faculty", affiliation: "Daffodil International University", order: 100 },
     columns: [
       { key: "photo", label: "", kind: "image" },
       { key: "name", label: "Name" },
-      { key: "affiliation", label: "Affiliation" },
+      { key: "designation", label: "Designation" },
       { key: "category", label: "Label", kind: "option" },
+      { key: "lead", label: "Lead", kind: "boolean" },
       { key: "featured", label: "Home", kind: "boolean" },
       { key: "published", label: "Published", kind: "boolean" },
     ],
     fields: [
       text("name", "Full name", { required: true, width: "half" }),
       text("slug", "URL slug", { width: "half", help: "Leave blank to generate from the name." }),
-      text("designation", "Designation", { width: "half", placeholder: "Professor of Computer Science" }),
-      text("affiliation", "Affiliation", { width: "half", placeholder: "IIT Delhi" }),
-      select("category", "Label", opts(SPEAKER_CATEGORIES, (k) => SPEAKER_CATEGORY_META[k].label), { required: true, width: "third" }),
-      select("theme", "Theme", themeOptions, { width: "third" }),
-      bool("keynote", "Keynote speaker", { width: "third" }),
+      text("designation", "Designation", { width: "half", placeholder: "Associate Professor, Department of CSE" }),
+      text("affiliation", "Affiliation", { width: "half", placeholder: "Daffodil International University" }),
+      select("category", "Label", opts(TRAINER_CATEGORIES, (k) => TRAINER_CATEGORY_META[k].label), { required: true, width: "third" }),
+      select("theme", "Programme", themeOptions, { width: "third", help: "The programme they teach; General for both." }),
+      bool("lead", "Lead trainer", { width: "third", help: "Shown in the spotlight at the top of the Trainers page." }),
       image("photo", "Photo", { help: "Square photos look best. Uploads are compressed automatically." }),
-      richtext("bio", "Bio"),
-      text("talkTitle", "Talk title"),
-      richtext("talkAbstract", "Talk abstract"),
-      url("website", "Website", { width: "half" }),
+      richtext("bio", "Profile"),
+      text("expertise", "Areas of expertise", { placeholder: "Machine learning, data science, software engineering" }),
+      richtext("teaching", "What they teach in the programmes"),
+      url("website", "Profile page", { width: "half", help: "e.g. their faculty page on the DIU website." }),
       url("linkedin", "LinkedIn", { width: "half" }),
       url("x", "X / Twitter", { width: "half" }),
       url("scholar", "Google Scholar", { width: "half" }),
@@ -174,9 +179,9 @@ export const COLLECTIONS: CollectionDef[] = [
   {
     key: "sessions",
     model: "Session",
-    label: "Programme",
+    label: "Schedule",
     singular: "Session",
-    description: "Day-wise schedule. Set the programme status (TBA / draft / final) in Site settings → Programme → Schedule.",
+    description: "Day-wise schedule of the next batch. Set the schedule status (TBA / draft / final) in Site settings → Schedule → Schedule.",
     icon: "calendar",
     group: "Programme",
     titleKey: "title",
@@ -189,7 +194,7 @@ export const COLLECTIONS: CollectionDef[] = [
       { key: "start", label: "Start" },
       { key: "title", label: "Title" },
       { key: "type", label: "Type", kind: "option" },
-      { key: "theme", label: "Theme", kind: "option" },
+      { key: "theme", label: "Programme", kind: "option" },
       { key: "published", label: "Published", kind: "boolean" },
     ],
     fields: [
@@ -198,12 +203,12 @@ export const COLLECTIONS: CollectionDef[] = [
       time("start", "Start time", { required: true, width: "third" }),
       time("end", "End time", { width: "third" }),
       select("type", "Type", opts(SESSION_TYPES, (k) => SESSION_TYPE_META[k].label), { required: true, width: "half" }),
-      select("theme", "Theme", themeOptions, { width: "half" }),
-      text("room", "Room / hall", { width: "half", placeholder: "To be announced" }),
-      text("speakerNote", "Speaker text", { width: "half", help: "Shown when no speaker is linked, e.g. “Speaker to be announced”." }),
-      refList("speakers", "Speakers / instructors", "speakers"),
-      ref("moderator", "Moderator (panels)", "speakers", { width: "half" }),
-      refList("panelists", "Panelists (panels)", "speakers"),
+      select("theme", "Programme", themeOptions, { width: "half" }),
+      text("room", "Room / lab", { width: "half", placeholder: "To be announced" }),
+      text("trainerNote", "Trainer text", { width: "half", help: "Shown when no trainer is linked, e.g. “Trainer to be announced”." }),
+      refList("trainers", "Trainers", "trainers"),
+      ref("moderator", "Moderator (discussions)", "trainers", { width: "half" }),
+      refList("panelists", "Panelists (discussions)", "trainers"),
       richtext("description", "Description"),
       order,
       published,
@@ -212,9 +217,9 @@ export const COLLECTIONS: CollectionDef[] = [
   {
     key: "tutorials",
     model: "Tutorial",
-    label: "Tutorials",
-    singular: "Tutorial",
-    description: "Hands-on tutorials with instructors, prerequisites and material links.",
+    label: "Hands-on labs",
+    singular: "Lab",
+    description: "Hands-on labs with their trainers, prerequisites and material links.",
     icon: "graduation",
     group: "Programme",
     titleKey: "title",
@@ -226,17 +231,17 @@ export const COLLECTIONS: CollectionDef[] = [
     columns: [
       { key: "title", label: "Title" },
       { key: "level", label: "Level", kind: "option" },
-      { key: "theme", label: "Theme", kind: "option" },
+      { key: "theme", label: "Programme", kind: "option" },
       { key: "published", label: "Published", kind: "boolean" },
     ],
     fields: [
       text("title", "Title", { required: true }),
       text("slug", "URL slug", { width: "half", help: "Leave blank to generate from the title." }),
-      text("schedule", "When & where", { width: "half", placeholder: "Day 1 · 14:00–15:30 · Room TBA" }),
+      text("schedule", "When & where", { width: "half", placeholder: "Day 1 · 14:00–15:30 · Lab TBA" }),
       select("level", "Level", opts(LEVELS, (k) => LEVEL_META[k].label), { width: "third" }),
       text("duration", "Duration", { width: "third", placeholder: "90 minutes" }),
-      select("theme", "Theme", themeOptions, { width: "third" }),
-      objects("instructors", "Instructors", "Instructor", [
+      select("theme", "Programme", themeOptions, { width: "third" }),
+      objects("instructors", "Trainers", "Trainer", [
         text("name", "Name", { required: true, width: "half" }),
         text("affiliation", "Affiliation", { width: "half" }),
         url("url", "Profile link"),
@@ -257,7 +262,7 @@ export const COLLECTIONS: CollectionDef[] = [
     model: "Demo",
     label: "Demos",
     singular: "Demo",
-    description: "Live demos shown on the Tutorials & Demos page.",
+    description: "Live demos shown on the Hands-on labs page.",
     icon: "monitor",
     group: "Programme",
     titleKey: "title",
@@ -274,7 +279,7 @@ export const COLLECTIONS: CollectionDef[] = [
     fields: [
       text("title", "Title", { required: true }),
       text("team", "Team / company", { width: "half" }),
-      select("theme", "Theme", themeOptions, { width: "half" }),
+      select("theme", "Programme", themeOptions, { width: "half" }),
       textarea("description", "Short description", { maxLength: 600 }),
       image("image", "Image"),
       url("videoUrl", "Video link (YouTube / Vimeo)", { width: "half" }),
@@ -284,41 +289,11 @@ export const COLLECTIONS: CollectionDef[] = [
     ],
   },
   {
-    key: "kiosks",
-    model: "Kiosk",
-    label: "Industry kiosks",
-    singular: "Kiosk",
-    description: "Participating companies and the agentic technology they showcase.",
-    icon: "store",
-    group: "Content",
-    titleKey: "company",
-    tags: ["kiosks"],
-    publicPath: "/programme#kiosks",
-    sort: { order: 1, company: 1 },
-    defaults: { published: true, order: 100 },
-    columns: [
-      { key: "logo", label: "", kind: "image" },
-      { key: "company", label: "Company" },
-      { key: "booth", label: "Booth" },
-      { key: "published", label: "Published", kind: "boolean" },
-    ],
-    fields: [
-      text("company", "Company name", { required: true, width: "half" }),
-      text("booth", "Booth number", { width: "half" }),
-      image("logo", "Logo"),
-      textarea("description", "What they showcase", { maxLength: 500 }),
-      url("website", "Website", { width: "half" }),
-      select("theme", "Theme", themeOptions, { width: "half" }),
-      order,
-      published,
-    ],
-  },
-  {
     key: "sponsors",
     model: "Sponsor",
-    label: "Partners & sponsors",
+    label: "Partners",
     singular: "Partner",
-    description: "Logos loop on the home page and are grouped by tier on the Partners & sponsors page. Sponsorship tiers and the enquiry text live in Site settings → Partners.",
+    description: "Logos loop on the home page and are grouped by tier on the Partners page. Partnership tiers and the enquiry text live in Site settings → Partners.",
     icon: "handshake",
     group: "Content",
     titleKey: "name",
@@ -347,14 +322,14 @@ export const COLLECTIONS: CollectionDef[] = [
     model: "Person",
     label: "Organisers & volunteers",
     singular: "Person",
-    description: "Faculty and student organisers, volunteers, hackathon mentors and judges. All use the same card style.",
+    description: "Faculty coordinators, student organisers and volunteers. All use the same card style.",
     icon: "users",
     group: "People",
     titleKey: "name",
     tags: ["people"],
     publicPath: "/organisers",
     sort: { group: 1, order: 1, name: 1 },
-    defaults: { published: true, group: "volunteer", affiliation: "IIT Delhi", order: 100 },
+    defaults: { published: true, group: "volunteer", affiliation: "Daffodil International University", order: 100 },
     columns: [
       { key: "photo", label: "", kind: "image" },
       { key: "name", label: "Name" },
@@ -365,16 +340,16 @@ export const COLLECTIONS: CollectionDef[] = [
     fields: [
       text("name", "Full name", { required: true, width: "half" }),
       select("group", "Group", opts(PEOPLE_GROUPS, (k) => PEOPLE_GROUP_META[k].label), { required: true, width: "half" }),
-      text("role", "Role", { width: "half", placeholder: "PhD scholar, ScAI" }),
+      text("role", "Role", { width: "half", placeholder: "Lecturer, Department of CSE" }),
       text("department", "Department", { width: "half" }),
       text("affiliation", "Affiliation", { width: "half" }),
       url("profileUrl", "Profile page", { width: "half" }),
       image("photo", "Photo"),
-      textarea("bio", "Short bio (mentors & judges)", { maxLength: 600 }),
+      textarea("bio", "Short bio", { maxLength: 600 }),
       email("loginEmail", "Sign-in e-mail (optional, never shown)", {
         width: "half",
         private: true,
-        help: "With a sign-in code, lets them sign in on the website (to save their agenda). Mentors and judges need this: they have no registration.",
+        help: "With a sign-in code, lets them sign in on the website (to save their agenda), as they have no registration.",
       }),
       text("loginCode", "Sign-in code", {
         width: "half",
@@ -391,7 +366,7 @@ export const COLLECTIONS: CollectionDef[] = [
     model: "Faq",
     label: "FAQs",
     singular: "Question",
-    description: "Frequently asked questions. Hackathon questions also appear on the Hackathon page.",
+    description: "Frequently asked questions, shown on the home page.",
     icon: "help",
     group: "Content",
     titleKey: "question",
@@ -417,9 +392,9 @@ export const COLLECTIONS: CollectionDef[] = [
     model: "GalleryItem",
     label: "Photo gallery",
     singular: "Photo",
-    description: "Post-event photos. Turn the gallery on in Site settings → Site-wide → Features & post-event when ready.",
+    description: "Photos from past batches. Turn the gallery on in Site settings → Site-wide → Features & past batches when ready.",
     icon: "image",
-    group: "Post-event",
+    group: "Past batches",
     titleKey: "caption",
     tags: ["gallery"],
     publicPath: "/gallery",
@@ -445,9 +420,9 @@ export const COLLECTIONS: CollectionDef[] = [
     model: "Talk",
     label: "Slides & recordings",
     singular: "Recording",
-    description: "Post-event talk slides and recordings. Turn this section on in Site settings → Site-wide → Features & post-event.",
+    description: "Session slides and recordings from past batches. Turn this section on in Site settings → Site-wide → Features & past batches.",
     icon: "video",
-    group: "Post-event",
+    group: "Past batches",
     titleKey: "title",
     tags: ["talks"],
     publicPath: "/talks",
@@ -455,16 +430,53 @@ export const COLLECTIONS: CollectionDef[] = [
     defaults: { published: true, order: 100 },
     columns: [
       { key: "title", label: "Title" },
-      { key: "speakerName", label: "Speaker" },
+      { key: "trainerName", label: "Trainer" },
       { key: "published", label: "Published", kind: "boolean" },
     ],
     fields: [
-      text("title", "Talk title", { required: true }),
-      text("speakerName", "Speaker(s)", { width: "half" }),
+      text("title", "Session title", { required: true }),
+      text("trainerName", "Trainer(s)", { width: "half" }),
       select("day", "Day", dayOptions, { width: "half" }),
       textarea("description", "Description"),
       file("slides", "Slides (PDF upload or link)"),
       url("videoUrl", "Recording link (YouTube / Vimeo)"),
+      order,
+      published,
+    ],
+  },
+  {
+    key: "participants",
+    model: "Participant",
+    label: "Past participants",
+    singular: "Participant",
+    description: "People who completed a batch. They are listed on the Past participants page by batch and programme; those with a quote and “Feature their quote” ticked appear under “What participants say” and on the home page.",
+    icon: "award",
+    group: "Past batches",
+    titleKey: "name",
+    tags: ["participants"],
+    publicPath: "/past-participants",
+    sort: { order: 1, name: 1 },
+    defaults: { published: true, featured: false, theme: "professionals", order: 100 },
+    columns: [
+      { key: "photo", label: "", kind: "image" },
+      { key: "name", label: "Name" },
+      { key: "organisation", label: "Organisation" },
+      { key: "batch", label: "Batch" },
+      { key: "theme", label: "Programme", kind: "option" },
+      { key: "featured", label: "Quote", kind: "boolean" },
+      { key: "published", label: "Published", kind: "boolean" },
+    ],
+    fields: [
+      text("name", "Full name", { required: true, width: "half" }),
+      text("designation", "Designation", { width: "half", placeholder: "Assistant Manager, HR" }),
+      text("organisation", "Organisation", { width: "half" }),
+      select("theme", "Programme", themeOptions, { required: true, width: "half", help: "General: they completed both programmes." }),
+      text("batch", "Batch", { required: true, width: "half", placeholder: "Batch 1 · January 2026", help: "Participants with the same batch text are grouped together." }),
+      date("completed", "Completed on", { width: "half", help: "Orders the batches, newest first." }),
+      image("photo", "Photo (optional)", { help: "Only with their permission. Square photos look best." }),
+      textarea("quote", "What they said about the training (optional)", { maxLength: 400, rows: 3, help: "Only with their permission." }),
+      bool("featured", "Feature their quote", { help: "Shows the quote under “What participants say” and on the home page." }),
+      url("profileUrl", "Profile link (optional)", { help: "e.g. their LinkedIn, with their permission." }),
       order,
       published,
     ],
@@ -480,7 +492,6 @@ const iconOptions = [
   { value: "mic", label: "Microphone" },
   { value: "graduation", label: "Graduation cap" },
   { value: "monitor", label: "Screen" },
-  { value: "store", label: "Kiosk" },
   { value: "trophy", label: "Trophy" },
   { value: "users", label: "People" },
   { value: "calendar", label: "Calendar" },
@@ -491,10 +502,13 @@ const iconOptions = [
   { value: "code", label: "Code" },
   { value: "landmark", label: "Institution" },
   { value: "heart", label: "Heart" },
+  { value: "laptop", label: "Laptop" },
+  { value: "award", label: "Award" },
+  { value: "clock", label: "Clock" },
 ];
 
 export interface SingletonDef {
-  key: "settings" | "hackathon";
+  key: "settings";
   label: string;
   description: string;
   tags: string[];
@@ -510,8 +524,6 @@ export interface SettingsSection extends FieldSection {
   path?: string;
   /** For a part of a section with a tab of its own: that section's key, so the tab moves (and hides) with it. */
   within?: string;
-  /** Hackathon details (Admin → Hackathon) shown on this section and edited in its tab too; they are saved there. */
-  hackathon?: FieldDef[];
 }
 
 /** A tab of Site settings: one page of the site, or the parts shared by every page. */
@@ -536,16 +548,6 @@ export const PALETTE_DEFAULTS: Record<Tone, string> = { azure: "#8cc8ff", lilac:
 
 const section = (key: string, title: string, copy: CopyKey | undefined, fields: FieldDef[] = [], extra: Partial<SettingsSection> = {}): SettingsSection => ({ key, title, copy, fields, ...extra });
 
-/** Hackathon details that the Hackathon page's tabs of Site settings edit too. */
-const hackathonTagline = text("tagline", "Tagline");
-const hackathonOverview = richtext("overview", "Overview");
-const hackathonPrizePool = text("prizePool", "Prize pool", { width: "half", placeholder: "TBA" });
-const hackathonPrizes = objects("prizes", "Prizes", "Prize", [
-  text("place", "Place / award", { required: true, width: "half" }),
-  text("reward", "Reward", { width: "half", placeholder: "TBA" }),
-  textarea("description", "Description", { rows: 2 }),
-], { titleKey: "place" });
-
 const FIELDS_HELP =
   "Open a field to change its name, its guide (the line under it, and the example inside it), the type of answer and its choices, and whether it is required or shown; the arrows change the order. Built-in fields (with a padlock) can be hidden but not deleted, and the ones the site needs stay required. Add your own questions at the end: their answers appear with each response and in the CSV download.";
 
@@ -554,22 +556,22 @@ export const SETTINGS_PAGES: SettingsPage[] = [
     key: "site",
     title: "Site-wide",
     path: "/",
-    description: "Event details, registration, colours and the parts every page shares: navigation, header, footer and banner.",
+    description: "Programme details, registration, colours and the parts every page shares: navigation, header, footer and banner.",
     sections: [
       section(
         "event",
-        "Event details",
+        "Programme details",
         undefined,
         [
-          text("eventName", "Event name", { required: true, width: "half", help: "Used in the logo, page titles, e-mails and calendar invites. A year at the end (e.g. 2026) appears under the logo." }),
+          text("eventName", "Name", { required: true, width: "half", help: "Used in the logo, page titles, e-mails and calendar invites. A year at the end (e.g. 2026) appears under the logo; without one, the next batch's year does." }),
           text("shortName", "Short name", { width: "half", help: "Used where space is tight: the admin panel and the name of the site when installed as an app." }),
           text("tagline", "Tagline"),
           textarea("description", "Short description", { help: "Used for search engines and social media previews.", maxLength: 300 }),
           text("organisedBy", "Organised by"),
-          datetime("startDate", "Starts", { required: true, width: "half", help: "Indian Standard Time. The programme's days and calendar invites follow it." }),
-          datetime("endDate", "Ends", { required: true, width: "half" }),
+          datetime("startDate", "Next batch starts", { required: true, width: "half", help: "Bangladesh Standard Time. The schedule's days and calendar invites follow it." }),
+          datetime("endDate", "Next batch ends", { required: true, width: "half" }),
           text("venueName", "Venue", { width: "half" }),
-          text("venueHall", "Hall / building", { width: "half", help: "Leave blank to show “to be announced”." }),
+          text("venueHall", "Room / building", { width: "half", help: "Leave blank to show “to be announced”." }),
           textarea("venueAddress", "Full address", { rows: 2 }),
         ],
         { anchor: "home.hero" },
@@ -579,20 +581,16 @@ export const SETTINGS_PAGES: SettingsPage[] = [
         "Registration",
         undefined,
         [
-          select("workshopStatus", "Workshop registration", statusOptions, { width: "half", help: "Also shown under the title on the home page." }),
-          datetime("workshopDeadline", "Workshop registration deadline", { width: "half" }),
+          select("workshopStatus", "Registration", statusOptions, { width: "half", help: "Also shown on Aura's placards and the registration cards on the home page." }),
+          datetime("workshopDeadline", "Registration deadline", { width: "half" }),
           datetime("workshopReplyBy", "Places confirmed by", {
             width: "half",
             help: "The date by which the organising committee tells registrants whether they have a place. Texts that say {replyBy} show “by” and this date; leave it blank for “by e-mail”.",
           }),
-          url("workshopUrl", "External workshop form (optional)", { help: "Leave blank to use the built-in registration form." }),
+          url("workshopUrl", "External registration form (optional)", { help: "Leave blank to use the built-in registration form." }),
           textarea("confirmationNote", "Extra text for the confirmation e-mail"),
-          select("hackathonStatus", "Hackathon registration", statusOptions, { width: "half" }),
-          datetime("hackathonDeadline", "Hackathon registration deadline", { width: "half" }),
-          url("hackathonUrl", "External hackathon platform link (optional)", { width: "half", help: "e.g. Unstop or Devfolio. Leave blank for the built-in form." }),
-          text("hackathonPlatform", "Platform name", { width: "half", placeholder: "Unstop" }),
         ],
-        { description: "Use the built-in forms, or paste a link to an external form (Google Forms, Unstop, Devfolio…).", path: "/register", anchor: "register.hero" },
+        { description: "Use the built-in form, or paste a link to an external form (Google Forms…).", path: "/register", anchor: "register.hero" },
       ),
       section(
         "colours",
@@ -615,18 +613,18 @@ export const SETTINGS_PAGES: SettingsPage[] = [
         "Logos & images",
         undefined,
         [
-          image("logoIITD", "IIT Delhi logo", { width: "half", help: "Left corner of the navigation bar. Leave blank for the built-in emblem." }),
-          image("logoScAI", "ScAI logo", { width: "half", help: "Right corner of the navigation bar. Leave blank for the built-in logo." }),
+          image("logoUniversity", "University logo", { width: "half", help: "Left corner of the navigation bar. Leave blank for the built-in DIU logo." }),
+          image("logoDepartment", "Department logo", { width: "half", help: "Right corner of the navigation bar. Leave blank for the built-in Department of CSE seal." }),
           image("eventLogo", "Event logo", { width: "half" }),
           image("ogImage", "Social preview image (optional)", { help: "1200×630 px. Leave blank to use the generated preview." }),
         ],
-        { description: "The IIT Delhi and ScAI logos are built in. Upload one here only to replace it.", anchor: "site.header" },
+        { description: "The DIU logo and the Department of CSE seal are built in. Upload one here only to replace it.", anchor: "site.header" },
       ),
       section("nav", "Navigation", "siteNav", [], { description: "Names of the pages and home sections in the navigation bar, its Explore menu and the footer.", anchor: "site.header" }),
       section("header", "Header", "siteHeader", [], { anchor: "site.header" }),
       section("account", "Sign-in", "siteAccount", [], {
         description:
-          "Visitors sign in (Sign in in the navigation bar, or by starring a programme session) to keep their agenda. There is no sign-up: workshop attendees use their registration ID, hackathon teams their team's, volunteers their admin panel password, and mentors and judges the sign-in e-mail and code set on their entry under Organisers & volunteers.",
+          "Visitors sign in (Sign in in the navigation bar, or by starring a session in the schedule) to keep their agenda. There is no sign-up: registered participants use their registration ID, volunteers their admin panel password, and coordinators the sign-in e-mail and code set on their entry under Organisers & volunteers.",
         anchor: "site.header",
       }),
       section("footer", "Footer", "siteFooter", [], { anchor: "site.footer" }),
@@ -644,7 +642,7 @@ export const SETTINGS_PAGES: SettingsPage[] = [
         [
           email("contactEmail", "Official e-mail", { width: "half" }),
           text("contactPhone", "Phone (optional)", { width: "half" }),
-          email("notifyEmail", "Send form notifications to", { width: "half", help: "New hackathon teams and enquiries are e-mailed here (needs SMTP). Workshop registrations are listed under Registrations." }),
+          email("notifyEmail", "Send form notifications to", { width: "half", help: "New enquiries are e-mailed here (needs SMTP). Registrations are listed under Registrations." }),
           url("website", "Website", { width: "half" }),
           url("linkedin", "LinkedIn", { width: "half" }),
           url("x", "X / Twitter", { width: "half" }),
@@ -653,13 +651,9 @@ export const SETTINGS_PAGES: SettingsPage[] = [
         ],
         { anchor: "site.footer" },
       ),
-      section("features", "Features & post-event", undefined, [
-        bool("showGallery", "Post-event: show the photo gallery"),
-        bool("showTalks", "Post-event: show talk slides & recordings"),
-        bool("showWinners", "Post-event: show hackathon winners"),
-        bool("showHackathon", "Show the hackathon", {
-          help: "Its page, its sections on the home and programme pages, Aura's hackathon placard and registration card, links in the menus, its FAQs and team registration. While it's off, the Hackathon page shows only a “details coming soon” poster (Hackathon → Coming-soon poster), and nothing links to it.",
-        }),
+      section("features", "Features & past batches", undefined, [
+        bool("showGallery", "Past batches: show the photo gallery"),
+        bool("showTalks", "Past batches: show session slides & recordings"),
       ]),
       section("seo", "SEO & analytics", undefined, [
         text("gaId", "Google Analytics measurement ID", { placeholder: "G-XXXXXXXXXX", width: "half" }),
@@ -677,21 +671,21 @@ export const SETTINGS_PAGES: SettingsPage[] = [
           "The first time someone opens the home page (and after the site is updated), the pages, scripts, styles and images are fetched and cached behind a loading screen, so the rest of the visit is quick. Aura's ship tries to take off as small Auras work on it and the ring around the window fills; once everything is cached she lifts off and the smoke clears to show the page. Visitors who ask for reduced motion get the caching without the screen. It isn't shown in this preview: open the home page in a private window to see it.",
       }),
       section("hero", "Hero", "homeHero", [
-        bool("showHeroPhoto", "Show the photo of the IIT Delhi building behind the hero"),
-        image("heroPhoto", "Hero photo", { help: "Leave it empty for the built-in photo of the IIT Delhi main building, framed so that its sign, in Hindi and English, shows above Aura. An uploaded landscape photo (16:9 works best) sits at the top right instead and fades into the background towards the title." }),
+        bool("showHeroPhoto", "Show the photo of the DIU campus behind the hero"),
+        image("heroPhoto", "Hero photo", { help: "Leave it empty for the built-in photo of DIU's academic building at Daffodil Smart City, framed so that its “Daffodil International University” sign shows above Aura. An uploaded landscape photo (16:9 works best) sits at the top right instead and fades into the background towards the title." }),
       ], {
-        description: "The event name, tagline, dates and venue come from Site-wide → Event details.",
+        description: "The name, tagline, batch dates and venue come from Site-wide → Programme details.",
       }),
       section("placard", "Hero announcements", "homePlacard", [], {
         description:
-          "Aura holds up two placards in turn in the hero: one for workshop registration, one for hackathon registration. {status} in a placard becomes that registration's status (Site-wide → Registration) in the words below, and turns to closed by itself at the deadline. Clear one placard to show only the other.",
+          "Aura holds up two placards in turn in the hero: one for AI for Professionals, one for AI for Workspace. {status} in a placard becomes the registration status (Site-wide → Registration) in the words below, and turns to closed by itself at the deadline. Clear one placard to show only the other.",
       }),
       section("register", "Registration choice", "homeRegister", [], {
-        description: "The heading and two compact cards along the foot of the hero, one for each registration. Their status comes from Site-wide → Registration.",
+        description: "The heading and two compact cards along the foot of the hero, one for each programme; each opens the registration form with its programme ticked. Their status comes from Site-wide → Registration.",
       }),
-      section("invite", "Registration open", "homeInvite", [image("invitePhoto", "Poster image", { help: "Leave it empty for the built-in picture of a poster session. An uploaded landscape picture (16:9, e.g. 1920×1080) replaces it across the top of the poster, under its label and badge, fading into the poster below." })], {
+      section("invite", "Registration open", "homeInvite", [image("invitePhoto", "Poster image", { help: "Leave it empty for the built-in photo of the DIU campus. An uploaded landscape picture (16:9, e.g. 1920×1080) replaces it across the top of the poster, under its label and badge, fading into the poster below." })], {
         description:
-          "Under the hero: that registration is open, that places are limited and confirmed by the organising committee, what to expect, the call to bring your research to the poster session, and the poster with its picture. Its dates and venue come from Site-wide → Event details, and the date in {replyBy} from Site-wide → Registration.",
+          "Under the hero: that registration is open, that places are limited and confirmed by the organising team, what to expect, the invitation to bring a real task, and the poster with its picture. Its dates and venue come from Site-wide → Programme details, and the date in {replyBy} from Site-wide → Registration.",
       }),
       section("highlights", "Highlight strip", "homeHighlights", [
         objects("highlights", "Highlights", "Highlight", [
@@ -701,13 +695,13 @@ export const SETTINGS_PAGES: SettingsPage[] = [
         ], { maxItems: 6 }),
       ]),
       section("news", "Announcements", "homeNews", [], { description: "The announcements themselves are added under Announcements." }),
-      section("themes", "Themes", "homeThemes", [
-        objects("themes", "Themes", "Theme", [
-          select("key", "Theme", themeOptions.filter((t) => t.value !== "general"), { required: true, width: "half" }),
+      section("themes", "Programmes", "homeThemes", [
+        objects("themes", "Programmes", "Programme", [
+          select("key", "Programme", themeOptions.filter((t) => t.value !== "general"), { required: true, width: "half" }),
           text("title", "Title", { required: true, width: "half" }),
           textarea("description", "Description (2–3 lines)", { rows: 3 }),
-          image("image", "Photo", { help: "A landscape photo (16:9 works best) across the top of the card, with Aura below it. Leave it empty to use the built-in photo for the theme." }),
-        ], { titleKey: "title", maxItems: 3 }),
+          image("image", "Photo", { help: "A landscape photo (16:9 works best) across the top of the card, with Aura below it. Leave it empty to use the built-in photo for the programme." }),
+        ], { titleKey: "title", maxItems: 2 }),
       ]),
       section("about", "About", "homeAbout", [
         objects("aboutPoints", "Topics around Aura", "Topic", [
@@ -716,11 +710,11 @@ export const SETTINGS_PAGES: SettingsPage[] = [
           textarea("description", "Summary (shown in Aura's speech bubble)", { rows: 2, maxLength: 150, help: "You can write {dates}, {venue} or {event}; they are filled in from these settings." }),
         ], { maxItems: 8, help: "Up to 8 topics around Aura, each summarising part of the About page. Aura waits in a thinking pose; hovering or tapping a topic makes her point at it and answer with its summary." }),
       ]),
-      section("speakers", "Speakers", "homeSpeakers", [
-        num("featuredSpeakers", "Featured speakers on the home page", { min: 0, max: 12, width: "half" }),
-        bool("showMoreSpeakers", "Show the “More speakers to be announced” card"),
-      ], { description: "Speakers are added under Speakers; tick “Feature on the home page” to show them here." }),
-      section("hackathon", "Hackathon", "homeHackathon", [], { description: "The hackathon's title, tagline, question, team size, mode and prize pool are edited under Hackathon." }),
+      section("trainers", "Trainers", "homeTrainers", [
+        num("featuredTrainers", "Featured trainers on the home page", { min: 0, max: 12, width: "half" }),
+        bool("showMoreTrainers", "Show the “More trainers to be announced” card"),
+      ], { description: "Trainers are added under Trainers; tick “Feature on the home page” to show them here." }),
+      section("participants", "Past participants", "homeParticipants", [], { description: "Quotes from past participants (under Past participants, with “Feature their quote” ticked), and a link to the Past participants page." }),
       section("venue", "Venue & travel", "homeVenue", [], { description: "The routes on the map are edited in the Venue tab → Getting here." }),
       section("partners", "Partners", "homePartners", [], { description: "The logos come from Partners & sponsors." }),
       section("faq", "FAQ & contact", "homeFaq", [], { description: "Questions are added under FAQs; the e-mail and phone under Site-wide → Contact & social." }),
@@ -737,7 +731,7 @@ export const SETTINGS_PAGES: SettingsPage[] = [
     path: "/about",
     sections: [
       section("hero", "Hero", "aboutHero"),
-      section("motivation", "Motivation", "aboutMotivation", [richtext("motivation", "Workshop motivation"), richtext("agenticAI", "What is agentic AI?")]),
+      section("motivation", "Motivation", "aboutMotivation", [richtext("motivation", "Why this training"), richtext("agenticAI", "What you will learn")]),
       section("audience", "Who should attend", "aboutAudience", [
         objects("audience", "Audiences", "Audience", [
           text("title", "Title", { required: true, width: "half" }),
@@ -756,87 +750,37 @@ export const SETTINGS_PAGES: SettingsPage[] = [
   },
   {
     key: "programme",
-    title: "Programme",
+    title: "Schedule",
     path: "/programme",
     sections: [
       section("hero", "Hero", "programmeHero", [file("schedulePdf", "Schedule PDF (optional)", { accept: "application/pdf", help: "Upload to replace the automatically generated PDF." })]),
       section("overview", "At a glance", "programmeOverview"),
       section("schedule", "Schedule", "programmeSchedule", [
-        select("programmeStatus", "Programme status", [
+        select("programmeStatus", "Schedule status", [
           { value: "tba", label: "To be announced (show placeholder)" },
           { value: "draft", label: "Draft (show sessions marked “subject to change”)" },
           { value: "final", label: "Final" },
         ]),
         textarea("programmeNote", "Note above the schedule"),
-      ], { description: "Sessions are added under Programme." }),
-      section("kiosks", "Industry kiosks", "programmeKiosks", [textarea("kioskIntro", "Introduction")], { description: "Kiosks are added under Industry kiosks." }),
-      section("exhibitForm", "Exhibit form", "exhibitFormText", [formFieldList("exhibitFields", "Fields of the “Exhibit with us” form", "exhibitor", { help: FIELDS_HELP })], {
-        description: "The form behind the “Exhibit with us” button: its fields and texts. Enquiries arrive under Enquiries.",
-        within: "kiosks",
-        anchor: "programme.kiosks",
-      }),
-      section("hackathon", "Hackathon", "programmeHackathon", [], { description: "The title, tagline, question and dates come from the Hackathon page in the menu." }),
+      ], { description: "Sessions are added under Schedule." }),
       section("plan", "Plan your visit", "programmePlan"),
     ],
   },
   {
-    key: "speakers",
-    title: "Speakers",
-    path: "/speakers",
-    sections: [section("hero", "Hero", "speakersHero"), section("list", "Speaker list", "speakersList", [], { description: "Speakers are added under Speakers. The “More speakers to be announced” card is edited under Home → Speakers; the texts here show while there are no speakers yet." })],
+    key: "trainers",
+    title: "Trainers",
+    path: "/trainers",
+    sections: [
+      section("hero", "Hero", "trainersHero"),
+      section("spotlight", "Lead trainer", "trainersSpotlight", [], { description: "The trainer marked “Lead trainer” under Trainers (the first one, if several are), shown large at the top of the page with their profile." }),
+      section("list", "Trainer list", "trainersList", [], { description: "Trainers are added under Trainers. The “More trainers to be announced” card is edited under Home → Trainers; the texts here show while there are no trainers yet." }),
+    ],
   },
   {
     key: "tutorials",
-    title: "Tutorials",
+    title: "Hands-on labs",
     path: "/tutorials",
-    sections: [section("hero", "Hero", "tutorialsHero"), section("list", "Tutorials & demos", "tutorialsList", [], { description: "Tutorials and demos are added under Tutorials and Demos." })],
-  },
-  {
-    key: "hackathon",
-    title: "Hackathon",
-    path: "/hackathon",
-    description: "Headings, labels and colours of the Hackathon page, team registration included, and its tagline, overview and prizes. Its title, question, rules, timeline and results are edited under Hackathon in the menu.",
-    sections: [
-      section("poster", "Coming-soon poster", "hackathonPoster", [image("hackathonPosterPhoto", "Poster image", { help: "Leave it empty for the built-in picture of a hackathon team at work. An uploaded landscape picture (16:9, e.g. 1920×1080) replaces it across the top of the poster, under its label and badge, fading into the poster below." })], {
-        description:
-          "While the hackathon is hidden (Site-wide → Features → Show the hackathon is off), its page shows only this poster, and nothing else on the site links to it. The preview shows the poster above the full page, so both can be edited.",
-      }),
-      section("hero", "Hero", "hackathonHero", [], {
-        hackathon: [{ ...hackathonTagline, help: "The line under the title. It also shows with the hackathon on the home page and the Programme page, and is the same text as Hackathon → Overview → Tagline." }],
-      }),
-      section("overview", "At a glance", "hackathonOverview", [], {
-        description: "Team size, who can join, dates, location and mode are edited under Hackathon → Overview; the prize pool and prizes in the Prize money tab.",
-        hackathon: [{ ...hackathonOverview, help: `The text under the title. The same text as Hackathon → Overview → Overview. ${hackathonOverview.help}` }],
-      }),
-      section("prizes", "Prize money", "hackathonPrizes", [], {
-        description: "A panel beside the At a glance facts, so both fit on one screen. The first three prizes stand on a small podium; any others are listed below it as special awards.",
-        within: "overview",
-        hackathon: [
-          { ...hackathonPrizePool, help: "The amount under the pool's label. The same as Hackathon → Overview → Prize pool." },
-          { ...hackathonPrizes, help: "In order: the first three stand on the podium, the rest are the special awards. The same list as Hackathon → Prizes & judging → Prizes." },
-        ],
-      }),
-      section("timeline", "Timeline", "hackathonTimeline"),
-      section("register", "Registration form", "hackathonRegisterForm", [], {
-        description: "Whether registration is open, its deadline and an external platform link are set under Site-wide → Registration.",
-      }),
-      section(
-        "form",
-        "Team form",
-        "hackathonFormText",
-        [
-          formFieldList("hackathonFields", "Team fields", "hackathonTeam", { help: `${FIELDS_HELP} Team fields go on the first step (before the members) or the last one (after them).` }),
-          formFieldList("hackathonMemberFields", "Fields for each member", "hackathonMember", { help: "Asked for every member of the team. “Required” means for each member being entered; the team lead always is." }),
-        ],
-        { description: "The team registration form's fields and texts. The preview shows the form even while registration isn't open.", within: "register", anchor: "hackathon.register" },
-      ),
-      section("tracks", "The challenge", "hackathonTracks", [], { description: "The hackathon's one track and one question, with the ideas under it. The question itself is edited under Hackathon → The question." }),
-      section("judging", "Judging", "hackathonJudging"),
-      section("people", "Mentors & judges", "hackathonPeople", [], { description: "Mentors and judges are added under Organisers & volunteers." }),
-      section("rules", "Rules & FAQ", "hackathonRules"),
-      section("results", "Results", "hackathonResults", [], { description: "Shown once “Post-event: show hackathon winners” is on (Site-wide → Features)." }),
-      section("cta", "Closing call to action", "hackathonCta"),
-    ],
+    sections: [section("hero", "Hero", "tutorialsHero"), section("list", "Labs & demos", "tutorialsList", [], { description: "Labs and demos are added under Hands-on labs and Demos." })],
   },
   {
     key: "register",
@@ -846,7 +790,7 @@ export const SETTINGS_PAGES: SettingsPage[] = [
       section("hero", "Hero", "registerHero"),
       section("form", "Form & status", "registerForm", [], { description: "Whether registration is open, and an external form link, are set under Site-wide → Registration." }),
       section("fields", "Form fields", "registerFormText", [formFieldList("registerFields", "Fields", "register", { help: FIELDS_HELP })], {
-        description: "The workshop registration form's fields, in three steps, and its texts. The preview shows the form even while registration isn't open.",
+        description: "The registration form's fields, in three steps, and its texts. The preview shows the form even while registration isn't open.",
         within: "form",
         anchor: "register.form",
       }),
@@ -859,13 +803,6 @@ export const SETTINGS_PAGES: SettingsPage[] = [
         textarea("feeNote", "Fee note", { placeholder: "Fee details will be announced soon." }),
       ]),
       section("deadlines", "Deadlines", "registerDeadlines"),
-      section("posters", "Call for posters", "registerPosters", [
-        image("postersPhoto", "Picture", {
-          help: "Leave it empty for the built-in picture of a poster session (the same as on the home page's poster). An uploaded landscape picture (16:9, e.g. 1920×1080) replaces it; beside the text it is shown taller, keeping its right side.",
-        }),
-      ], {
-        description: "Under the form: arXiv preprints and papers currently under submission, on the broader theme of agentic AI, are welcome as posters at the poster session, beside a picture. Registrants say whether they'd like to present one with the form's “Would you like to present a poster?” (Form fields).",
-      }),
     ],
   },
   {
@@ -875,17 +812,17 @@ export const SETTINGS_PAGES: SettingsPage[] = [
     sections: [
       section("hero", "Hero", "partnersHero", [
         textarea("sponsorshipIntro", "Introduction"),
-        file("sponsorBrochure", "Sponsorship brochure (PDF)", { accept: "application/pdf" }),
+        file("sponsorBrochure", "Partnership brochure (PDF)", { accept: "application/pdf" }),
       ]),
       section("partnerForm", "Partner form", "partnerFormText", [formFieldList("partnerFields", "Fields of the “Become a partner” form", "sponsor", { help: FIELDS_HELP })], {
         description: "The form behind the “Become a partner” button: its fields and texts. Enquiries arrive under Enquiries.",
         anchor: "partners.hero",
       }),
-      section("list", "Our partners", "partnersList", [], { description: "Partners are added under Partners & sponsors." }),
-      section("reach", "Who you'll meet", "partnersReach", [], { description: "The list comes from About → Who should attend." }),
+      section("list", "Our partners", "partnersList", [], { description: "Partners are added under Partners." }),
+      section("reach", "Who you'll reach", "partnersReach", [], { description: "The list comes from About → Who should attend." }),
       section("ways", "Ways to take part", "partnersWays"),
-      section("tiers", "Sponsorship tiers", "partnersTiers", [
-        objects("sponsorTiers", "Sponsorship tiers", "Tier", [
+      section("tiers", "Partnership tiers", "partnersTiers", [
+        objects("sponsorTiers", "Partnership tiers", "Tier", [
           text("name", "Tier name", { required: true, width: "half" }),
           text("price", "Contribution", { width: "half", placeholder: "On request" }),
           list("perks", "Benefits", { itemLabel: "Benefit" }),
@@ -903,13 +840,13 @@ export const SETTINGS_PAGES: SettingsPage[] = [
         text("mapQuery", "Map location", { help: "Search text for the embedded Google Map, e.g. a building name." }),
         url("mapEmbedUrl", "Custom map embed URL (optional)", { help: "Paste the src of a Google Maps “Embed a map” iframe." }),
         richtext("campusEntry", "Campus entry information"),
-      ], { description: "The venue's name and address are under Site-wide → Event details." }),
+      ], { description: "The venue's name and address are under Site-wide → Programme details." }),
       section("routes", "Getting here", "venueRoutes", [
         objects("directions", "Directions", "Route", [
           select("mode", "Mode", [
             { value: "air", label: "By air" },
             { value: "rail", label: "By train" },
-            { value: "metro", label: "By metro" },
+            { value: "metro", label: "By metro rail" },
             { value: "road", label: "By road" },
           ], { width: "half" }),
           text("title", "Title", { required: true, width: "half" }),
@@ -940,7 +877,7 @@ export const SETTINGS_PAGES: SettingsPage[] = [
     description: "People are added under Organisers & volunteers.",
     sections: [
       section("hero", "Hero", "organisersHero"),
-      section("faculty", "Faculty organisers", "organisersFaculty"),
+      section("faculty", "Faculty coordinators", "organisersFaculty"),
       section("students", "Student organisers", "organisersStudents"),
       section("volunteers", "Volunteers", "organisersVolunteers"),
     ],
@@ -949,15 +886,28 @@ export const SETTINGS_PAGES: SettingsPage[] = [
     key: "gallery",
     title: "Photo gallery",
     path: "/gallery",
-    description: "Shown once “Post-event: show the photo gallery” is on (Site-wide → Features); the preview here shows it before that. Photos are added under Photo gallery.",
+    description: "Shown once “Past batches: show the photo gallery” is on (Site-wide → Features); the preview here shows it before that. Photos are added under Photo gallery.",
     sections: [section("hero", "Page", "galleryHero")],
   },
   {
     key: "talks",
     title: "Slides & recordings",
     path: "/talks",
-    description: "Shown once “Post-event: show talk slides & recordings” is on (Site-wide → Features); the preview here shows it before that. Talks are added under Slides & recordings.",
+    description: "Shown once “Past batches: show session slides & recordings” is on (Site-wide → Features); the preview here shows it before that. Recordings are added under Slides & recordings.",
     sections: [section("hero", "Page", "talksHero")],
+  },
+  {
+    key: "participants",
+    title: "Past participants",
+    path: "/past-participants",
+    description: "Participants are added under Past participants.",
+    sections: [
+      section("hero", "Hero", "participantsHero"),
+      section("stats", "Numbers", "participantsStats", [], { description: "Counted from the participants listed under Past participants." }),
+      section("testimonials", "What participants say", "participantsTestimonials", [], { description: "The quotes of participants with “Feature their quote” ticked." }),
+      section("list", "Participants by batch", "participantsList"),
+      section("cta", "Closing call to action", "participantsCta"),
+    ],
   },
   {
     key: "meetAura",
@@ -1007,88 +957,7 @@ export const SETTINGS_DEF: SingletonDef = {
   ]),
 };
 
-export const HACKATHON_DEF: SingletonDef = {
-  key: "hackathon",
-  label: "Hackathon",
-  description: "Everything on the Hackathon page. Mentors and judges are managed under Organisers & volunteers.",
-  tags: ["hackathon"],
-  sections: [
-    {
-      key: "overview",
-      title: "Overview",
-      fields: [
-        text("title", "Title", { required: true }),
-        { ...hackathonTagline, help: "Also editable in Site settings → Hackathon → Hero." },
-        { ...hackathonOverview, help: `Also editable in Site settings → Hackathon → At a glance. ${hackathonOverview.help}` },
-        text("teamSize", "Team size", { width: "half", placeholder: "2 to 4 members" }),
-        text("teamType", "Who can join", { width: "half", help: "The kind of teams you're looking for, in a line." }),
-        text("dates", "Dates", { width: "half", help: "Leave blank to show the workshop's dates (Site settings → Site-wide → Event details)." }),
-        text("location", "Location", { width: "half", help: "Leave blank to show the workshop's venue." }),
-        text("mode", "Mode", { width: "half", placeholder: "On-site / hybrid, to be announced" }),
-        { ...hackathonPrizePool, help: "Also editable in Site settings → Hackathon → Prize money." },
-        list("eligibility", "Eligibility", { itemLabel: "Rule" }),
-        textarea("registrationNote", "Registration note"),
-      ],
-    },
-    {
-      key: "challenge",
-      title: "The question",
-      description: "One hackathon, one track, one question: every team answers the same question, so there are no themes or tracks to pick from. (The three themes are the workshop's, for its talks and tutorials.)",
-      fields: [
-        text("question", "The question", { required: true, maxLength: 160, help: "The one question every team answers, in a line. It is shown large on the Hackathon page and on the home page." }),
-        richtext("challenge", "The challenge", { help: "What answering the question involves, in a few lines." }),
-        list("ideas", "Ideas to get teams thinking", { itemLabel: "Idea", help: "Example directions, not separate tracks. Leave empty to show none." }),
-      ],
-    },
-    {
-      key: "rules",
-      title: "Rules & conduct",
-      fields: [list("rules", "Rules", { itemLabel: "Rule" }), richtext("codeOfConduct", "Code of conduct")],
-    },
-    {
-      key: "timeline",
-      title: "Timeline",
-      fields: [
-        objects("timeline", "Milestones", "Milestone", [
-          text("label", "Milestone", { required: true, width: "half" }),
-          date("date", "Date", { width: "half", help: "Leave blank while the date is TBA." }),
-          text("dateLabel", "Date text (optional)", { width: "half", placeholder: "TBA" }),
-          textarea("description", "Description", { rows: 2 }),
-        ], { titleKey: "label" }),
-      ],
-    },
-    {
-      key: "prizes",
-      title: "Prizes & judging",
-      fields: [
-        { ...hackathonPrizes, help: "Also editable in Site settings → Hackathon → Prize money." },
-        objects("judgingCriteria", "Judging criteria", "Criterion", [
-          text("name", "Criterion", { required: true, width: "half" }),
-          num("weight", "Weight (%)", { min: 0, max: 100, width: "half" }),
-          textarea("description", "Description", { rows: 2 }),
-        ], { titleKey: "name" }),
-      ],
-    },
-    {
-      key: "results",
-      title: "Results",
-      description: "Shown only after you enable “Post-event: show hackathon winners” in Site settings → Site-wide → Features & post-event.",
-      fields: [
-        textarea("resultsNote", "Results introduction"),
-        objects("winners", "Winners", "Winner", [
-          text("position", "Position / award", { required: true, width: "half" }),
-          text("team", "Team name", { required: true, width: "half" }),
-          text("project", "Project", { width: "half" }),
-          text("members", "Members", { width: "half" }),
-          textarea("description", "Description", { rows: 2 }),
-          url("link", "Project link"),
-        ], { titleKey: "team" }),
-      ],
-    },
-  ],
-};
-
-export const SINGLETONS = { settings: SETTINGS_DEF, hackathon: HACKATHON_DEF } as const;
+export const SINGLETONS = { settings: SETTINGS_DEF } as const;
 
 /* Form option lists used by the public registration forms */
 export const attendeeCategoryKeys = ATTENDEE_CATEGORIES;

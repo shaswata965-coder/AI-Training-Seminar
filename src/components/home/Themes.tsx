@@ -8,25 +8,22 @@ import { cn } from "@/lib/cn";
 import { THEME_META } from "@/lib/content/constants";
 import type { SiteSettings } from "@/lib/content/types";
 import { copy } from "@/lib/copy";
-import { hackathonShown } from "@/lib/event";
 
 type Theme = SiteSettings["themes"][number];
 
-/** The built-in photos (public/themes), shown until another is uploaded in Site settings → Home → Themes. */
+/** The built-in photos (public/themes, of DIU's campus), shown until another is uploaded in Site settings → Home → Programmes. */
 const THEME_PHOTOS: Record<Theme["key"], string> = {
-  healthcare: "/themes/healthcare.webp",
-  science: "/themes/science.webp",
-  enterprise: "/themes/enterprise.webp",
+  professionals: "/themes/professionals.webp",
+  workspace: "/themes/workspace.webp",
 };
 
-/** A theme card's photo: the one uploaded for it, or the built-in one. */
+/** A programme card's photo: the one uploaded for it, or the built-in one. */
 export const themePhoto = (t: Theme): string | undefined => t.image || THEME_PHOTOS[t.key];
 
 /**
- * The workshop's three themes as cards, each with its photo across the top and Aura, dressed for the theme, stepping
- * out of its lower edge across from the theme's number. A theme without a photo shows Aura on her own. Side by side,
- * the cards share one grid's rows (subgrid), so their titles, texts and links line up however long each one is.
- * Under them, a note sets the hackathon apart: it doesn't split into themes, every team answers one question.
+ * The two training programmes as cards, each with its photo across the top and Aura, dressed for the programme,
+ * stepping out of its lower edge across from its number. A programme without a photo shows Aura on her own. Side by
+ * side, the cards share one grid's rows (subgrid), so their titles, texts and links line up however long each one is.
  */
 export function Themes({ s }: { s: SiteSettings }) {
   const c = copy(s, "homeThemes");
@@ -40,16 +37,16 @@ export function Themes({ s }: { s: SiteSettings }) {
         align="center"
       />
       {/* Side by side, each card spans five rows: photo, Aura, title, text, links. */}
-      <ul className="grid gap-6 lg:grid-cols-3 lg:gap-y-0">
+      <ul className={cn("mx-auto grid gap-6 lg:gap-y-0", s.themes.length > 2 ? "lg:grid-cols-3" : "max-w-5xl md:grid-cols-2")}>
         {s.themes.map((t, i) => {
           const meta = THEME_META[t.key] ?? THEME_META.general;
           const tag = <span className="tag tag-eyebrow">{c.theme ? `${c.theme} ${i + 1}` : i + 1}</span>;
-          const bubbleSide = i === 2 ? "left" : "right";
+          const bubbleSide = i === s.themes.length - 1 && i > 0 ? "left" : "right";
           const photo = themePhoto(t);
           return (
-            <li key={t.key} data-reveal style={{ ["--reveal-delay" as string]: `${i * 110}ms` }} className="lg:row-span-5 lg:grid lg:grid-rows-subgrid">
-              <Tilt className="h-full lg:row-span-5 lg:grid lg:grid-rows-subgrid">
-                <article className={`tone-${meta.tone} card group relative flex h-full flex-col overflow-hidden lg:row-span-5 lg:grid lg:grid-rows-subgrid`}>
+            <li key={t.key} data-reveal style={{ ["--reveal-delay" as string]: `${i * 110}ms` }} className="md:row-span-5 md:grid md:grid-rows-subgrid">
+              <Tilt className="h-full md:row-span-5 md:grid md:grid-rows-subgrid">
+                <article className={`tone-${meta.tone} card group relative flex h-full flex-col overflow-hidden md:row-span-5 md:grid md:grid-rows-subgrid`}>
                   <div aria-hidden className="pointer-events-none absolute inset-0 bg-[radial-gradient(60%_50%_at_var(--mx,70%)_var(--my,0%),color-mix(in_oklab,var(--accent)_30%,transparent),transparent_70%)]" />
                   {photo ? (
                     // The photo fades out at the bottom, so it melts into the card.
@@ -60,7 +57,7 @@ export function Themes({ s }: { s: SiteSettings }) {
                       <div className="absolute top-0 left-0 p-5">{tag}</div>
                     </div>
                   ) : null}
-                  <div className={cn("relative flex flex-1 flex-col p-6 sm:p-7 lg:grid lg:grid-rows-subgrid", photo ? "pt-0 sm:pt-0 lg:row-span-4" : "lg:row-span-5")}>
+                  <div className={cn("relative flex flex-1 flex-col p-6 sm:p-7 md:grid md:grid-rows-subgrid", photo ? "pt-0 sm:pt-0 md:row-span-4" : "md:row-span-5")}>
                     {photo ? (
                       // Aura and the number sit across from each other where the photo fades out, clear of what it shows.
                       <div className="relative -mt-16 mb-1 flex items-end justify-between gap-4">
@@ -70,7 +67,7 @@ export function Themes({ s }: { s: SiteSettings }) {
                         </span>
                       </div>
                     ) : (
-                      <div className="flex flex-col lg:row-span-2">
+                      <div className="flex flex-col md:row-span-2">
                         <div className="relative flex items-start justify-between gap-4">
                           {tag}
                           <span aria-hidden className="font-display text-6xl leading-none font-black text-[color-mix(in_oklab,var(--accent)_45%,transparent)]">
@@ -106,20 +103,6 @@ export function Themes({ s }: { s: SiteSettings }) {
           );
         })}
       </ul>
-      {c.hackathonNote && hackathonShown(s) ? (
-        <p className="tone-aqua mx-auto mt-10 flex w-fit max-w-full flex-wrap items-center justify-center gap-x-3 gap-y-2 rounded-2xl bg-surface/80 px-4 py-3 text-center text-[15px] text-muted ring-1 ring-border backdrop-blur sm:px-5">
-          <span className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-accent-soft font-display text-lg leading-none font-black text-accent-ink" aria-hidden>
-            1
-          </span>
-          <span>{c.hackathonNote}</span>
-          {c.hackathonLink ? (
-            <Link href="/hackathon#challenge" className="group/link inline-flex items-center gap-1 font-semibold text-accent-ink">
-              <span className="mi-underline">{c.hackathonLink}</span>
-              <ArrowRight size={15} aria-hidden className="transition-transform group-hover/link:translate-x-1" />
-            </Link>
-          ) : null}
-        </p>
-      ) : null}
     </Section>
   );
 }

@@ -1,8 +1,8 @@
-import { House, Mic, Trophy } from "lucide-react";
+import { House, Mic } from "lucide-react";
 import type { CSSProperties } from "react";
 import { AuraHead } from "@/components/aura/AuraHead";
 import { Avatar } from "@/components/ui/Avatar";
-import { AIRPORT, GREEN, METRO, PLACES, ROUTES, VENUE } from "@/components/venue/delhi-map";
+import { AIRPORT, GREEN, METRO, PLACES, ROUTES, VENUE } from "@/components/venue/dhaka-map";
 
 /*
  * Preview pictures for <Portal> links (components/ui/Portal.tsx): each one hints at the page it
@@ -10,8 +10,8 @@ import { AIRPORT, GREEN, METRO, PLACES, ROUTES, VENUE } from "@/components/venue
  * with reduced motion (see .portal-* in globals.css).
  */
 
-/** Speakers: a few real faces, fanned out, and how many there are. */
-export function FacesArt({ people, total }: { people: { name: string; photo?: string }[]; total: number }) {
+/** Trainers: a few real faces, fanned out, and how many there are. */
+export function FacesArt({ people, total, unit = ["trainer", "trainers"] }: { people: { name: string; photo?: string }[]; total: number; unit?: [string, string] }) {
   if (!people.length) {
     return (
       <span className="relative grid h-14 w-14 place-items-center rounded-2xl bg-surface text-accent-ink shadow-card">
@@ -30,7 +30,7 @@ export function FacesArt({ people, total }: { people: { name: string; photo?: st
         ))}
       </span>
       <span className="rounded-md bg-surface px-1.5 py-0.5 text-[10.5px] font-bold whitespace-nowrap text-accent-ink shadow-card">
-        {total} {total === 1 ? "speaker" : "speakers"}
+        {total} {total === 1 ? unit[0] : unit[1]}
       </span>
     </span>
   );
@@ -60,13 +60,13 @@ export function LoopArt() {
   );
 }
 
-/** Venue: a crop of the Delhi route map, the airport route marching toward IIT Delhi. */
+/** Venue: a crop of the Dhaka route map, the airport route marching toward Daffodil Smart City. */
 export function RouteArt() {
   const route = ROUTES.air[0];
-  const from = PLACES.find((p) => p.id === route.from)?.at ?? [81, 519];
-  const metro = METRO.filter((l) => l.id !== "yellow");
+  const from = PLACES.find((p) => p.id === route.from)?.at ?? [732, 331];
+  const metro = METRO;
   return (
-    <svg viewBox="40 330 600 500" preserveAspectRatio="xMidYMid slice" className="h-full w-full" focusable="false">
+    <svg viewBox="170 40 620 400" preserveAspectRatio="xMidYMid slice" className="h-full w-full" focusable="false">
       <path d={AIRPORT} className="fill-[color-mix(in_oklab,var(--fg)_8%,var(--surface))]" />
       {GREEN.map((d, i) => (
         <path key={i} d={d} className="fill-[color-mix(in_oklab,var(--mint)_45%,var(--surface))]" />
@@ -99,20 +99,6 @@ export function ScheduleArt() {
           ))}
         </span>
       ))}
-    </span>
-  );
-}
-
-/** Hackathon: the trophy in a ring of its themes. */
-export function TrophyArt() {
-  return (
-    <span className="relative grid h-full w-full place-items-center">
-      <span className="portal-spin absolute h-[3.75rem] w-[3.75rem] rounded-full border-2 border-dashed border-[color-mix(in_oklab,var(--accent-ink)_45%,transparent)]">
-        <span className="absolute -top-1 left-1/2 h-2.5 w-2.5 -translate-x-1/2 rounded-full bg-[var(--blush)] ring-2 ring-surface" />
-        <span className="absolute -bottom-1 left-[18%] h-2.5 w-2.5 rounded-full bg-[var(--lilac)] ring-2 ring-surface" />
-        <span className="absolute right-[12%] -bottom-0.5 h-2.5 w-2.5 rounded-full bg-[var(--peach)] ring-2 ring-surface" />
-      </span>
-      <Trophy size={26} className="relative text-accent-ink" />
     </span>
   );
 }

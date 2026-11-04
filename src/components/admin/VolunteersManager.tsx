@@ -307,7 +307,7 @@ export function VolunteersManager() {
                 value={draft.responsibility}
                 onChange={(e) => setDraft({ ...draft, responsibility: e.target.value })}
                 error={errors.responsibility}
-                placeholder="e.g. Speaker coordination: keep speaker profiles and the programme up to date."
+                placeholder="e.g. Trainer coordination: keep trainer profiles and the programme up to date."
                 hint="Shown to them when they sign in, and to administrators here."
               />
               <div className="grid items-start gap-2 sm:grid-cols-[1fr_auto]">

@@ -1,39 +1,64 @@
 import { CalendarDays, MapPin } from "lucide-react";
-import type { ReactNode } from "react";
+import type { CSSProperties, ReactNode } from "react";
 import { NetworkCanvas } from "@/components/effects/NetworkCanvas";
 import { Img } from "@/components/ui/Img";
 import type { SiteSettings } from "@/lib/content/types";
 import { copy } from "@/lib/copy";
-import { hackathonShown, splitEventName, venueLine } from "@/lib/event";
+import { splitEventName, venueLine } from "@/lib/event";
 import { formatDateRange } from "@/lib/format";
 import { HeroPlacards, type HeroPlacard } from "./HeroPlacards";
 import { RegisterChooser } from "./RegisterChooser";
 
-/** The built-in photo of the IIT Delhi main building (public/hero), 1280×712. */
-const BUILDING = "/hero/iit-delhi.webp";
+/**
+ * The built-in photos of Daffodil International University's campus at Daffodil Smart City (public/hero, from
+ * Wikimedia Commons, 1280×712): the academic building by day in the light theme, the Knowledge Tower by night in
+ * the dark one. Each is placed by its "Daffodil International University" sign: `sx` is the sign's centre across
+ * the photo and `sy` its top down it (fractions), `avoid` the box the agent network keeps off (left, top, width,
+ * height in %) and `fade` where the photo fades in from the left (from, to in %), so it stays clear of the title.
+ */
+const CAMPUS = [
+  { src: "/hero/diu-campus.webp", sx: 0.397, sy: 0.46, fade: [4, 26], avoid: [33, 42, 14, 12], theme: "dark:hidden" },
+  { src: "/hero/diu-campus-night.webp", sx: 0.632, sy: 0.247, fade: [14, 42], avoid: [50, 20, 26, 12], theme: "hidden dark:block" },
+] as const;
+const BUILDING = CAMPUS[0].src;
+const ASPECT = 712 / 1280;
+
+/** The built-in campus photos, for the loading screen to cache. */
+export const BUILT_IN_HERO_PHOTOS = CAMPUS.map((c) => c.src);
 
 /** The hero's photo: the one uploaded in Site settings → Home → Hero, or the built-in one. */
 export const heroPhoto = (s: SiteSettings): string | undefined => (s.showHeroPhoto ? s.heroPhoto || BUILDING : undefined);
 
 /**
- * The built-in photo behind Aura, placed so that the building's sign, "भारतीय प्रौद्योगिकी संस्थान दिल्ली" over
- * "INDIAN INSTITUTE OF TECHNOLOGY DELHI", sits just above her head and clear of the text: --w is the photo's width,
- * and the sign (at 30.7% across and 62.5% down the photo) is centred on her column, its top --y from the column's
- * top. The photo fades in from the left and out below the sign, behind her; while the text is above her (below lg)
- * it starts at the emblem over the sign, and her column leaves room for the sign above her. The agent network keeps
- * off the sign.
+ * The built-in campus photo behind Aura, placed so that the university's sign sits just above her head and clear of
+ * the text: --w is the photo's width, the sign is centred on her column, its top --y from the column's top. The
+ * photo fades in from the left and out below, behind her; while the text is above her (below lg) it starts a little
+ * above the sign, and her column leaves room for it. The agent network keeps off the sign.
  */
 function BuildingSign() {
-  return (
+  return CAMPUS.map((c) => (
     <div
+      key={c.src}
       aria-hidden
-      className="pointer-events-none absolute -z-20 aspect-[1280/712] [--w:860px] [--y:1.75rem] [mask-composite:intersect] [mask-image:linear-gradient(to_right,transparent,black_14%),linear-gradient(to_bottom,transparent_50%,black_54.5%,black_76%,transparent_96%)] sm:[--w:960px] lg:[--w:1100px] lg:[--y:-1.25rem] lg:[mask-image:linear-gradient(to_right,transparent,black_14%),linear-gradient(to_bottom,black_76%,transparent_96%)]"
-      style={{ width: "var(--w)", left: "calc(50% - var(--w) * 0.307)", top: "calc(var(--y) - var(--w) * 0.3477)" }}
+      className={`pointer-events-none absolute -z-20 aspect-[1280/712] [--w:860px] [--y:1.75rem] sm:[--w:960px] lg:[--w:1100px] lg:[--y:-1.25rem] ${c.theme}`}
+      style={
+        {
+          width: "var(--w)",
+          left: `calc(50% - var(--w) * ${c.sx})`,
+          top: `calc(var(--y) - var(--w) * ${(c.sy * ASPECT).toFixed(4)})`,
+          "--from": `${Math.max(0, c.sy * 100 - 12)}%`,
+          "--to": `${Math.max(4, c.sy * 100 - 7.5)}%`,
+          "--fade-from": `${c.fade[0]}%`,
+          "--fade-to": `${c.fade[1]}%`,
+        } as CSSProperties
+      }
     >
-      <Img src={BUILDING} alt="" width={1280} height={712} loading="eager" className="h-full w-full object-cover opacity-95 dark:opacity-60 dark:brightness-90" />
-      <span data-graph-avoid="" className="absolute top-[52%] left-[15%] h-[24%] w-[32%]" />
+      <div className="h-full w-full [mask-image:linear-gradient(to_right,transparent_var(--fade-from),black_var(--fade-to)),linear-gradient(to_bottom,transparent_var(--from),black_var(--to),black_76%,transparent_96%)] [mask-composite:intersect] lg:[mask-image:linear-gradient(to_right,transparent_var(--fade-from),black_var(--fade-to)),linear-gradient(to_bottom,black_76%,transparent_96%)]">
+        <Img src={c.src} alt="" width={1280} height={712} loading="eager" className="h-full w-full object-cover opacity-95 dark:opacity-90" />
+      </div>
+      <span data-graph-avoid="" className="absolute" style={{ left: `${c.avoid[0]}%`, top: `${c.avoid[1]}%`, width: `${c.avoid[2]}%`, height: `${c.avoid[3]}%` }} />
     </div>
-  );
+  ));
 }
 
 /** One fact under the title: a coloured rule, a small label and the value. */
@@ -53,12 +78,12 @@ export function Hero({ s }: { s: SiteSettings }) {
   const c = copy(s, "homeHero");
   const p = copy(s, "homePlacard");
   const tones = copy(s, "homeRegister");
-  // Aura's two placards, in turn: workshop and hackathon registration ({status} is filled in as they show); the hackathon's only while it is shown.
+  // Aura's two placards, in turn: one per programme, both with the registration status ({status} is filled in as they show).
   const placards: HeroPlacard[] = [
-    { key: "workshop" as const, text: p.text, tab: p.workshopTab, tone: tones.workshopTone, status: s.workshopStatus, deadline: s.workshopDeadline },
-    { key: "hackathon" as const, text: p.hackathon, tab: p.hackathonTab, tone: tones.hackathonTone, status: s.hackathonStatus, deadline: s.hackathonDeadline },
-  ].filter((x) => x.text.trim() && (x.key !== "hackathon" || hackathonShown(s)));
-  // "Agentic AI Workshop 2026" → highlighted "Agentic AI", then "Workshop", then a muted "2026".
+    { key: "professionals" as const, text: p.text, tab: p.professionalsTab, tone: tones.professionalsTone, status: s.workshopStatus, deadline: s.workshopDeadline },
+    { key: "workspace" as const, text: p.workspace, tab: p.workspaceTab, tone: tones.workspaceTone, status: s.workshopStatus, deadline: s.workshopDeadline },
+  ].filter((x) => x.text.trim());
+  // "DIU AI Training Seminars 2026" → highlighted "DIU AI Training", then "Seminars", then a muted "2026".
   const { title, year } = splitEventName(s.eventName);
   const lead = title.split(/\s+/);
   const last = lead.pop();

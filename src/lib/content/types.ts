@@ -3,7 +3,7 @@ import type {
   ProgrammeStatus,
   RegistrationStatus,
   SessionType,
-  SpeakerCategory,
+  TrainerCategory,
   SponsorTier,
   ThemeKey,
 } from "./constants";
@@ -42,24 +42,16 @@ export interface SiteSettings extends PageCopy, SectionOrders, HiddenSections, F
   fees: { category: string; amount: string; note: string }[];
   feeNote: string;
   confirmationNote: string;
-  hackathonStatus: RegistrationStatus;
-  hackathonDeadline: string;
-  hackathonUrl: string;
-  hackathonPlatform: string;
 
   /** Cache the site's files behind a loading screen on the home page (components/loading). */
   showLoader: boolean;
-  /** The photo of the IIT Delhi building behind the home hero: an upload, or empty for the built-in one. */
+  /** The photo of the Daffodil International University campus behind the home hero: an upload, or empty for the built-in one. */
   showHeroPhoto: boolean;
   heroPhoto: string;
   /** The picture at the top of the home page's registration poster: an upload, or empty for the built-in one. */
   invitePhoto: string;
-  /** The picture at the top of the hackathon's coming-soon poster: an upload, or empty for the built-in one. */
-  hackathonPosterPhoto: string;
-  /** The picture beside the call for posters on the Registration page: an upload, or empty for the built-in one. */
-  postersPhoto: string;
   highlights: { label: string; value: string; icon: string }[];
-  featuredSpeakers: number;
+  featuredTrainers: number;
 
   motivation: string;
   agenticAI: string;
@@ -83,7 +75,6 @@ export interface SiteSettings extends PageCopy, SectionOrders, HiddenSections, F
   sponsorshipIntro: string;
   sponsorTiers: { name: string; price: string; perks: string[] }[];
   sponsorBrochure: string;
-  kioskIntro: string;
 
   contactEmail: string;
   contactPhone: string;
@@ -94,54 +85,22 @@ export interface SiteSettings extends PageCopy, SectionOrders, HiddenSections, F
   instagram: string;
   youtube: string;
 
-  logoIITD: string;
-  logoScAI: string;
+  /** The university's logo (left corner of the navigation bar) and the department's seal (right corner). */
+  logoUniversity: string;
+  logoDepartment: string;
   eventLogo: string;
   brandColor: string;
   palette: Palette;
   ogImage: string;
 
-  showMoreSpeakers: boolean;
+  showMoreTrainers: boolean;
   showGallery: boolean;
   showTalks: boolean;
-  showWinners: boolean;
-  /** The hackathon on the site; while off, its page shows only a "details coming soon" poster. */
-  showHackathon: boolean;
   bannerText: string;
   bannerLink: string;
 
   gaId: string;
   keywords: string[];
-}
-
-export interface HackathonInfo {
-  title: string;
-  tagline: string;
-  overview: string;
-  mode: string;
-  teamSize: string;
-  /** Who can form a team, in a line. */
-  teamType: string;
-  /** When it runs; empty means the workshop's dates. */
-  dates: string;
-  /** Where it runs; empty means the workshop's venue. */
-  location: string;
-  prizePool: string;
-  eligibility: string[];
-  registrationNote: string;
-  /** The one question every team answers: the hackathon has a single track (the workshop's themes are for its talks). */
-  question: string;
-  /** What answering it involves, in a few lines. */
-  challenge: string;
-  /** Example directions, to get teams thinking. */
-  ideas: string[];
-  rules: string[];
-  codeOfConduct: string;
-  timeline: { label: string; date: string; dateLabel: string; description: string }[];
-  prizes: { place: string; reward: string; description: string }[];
-  judgingCriteria: { name: string; weight: number | null; description: string }[];
-  resultsNote: string;
-  winners: { position: string; team: string; project: string; members: string; description: string; link: string }[];
 }
 
 interface Doc {
@@ -160,18 +119,21 @@ export interface Announcement extends Doc {
   pinned: boolean;
 }
 
-export interface Speaker extends Doc {
+export interface Trainer extends Doc {
   name: string;
   slug: string;
   designation: string;
   affiliation: string;
-  category: SpeakerCategory;
+  category: TrainerCategory;
   theme: ThemeKey | "";
-  keynote: boolean;
+  /** The lead trainer: shown in the spotlight at the top of the Trainers page. */
+  lead: boolean;
   photo: string;
   bio: string;
-  talkTitle: string;
-  talkAbstract: string;
+  /** Areas of expertise, in a line. */
+  expertise: string;
+  /** What they teach in the programmes. */
+  teaching: string;
   website: string;
   linkedin: string;
   x: string;
@@ -188,8 +150,8 @@ export interface Session extends Doc {
   type: SessionType;
   theme: ThemeKey;
   room: string;
-  speakerNote: string;
-  speakers: string[];
+  trainerNote: string;
+  trainers: string[];
   moderator: string;
   panelists: string[];
   description: string;
@@ -217,15 +179,6 @@ export interface Demo extends Doc {
   image: string;
   videoUrl: string;
   link: string;
-}
-
-export interface Kiosk extends Doc {
-  company: string;
-  booth: string;
-  logo: string;
-  description: string;
-  website: string;
-  theme: ThemeKey | "";
 }
 
 export interface Sponsor extends Doc {
@@ -262,24 +215,40 @@ export interface GalleryItem extends Doc {
 
 export interface Talk extends Doc {
   title: string;
-  speakerName: string;
+  trainerName: string;
   day: string;
   description: string;
   slides: string;
   videoUrl: string;
 }
 
+export interface Participant extends Doc {
+  name: string;
+  designation: string;
+  organisation: string;
+  /** The programme they completed; "general" for both. */
+  theme: ThemeKey;
+  /** Their batch, as written in the admin ("Batch 1 · January 2026"): participants with the same text are grouped. */
+  batch: string;
+  /** YYYY-MM-DD the batch was completed, to order the batches. */
+  completed: string;
+  photo: string;
+  quote: string;
+  featured: boolean;
+  profileUrl: string;
+}
+
 export interface CollectionTypes {
   announcements: Announcement;
-  speakers: Speaker;
+  trainers: Trainer;
   sessions: Session;
   tutorials: Tutorial;
   demos: Demo;
-  kiosks: Kiosk;
   sponsors: Sponsor;
   people: Person;
   faqs: Faq;
   gallery: GalleryItem;
   talks: Talk;
+  participants: Participant;
 }
 export type CollectionKey = keyof CollectionTypes;

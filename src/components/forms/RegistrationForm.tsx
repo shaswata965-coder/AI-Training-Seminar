@@ -10,6 +10,7 @@ import { ShareButtons } from "@/components/share/ShareButtons";
 import { Button } from "@/components/ui/Button";
 import { useToast } from "@/components/ui/Toast";
 import { fill } from "@/lib/copy";
+import { useUrlParam } from "@/lib/client-hooks";
 import type { CalendarLinks } from "@/lib/event";
 import { checkAnswers, emptyAnswer, type Answer, type FormField } from "@/lib/forms";
 import type { PageCopy } from "@/lib/schema/page-copy";
@@ -20,9 +21,13 @@ import { postJson } from "./submit";
 
 const STEP_AURA: AuraVariant[] = ["registration", "thinker", "guide"];
 
+/** The programme a link to the form can pick (/register?programme=…), by the choice it ticks in “interests”. */
+const PROGRAMME_CHOICE: Record<string, string> = { professionals: "AI for Professionals", workspace: "AI for Workspace" };
+
 /**
- * Workshop registration in up to three steps, with the fields and texts set in Site settings → Registration →
- * Form fields (a step with no fields shown is left out). Answers are checked here as on the server.
+ * Training registration in up to three steps, with the fields and texts set in Site settings → Registration →
+ * Form fields (a step with no fields shown is left out). Answers are checked here as on the server. A link with
+ * ?programme=professionals or ?programme=workspace ticks that programme until the visitor changes it.
  */
 export function RegistrationForm({ fields, text, calendar, shareUrl, eventName }: { fields: FormField[]; text: PageCopy["registerFormText"]; calendar: CalendarLinks; shareUrl: string; eventName: string }) {
   const toast = useToast();
@@ -30,7 +35,11 @@ export function RegistrationForm({ fields, text, calendar, shareUrl, eventName }
   const steps = [1, 2, 3].filter((n) => shown.some((f) => f.step === n));
   const names = [text.step1, text.step2, text.step3];
   const [step, setStep] = useState(0);
-  const [values, setValues] = useState<Record<string, Answer>>(() => Object.fromEntries(fields.map((f) => [f.key, emptyAnswer(f.type)])));
+  const [typed, setValues] = useState<Record<string, Answer>>(() => Object.fromEntries(fields.map((f) => [f.key, emptyAnswer(f.type)])));
+  const [pickedByHand, setPickedByHand] = useState(false);
+  const fromLink = PROGRAMME_CHOICE[useUrlParam("programme") ?? ""];
+  const linkPicks = !pickedByHand && fromLink && fields.some((f) => f.key === "interests" && f.options.includes(fromLink));
+  const values = useMemo(() => (linkPicks ? { ...typed, interests: [fromLink] } : typed), [typed, linkPicks, fromLink]);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [pending, setPending] = useState(false);
   const [done, setDone] = useState<{ regId: string | null; email: string; emailSent: boolean } | null>(null);
@@ -111,7 +120,10 @@ export function RegistrationForm({ fields, text, calendar, shareUrl, eventName }
       <form onSubmit={onSubmit} noValidate className="relative grid gap-5 p-5 sm:p-8">
         <Honeypot />
         <div key={step} className="animate-fade-up">
-          <AnswerFields form="register" fields={current} values={values} onChange={(k, v) => setValues((s) => ({ ...s, [k]: v }))} errors={errors} optional={text.optional} />
+          <AnswerFields form="register" fields={current} values={values} onChange={(k, v) => {
+              if (k === "interests") setPickedByHand(true);
+              setValues((s) => ({ ...s, [k]: v }));
+            }} errors={errors} optional={text.optional} />
         </div>
 
         <div className="flex flex-wrap items-center justify-between gap-3 border-t border-border pt-5">

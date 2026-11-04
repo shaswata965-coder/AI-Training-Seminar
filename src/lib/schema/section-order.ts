@@ -8,10 +8,10 @@
  */
 
 export const SECTION_ORDER = {
-  home: ["invite", "themes", "speakers", "hackathon", "news", "about", "highlights", "venue", "partners", "faq"],
+  home: ["invite", "themes", "trainers", "news", "about", "participants", "highlights", "venue", "partners", "faq"],
   about: ["motivation", "audience", "activities"],
-  programme: ["overview", "schedule", "kiosks", "hackathon", "plan"],
-  hackathon: ["overview", "timeline", "tracks", "register", "judging", "people", "rules", "results", "cta"],
+  programme: ["overview", "schedule", "plan"],
+  participants: ["stats", "testimonials", "list", "cta"],
   partners: ["list", "reach", "ways", "tiers"],
   venue: ["place", "routes", "stay"],
   organisers: ["faculty", "students", "volunteers"],
@@ -58,13 +58,13 @@ export function sectionOrder<P extends OrderPage>(settings: Partial<SectionOrder
  * The sections of each page that can be hidden, each with the switch at the top of its tab in Site settings:
  * every movable one, and the parts of the pages that have no Section order. The hero, which holds the page's
  * title, always shows. The keys of a page's hidden sections are stored as `<page>Hidden` (homeHidden,
- * speakersHidden…), so a volunteer given one page can hide only that page's sections.
+ * trainersHidden…), so a volunteer given one page can hide only that page's sections.
  */
 export const HIDEABLE_SECTIONS = {
   ...SECTION_ORDER,
-  speakers: ["list"],
+  trainers: ["spotlight", "list"],
   tutorials: ["list"],
-  register: ["form", "fees", "deadlines", "posters"],
+  register: ["form", "fees", "deadlines"],
 } as const;
 
 export type HidePage = keyof typeof HIDEABLE_SECTIONS;

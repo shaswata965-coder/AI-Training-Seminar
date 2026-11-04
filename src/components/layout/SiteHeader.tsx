@@ -16,7 +16,7 @@ import { ThemeToggle } from "./ThemeToggle";
 
 export interface SiteHeaderProps {
   /** Logos uploaded under Admin → Branding; empty uses the bundled ones. */
-  logos: { iitd: string; scai: string };
+  logos: { university: string; department: string };
   registerHref: string;
   extraNav: NavItem[];
   /** Names from Site settings → Site-wide → Navigation and Header. */
@@ -24,8 +24,6 @@ export interface SiteHeaderProps {
   text: PageCopy["siteHeader"];
   /** The home page's sections switched off in Site settings → Home, left out of the Explore menu. */
   homeHidden: string[];
-  /** Whether the hackathon is on the site (its link and the phone menu's button). */
-  hackathon: boolean;
 }
 
 function isActive(pathname: string, href: string) {
@@ -33,7 +31,7 @@ function isActive(pathname: string, href: string) {
   return pathname === href || pathname.startsWith(`${href}/`);
 }
 
-export function SiteHeader({ logos, registerHref, extraNav, nav, text, homeHidden, hackathon }: SiteHeaderProps) {
+export function SiteHeader({ logos, registerHref, extraNav, nav, text, homeHidden }: SiteHeaderProps) {
   const pathname = usePathname();
   const headerRef = useRef<HTMLElement>(null);
   const [scrolled, setScrolled] = useState(false);
@@ -44,27 +42,24 @@ export function SiteHeader({ logos, registerHref, extraNav, nav, text, homeHidde
   const explorePages = [...explorePagesOf(nav), ...extraNav];
   const homeSections = sectionNav(nav, homeHidden);
   const exploreItems = [...explorePages, ...homeSections];
-  const pages = [homeNav(nav), ...primaryNav(nav, hackathon), registrationNav(nav)];
+  const pages = [homeNav(nav), ...primaryNav(nav), registrationNav(nav)];
   const exploreActive = explorePages.some((item) => isActive(pathname, item.href));
   // Phones: logo, then the buttons pushed right. Desktop: three columns, so the links and Register sit centred between the logos.
   const barCls = "flex h-16 items-center gap-2 px-4 sm:gap-3 sm:px-6 lg:grid lg:h-[72px] lg:grid-cols-[1fr_auto_1fr] xl:px-8";
-  const iitdLogo = (
-    <Link href="/" aria-label="IIT Delhi, home page" className="group/logo flex items-center gap-2.5 justify-self-start rounded-full pr-2">
-      <span className="rounded-full bg-[conic-gradient(from_210deg,var(--azure),var(--lilac),var(--blush),var(--mint),var(--azure))] p-[2px] shadow-card transition-[rotate,scale] duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover/logo:scale-105 group-hover/logo:rotate-12">
-        <span className="flex rounded-full bg-white p-[3px]">
-          <InstituteLogo kind="iitd" upload={logos.iitd} decorative className="h-10 lg:h-12" />
+  // The DIU wordmark, on its own white tile in both themes, inside a ring in the site's colours.
+  const universityLogo = (
+    <Link href="/" aria-label="Daffodil International University, home page" className="group/logo flex shrink-0 items-center justify-self-start rounded-xl">
+      <span className="rounded-[0.85rem] bg-[conic-gradient(from_210deg,var(--azure),var(--lilac),var(--blush),var(--mint),var(--azure))] p-[2px] shadow-card transition-[scale] duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover/logo:scale-105">
+        <span className="flex rounded-xl bg-white px-2 py-1">
+          <InstituteLogo kind="university" upload={logos.university} className="h-8 lg:h-10" />
         </span>
-      </span>
-      <span className="font-display text-lg leading-none font-extrabold tracking-tight whitespace-nowrap text-fg lg:text-xl">
-        IIT <span className="text-gradient">Delhi</span>
       </span>
     </Link>
   );
-  // The full ScAI wordmark where the header has room, otherwise just its "ScAI" letters.
-  const scaiLogo = (
-    <div className="flex justify-self-end">
-      <InstituteLogo kind="scai" upload={logos.scai} monogram className="h-6 min-[1360px]:hidden" />
-      <InstituteLogo kind="scai" upload={logos.scai} className="hidden h-6 min-[1360px]:flex" />
+  // The Department of CSE's round seal, where the header has room for it.
+  const departmentLogo = (
+    <div className="hidden justify-self-end sm:flex">
+      <InstituteLogo kind="department" upload={logos.department} className="h-10 lg:h-12" />
     </div>
   );
   const exploreLink = (item: NavItem, i: number) => (
@@ -145,11 +140,11 @@ export function SiteHeader({ logos, registerHref, extraNav, nav, text, homeHidde
       )}
     >
       <div className={barCls}>
-        {iitdLogo}
+        {universityLogo}
 
         <div className="ml-auto flex items-center gap-2 lg:ml-0">
         <nav aria-label="Main" className="hidden items-center gap-0.5 lg:flex">
-          {[homeNav(nav), ...primaryNav(nav, hackathon)].map((item) => {
+          {[homeNav(nav), ...primaryNav(nav)].map((item) => {
             const active = isActive(pathname, item.href);
             return (
               <Link
@@ -223,7 +218,7 @@ export function SiteHeader({ logos, registerHref, extraNav, nav, text, homeHidde
             <Menu size={20} aria-hidden />
           </button>
         </div>
-        {scaiLogo}
+        {departmentLogo}
       </div>
       <div
         aria-hidden
@@ -240,7 +235,7 @@ export function SiteHeader({ logos, registerHref, extraNav, nav, text, homeHidde
         {menuOpen ? (
           <div className="flex min-h-full flex-col">
             <div className={barCls}>
-              {iitdLogo}
+              {universityLogo}
               <div className="ml-auto flex items-center gap-2 lg:ml-0">
                 <ThemeToggle />
                 <button
@@ -253,7 +248,7 @@ export function SiteHeader({ logos, registerHref, extraNav, nav, text, homeHidde
                   <X size={20} aria-hidden className="transition-transform duration-300 group-hover:rotate-90" />
                 </button>
               </div>
-              {scaiLogo}
+              {departmentLogo}
             </div>
             <nav aria-label="Mobile" className="container-site grid gap-8 pt-4 pb-6">
               <div>
@@ -301,11 +296,6 @@ export function SiteHeader({ logos, registerHref, extraNav, nav, text, homeHidde
                 <ButtonLink href={registerHref} size="lg" onClick={() => setMenuOpen(false)} icon={<Ticket size={18} aria-hidden />}>
                   {text.registerNow}
                 </ButtonLink>
-                {hackathon ? (
-                  <ButtonLink href="/hackathon" variant="outline" size="lg" onClick={() => setMenuOpen(false)}>
-                    {text.joinHackathon}
-                  </ButtonLink>
-                ) : null}
               </div>
             </nav>
             <div className="mt-auto flex justify-center pb-6">

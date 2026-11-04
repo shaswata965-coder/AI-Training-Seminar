@@ -2,11 +2,10 @@ import { ExternalLink, Mail } from "lucide-react";
 import type { Metadata } from "next";
 import { Aura } from "@/components/aura/Aura";
 import { Deadline } from "@/components/forms/Deadline";
-import { CallForPosters } from "@/components/forms/CallForPosters";
 import { DeadlineGate } from "@/components/forms/DeadlineGate";
 import { RegistrationForm } from "@/components/forms/RegistrationForm";
 import { PageHero } from "@/components/layout/PageHero";
-import { TrophyArt } from "@/components/portals/PortalArt";
+import { LoopArt } from "@/components/portals/PortalArt";
 import { Badge } from "@/components/ui/Badge";
 import { ButtonLink } from "@/components/ui/Button";
 import { Portal } from "@/components/ui/Portal";
@@ -15,7 +14,7 @@ import { cn } from "@/lib/cn";
 import { getSettings, inPreview } from "@/lib/content/queries";
 import type { SiteSettings } from "@/lib/content/types";
 import { copy } from "@/lib/copy";
-import { eventCalendarLinks, hackathonRegistrationHref, hackathonShown } from "@/lib/event";
+import { eventCalendarLinks } from "@/lib/event";
 import { formatDateRange } from "@/lib/format";
 import { absoluteUrl } from "@/lib/paths";
 import { isShown } from "@/lib/schema/section-order";
@@ -24,7 +23,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const s = await getSettings();
   return {
     title: "Registration",
-    description: `Register for the ${s.eventName} at IIT Delhi, ${formatDateRange(s.startDate, s.endDate)}. Fees, deadlines and the registration form.`,
+    description: `Register for the next batch of the ${s.eventName} at Daffodil International University, ${formatDateRange(s.startDate, s.endDate)}. Fees, deadlines and the registration form.`,
     alternates: { canonical: absoluteUrl("/register") },
   };
 }
@@ -39,8 +38,7 @@ export default async function RegisterPage() {
   const showFees = isShown(s, "register", "fees");
   const showDeadlines = isShown(s, "register", "deadlines");
   const showAside = showFees || showDeadlines;
-  // While the hackathon is hidden, so is the form's "interested in the hackathon" box.
-  const fields = hackathonShown(s) ? s.registerFields : s.registerFields.map((f) => (f.key === "hackathonInterest" ? { ...f, hidden: true } : f));
+  const fields = s.registerFields;
   const closedBadge = (
     <Badge tone="blush" dot>
       {hero.closed}
@@ -71,21 +69,7 @@ export default async function RegisterPage() {
         eyebrow={hero.eyebrow}
         title={hero.title}
         aura="registration"
-        description={
-          <p>
-            {hero.description}
-            {hero.hackathonLink && showDeadlines && hackathonShown(s) ? (
-              <>
-                {" "}
-                {hero.hackathonBefore}{" "}
-                <a className="font-semibold text-brand underline underline-offset-2" href="#hackathon-note">
-                  {hero.hackathonLink}
-                </a>
-                .
-              </>
-            ) : null}
-          </p>
-        }
+        description={<p>{hero.description}</p>}
       >
         {status}
       </PageHero>
@@ -162,10 +146,10 @@ export default async function RegisterPage() {
                       <h2 className="font-display text-xl font-bold text-fg">{dl.title}</h2>
                       {s.workshopDeadline ? <Deadline iso={s.workshopDeadline} label={dl.workshop} /> : <p className="text-sm text-muted">{dl.workshopTba}</p>}
                     </div>
-                    {hackathonShown(s) ? (
-                      <div id="hackathon-note" className="scroll-mt-28">
+                    {dl.portalTitle && isShown(s, "home", "themes") ? (
+                      <div>
                         <h2 className="sr-only">{dl.portalKicker}</h2>
-                        <Portal href={hackathonRegistrationHref(s)} tone="aqua" compact kicker={dl.portalKicker} title={dl.portalTitle} text={dl.portalText} art={<TrophyArt />} />
+                        <Portal href="/#themes" tone="lilac" compact kicker={dl.portalKicker} title={dl.portalTitle} text={dl.portalText} art={<LoopArt />} />
                       </div>
                     ) : null}
                   </div>
@@ -175,7 +159,6 @@ export default async function RegisterPage() {
           </div>
         </section>
       ) : null}
-      {isShown(s, "register", "posters") ? <CallForPosters s={s} formShown={showForm} /> : null}
     </TagScope>
   );
 }

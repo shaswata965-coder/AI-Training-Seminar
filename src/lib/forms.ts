@@ -2,11 +2,11 @@ import { ATTENDEE_CATEGORY_META, currentThemeKey, THEME_META } from "@/lib/conte
 import { cleanLine, cleanText } from "@/lib/safe-text";
 
 /*
- * The site's public forms (workshop registration, hackathon team registration, and the contact, exhibitor
- * and partner enquiries) are lists of fields that organisers edit in Site settings: each field's name, its
- * guide (help under it and an example inside it), the type of answer, whether it is required or shown, and
- * the choices of a list; they can add questions of their own. Built-in fields are the ones the site relies
- * on (the e-mail address a confirmation goes to, a team's name, the consent box): they can't be deleted,
+ * The site's public forms (training registration, and the contact and partner enquiries) are lists of
+ * fields that organisers edit in Site settings: each field's name, its guide (help under it and an example
+ * inside it), the type of answer, whether it is required or shown, and the choices of a list; they can add
+ * questions of their own. Built-in fields are the ones the site relies on (the e-mail address a
+ * confirmation goes to, the consent box): they can't be deleted,
  * and some always stay required or keep their type. Answers are checked the same way in the browser and on
  * the server (checkAnswers). Shared by client and server code.
  */
@@ -62,8 +62,6 @@ export interface FormField {
   /** The choices of a drop-down list, buttons or tick boxes. */
   options: string[];
   required: boolean;
-  /** Team members only: required for the team lead alone. */
-  leadOnly: boolean;
   hidden: boolean;
   /** For forms in steps, which step it is on (1 is the first). */
   step: number;
@@ -85,18 +83,16 @@ interface BuiltIn extends Partial<FormField> {
   autoComplete?: string;
 }
 
-export type FormKey = "register" | "hackathonTeam" | "hackathonMember" | "contact" | "exhibitor" | "sponsor";
+export type FormKey = "register" | "contact" | "sponsor";
 
 interface FormSpec {
   title: string;
   /** The steps fields can be put on (a one-page form has one). */
   steps: string[];
-  /** Fields of each member of a team (required means required for every member being entered). */
-  members?: boolean;
   fields: BuiltIn[];
 }
 
-const ATTENDEE_OPTIONS = ["Student", "Researcher / postdoc", "Faculty", "Industry practitioner", "Startup founder / team", "Investor", "Other"];
+const ATTENDEE_OPTIONS = ["Student", "Faculty / teacher", "Working professional", "Government / NGO staff", "Entrepreneur / business owner", "Other"];
 const NAME = { label: "Name", type: "text", types: ["text"], always: true, max: 120, autoComplete: "name", why: "Used to address them in e-mails." } satisfies Omit<BuiltIn, "key">;
 const EMAIL = { label: "E-mail", type: "email", types: ["email"], always: true, max: 160, autoComplete: "email", why: "Replies and confirmations go to this address." } satisfies Omit<BuiltIn, "key">;
 const PHONE = { label: "Phone", type: "tel", max: 30, autoComplete: "tel" } satisfies Omit<BuiltIn, "key">;
@@ -111,71 +107,36 @@ const enquiry = (organisation: Partial<BuiltIn>, message: Partial<BuiltIn>, subj
 
 export const FORMS: Record<FormKey, FormSpec> = {
   register: {
-    title: "Workshop registration",
+    title: "Training registration",
     steps: ["Step 1", "Step 2", "Step 3"],
     fields: [
       { key: "name", ...NAME, label: "Full name" },
       { key: "email", ...EMAIL, why: "The confirmation goes to this address, and each address registers once." },
-      { key: "phone", ...PHONE },
+      { key: "phone", ...PHONE, required: true },
       { key: "category", label: "I am a…", type: "select", options: ATTENDEE_OPTIONS, placeholder: "Choose one", required: true },
       { key: "organisation", label: "Institution / organisation", type: "text", required: true, max: 160, autoComplete: "organization" },
-      { key: "designation", label: "Designation / programme", type: "text", placeholder: "e.g. PhD student, Data scientist", max: 120 },
-      { key: "city", label: "City", type: "text", max: 80, autoComplete: "address-level2" },
-      { key: "country", label: "Country", type: "text", placeholder: "e.g. India", max: 80, autoComplete: "country-name" },
-      { key: "interests", label: "Which themes interest you most?", type: "checkboxes", types: ["checkboxes"], options: ["Healthcare", "Scientific Discovery", "Enterprise"], step: 2 },
-      { key: "tutorials", label: "I'd like to join hands-on tutorials", help: "We'll share prerequisites closer to the event.", type: "checkbox", types: ["checkbox"], step: 2 },
-      { key: "hackathonInterest", label: "I'm interested in the hackathon", help: "Hackathon registration is separate. We'll send you the details.", type: "checkbox", types: ["checkbox"], step: 2 },
+      { key: "designation", label: "Designation / department", type: "text", placeholder: "e.g. Assistant Manager, HR", max: 120 },
+      { key: "city", label: "City", type: "text", placeholder: "e.g. Dhaka", max: 80, autoComplete: "address-level2" },
+      { key: "country", label: "Country", type: "text", placeholder: "e.g. Bangladesh", max: 80, autoComplete: "country-name", hidden: true },
+      { key: "interests", label: "Which programme would you like to join?", help: "Pick one, or both.", type: "checkboxes", types: ["checkboxes"], options: ["AI for Professionals", "AI for Workspace"], required: true, step: 2 },
       {
-        key: "presentPoster",
-        label: "Would you like to present a poster?",
-        help: "The poster session is open to arXiv preprints and papers currently under submission, on the broader theme of agentic AI. The organisers will write to you with the details.",
+        key: "experience",
+        label: "How much have you used AI tools so far?",
         type: "radio",
         types: ["radio", "select"],
-        options: ["Yes", "No"],
+        options: ["Never or hardly ever", "Now and then", "Every week", "Every day"],
         required: true,
         step: 2,
       },
-      { key: "heardFrom", label: "How did you hear about the workshop?", type: "select", options: ["Social media", "E-mail", "Colleague or friend", "IIT Delhi / ScAI website", "Other"], placeholder: "Choose one", step: 2 },
-      { key: "dietary", label: "Dietary preference", type: "select", options: ["Vegetarian", "Non-vegetarian", "Vegan", "Jain", "Other"], placeholder: "No preference", step: 3 },
+      { key: "tutorials", label: "I'll bring my own laptop to the hands-on labs", help: "Every session is hands-on. Tell us if you'll need a computer from the lab.", type: "checkbox", types: ["checkbox"], step: 2 },
+      { key: "heardFrom", label: "How did you hear about the training?", type: "select", options: ["Social media", "E-mail", "Colleague or friend", "DIU website", "Other"], placeholder: "Choose one", step: 2 },
+      { key: "dietary", label: "Dietary preference", help: "For the refreshments served during the sessions.", type: "select", options: ["No preference", "Vegetarian", "Vegan", "Other"], placeholder: "No preference", step: 3, hidden: true },
       { key: "accessibility", label: "Accessibility requirements", help: "Let us know if you need any assistance at the venue.", type: "textarea", max: 500, step: 3 },
-      { key: "message", label: "Anything else?", type: "textarea", max: 1000, step: 3 },
-      { key: "consent", label: "I agree to be contacted about this workshop", help: "Your details are used only to organise the event and are not shared with third parties.", type: "checkbox", types: ["checkbox"], always: true, step: 3, why: "Registrations need this consent." },
-    ],
-  },
-  hackathonTeam: {
-    title: "Hackathon team",
-    // The members' details come between the two.
-    steps: ["The first step (before the members)", "The last step (after the members)"],
-    fields: [
-      { key: "teamName", label: "Team name", type: "text", types: ["text"], always: true, min: 2, max: 60, why: "Each team needs a name of its own." },
-      { key: "ideaTitle", label: "Idea title", type: "text", max: 120, step: 2 },
-      { key: "ideaSummary", label: "Idea summary", help: "A few lines on how your agent answers the question. You can refine it at the idea-submission stage.", type: "textarea", max: 1500, step: 2 },
-      { key: "githubUrl", label: "GitHub / project link", placeholder: "https://github.com/…", type: "url", max: 300, step: 2 },
-      { key: "consent", label: "We accept the hackathon rules and code of conduct", help: "We confirm the details above are correct and agree to be contacted about the hackathon.", type: "checkbox", types: ["checkbox"], always: true, step: 2, why: "Teams must accept the rules." },
-    ],
-  },
-  hackathonMember: {
-    title: "Each team member",
-    steps: ["Members"],
-    members: true,
-    fields: [
-      { key: "name", ...NAME },
-      { key: "email", ...EMAIL, why: "The team lead's gets the confirmation, and each person can be in only one team." },
-      { key: "phone", ...PHONE, required: true, leadOnly: true },
-      { key: "organisation", label: "Institution / organisation", type: "text", required: true, max: 160, autoComplete: "organization" },
-      { key: "role", label: "Role in the team", type: "text", placeholder: "e.g. Developer, Designer", max: 60, hidden: true },
+      { key: "message", label: "What would you like to get out of the training?", type: "textarea", max: 1000, step: 3 },
+      { key: "consent", label: "I agree to be contacted about this training", help: "Your details are used only to organise the training and are not shared with third parties.", type: "checkbox", types: ["checkbox"], always: true, step: 3, why: "Registrations need this consent." },
     ],
   },
   contact: { title: "Contact form", steps: ["Form"], fields: enquiry({}, { placeholder: "How can we help?" }, {}) },
-  exhibitor: {
-    title: "Exhibit with us",
-    steps: ["Form"],
-    fields: enquiry(
-      { label: "Company / organisation", required: true },
-      { label: "What would you like to showcase?", placeholder: "Tell us about your product or demo, team size and any booth requirements." },
-      { hidden: true },
-    ),
-  },
   sponsor: {
     title: "Become a partner",
     steps: ["Form"],
@@ -186,16 +147,13 @@ export const FORMS: Record<FormKey, FormSpec> = {
 /** The Site settings field holding each form's fields. */
 export const FORM_SETTINGS = {
   register: "registerFields",
-  hackathonTeam: "hackathonFields",
-  hackathonMember: "hackathonMemberFields",
   contact: "contactFields",
-  exhibitor: "exhibitFields",
   sponsor: "partnerFields",
 } as const satisfies Record<FormKey, string>;
 export type FormSettings = { [K in FormKey as (typeof FORM_SETTINGS)[K]]: FormField[] };
 
 /** The enquiry form of each kind of enquiry. */
-export const ENQUIRY_FORMS = { contact: "contact", exhibitor: "exhibitor", sponsor: "sponsor" } as const;
+export const ENQUIRY_FORMS = { contact: "contact", sponsor: "sponsor" } as const;
 
 const MAX_FIELDS = 40;
 const MAX_OPTIONS = 40;
@@ -223,7 +181,6 @@ function fromBuiltIn(b: BuiltIn): FormField {
     type: b.type,
     options: b.options ?? [],
     required: Boolean(b.always || b.required),
-    leadOnly: Boolean(b.leadOnly),
     hidden: Boolean(b.hidden && !b.always),
     step: b.step ?? 1,
   };
@@ -264,7 +221,6 @@ export function formFields(form: FormKey, saved: unknown): FormField[] {
       type,
       options: hasChoices(type) ? options : [],
       required: always || (!hidden && r.required === true),
-      leadOnly: Boolean(spec.members && !always && r.leadOnly === true && r.required === true),
       hidden,
       step,
     });
@@ -307,8 +263,7 @@ export const emptyAnswer = (type: AnswerType): Answer => (KIND[type] === "list" 
 export const answered = (v: unknown) => (Array.isArray(v) ? v.length > 0 : typeof v === "boolean" ? v : typeof v === "string" && v.trim() !== "");
 
 /**
- * Check one answer: the cleaned value, or what is wrong with it. `required` is the field's, or not, for a
- * team member other than the lead when the field is required for the lead only.
+ * Check one answer: the cleaned value, or what is wrong with it.
  */
 function checkAnswer(form: FormKey, f: FormField, raw: unknown, required: boolean): { value: Answer; error?: string } {
   const b = builtInOf(form, f.key);
@@ -349,16 +304,15 @@ function checkAnswer(form: FormKey, f: FormField, raw: unknown, required: boolea
 
 /**
  * Check a submission against a form's fields (those on `step`, if given). Only shown fields are read; anything
- * else in the input is ignored. `lead` is for team members: false for a member other than the team lead.
+ * else in the input is ignored.
  */
-export function checkAnswers(form: FormKey, fields: FormField[], input: unknown, opts: { step?: number; lead?: boolean } = {}) {
+export function checkAnswers(form: FormKey, fields: FormField[], input: unknown, opts: { step?: number } = {}) {
   const src = input && typeof input === "object" ? (input as Record<string, unknown>) : {};
   const values: Record<string, Answer> = {};
   const errors: Record<string, string> = {};
   for (const f of fields) {
     if (f.hidden || (opts.step !== undefined && f.step !== opts.step)) continue;
-    const required = f.required && !(f.leadOnly && opts.lead === false);
-    const { value, error } = checkAnswer(form, f, Object.hasOwn(src, f.key) ? src[f.key] : undefined, required);
+    const { value, error } = checkAnswer(form, f, Object.hasOwn(src, f.key) ? src[f.key] : undefined, f.required);
     values[f.key] = value;
     if (error) errors[f.key] = error;
   }

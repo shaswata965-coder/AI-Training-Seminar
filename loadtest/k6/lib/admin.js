@@ -29,15 +29,15 @@ export function adminGet(path, name) {
   return res;
 }
 
-/** Post an announcement, as an organiser would during the contest. */
+/** Post an announcement, as an organiser would during a busy day. */
 export function announce(n) {
   const body = {
     title: `Load test update ${n}: round ${n} starts in 15 minutes`,
-    body: "Teams, please check the timeline on the hackathon page. Mentors are in the atrium.",
+    body: "Registration for the next batch is open. Places are limited.",
     date: new Date().toISOString(),
     tone: "info",
-    linkUrl: "/hackathon",
-    linkLabel: "Hackathon timeline",
+    linkUrl: "/register",
+    linkLabel: "Register now",
     pinned: false,
     published: true,
   };

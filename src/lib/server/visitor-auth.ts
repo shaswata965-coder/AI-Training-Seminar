@@ -3,17 +3,16 @@ import { createHash, randomBytes, timingSafeEqual } from "node:crypto";
 import type { NextRequest } from "next/server";
 import { PEOPLE_GROUP_META, type PeopleGroup } from "@/lib/content/constants";
 import { connectDb } from "@/lib/db";
-import { getCollectionModel, HackathonRegistration, Registration, User, VisitorSession } from "@/lib/models";
+import { getCollectionModel, Registration, User, VisitorSession } from "@/lib/models";
 import { verifyPassword } from "@/lib/password";
 import { BASE_PATH } from "@/lib/paths";
 
 /*
- * Signing in on the public site, to keep an agenda. There is no separate sign-up: anyone the event already
+ * Signing in on the public site, to keep an agenda. There is no separate sign-up: anyone the programme already
  * knows signs in with their e-mail and what they were given:
  *  - an admin panel account (administrators, editors, volunteers): its password;
- *  - a workshop registration: its registration ID;
- *  - a hackathon team (any member's e-mail): the team's registration ID;
- *  - a person under Organisers & volunteers (mentors, judges…): the sign-in e-mail and code set there.
+ *  - a training registration: its registration ID;
+ *  - a person under Organisers & volunteers: the sign-in e-mail and code set there.
  * This is separate from the admin panel's own sign-in (admin-auth.ts), which it never grants.
  */
 
@@ -42,20 +41,15 @@ const escapeRegex = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 export async function identify(email: string, code: string): Promise<Visitor | null> {
   await connectDb();
   const id = code.trim().toUpperCase();
-  const [user, registration, team, person] = await Promise.all([
+  const [user, registration, person] = await Promise.all([
     User.findOne({ email }).lean(),
     Registration.findOne({ email, status: { $ne: "cancelled" } }).lean(),
-    HackathonRegistration.findOne({ "members.email": email, status: { $ne: "withdrawn" } }).lean(),
     getCollectionModel("people").findOne({ loginEmail: { $regex: `^${escapeRegex(email)}$`, $options: "i" } }).lean(),
   ]);
   // The password is checked even without an account, so a wrong e-mail takes as long as a wrong password.
   const passwordOk = await verifyPassword(code, user?.passwordHash);
   if (user?.active && passwordOk) return { email, name: user.name || email, kind: "team" };
   if (registration && sameText(registration.regId.toUpperCase(), id)) return { email, name: registration.name, kind: "workshop" };
-  if (team && sameText(team.regId.toUpperCase(), id)) {
-    const member = team.members.find((m) => m.email === email);
-    return { email, name: member?.name || team.teamName, kind: "hackathon" };
-  }
   const personCode = typeof person?.loginCode === "string" ? person.loginCode.trim() : "";
   if (person && personCode.length >= MIN_CODE && sameText(personCode, code.trim())) {
     const group = String(person.group) as PeopleGroup;

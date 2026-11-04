@@ -13,7 +13,7 @@ export interface PosterFact {
 }
 
 /**
- * A printed-looking poster (registration on the home page, the hackathon's "details coming soon"): a tinted head with the
+ * A printed-looking poster (registration on the home page): a tinted head with the
  * kicker and a badge, Aura as a professor unfurling a poster and pointing at it with a laser pointer (or, given a
  * `photo`, that picture across the top instead), a large title, a few points with ticks, and the facts (dates,
  * venue) along its foot. `as="h1"` when it is the page's title.
@@ -80,7 +80,7 @@ export function Poster({
           <div aria-hidden className="bg-dots pointer-events-none absolute inset-0 opacity-60 [mask-image:linear-gradient(to_bottom,black,transparent)]" />
           {labels}
           <div className="relative -mb-6 flex justify-center pt-2">
-            <Aura variant="lecturer" size={250} className="max-w-[72%]" />
+            <Aura variant="trainers" size={250} className="max-w-[72%]" />
           </div>
         </div>
       )}

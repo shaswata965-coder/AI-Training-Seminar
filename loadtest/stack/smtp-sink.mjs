@@ -18,11 +18,9 @@ const delayMs = Number(process.env.SMTP_SINK_DELAY_MS ?? 0);
 const maxConnections = Number(process.env.SMTP_SINK_MAX_CONNECTIONS) || Infinity;
 
 const KINDS = [
-  ["workshop-confirmation", /^You're registered:/],
-  ["team-confirmation", /^Team registered:/],
+  ["workshop-confirmation", /^Registration received:/],
   ["enquiry-ack", /^We received your/],
-  ["organiser-team-notice", /^New hackathon team:/],
-  ["organiser-enquiry-notice", /^(Contact message|Exhibitor enquiry|Sponsorship enquiry) from/],
+  ["organiser-enquiry-notice", /^(Contact message|Partnership enquiry) from/],
 ];
 
 const stats = { messages: 0, recipients: 0, connections: 0, refused: 0, open: 0, peakOpen: 0, byKind: {}, perRecipient: {} };

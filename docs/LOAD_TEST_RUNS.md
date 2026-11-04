@@ -1,5 +1,7 @@
 # Load test runs, 22 October 2026
 
+> **History.** This report was written for the earlier version of this site, the IIT Delhi Agentic AI Workshop 2026 (October 2026), before the `claude/diu-ai-training` branch turned it into the DIU AI Training Seminars site. The parts it tests that both versions share (admin sign-in, sessions, uploads, form validation and rate limits, caching, the nginx configuration) are unchanged; its findings about the hackathon (team registration, the contest-day load test) no longer apply, as the hackathon has been removed. It has not been re-run on this version.
+
 The full report of every run behind [LOAD_TEST_REPORT.md](LOAD_TEST_REPORT.md), as `loadtest/tools/report.mjs` wrote it. Run names are `<scenario>-<IP mode>[-<variant>]`: `readme-10min` is the README deployment with the 2,000 arriving over ten minutes, `tuned` is the first tuned nginx (nginx compressing every response) and `tuned-v2` the recommended one (now `loadtest/stack/nginx.tuned.conf.template`). Runs ending `-final` are after the fixes (the README's current nginx configuration, the new rate limits and e-mail, and an SMTP sink refusing more than 3 connections at once); `-exempt` ran with the shared address in `RATE_LIMIT_EXEMPT`, and `-noprobe` without the real-browser probe. The daily-distinct browser probe predates its own submission cap, so after 8 registrations it was rate-limited itself; its page timings are unaffected.
 
 ## daily-distinct

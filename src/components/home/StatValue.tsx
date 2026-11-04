@@ -116,7 +116,7 @@ export function StatValue({ value }: { value: string }) {
   return (
     <span ref={ref} className="tabular">
       {match[1]}
-      {match[2].includes(",") ? n.toLocaleString("en-IN") : n}
+      {match[2].includes(",") ? n.toLocaleString("en-GB") : n}
       {match[3]}
     </span>
   );

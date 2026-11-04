@@ -1,12 +1,13 @@
 import { FORM_DEFAULTS, FORM_SETTINGS, formFields, type FormKey } from "@/lib/forms";
 import { PAGE_COPY_DEFAULTS } from "@/lib/schema/page-copy";
 import { HIDDEN_SECTIONS_DEFAULTS, SECTION_ORDER_DEFAULTS } from "@/lib/schema/section-order";
-import type { Faq, HackathonInfo, Person, Session, SiteSettings } from "./types";
+import type { Faq, Person, Session, SiteSettings, Trainer } from "./types";
 
 /*
  * Default content. Used when the database is not configured/reachable and to
  * bootstrap a fresh database on first run. Everything here can be edited in
- * the admin panel. Items still pending from the organisers are marked TBA.
+ * the admin panel. Items still to be confirmed by the organisers are marked TBA,
+ * and the next batch's dates and schedule are a draft to be replaced.
  */
 
 export const DEFAULT_SETTINGS: SiteSettings = {
@@ -14,356 +15,311 @@ export const DEFAULT_SETTINGS: SiteSettings = {
   ...SECTION_ORDER_DEFAULTS,
   ...HIDDEN_SECTIONS_DEFAULTS,
   ...FORM_DEFAULTS,
-  eventName: "Agentic AI Workshop 2026",
-  shortName: "AAIW 2026",
-  tagline: "Where autonomous AI agents meet healthcare, science and enterprise.",
+  eventName: "DIU AI Training Seminars",
+  shortName: "DIU AI Training",
+  tagline: "Practical, hands-on AI training for professionals and the modern workspace.",
   description:
-    "A two-day workshop at IIT Delhi on agentic AI: invited talks, panel discussions, hands-on tutorials, live demos, industry kiosks and a poster session. 15–16 December 2026.",
-  organisedBy: "Indian Institute of Technology Delhi and Yardi School of Artificial Intelligence (ScAI), IIT Delhi",
-  startDate: "2026-12-15T09:00:00+05:30",
-  endDate: "2026-12-16T18:00:00+05:30",
-  venueName: "IIT Delhi, Hauz Khas, New Delhi",
+    "AI training seminars at Daffodil International University: AI for Professionals and AI for Workspace, hands-on sessions led by faculty of the Department of Computer Science and Engineering.",
+  organisedBy: "Department of Computer Science and Engineering, Daffodil International University",
+  startDate: "2026-12-11T09:30:00+06:00",
+  endDate: "2026-12-12T17:00:00+06:00",
+  venueName: "Daffodil Smart City, Savar, Dhaka",
   venueHall: "",
-  venueAddress: "Indian Institute of Technology Delhi, Hauz Khas, New Delhi 110016, India",
+  venueAddress: "Daffodil International University, Daffodil Smart City, Birulia, Savar, Dhaka 1216, Bangladesh",
 
   workshopStatus: "open",
   workshopDeadline: "",
   workshopReplyBy: "",
   workshopUrl: "",
-  fees: [{ category: "Everyone", amount: "Free", note: "Places are limited" }],
-  feeNote: "Registration is free. Places are limited, so registrations are reviewed and confirmed by the organising committee.",
+  fees: [{ category: "Everyone", amount: "To be announced", note: "Places are limited" }],
+  feeNote: "Fees for each batch will be announced here. Places are limited, so registrations are reviewed and confirmed by the organising team.",
   confirmationNote: "",
-  hackathonStatus: "soon",
-  hackathonDeadline: "",
-  hackathonUrl: "",
-  hackathonPlatform: "",
 
   showLoader: true,
   showHeroPhoto: true,
   heroPhoto: "",
   invitePhoto: "",
-  hackathonPosterPhoto: "",
-  postersPhoto: "",
   highlights: [
-    { label: "Speakers", value: "TBA", icon: "mic" },
-    { label: "Tutorials", value: "TBA", icon: "graduation" },
-    { label: "Live demos", value: "TBA", icon: "monitor" },
-    { label: "Industry kiosks", value: "TBA", icon: "store" },
-    { label: "Prize pool", value: "TBA", icon: "trophy" },
+    { label: "Programmes", value: "2", icon: "sparkles" },
+    { label: "Trainers", value: "9", icon: "users" },
+    { label: "Days per batch", value: "2", icon: "calendar" },
+    { label: "Hands-on labs", value: "6", icon: "laptop" },
+    { label: "Seats per batch", value: "TBA", icon: "graduation" },
   ],
-  featuredSpeakers: 8,
+  featuredTrainers: 9,
 
   motivation:
-    "AI systems are moving from answering questions to **taking actions**: planning multi-step tasks, using tools, collaborating with people and other agents, and learning from feedback. This shift opens remarkable opportunities and raises hard questions about reliability, safety and accountability.\n\nThe Agentic AI Workshop 2026 brings together researchers, practitioners, founders and investors at IIT Delhi to take stock of where agentic AI stands, where it is heading, and how it can create real impact in **healthcare**, **scientific discovery** and **enterprise**.",
+    "AI tools have moved out of research labs and into everyday work. They draft documents, summarise reports, analyse data and answer questions in seconds, and people who know how to use them well get more done, with better results.\n\nThe AI Training Seminars at Daffodil International University help professionals, teachers, students and entrepreneurs make that shift with confidence. In two programmes, **AI for Professionals** and **AI for Workspace**, trainers from DIU's Department of Computer Science and Engineering show you how to use AI tools on real tasks, safely and responsibly.",
   agenticAI:
-    "Agentic AI refers to systems that pursue goals with a degree of autonomy. Instead of producing a single response, an agent **perceives** its environment, **reasons** about what to do, **plans** a sequence of steps, **acts** using tools, APIs or other agents, and **reflects** on the outcome to improve. Large language models often act as the reasoning engine, combined with memory, tool use and human oversight.",
+    "How today's AI assistants work and where they fall short; how to write clear instructions (prompts) and check the answers; how to use AI for **writing**, **research**, **data analysis**, **presentations** and **meetings**; and how to protect **privacy** and keep **your own judgement** in charge. Every session is hands-on, so you leave with skills you can use the next day.",
   aboutPoints: [
-    { title: "Why now", icon: "rocket", description: "AI is moving from answering questions to taking actions: big opportunities, and hard questions about reliability, safety and accountability." },
-    { title: "Agentic AI", icon: "sparkles", description: "Systems that pursue goals with a degree of autonomy, using tools, other agents and human oversight to get things done." },
-    { title: "The agent loop", icon: "code", description: "Perceive, reason, plan, act, reflect: the cycle an agent repeats, often with a large language model as its engine." },
-    { title: "Three themes", icon: "heart", description: "Healthcare, scientific discovery and enterprise: where agents can create real impact." },
-    { title: "Who it is for", icon: "users", description: "Researchers, students, industry practitioners, founders and investors." },
-    { title: "Two full days", icon: "calendar", description: "{dates}: invited talks, panel discussions, hands-on tutorials, live demos and industry kiosks." },
-    { title: "Hackathon", icon: "trophy", description: "One track and one question for every team, with the finals live at the workshop." },
+    { title: "Why now", icon: "rocket", description: "AI tools now draft, summarise and analyse in seconds. Using them well is fast becoming a core skill at work." },
+    { title: "Two programmes", icon: "sparkles", description: "AI for Professionals and AI for Workspace: pick the one that fits how you work, or take both." },
+    { title: "Hands-on", icon: "code", description: "Every session is practical: you use real AI tools on real tasks from the first hour." },
+    { title: "Our trainers", icon: "landmark", description: "Faculty of the Department of Computer Science and Engineering at Daffodil International University." },
+    { title: "Who it is for", icon: "users", description: "Working professionals, teachers, students, entrepreneurs and office teams. No programming needed." },
+    { title: "Each batch", icon: "calendar", description: "{dates}: short lectures, hands-on labs and live demos at {venue}." },
+    { title: "Responsible use", icon: "heart", description: "Privacy, accuracy and judgement: using AI safely is part of every session." },
+    { title: "Past batches", icon: "award", description: "Meet the people who have trained with us on the Past participants page." },
   ],
   audience: [
-    { title: "Researchers & faculty", icon: "landmark", description: "Share and discover the latest advances in agents, planning and multi-agent systems." },
-    { title: "Students", icon: "graduation", description: "Learn hands-on in tutorials, present your work at the poster session and meet researchers." },
-    { title: "Industry practitioners", icon: "briefcase", description: "See what works in production and connect with research teams." },
-    { title: "Startups & founders", icon: "rocket", description: "Showcase your product at the kiosks and meet collaborators." },
-    { title: "Investors", icon: "sparkles", description: "Spot emerging agentic AI ventures and the talent behind them." },
+    { title: "Working professionals", icon: "briefcase", description: "Managers, analysts, engineers, bankers, lawyers, doctors and more who want AI to take on routine work." },
+    { title: "Teachers & faculty", icon: "graduation", description: "Prepare lessons, assessments and feedback faster, and guide students in using AI well." },
+    { title: "Students", icon: "sparkles", description: "Build the AI skills employers now look for, and use them in your studies." },
+    { title: "Office & admin teams", icon: "monitor", description: "Write, plan, organise and report faster with AI in the tools you use every day." },
+    { title: "Entrepreneurs", icon: "rocket", description: "Use AI for marketing, customer service and planning in a growing business." },
   ],
   activities: [
-    { title: "Invited talks", icon: "mic", description: "Keynotes and talks from leading academic and industry voices." },
-    { title: "Panel discussions", icon: "users", description: "Debates on the opportunities, risks and road ahead." },
-    { title: "Tutorials", icon: "graduation", description: "Hands-on sessions on building and evaluating agents." },
-    { title: "Live demos", icon: "monitor", description: "Agents in action, from research labs and companies." },
-    { title: "Industry kiosks", icon: "store", description: "Meet companies showcasing agentic technology." },
-    { title: "Hackathon", icon: "trophy", description: "One hackathon, one track, one question, with the finals at the workshop." },
+    { title: "Short lectures", icon: "mic", description: "The ideas behind each tool, and when to use it." },
+    { title: "Hands-on labs", icon: "laptop", description: "Guided practice on real tasks, with trainers on hand." },
+    { title: "Live demos", icon: "monitor", description: "AI tools at work, from the first prompt to a finished result." },
+    { title: "Bring your own task", icon: "briefcase", description: "Work on something from your own job or studies." },
+    { title: "Discussions", icon: "users", description: "Using AI responsibly: privacy, accuracy and judgement." },
   ],
   themes: [
     {
-      key: "healthcare",
-      title: "Agentic AI in Healthcare",
+      key: "professionals",
+      title: "AI for Professionals",
       description:
-        "Agents that support clinicians and patients by triaging, summarising records, coordinating care and accelerating diagnostics, built to be safe, fair and accountable.",
+        "For working professionals in any field: use AI to research, analyse, write reports and make better decisions, with privacy and accuracy in mind.",
     },
     {
-      key: "science",
-      title: "Agentic AI for Scientific Discovery",
+      key: "workspace",
+      title: "AI for Workspace",
       description:
-        "AI scientists that read the literature, generate hypotheses, design and run experiments and analyse results, closing the loop from idea to insight.",
-    },
-    {
-      key: "enterprise",
-      title: "Agentic AI and Enterprise",
-      description:
-        "From prototype to product: building, funding and scaling agentic AI ventures, and the new business models that agents make possible.",
+        "For everyday office work: write e-mails and documents, build spreadsheets and slides, and take meeting notes faster with AI assistants.",
     },
   ],
 
   programmeStatus: "draft",
-  programmeNote: "A tentative plan: speakers, panelists and rooms will be announced as they are confirmed, and times may still change.",
+  programmeNote: "A tentative schedule for the next batch: trainers and rooms will be confirmed, and times may still change.",
   schedulePdf: "",
 
-  mapQuery: "Indian Institute of Technology Delhi, Hauz Khas, New Delhi",
+  mapQuery: "Daffodil International University, Daffodil Smart City, Birulia, Savar, Dhaka",
   mapEmbedUrl: "",
   directions: [
     {
       mode: "air",
       title: "From the airport",
       details:
-        "Indira Gandhi International Airport (DEL) is roughly 15 km from campus, about 30–60 minutes by taxi depending on traffic. Prepaid taxis and app-based cabs are available at every terminal. The Magenta Line metro (from Terminal 1) and the Airport Express Line (from Terminal 3) connect to the city network.",
+        "Hazrat Shahjalal International Airport (DAC) is roughly 20 km from Daffodil Smart City, about 45–90 minutes by car depending on traffic, by way of Abdullahpur and the Ashulia road. App-based cars and taxis are available at the airport.",
     },
     {
       mode: "rail",
       title: "From the railway stations",
       details:
-        "New Delhi and Hazrat Nizamuddin stations are roughly 12–16 km away (about 40–60 minutes by taxi). From New Delhi station, the Yellow Line metro runs directly to Hauz Khas.",
+        "Dhaka Airport railway station is roughly 20 km from campus, and Kamalapur station roughly 30 km. From either, take an app-based car, or the metro rail towards Uttara or Mirpur and continue by road.",
     },
     {
       mode: "metro",
-      title: "By Delhi Metro",
+      title: "By metro rail",
       details:
-        "The nearest stations are IIT (Magenta Line) and Hauz Khas (Yellow and Magenta Lines). From there, the campus is a short auto-rickshaw or cab ride. Use the DMRC journey planner for the best route.",
+        "Dhaka Metro Rail (MRT Line 6) runs between Uttara North and Motijheel. Get off at Uttara North and continue by road through Abdullahpur and Ashulia, or at Mirpur 10 and continue by road through Mirpur 1 and Birulia.",
     },
     {
       mode: "road",
       title: "By road",
       details:
-        "IIT Delhi is in Hauz Khas, South Delhi. App-based cabs and auto-rickshaws are widely available; allow extra time during peak hours. Visitor parking on campus is limited.",
+        "Daffodil Smart City is at Birulia, Savar, on the north-western edge of Dhaka. DIU's transport buses link the campus with the city; ask the organisers which routes run on training days. App-based cars and CNG auto-rickshaws reach campus too; allow extra time at peak hours.",
     },
   ],
   campusEntry:
-    "IIT Delhi is a secured campus. Please carry a valid government-issued photo ID and your registration ID (sent to you by e-mail). The exact hall, entry gate and any visitor-pass details will be shared here and by e-mail before the workshop.",
+    "Daffodil Smart City is a secured campus. Please carry a valid photo ID and your registration ID (sent to you by e-mail). The building, room and entry gate for your batch will be shared here and by e-mail before it begins.",
   accommodation: [
-    { name: "IIT Delhi guest house", kind: "campus", distance: "On campus", url: "", note: "Limited rooms may be available for speakers and outstation participants on request. Contact the organisers." },
-    { name: "Hauz Khas, Green Park & Safdarjung Enclave", kind: "area", distance: "2–5 km", url: "", note: "Many hotels and guest houses within a short cab or metro ride." },
-    { name: "Saket & Malviya Nagar", kind: "area", distance: "3–6 km", url: "", note: "Mid-range hotels, restaurants and malls on the Yellow Line metro." },
-    { name: "Aerocity", kind: "area", distance: "~15 km", url: "", note: "Business hotels next to the airport, convenient for short visits." },
+    { name: "Uttara", kind: "area", distance: "~15 km", url: "", note: "Hotels and guest houses near the airport and the metro rail." },
+    { name: "Mirpur", kind: "area", distance: "~12 km", url: "", note: "Hotels and restaurants along the metro rail line." },
+    { name: "Savar & Ashulia", kind: "area", distance: "5–10 km", url: "", note: "The hotels closest to campus." },
+    { name: "Ask the organisers", kind: "campus", distance: "On campus", url: "", note: "Travelling from outside Dhaka? Ask the organisers whether rooms on campus are available for participants." },
   ],
   localInfo: [
-    "December in Delhi is cool, with chilly mornings and evenings. Pack a light jacket.",
-    "Air quality can be poor in winter; carry a mask if you are sensitive to pollution.",
-    "App-based cabs and the Delhi Metro are the easiest ways to get around.",
-    "Hauz Khas Village, Deer Park and the Qutub Minar are a short ride from campus.",
+    "December and January are cool and dry in Dhaka, with foggy mornings. A light jacket helps.",
+    "Dhaka's traffic is hard to predict: set out early, especially on weekday mornings.",
+    "App-based cars and the metro rail are the easiest ways to get around the city.",
+    "Bring a charged laptop and its charger to every session.",
   ],
 
   sponsorshipIntro:
-    "Partner with the Agentic AI Workshop 2026 to engage with leading researchers, students, startups and industry teams working on agentic AI. Sponsorship and exhibition packages can be tailored to your goals.",
+    "Partner with the AI Training Seminars at Daffodil International University to bring AI skills to professionals, teachers and students. Partnership packages can be tailored to your goals.",
   sponsorTiers: [
     {
-      name: "Title partner",
+      name: "Programme partner",
       price: "On request",
-      perks: ["Prominent branding across the venue and website", "Speaking slot in the opening session", "Premium kiosk space", "Poster session sponsorship"],
+      perks: ["Your name with the programme on the website and banners", "A dedicated batch for your staff", "A speaking slot at the opening session"],
     },
     {
-      name: "Platinum",
+      name: "Batch sponsor",
       price: "On request",
-      perks: ["Logo on the website, banners and schedule", "Kiosk space at the venue", "Access to student and research talent"],
+      perks: ["Logo on the website and banners of the batch", "Seats for your staff or community", "Meet motivated participants"],
     },
-    { name: "Gold", price: "On request", perks: ["Logo on the website and banners", "Kiosk space in the shared zone"] },
-    { name: "Academic & community partners", price: "On request", perks: ["Logo on the website", "Outreach to your community"] },
+    { name: "Community & media partners", price: "On request", perks: ["Logo on the website", "Outreach to your community"] },
   ],
   sponsorBrochure: "",
-  kioskIntro:
-    "Industry kiosks give companies and startups a space to showcase agentic AI products, research prototypes and career opportunities to a highly engaged audience.",
 
   contactEmail: "",
   contactPhone: "",
   notifyEmail: "",
-  website: "",
+  website: "https://daffodilvarsity.edu.bd",
   linkedin: "",
   x: "",
   instagram: "",
   youtube: "",
 
-  logoIITD: "",
-  logoScAI: "",
+  logoUniversity: "",
+  logoDepartment: "",
   eventLogo: "",
   brandColor: "",
   palette: { azure: "", lilac: "", mint: "", peach: "", blush: "", butter: "", aqua: "" },
   ogImage: "",
 
-  showMoreSpeakers: true,
+  showMoreTrainers: false,
   showGallery: false,
   showTalks: false,
-  showWinners: false,
-  showHackathon: false,
   bannerText: "",
   bannerLink: "",
 
   gaId: "",
   keywords: [
-    "Agentic AI",
-    "AI agents",
-    "IIT Delhi",
-    "Yardi School of Artificial Intelligence",
-    "ScAI",
-    "workshop",
-    "hackathon",
-    "AI in healthcare",
-    "AI for science",
-    "AI in enterprise",
+    "AI training",
+    "AI for Professionals",
+    "AI for Workspace",
+    "Daffodil International University",
+    "DIU",
+    "Department of CSE",
+    "AI course Dhaka",
+    "Bangladesh",
   ],
-};
-
-export const DEFAULT_HACKATHON: HackathonInfo = {
-  title: "Agentic AI Hackathon 2026",
-  tagline: "One track, one question: build the agent that answers it.",
-  overview:
-    "One hackathon, one track, one question: every team designs and builds an agentic AI system that answers the same question, with one timeline, one set of rules and one prize pool. After the idea round, shortlisted teams compete in the **final round live at the workshop** at IIT Delhi on 15–16 December 2026.",
-  mode: "To be announced (on-site / hybrid)",
-  teamSize: "To be announced",
-  teamType: "Students, researchers and early-career professionals; teams may mix institutions",
-  dates: "",
-  location: "",
-  prizePool: "TBA",
-  eligibility: [
-    "Open to students, researchers and early-career professionals. Final eligibility rules will be announced.",
-    "Teams may include members from different institutions.",
-    "Each participant can be part of only one team.",
-  ],
-  registrationNote: "Registration is per team: one member registers on behalf of the whole team.",
-  question: "What can agents do for us?",
-  challenge:
-    "Pick a real task, from any field, and build an agent that plans, uses tools and acts on it, safely and with people in the loop. The full problem statement is published when registration opens.",
-  ideas: [
-    "Hand a slow, multi-step task that people do by hand today to an agent, with a person signing off",
-    "Build an agent that plans, uses real tools and APIs, and explains each step it takes",
-    "Make agents work together: split a job, check each other's work and report back",
-  ],
-  rules: [
-    "Build during the hackathon; existing open-source libraries, models and APIs are allowed with attribution.",
-    "AI coding assistants are allowed but must be disclosed in your submission.",
-    "Submissions include source code (e.g. a GitHub repository), a short demo video and a README.",
-    "Do not use real personal or patient data without the appropriate permissions.",
-    "Detailed rules will be published when registration opens. The judges' decisions are final.",
-  ],
-  codeOfConduct:
-    "We are committed to a respectful, harassment-free and inclusive experience for everyone. Be kind, collaborate generously and report any concerns to the organisers. Participants who violate the code of conduct may be disqualified.",
-  timeline: [
-    { label: "Registration opens", date: "", dateLabel: "TBA", description: "Form your team and register." },
-    { label: "Registration closes", date: "", dateLabel: "TBA", description: "Last date to register your team." },
-    { label: "Idea submission", date: "", dateLabel: "TBA", description: "Submit a short proposal for your agent." },
-    { label: "Shortlisting", date: "", dateLabel: "TBA", description: "Shortlisted teams are announced." },
-    { label: "Final round at the workshop", date: "2026-12-15", dateLabel: "15–16 Dec 2026", description: "Build, demo and pitch live at IIT Delhi." },
-    { label: "Results", date: "", dateLabel: "TBA", description: "Winners announced." },
-  ],
-  prizes: [
-    { place: "Winner", reward: "TBA", description: "" },
-    { place: "Runner-up", reward: "TBA", description: "" },
-    { place: "Second runner-up", reward: "TBA", description: "" },
-    { place: "Special mention", reward: "TBA", description: "" },
-  ],
-  judgingCriteria: [
-    { name: "Impact & relevance", weight: 25, description: "Does it answer the question for a real problem and real people?" },
-    { name: "Agentic design & technical depth", weight: 25, description: "Planning, tool use, memory and robustness of the agent." },
-    { name: "Innovation", weight: 20, description: "Novelty of the idea and the approach." },
-    { name: "Demo & user experience", weight: 20, description: "A working demo that is clear and usable." },
-    { name: "Responsible AI", weight: 10, description: "Safety, privacy, fairness and transparency considerations." },
-  ],
-  resultsNote: "Congratulations to all the teams who took part!",
-  winners: [],
 };
 
 type NewDoc<T> = Omit<T, "id">;
 
-export const DEFAULT_PEOPLE: NewDoc<Person>[] = [
-  ...["Prof. Sandeep Kumar", "Prof. Mausam", "Prof. Parag Singla", "Prof. Tanmoy Chakraborty", "Prof. Souvik Chakraborty"].map(
-    (name, i) => ({
-      name,
-      group: "faculty" as const,
-      role: "Faculty organiser",
-      department: "",
-      affiliation: "IIT Delhi",
-      profileUrl: "",
-      photo: "",
-      bio: "",
-      order: i + 1,
-      published: true,
-    }),
-  ),
-  { name: "Abhishek Gupta", group: "student", role: "PhD scholar", department: "Yardi School of Artificial Intelligence (ScAI)", affiliation: "IIT Delhi", profileUrl: "", photo: "", bio: "", order: 1, published: true },
-  { name: "Aditya Shahne", group: "student", role: "PhD scholar", department: "Department of Electrical Engineering", affiliation: "IIT Delhi", profileUrl: "", photo: "", bio: "", order: 2, published: true },
-  { name: "Ajit Kumar Singh", group: "student", role: "PhD scholar", department: "Department of Electrical Engineering", affiliation: "IIT Delhi", profileUrl: "", photo: "", bio: "", order: 3, published: true },
-];
+/*
+ * The trainers: the members of the Department of CSE's list, in its order, the convener first as the lead
+ * trainer. Their designations, photos and profiles are edited under Trainers in the admin panel.
+ */
+const CSE = "Department of Computer Science and Engineering";
+const trainer = (name: string, slug: string, extra: Partial<NewDoc<Trainer>> = {}): NewDoc<Trainer> => ({
+  name,
+  slug,
+  designation: `Faculty member, ${CSE}`,
+  affiliation: "Daffodil International University",
+  category: "faculty",
+  theme: "general",
+  lead: false,
+  photo: "",
+  bio: `${name} is a faculty member of the ${CSE} at Daffodil International University and a trainer on the DIU AI Training Seminars.`,
+  expertise: "",
+  teaching: "",
+  website: "",
+  linkedin: "",
+  x: "",
+  scholar: "",
+  github: "",
+  featured: true,
+  published: true,
+  ...extra,
+});
+
+export const DEFAULT_TRAINERS: NewDoc<Trainer>[] = [
+  trainer("Professor Dr. Sheak Rashed Haider Noori", "sheak-rashed-haider-noori", {
+    designation: `Professor, ${CSE}`,
+    lead: true,
+    bio: `Professor Dr. Sheak Rashed Haider Noori is a Professor in the ${CSE} at Daffodil International University and leads the trainers of the DIU AI Training Seminars.`,
+  }),
+  trainer("Dr. S. M. Aminul Haque", "s-m-aminul-haque"),
+  trainer("Dr. Arif Mahmud", "arif-mahmud"),
+  trainer("Dr. Abdus Sattar", "abdus-sattar"),
+  trainer("Dr. Masud Rana Rashel", "masud-rana-rashel"),
+  trainer("Mr. Shahdat Hossain", "shahdat-hossain"),
+  trainer("Mr. Saiful Islam", "saiful-islam"),
+  trainer("Mr. Mohammad Jahangir Alam", "mohammad-jahangir-alam"),
+  trainer("Kridita Ray", "kridita-ray"),
+].map((t, i) => ({ ...t, order: i + 1 }));
+
+/** Faculty coordinators, student organisers and volunteers: none until the organisers add them. */
+export const DEFAULT_PEOPLE: NewDoc<Person>[] = [];
 
 export const DEFAULT_FAQS: NewDoc<Faq>[] = [
-  { category: "general", question: "Who can attend the workshop?", answer: "The workshop is for researchers, faculty, students, industry practitioners, startups and investors working on agentic AI. Places are limited, so registrations are reviewed and confirmed by the organising committee." },
-  { category: "registration", question: "Is there a registration fee?", answer: "No, registration is free. Places are limited, so register early: the organising committee reviews every registration and lets you know whether we can offer you a place." },
-  { category: "registration", question: "Do I need to register separately for the hackathon?", answer: "Yes. Workshop registration and hackathon registration are separate. Hackathon registration is done per team on the Hackathon page." },
-  { category: "programme", question: "When will the detailed programme be available?", answer: "The schedule is published on the Programme page as sessions are confirmed. You can download it as a PDF and add sessions to your calendar." },
-  { category: "programme", question: "What should I bring to the tutorials?", answer: "Most tutorials need a laptop. Check each tutorial's prerequisites (software, accounts) on the Tutorials & Demos page." },
-  { category: "programme", question: "Will the talks be recorded?", answer: "Selected talk slides and recordings may be shared on this website after the event." },
-  { category: "travel", question: "How do I reach IIT Delhi?", answer: "See the Venue & travel page for directions from the airport, the railway stations and the Delhi Metro, and the route map on the home page." },
-  { category: "travel", question: "Is accommodation provided?", answer: "Accommodation is not included in registration unless announced otherwise. The Venue & travel page lists nearby options." },
-  { category: "sponsorship", question: "How can my company exhibit or sponsor?", answer: "Use the “Exhibit with us” or “Become a partner” forms on this page, or e-mail the organisers, and we will share the available options." },
-  { category: "hackathon", question: "What is the hackathon team size?", answer: "Team size and eligibility will be announced with the detailed rules. Keep an eye on the Hackathon page for updates." },
-  { category: "hackathon", question: "Where does the hackathon final take place?", answer: "The final round takes place live at the workshop at IIT Delhi on 15–16 December 2026." },
+  {
+    category: "general",
+    question: "Who can join the training?",
+    answer: "Anyone who wants to use AI in their work or studies: working professionals, teachers, students, entrepreneurs and office teams. No programming or technical background is needed.",
+  },
+  {
+    category: "general",
+    question: "What is the difference between the two programmes?",
+    answer:
+      "**AI for Professionals** is for people who want AI to help with the core of their work: research, analysis, reports and decisions. **AI for Workspace** focuses on everyday office tasks: e-mail, documents, spreadsheets, slides and meetings. You can join one or both.",
+  },
+  {
+    category: "registration",
+    question: "How do I register?",
+    answer: "Use the registration form on this site and pick the programme you'd like to join. Places are limited, so the organising team reviews every registration and lets you know whether we can offer you a place.",
+  },
+  { category: "registration", question: "Is there a fee?", answer: "The fee for each batch is announced on the Registration page." },
+  { category: "programme", question: "What should I bring?", answer: "A charged laptop and its charger. Tell us in the registration form if you will need a computer in the lab instead." },
+  { category: "programme", question: "Do I need to know programming?", answer: "No. Both programmes are designed for non-programmers: if you can use a web browser and an office suite, you can follow every session." },
+  {
+    category: "programme",
+    question: "Which AI tools will we use?",
+    answer: "Widely available AI assistants and the AI features of everyday office tools. The trainers share the list, and any accounts you need, before the batch starts.",
+  },
+  { category: "programme", question: "Will the sessions be recorded?", answer: "Selected slides and recordings may be shared on this website after a batch." },
+  {
+    category: "travel",
+    question: "How do I reach Daffodil Smart City?",
+    answer: "See the Venue & travel page for directions from the airport, the railway stations, the metro rail and by road, and the route map on the home page.",
+  },
+  {
+    category: "sponsorship",
+    question: "Can you run a batch for our organisation?",
+    answer: "Yes. Use the “Become a partner” form on the Partners page, or e-mail the organisers, and we will get back to you with the options.",
+  },
 ].map((f, i) => ({ ...f, order: i + 1, published: true }));
 
 /*
- * The tentative programme: the organisers' plan of talks, panels and breaks for both days, with speakers,
- * panelists and rooms still to be announced. Added once to a site without sessions (bootstrap.ts), shown
- * as a draft ("subject to change"); every session is then edited under Programme in the admin panel.
+ * The tentative schedule of a batch: Day 1 for AI for Professionals, Day 2 for AI for Workspace, with the
+ * trainers and rooms still to be announced. Added once to a site without sessions (bootstrap.ts), shown as a
+ * draft ("subject to change"); every session is then edited under Schedule in the admin panel.
  */
-const TALK = { type: "talk", title: "Invited talk", speakerNote: "Speaker to be announced" } as const;
-const TUTORIAL = {
-  type: "tutorial",
-  title: "Tutorial or demo",
-  speakerNote: "Instructors to be announced",
-  description: "Five hands-on tutorials and live demos run side by side in this slot. Pick the one you want once the line-up is announced.",
-} as const;
-const slot = (day: "1" | "2", start: string, end: string, session: { type: Session["type"]; title: string; speakerNote?: string; description?: string }) => ({ day, start, end, ...session });
+type Slot = { type: Session["type"]; title: string; theme?: Session["theme"]; description?: string };
+const slot = (day: "1" | "2", start: string, end: string, session: Slot) => ({ day, start, end, ...session });
+const TBA = "Trainer to be announced";
 
 export const DEFAULT_SESSIONS: NewDoc<Session>[] = [
-  slot("1", "09:00", "10:00", { type: "other", title: "Inauguration" }),
-  slot("1", "10:00", "10:30", TALK),
-  slot("1", "10:30", "11:00", TALK),
-  slot("1", "11:00", "11:30", TALK),
-  slot("1", "11:30", "11:45", { type: "break", title: "Tea break" }),
-  slot("1", "11:45", "12:15", TALK),
-  slot("1", "12:15", "12:45", TALK),
-  slot("1", "12:45", "13:15", TALK),
-  slot("1", "13:15", "15:00", { type: "break", title: "Lunch & poster session", description: "Posters are on display through lunch, with their authors beside them." }),
-  slot("1", "15:00", "16:30", { type: "panel", title: "Panel discussion 1", speakerNote: "Panelists to be announced" }),
-  slot("1", "16:30", "17:00", TALK),
-  slot("1", "17:00", "17:30", TALK),
-  slot("1", "17:30", "18:00", TALK),
-  slot("1", "18:00", "19:30", { type: "panel", title: "Panel discussion 2", speakerNote: "Five or six panelists, to be announced" }),
-  slot("1", "19:30", "21:30", { type: "break", title: "Networking dinner" }),
-  slot("2", "08:00", "09:00", { type: "break", title: "Breakfast" }),
-  slot("2", "09:00", "09:30", TALK),
-  slot("2", "09:30", "10:00", TALK),
-  slot("2", "10:00", "10:30", TALK),
-  slot("2", "10:30", "11:00", TALK),
-  slot("2", "11:00", "11:30", TALK),
-  slot("2", "11:30", "11:45", { type: "break", title: "Tea break" }),
-  slot("2", "11:45", "12:15", TALK),
-  slot("2", "12:15", "12:45", TALK),
-  slot("2", "12:45", "13:15", TALK),
-  ...[1, 2, 3, 4, 5].map(() => slot("2", "13:15", "14:30", TUTORIAL)),
-].map((x, i) => ({ speakerNote: "", description: "", ...x, theme: "general", room: "", speakers: [], moderator: "", panelists: [], order: i + 1, published: true }));
-
-/** Earlier default About point sets. Stored but never edited, they are replaced by the current topics. */
-const RETIRED_ABOUT_POINTS = [
-  "Agents that act|Three themes|Talks and panels|Learn by doing|Build and compete|Open to all",
-  "What is agentic AI?|When and where?|Why now?|Which themes?|Who is speaking?|Can I get hands-on?|Is there a hackathon?|Industry presence?|Who should come?|Who organises it?",
-];
-
-function withCurrentAboutPoints<T extends { aboutPoints?: { title: string }[] }>(settings: T): T {
-  const titles = settings.aboutPoints?.map((p) => p.title).join("|");
-  return titles && RETIRED_ABOUT_POINTS.includes(titles) ? { ...settings, aboutPoints: DEFAULT_SETTINGS.aboutPoints } : settings;
-}
+  slot("1", "09:30", "10:00", { type: "keynote", title: "Registration and welcome", description: "Meet the trainers and the rest of the batch, and see what you'll be able to do by the end." }),
+  slot("1", "10:00", "11:00", { type: "talk", theme: "professionals", title: "AI in your profession: what today's tools can and can't do" }),
+  slot("1", "11:00", "11:15", { type: "break", title: "Tea break" }),
+  slot("1", "11:15", "12:30", { type: "tutorial", theme: "professionals", title: "Prompting for professional work: clear instructions, better answers" }),
+  slot("1", "12:30", "14:30", { type: "break", title: "Lunch and prayer break" }),
+  slot("1", "14:30", "15:45", { type: "tutorial", theme: "professionals", title: "Research, analysis and reports with AI" }),
+  slot("1", "15:45", "16:30", { type: "panel", title: "Using AI responsibly: privacy, accuracy and judgement" }),
+  slot("1", "16:30", "17:00", { type: "other", title: "Wrap-up and questions" }),
+  slot("2", "09:30", "10:00", { type: "talk", theme: "workspace", title: "AI across your workspace: an overview" }),
+  slot("2", "10:00", "11:00", { type: "tutorial", theme: "workspace", title: "Writing with AI: e-mails, letters and documents" }),
+  slot("2", "11:00", "11:15", { type: "break", title: "Tea break" }),
+  slot("2", "11:15", "12:30", { type: "tutorial", theme: "workspace", title: "Spreadsheets and data with AI" }),
+  slot("2", "12:30", "13:30", { type: "break", title: "Lunch and prayer break" }),
+  slot("2", "13:30", "14:30", { type: "tutorial", theme: "workspace", title: "Slides and meeting notes with AI" }),
+  slot("2", "14:30", "15:30", { type: "demo", theme: "workspace", title: "Live demo: automating a routine office task" }),
+  slot("2", "15:30", "16:30", { type: "tutorial", title: "Bring your own task: guided practice" }),
+  slot("2", "16:30", "17:00", { type: "other", title: "Closing session and feedback" }),
+].map((x, i) => ({
+  description: "",
+  theme: "general" as const,
+  ...x,
+  trainerNote: x.type === "break" ? "" : TBA,
+  room: "",
+  trainers: [],
+  moderator: "",
+  panelists: [],
+  order: i + 1,
+  published: true,
+}));
 
 /*
- * Earlier defaults. A site stores the defaults of its day when it is set up, so these are still in the
- * databases of sites set up before the defaults changed (the third theme was Entrepreneurship, now
- * Enterprise; the hackathon had a track per theme, now one track and one question; the home page
- * opened with the highlights and announcements). As they are read, a stored value that is still one of
- * these, never edited, becomes the current default; anything an organiser has changed is kept. The
- * database itself is not changed.
+ * Earlier defaults. A site stores the defaults of its day when it is set up, so when a default changes, list the
+ * old value here: as they are read, a stored value that is still one of these, never edited, becomes the current
+ * default; anything an organiser has changed is kept. The database itself is not changed.
  */
 interface Retired {
   /** By field, or "section.text" for a section's texts: earlier defaults, each replaced by the current default there. */
@@ -372,108 +328,7 @@ interface Retired {
   texts: Record<string, Record<string, string>>;
 }
 
-const RETIRED: { settings: Retired; hackathon: Retired } = {
-  settings: {
-    values: {
-      tagline: ["Where autonomous AI agents meet healthcare, science and entrepreneurship."],
-      motivation: [
-        "AI systems are moving from answering questions to **taking actions**: planning multi-step tasks, using tools, collaborating with people and other agents, and learning from feedback. This shift opens remarkable opportunities and raises hard questions about reliability, safety and accountability.\n\nThe Agentic AI Workshop 2026 brings together researchers, practitioners, founders and investors at IIT Delhi to take stock of where agentic AI stands, where it is heading, and how it can create real impact in **healthcare**, **scientific discovery** and **entrepreneurship**.",
-      ],
-      programmeNote: [
-        "The detailed programme will be published soon. Sessions span invited talks, panel discussions, tutorials, live demos and the hackathon final.",
-      ],
-      homeOrder: [["highlights", "news", "themes", "about", "speakers", "hackathon", "venue", "partners", "faq"]],
-      "siteNav.themesText": ["Healthcare, scientific discovery and entrepreneurship"],
-      // Texts that mentioned the hackathon in passing, from before it was hidden until announced.
-      description: [
-        "A two-day workshop at IIT Delhi on agentic AI: invited talks, panel discussions, hands-on tutorials, live demos, industry kiosks and a hackathon. 15–16 December 2026.",
-        "A two-day, invitation-only workshop at IIT Delhi on agentic AI: invited talks, panel discussions, hands-on tutorials, live demos, industry kiosks and a poster session. 15–16 December 2026.",
-      ],
-      "siteNav.faqText": ["Registration, travel, the hackathon and more"],
-      // Registration became invitation-only, free but mandatory; then open, with places confirmed by the organising committee.
-      fees: [
-        [
-          { category: "Students", amount: "To be announced", note: "" },
-          { category: "Academia & researchers", amount: "To be announced", note: "" },
-          { category: "Industry & startups", amount: "To be announced", note: "" },
-        ],
-        [{ category: "Every invitee", amount: "Free", note: "Registration is mandatory for entry" }],
-      ],
-      feeNote: [
-        "Registration fees (if any) and deadlines will be announced soon.",
-        "The workshop is by invitation. Registration is free but mandatory: invitees need it to get entry.",
-      ],
-      "registerHero.description": [
-        "{dates} · {venue}. Registering takes about two minutes.",
-        "{dates} · {venue}. The workshop is by invitation: every invitee must register to get entry. Registration is free but mandatory, and takes about two minutes.",
-      ],
-      "homeRegister.soloDescription": ["The workshop is by invitation. Registration is free but mandatory: every invitee registers to get entry."],
-      "homeInvite.eyebrow": ["By invitation"],
-      "homeInvite.title": ["You're invited"],
-      "homeInvite.description": ["The {event} is by invitation. Every invitee must register to get entry: registration is free but mandatory."],
-      "homeInvite.posterKicker": ["Invitation"],
-      "homeInvite.posterBadge": ["Free · registration required"],
-      "registerFormText.doneTitle": ["You're registered!"],
-      "registerFormText.doneMailed": ["A confirmation e-mail is on its way to {email}."],
-      "registerFormText.doneQueued": [
-        "Your registration ID and details are on their way to {email}. If this address was already registered, your earlier registration stands and we've sent its confirmation again.",
-      ],
-      "registerFormText.shareText": ["I'm attending the {event} at IIT Delhi!"],
-      "registerPosters.welcome1": ["arXiv preprints on agentic AI and its uses"],
-      "registerPosters.welcome2": ["Papers submitted to, or accepted at, a conference or journal"],
-      "registerPosters.welcome3": ["Work in progress from your lab, startup or team"],
-      "homeNews.description": ["Updates about registration, speakers, the programme and the hackathon appear here first."],
-      "programmeHero.description": [
-        "{dates} at {venueName}. Keynotes, talks, panels, hands-on tutorials and live demos, with industry kiosks and the hackathon final alongside.",
-      ],
-      "venueStay.portalText": ["Answers on registration, travel, the hackathon and more."],
-      "homeThemes.description": ["Talks, tutorials and the hackathon are organised around three themes."],
-      "hackathonTracks.eyebrow": ["Themes"],
-      "hackathonTracks.title": ["One hackathon, three themes"],
-      "hackathonTracks.description": [
-        "Every team takes part in the same hackathon, with one timeline, one set of rules and one prize pool. Pick the theme your idea fits; the problems below are examples to get you thinking.",
-      ],
-      "hackathonTracks.frame": ["One hackathon · {count} themes"],
-      "hackathonPrizes.intro": ["Prizes for the top three teams, and awards for the best agent in each theme."],
-      "hackathonRegisterForm.need1": ["A team name and a theme"],
-      "hackathonRegisterForm.tracksLink": ["Not sure which theme? See the themes"],
-      "hackathonRegisterForm.soonText": [
-        "Start forming your team! When registration opens you will need a team name, the theme you'll work on, member details and a short idea summary.",
-      ],
-    },
-    texts: {
-      themes: { entrepreneurship: "enterprise", "Agentic AI and Entrepreneurship": "Agentic AI and Enterprise" },
-      aboutPoints: {
-        "Healthcare, scientific discovery and entrepreneurship: where agents can create real impact.": "Healthcare, scientific discovery and enterprise: where agents can create real impact.",
-        "Teams build agents for health, science or startups, with the finals live at the workshop.": "One track and one question for every team, with the finals live at the workshop.",
-      },
-      activities: { "Build agents for health, science and startups, with the finals at the workshop.": "One hackathon, one track, one question, with the finals at the workshop." },
-      sponsorTiers: {
-        "Hackathon theme sponsorship": "Poster session sponsorship",
-        "Hackathon sponsorship": "Poster session sponsorship",
-        "Access to hackathon talent": "Access to student and research talent",
-      },
-      audience: { "Learn hands-on in tutorials, meet mentors and build in the hackathon.": "Learn hands-on in tutorials, present your work at the poster session and meet researchers." },
-      keywords: { "AI entrepreneurship": "AI in enterprise" },
-      registerFields: {
-        "arXiv preprints and submitted or accepted papers are welcome at the poster session. The organisers will write to you with the details.":
-          "The poster session is open to arXiv preprints and papers currently under submission, on the broader theme of agentic AI. The organisers will write to you with the details.",
-      },
-    },
-  },
-  hackathon: {
-    values: {
-      tagline: ["Build agents that matter for health, science and startups."],
-      overview: [
-        "One hackathon, three themes: teams design and build agentic AI systems that tackle real problems in healthcare, scientific discovery or entrepreneurship. After the idea round, shortlisted teams compete in the **final round live at the workshop** at IIT Delhi on 15–16 December 2026.",
-      ],
-    },
-    texts: {
-      prizes: { "Best agent in each theme": "Special mention" },
-      judgingCriteria: { "Does it address a real problem in one of the themes?": "Does it answer the question for a real problem and real people?" },
-    },
-  },
-};
+const RETIRED: Retired = { values: {}, texts: {} };
 
 const same = (a: unknown, b: unknown) => JSON.stringify(a) === JSON.stringify(b);
 
@@ -511,10 +366,10 @@ function withWholeForms<T extends object>(settings: T): T {
 }
 
 /**
- * Stored settings or hackathon details (merged over the defaults) with any earlier, unedited default replaced
- * by the current one, and the forms' fields made whole.
+ * Stored settings (merged over the defaults) with any earlier, unedited default replaced by the current one,
+ * and the forms' fields made whole.
  */
-export function withCurrentDefaults<T extends object>(key: "settings" | "hackathon", data: T): T {
-  if (key === "hackathon") return withoutRetired(data, DEFAULT_HACKATHON as T, RETIRED.hackathon);
-  return withWholeForms(withoutRetired(withCurrentAboutPoints(data as T & { aboutPoints?: { title: string }[] }), DEFAULT_SETTINGS as T, RETIRED.settings));
+export function withCurrentDefaults<T extends object>(key: "settings", data: T): T {
+  void key;
+  return withWholeForms(withoutRetired(data, DEFAULT_SETTINGS as T, RETIRED));
 }

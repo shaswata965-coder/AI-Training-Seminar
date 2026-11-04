@@ -13,7 +13,7 @@ import { Section, SectionHeading } from "@/components/ui/Section";
 import { TagScope } from "@/components/ui/Tag";
 import { getSettings } from "@/lib/content/queries";
 import { copy } from "@/lib/copy";
-import { eventCalendarLinks, withoutHackathon } from "@/lib/event";
+import { eventCalendarLinks } from "@/lib/event";
 import { formatDateRange } from "@/lib/format";
 import { absoluteUrl } from "@/lib/paths";
 
@@ -21,7 +21,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const s = await getSettings();
   return {
     title: "About",
-    description: `Why the ${s.eventName} matters, what agentic AI is, who should attend and what happens over the two days.`,
+    description: `Why the ${s.eventName} matters, what you will learn, who should attend and how a batch runs.`,
     alternates: { canonical: absoluteUrl("/about") },
   };
 }
@@ -29,12 +29,10 @@ export async function generateMetadata(): Promise<Metadata> {
 const TONES = ["azure", "lilac", "mint", "peach", "butter", "blush"] as const;
 
 function activityHref(title: string) {
-  if (/panel/i.test(title)) return "/speakers#panels";
-  if (/talk|keynote|speaker/i.test(title)) return "/speakers";
-  if (/tutorial/i.test(title)) return "/tutorials";
+  if (/lecture|trainer/i.test(title)) return "/trainers";
+  if (/lab|tutorial|hands-on|own task/i.test(title)) return "/tutorials";
   if (/demo/i.test(title)) return "/tutorials#demos";
-  if (/kiosk|exhibit|industry/i.test(title)) return "/programme#kiosks";
-  if (/hack/i.test(title)) return "/hackathon";
+  if (/participant|batch/i.test(title)) return "/past-participants";
   return "/programme";
 }
 
@@ -48,7 +46,7 @@ export default async function AboutPage() {
     <TagScope style="underline">
       <PageHero edit="about.hero" home={s.siteNav.home} tone={hero.tone} crumb={hero.crumb} eyebrow={hero.eyebrow} title={hero.title} aura="guide" description={hero.description}>
         <AddToCalendar links={eventCalendarLinks(s)} variant="outline" size="sm" />
-        <ShareButtons url={absoluteUrl("/")} text={`${s.eventName} at IIT Delhi, ${formatDateRange(s.startDate, s.endDate)}`} />
+        <ShareButtons url={absoluteUrl("/")} text={`${s.eventName} at Daffodil International University, ${formatDateRange(s.startDate, s.endDate)}`} />
       </PageHero>
 
       <InOrder
@@ -99,7 +97,7 @@ export default async function AboutPage() {
             <Section edit="about.activities" tone={ac.tone} bg={ac.background} labelledBy="activities-title">
               <SectionHeading id="activities-title" eyebrow={ac.eyebrow} title={ac.title} className="mb-8 sm:mb-10" />
               <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                {withoutHackathon(s, s.activities, (x) => x.title).map((a, i) => (
+                {s.activities.map((a, i) => (
                   <li key={a.title} data-reveal style={{ "--reveal-delay": `${i * 60}ms` } as CSSProperties}>
                     <Link
                       href={activityHref(a.title)}

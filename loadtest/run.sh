@@ -4,13 +4,13 @@
 #   browser at the busiest moment) → check the database and e-mails against what k6 saw → report.
 #
 #   loadtest/run.sh                                   # every scenario in every IP mode
-#   loadtest/run.sh submission:distinct contest:shared
+#   loadtest/run.sh submission:distinct daily:shared
 #   SCALE=0.05 PACE=0.2 loadtest/run.sh daily:distinct   # quick smoke run
 #   NGINX_PROFILE=plain LABEL=plain loadtest/run.sh submission:distinct   # the README's earlier nginx (stack/up.sh)
 #   ARRIVAL=600 LABEL=10min loadtest/run.sh submission:distinct          # the 2,000 arrive over 10 minutes
-#   RATE_LIMIT_EXEMPT=127.20.0.1 LABEL=exempt loadtest/run.sh contest:shared   # the shared address exempt
+#   RATE_LIMIT_EXEMPT=127.20.0.1 LABEL=exempt loadtest/run.sh submission:shared   # the shared address exempt
 #
-# Scenarios: daily (100 users), submission (2,000), contest (300 → 400). IP modes:
+# Scenarios: daily (100 users), submission (2,000). IP modes:
 #   distinct  every user has an address of their own (127.10.0.0/20)
 #   shared    every user behind one address, like one campus or office NAT (127.20.0.1)
 #   campus    one user in four behind one of 10 campus NAT addresses, the rest on their own
@@ -36,7 +36,7 @@ PROBE="${PROBE:-1}"
 export SERVER_CPUS
 
 RUNS=("$@")
-[[ ${#RUNS[@]} -gt 0 ]] || RUNS=(daily:distinct daily:shared submission:distinct submission:shared submission:campus contest:distinct contest:shared)
+[[ ${#RUNS[@]} -gt 0 ]] || RUNS=(daily:distinct daily:shared submission:distinct submission:shared submission:campus)
 
 # Prefix for commands on the load generator's CPUs. An array, not a function, so that `$!` of a command
 # started in the background is the command itself (taskset execs it), and killing it stops it.
@@ -63,7 +63,6 @@ probe_window() {
   case "$1" in
     daily) echo "90 240" ;;
     submission) echo "40 120" ;;
-    contest) echo "360 240" ;;
   esac
 }
 
@@ -74,7 +73,7 @@ refresh_website() {
   curl -sk -b "$jar" -o /dev/null -w "Refresh website: %{http_code}\n" -X POST https://localhost/api/admin/revalidate -H 'origin: https://localhost'
   rm -f "$jar"
   # Render each page once, as a site that has been up for a while has.
-  for p in / /about /programme /speakers /register /hackathon /partners /venue /organisers /tutorials /api/programme/pdf; do
+  for p in / /about /programme /trainers /register /past-participants /partners /venue /organisers /tutorials /api/programme/pdf; do
     curl -sk -o /dev/null "https://localhost$p"; curl -sk -o /dev/null "https://localhost$p"
   done
 }

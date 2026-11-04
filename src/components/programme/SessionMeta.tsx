@@ -2,7 +2,7 @@ import { MapPin, Mic2, Users } from "lucide-react";
 import Link from "next/link";
 import { Badge } from "@/components/ui/Badge";
 import { SESSION_TYPE_META, THEME_META } from "@/lib/content/constants";
-import type { Session, Speaker } from "@/lib/content/types";
+import type { Session, Trainer } from "@/lib/content/types";
 
 export function SessionBadges({ session }: { session: Session }) {
   const type = SESSION_TYPE_META[session.type] ?? SESSION_TYPE_META.other;
@@ -21,17 +21,17 @@ export function SessionBadges({ session }: { session: Session }) {
   );
 }
 
-export function speakerNames(session: Session, byId: Record<string, Speaker>) {
-  const ids = session.type === "panel" ? session.panelists : session.speakers;
+export function trainerNames(session: Session, byId: Record<string, Trainer>) {
+  const ids = session.type === "panel" ? session.panelists : session.trainers;
   return ids.map((id) => byId[id]).filter(Boolean);
 }
 
-export function SessionPeople({ session, byId, linked = true }: { session: Session; byId: Record<string, Speaker>; linked?: boolean }) {
-  const people = speakerNames(session, byId);
+export function SessionPeople({ session, byId, linked = true }: { session: Session; byId: Record<string, Trainer>; linked?: boolean }) {
+  const people = trainerNames(session, byId);
   const moderator = session.moderator ? byId[session.moderator] : undefined;
-  const name = (sp: Speaker) =>
+  const name = (sp: Trainer) =>
     linked ? (
-      <Link key={sp.id} href={`/speakers?speaker=${encodeURIComponent(sp.slug)}`} className="font-semibold text-fg underline decoration-border-strong underline-offset-2 hover:decoration-brand">
+      <Link key={sp.id} href={`/trainers?trainer=${encodeURIComponent(sp.slug)}`} className="font-semibold text-fg underline decoration-border-strong underline-offset-2 hover:decoration-brand">
         {sp.name}
       </Link>
     ) : (
@@ -39,7 +39,7 @@ export function SessionPeople({ session, byId, linked = true }: { session: Sessi
         {sp.name}
       </span>
     );
-  if (!people.length && !moderator && !session.speakerNote) return null;
+  if (!people.length && !moderator && !session.trainerNote) return null;
   return (
     <div className="space-y-1 text-sm text-muted">
       {moderator ? (
@@ -64,10 +64,10 @@ export function SessionPeople({ session, byId, linked = true }: { session: Sessi
             ))}
           </span>
         </p>
-      ) : session.speakerNote ? (
+      ) : session.trainerNote ? (
         <p className="flex items-start gap-1.5">
           <Users size={15} aria-hidden className="mt-0.5 shrink-0 text-subtle" />
-          <span>{session.speakerNote}</span>
+          <span>{session.trainerNote}</span>
         </p>
       ) : null}
     </div>

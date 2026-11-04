@@ -9,9 +9,9 @@ import { sendMail } from "@/lib/server/mail";
 import { answerText, ENQUIRY_FORMS, FORM_SETTINGS } from "@/lib/forms";
 import { checkEnquiry } from "@/lib/server/validation";
 
-const LABEL = { contact: "Contact message", exhibitor: "Exhibitor enquiry", sponsor: "Sponsorship enquiry" } as const;
+const LABEL = { contact: "Contact message", sponsor: "Partnership enquiry" } as const;
 
-/** Contact form, "Exhibit with us" and "Become a partner" enquiries. */
+/** Contact form and "Become a partner" enquiries. */
 export async function POST(req: NextRequest) {
   if (!isSameOrigin(req)) return error(403, "Cross-site requests are not allowed.");
   const body = await readJson(req);

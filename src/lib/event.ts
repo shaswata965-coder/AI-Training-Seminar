@@ -1,6 +1,6 @@
 import { googleCalendarUrl, outlookCalendarUrl } from "./calendar";
 import type { SiteSettings } from "./content/types";
-import { eventDayDate, formatDate, formatDateRange, istDateTime } from "./format";
+import { eventDayDate, formatDate, formatDateRange, localDateTime } from "./format";
 import { absoluteUrl } from "./paths";
 
 export interface EventDay {
@@ -10,13 +10,13 @@ export interface EventDay {
   end: Date;
 }
 
-/** One entry per event day, each from the start time to the end time (IST). */
+/** One entry per day of the batch, each from the start time to the end time (BST). */
 export function eventDays(s: SiteSettings): EventDay[] {
   const start = new Date(s.startDate);
   const end = new Date(s.endDate);
   if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime())) return [];
-  const startTime = new Intl.DateTimeFormat("en-GB", { timeZone: "Asia/Kolkata", hour: "2-digit", minute: "2-digit", hour12: false }).format(start);
-  const endTime = new Intl.DateTimeFormat("en-GB", { timeZone: "Asia/Kolkata", hour: "2-digit", minute: "2-digit", hour12: false }).format(end);
+  const startTime = new Intl.DateTimeFormat("en-GB", { timeZone: "Asia/Dhaka", hour: "2-digit", minute: "2-digit", hour12: false }).format(start);
+  const endTime = new Intl.DateTimeFormat("en-GB", { timeZone: "Asia/Dhaka", hour: "2-digit", minute: "2-digit", hour12: false }).format(end);
   const first = eventDayDate(s.startDate, 1);
   const last = eventDayDate(s.endDate, 1);
   const count = Math.max(1, Math.round((Date.parse(last) - Date.parse(first)) / 86_400_000) + 1);
@@ -25,13 +25,13 @@ export function eventDays(s: SiteSettings): EventDay[] {
     return {
       day: i + 1,
       date,
-      start: istDateTime(date, startTime) ?? start,
-      end: istDateTime(date, endTime) ?? end,
+      start: localDateTime(date, startTime) ?? start,
+      end: localDateTime(date, endTime) ?? end,
     };
   });
 }
 
-/** "Agentic AI Workshop 2026" → { title: "Agentic AI Workshop", year: "2026" }. Names without a trailing year keep it empty. */
+/** "DIU AI Training Seminars 2026" → { title: "DIU AI Training Seminars", year: "2026" }. Names without a trailing year keep it empty. */
 export function splitEventName(name: string): { title: string; year: string } {
   const m = name.trim().match(/^(.+?)\s+(20\d\d)$/);
   return m ? { title: m[1], year: m[2] } : { title: name.trim(), year: "" };
@@ -78,17 +78,4 @@ export function deadlinePassed(iso: string | null | undefined, now = Date.now())
 
 export function registrationHref(s: SiteSettings) {
   return s.workshopUrl || "/register";
-}
-/** Whether the hackathon is on the site (Site settings → Site-wide → Features); while it isn't, its page shows only a poster. */
-export const hackathonShown = (s: Pick<SiteSettings, "showHackathon">) => s.showHackathon;
-
-/** A list item about the hackathon (an About topic, an activity, a FAQ, the prize pool highlight), left out while it is hidden. */
-const ABOUT_HACKATHON = /hackathon|prize pool/i;
-export function withoutHackathon<T>(s: Pick<SiteSettings, "showHackathon">, items: T[], text: (item: T) => string): T[] {
-  return s.showHackathon ? items : items.filter((item) => !ABOUT_HACKATHON.test(text(item)));
-}
-
-/** Team registration: an external platform, or the form at the foot of the Hackathon page. */
-export function hackathonRegistrationHref(s: SiteSettings) {
-  return s.hackathonUrl || "/hackathon#register";
 }

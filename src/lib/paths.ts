@@ -1,4 +1,4 @@
-/** Optional sub-path the site is served from (e.g. "/agentic-ai-workshop"). */
+/** Optional sub-path the site is served from (e.g. "/ai-training"). */
 export const BASE_PATH = (process.env.NEXT_PUBLIC_BASE_PATH ?? "").replace(/\/+$/, "");
 
 /** Public origin of the site, without a trailing slash. */

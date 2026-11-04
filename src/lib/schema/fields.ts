@@ -46,7 +46,7 @@ export interface SelectField extends Base {
   options: Option[];
 }
 export interface DateField extends Base {
-  /** date = YYYY-MM-DD, datetime = ISO string (entered in IST), time = HH:mm */
+  /** date = YYYY-MM-DD, datetime = ISO string (entered in BST), time = HH:mm */
   type: "date" | "datetime" | "time";
 }
 export interface MediaField extends Base {
@@ -104,7 +104,7 @@ export type FieldDef =
   | OrderField
   | FormFieldsField;
 
-/** A tab of fields inside a singleton editor (Settings, Hackathon). */
+/** A tab of fields inside a singleton editor (Site settings). */
 export interface FieldSection {
   key: string;
   title: string;

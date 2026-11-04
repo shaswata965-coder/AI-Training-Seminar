@@ -1,6 +1,6 @@
 import "server-only";
 import mongoose from "mongoose";
-import { DEFAULT_HACKATHON, DEFAULT_SETTINGS, withCurrentDefaults } from "@/lib/content/defaults";
+import { DEFAULT_SETTINGS, withCurrentDefaults } from "@/lib/content/defaults";
 import { fillDefaults, mergeDefaults, toPlain } from "@/lib/content/normalize";
 import { connectDb } from "@/lib/db";
 import { slugify } from "@/lib/format";
@@ -101,7 +101,7 @@ export async function reorderItems(def: CollectionDef, ids: string[]) {
 
 /* ------------------------------------------------------------ Singletons -- */
 
-const SINGLETON_DEFAULTS = { settings: DEFAULT_SETTINGS, hackathon: DEFAULT_HACKATHON } as const;
+const SINGLETON_DEFAULTS = { settings: DEFAULT_SETTINGS } as const;
 export type SingletonKey = keyof typeof SINGLETONS;
 
 export function isSingletonKey(key: string): key is SingletonKey {

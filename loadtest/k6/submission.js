@@ -4,7 +4,7 @@
  * virtual user doing one thing:
  *   - opens the form page directly (60 %) or comes through the home page (40 %), with nothing cached;
  *   - spends 20 to 60 s filling it in;
- *   - sends it: workshop registration 75 %, hackathon team (1 to 6 members) 20 %, contact form 5 %;
+ *   - sends it: training registration 92 %, contact form 8 %;
  *     3 % send it from two tabs at once and 2 % send it again a little later, as people do;
  *   - and 30 % then look at another page.
  * Meanwhile three organisers watch the dashboard and the registrations list and download CSV exports.
@@ -15,7 +15,7 @@ import { sleep } from "k6";
 import { adminGet, signIn } from "./lib/admin.js";
 import { openPage, readManifest } from "./lib/browser.js";
 import { baseOptions, between, dur, PACE, thresholds, users, weighted } from "./lib/config.js";
-import { enquiryPayload, hackathonPayload, settle, submit, submitTwice, workshopPayload } from "./lib/forms.js";
+import { enquiryPayload, settle, submit, submitTwice, workshopPayload } from "./lib/forms.js";
 import { summarise } from "./lib/summary.js";
 
 const USERS = users(Number(__ENV.USERS || 2000));
@@ -31,8 +31,8 @@ export const options = {
   },
 };
 
-const FORM_PAGE = { workshop: "/register", hackathon: "/hackathon#register", enquiry: "/" };
-const PAYLOAD = { workshop: workshopPayload, hackathon: hackathonPayload, enquiry: (id) => enquiryPayload(id, "contact") };
+const FORM_PAGE = { workshop: "/register", enquiry: "/" };
+const PAYLOAD = { workshop: workshopPayload, enquiry: (id) => enquiryPayload(id, "contact") };
 
 export function setup() {
   return { manifest: readManifest() };
@@ -40,7 +40,7 @@ export function setup() {
 
 export function applicant({ manifest }) {
   sleep(between(0, ARRIVAL) * PACE);
-  const form = weighted({ workshop: 75, hackathon: 20, enquiry: 5 });
+  const form = weighted({ workshop: 92, enquiry: 8 });
   const page = FORM_PAGE[form];
 
   let cold = true;
@@ -70,7 +70,7 @@ export function applicant({ manifest }) {
 
   if (Math.random() < 0.3) {
     sleep(between(3, 8) * PACE);
-    openPage(manifest, weighted({ "/programme": 2, "/hackathon": 1, "/speakers": 1, "/venue": 1 }), { from: page.split("#")[0] });
+    openPage(manifest, weighted({ "/programme": 2, "/past-participants": 1, "/trainers": 1, "/venue": 1 }), { from: page.split("#")[0] });
   }
 }
 
@@ -78,9 +78,7 @@ export function organiser() {
   signIn();
   adminGet("/api/admin/stats", "admin dashboard");
   sleep(between(10, 20) * PACE);
-  adminGet("/api/admin/registrations?type=workshop", "admin registrations");
-  sleep(between(10, 20) * PACE);
-  adminGet("/api/admin/registrations?type=hackathon", "admin teams");
+  adminGet("/api/admin/registrations", "admin registrations");
   if (Math.random() < 0.3) adminGet("/api/admin/export/workshop", "admin CSV export");
   sleep(between(10, 20) * PACE);
 }

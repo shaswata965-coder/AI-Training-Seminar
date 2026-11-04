@@ -174,13 +174,13 @@
     --tag-bg: transparent;
     --tag-before: "//";
   }
-  /* Tinted label with an accent edge: notices, practical details and the hackathon. */
+  /* Tinted label with an accent edge: notices and practical details. */
   [data-tags="tab"] {
     --tag-pad: 0.25em 0.65em 0.25em 0.75em;
     --tag-radius: 0 0.3rem 0.3rem 0;
     --tag-bar: inset 3px 0 0 0;
   }
-  /* Dashed ticket stamp: registration and exhibitors. */
+  /* Dashed ticket stamp: registration. */
   [data-tags="stamp"] {
     --tag-bg: transparent;
     --tag-border-width: 1.5px;

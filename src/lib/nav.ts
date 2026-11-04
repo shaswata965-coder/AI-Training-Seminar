@@ -11,11 +11,11 @@ export type NavCopy = PageCopy["siteNav"];
 
 export const homeNav = (n: NavCopy): NavItem => ({ href: "/", label: n.home });
 
-/** Dedicated pages shown as links in the navigation bar (after Home); the Hackathon only while it is shown. */
-export const primaryNav = (n: NavCopy, hackathon: boolean): NavItem[] => [
+/** Dedicated pages shown as links in the navigation bar (after Home). */
+export const primaryNav = (n: NavCopy): NavItem[] => [
   { href: "/programme", label: n.programme },
-  { href: "/speakers", label: n.speakers },
-  ...(hackathon ? [{ href: "/hackathon", label: n.hackathon }] : []),
+  { href: "/trainers", label: n.trainers },
+  { href: "/past-participants", label: n.participants },
 ];
 
 export const registrationNav = (n: NavCopy): NavItem => ({ href: "/register", label: n.registration });

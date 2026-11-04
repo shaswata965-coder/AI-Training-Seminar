@@ -7,7 +7,7 @@ import { getSingleton, isSingletonKey, saveSingleton, ValidationError, type Sing
 import { error, isRecord, json, readJson } from "@/lib/server/http";
 import { changedPages, scopedSettings, visibleSettings } from "@/lib/server/settings-access";
 
-// Site settings: any of its pages (each route then limits a volunteer to theirs). The hackathon: its own permission.
+// Site settings: any of its pages (each route then limits a volunteer to theirs).
 const access = (key: SingletonKey): Permission | Permission[] => (key === "settings" ? SETTINGS_PERMISSIONS : key);
 
 export async function GET(req: NextRequest, ctx: RouteContext<"/api/admin/singleton/[key]">) {

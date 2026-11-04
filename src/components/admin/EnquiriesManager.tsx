@@ -15,7 +15,7 @@ import { api, useApi } from "./api";
 
 interface Enquiry {
   id: string;
-  type: "contact" | "exhibitor" | "sponsor";
+  type: "contact" | "sponsor";
   name: string;
   email: string;
   organisation: string;
@@ -27,7 +27,7 @@ interface Enquiry {
   notes: string;
   createdAt: string;
 }
-const TYPE = { contact: { label: "Contact", tone: "azure" }, exhibitor: { label: "Exhibitor", tone: "peach" }, sponsor: { label: "Sponsor", tone: "butter" } } as const;
+const TYPE = { contact: { label: "Contact", tone: "azure" }, sponsor: { label: "Partner", tone: "butter" } } as const;
 const STATUS = { new: "blush", "in-progress": "butter", closed: "mint" } as const;
 
 export function EnquiriesManager() {
@@ -62,7 +62,7 @@ export function EnquiriesManager() {
     <div>
       <PageTitle
         title="Enquiries"
-        description="Messages from the contact form, “Exhibit with us” and “Become a partner”."
+        description="Messages from the contact form and “Become a partner”."
         actions={
           <a href={withBase("/api/admin/export/enquiries")} data-ripple="" className="btn-shine inline-flex h-11 items-center gap-2 rounded-full bg-brand px-4 text-sm font-semibold text-brand-fg hover:-translate-y-0.5 hover:bg-brand-strong">
             <Download size={16} aria-hidden /> Download CSV
@@ -71,7 +71,7 @@ export function EnquiriesManager() {
       />
       <div ref={listRef} className="group/seg relative isolate mb-4 inline-flex flex-wrap rounded-full border border-border bg-surface p-1 shadow-card" role="group" aria-label="Filter by type">
         <SlidingPill pillRef={pillRef} className="bg-brand shadow-sm" />
-        {(["all", "contact", "exhibitor", "sponsor"] as const).map((t) => (
+        {(["all", "contact", "sponsor"] as const).map((t) => (
           <button key={t} type="button" aria-pressed={type === t} onClick={() => setType(t)} data-ripple="" className={cn("rounded-full px-4 py-2 text-sm font-semibold capitalize", type === t ? "bg-brand text-brand-fg group-data-[pill=on]/seg:bg-transparent" : "text-muted hover:text-fg")}>
             {t}
           </button>

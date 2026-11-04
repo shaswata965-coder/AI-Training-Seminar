@@ -20,7 +20,7 @@ export interface ProgrammeSession extends Session {
   startIso: string;
   endIso: string;
 }
-export interface MiniSpeaker {
+export interface MiniTrainer {
   id: string;
   name: string;
   slug: string;
@@ -52,11 +52,11 @@ function Chip({ on, onClick, children, tone }: { on: boolean; onClick: () => voi
 
 export function ProgrammeView({
   sessions,
-  speakers,
+  trainers,
   days,
 }: {
   sessions: ProgrammeSession[];
-  speakers: Record<string, MiniSpeaker>;
+  trainers: Record<string, MiniTrainer>;
   days: { day: number; label: string }[];
 }) {
   const toast = useToast();
@@ -150,12 +150,12 @@ export function ProgrammeView({
       if (types.size && !types.has(s.type)) return false;
       if (agendaOnly && !agenda.has(s.id)) return false;
       if (needle) {
-        const people = [...s.speakers, ...s.panelists, s.moderator].map((id) => speakers[id]?.name ?? "").join(" ");
-        if (!`${s.title} ${s.description} ${s.room} ${people} ${s.speakerNote}`.toLowerCase().includes(needle)) return false;
+        const people = [...s.trainers, ...s.panelists, s.moderator].map((id) => trainers[id]?.name ?? "").join(" ");
+        if (!`${s.title} ${s.description} ${s.room} ${people} ${s.trainerNote}`.toLowerCase().includes(needle)) return false;
       }
       return true;
     });
-  }, [sessions, day, themes, types, agendaOnly, agenda, q, speakers]);
+  }, [sessions, day, themes, types, agendaOnly, agenda, q, trainers]);
 
   const groups = useMemo(() => {
     const map = new Map<string, ProgrammeSession[]>();
@@ -220,7 +220,7 @@ export function ProgrammeView({
               type="search"
               value={q}
               onChange={(e) => setQ(e.target.value)}
-              placeholder="Search titles, speakers, rooms…"
+              placeholder="Search titles, trainers, rooms…"
               className="h-11 w-full rounded-xl border border-border bg-surface pr-4 pl-10 text-[15px] focus:border-brand focus:ring-4 focus:ring-[color-mix(in_oklab,var(--brand)_18%,transparent)] focus:outline-none"
             />
           </label>
@@ -298,8 +298,8 @@ export function ProgrammeView({
                     const next = s.id === upcomingId;
                     const starred = agenda.has(s.id);
                     const isBreak = s.type === "break";
-                    const people = (s.type === "panel" ? s.panelists : s.speakers).map((id) => speakers[id]).filter(Boolean);
-                    const moderator = s.moderator ? speakers[s.moderator] : undefined;
+                    const people = (s.type === "panel" ? s.panelists : s.trainers).map((id) => trainers[id]).filter(Boolean);
+                    const moderator = s.moderator ? trainers[s.moderator] : undefined;
                     return (
                       <li
                         key={s.id}
@@ -353,12 +353,12 @@ export function ProgrammeView({
                         </div>
                         <h3 className="mt-3 font-display text-lg leading-snug font-semibold text-fg sm:text-xl">{s.title}</h3>
                         <p className="mt-1 text-sm font-semibold text-subtle tabular">{timeRange(s.start, s.end)}</p>
-                        {moderator || people.length || s.speakerNote ? (
+                        {moderator || people.length || s.trainerNote ? (
                           <div className="mt-3 space-y-1.5 text-sm text-muted">
                             {moderator ? (
                               <p>
                                 <span className="font-semibold text-subtle">Moderator: </span>
-                                <Link className="font-semibold text-fg underline decoration-border-strong underline-offset-2 hover:decoration-brand hover:underline-offset-4" href={`/speakers?speaker=${encodeURIComponent(moderator.slug)}`}>
+                                <Link className="font-semibold text-fg underline decoration-border-strong underline-offset-2 hover:decoration-brand hover:underline-offset-4" href={`/trainers?trainer=${encodeURIComponent(moderator.slug)}`}>
                                   {moderator.name}
                                 </Link>
                               </p>
@@ -369,7 +369,7 @@ export function ProgrammeView({
                                 {people.map((p, i) => (
                                   <span key={p.id}>
                                     {i ? ", " : ""}
-                                    <Link className="font-semibold text-fg underline decoration-border-strong underline-offset-2 hover:decoration-brand hover:underline-offset-4" href={`/speakers?speaker=${encodeURIComponent(p.slug)}`}>
+                                    <Link className="font-semibold text-fg underline decoration-border-strong underline-offset-2 hover:decoration-brand hover:underline-offset-4" href={`/trainers?trainer=${encodeURIComponent(p.slug)}`}>
                                       {p.name}
                                     </Link>
                                     {p.affiliation ? <span className="text-subtle"> · {p.affiliation}</span> : null}
@@ -377,7 +377,7 @@ export function ProgrammeView({
                                 ))}
                               </p>
                             ) : (
-                              <p>{s.speakerNote}</p>
+                              <p>{s.trainerNote}</p>
                             )}
                           </div>
                         ) : null}

@@ -63,7 +63,7 @@ export function RefSelect({ resource, value, onChange, id, invalid }: { resource
   );
 }
 
-/** Ordered multi-select of linked items (e.g. the speakers of a session). */
+/** Ordered multi-select of linked items (e.g. the trainers of a session). */
 export function RefListSelect({ resource, value, onChange, id }: { resource: string; value: string[]; onChange: (v: string[]) => void; id?: string }) {
   const options = useOptions(resource);
   const label = (v: string) => options?.find((o) => o.value === v)?.label ?? "Unknown (deleted?)";

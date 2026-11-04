@@ -27,7 +27,7 @@ export function FormFieldsInput({ field: f, value, onChange, error }: { field: F
   };
   const add = () => {
     const key = newFieldKey();
-    onChange([...list, { key, label: "New question", help: "", placeholder: "", type: "text", options: [], required: false, leadOnly: false, hidden: false, step: spec.steps.length }]);
+    onChange([...list, { key, label: "New question", help: "", placeholder: "", type: "text", options: [], required: false, hidden: false, step: spec.steps.length }]);
     setOpen(key);
   };
 
@@ -70,7 +70,7 @@ export function FormFieldsInput({ field: f, value, onChange, error }: { field: F
                   </button>
                 )}
               </div>
-              {isOpen ? <FieldEditor form={f.form} field={x} steps={spec.steps} members={Boolean(spec.members)} onChange={(patch) => set(x.key, patch)} /> : null}
+              {isOpen ? <FieldEditor form={f.form} field={x} steps={spec.steps} onChange={(patch) => set(x.key, patch)} /> : null}
             </li>
           );
         })}
@@ -83,7 +83,7 @@ export function FormFieldsInput({ field: f, value, onChange, error }: { field: F
   );
 }
 
-function FieldEditor({ form, field: x, steps, members, onChange }: { form: FormFieldsField["form"]; field: FormField; steps: string[]; members: boolean; onChange: (patch: Partial<FormField>) => void }) {
+function FieldEditor({ form, field: x, steps, onChange }: { form: FormFieldsField["form"]; field: FormField; steps: string[]; onChange: (patch: Partial<FormField>) => void }) {
   const id = useId();
   const limits = limitsOf(form, x.key);
   const label = "mb-1.5 block text-sm font-semibold text-fg";
@@ -140,8 +140,7 @@ function FieldEditor({ form, field: x, steps, members, onChange }: { form: FormF
       ) : null}
       {hasChoices(x.type) ? <Choices id={id} options={x.options} onChange={(options) => onChange({ options })} /> : null}
       <div className="grid gap-2 sm:col-span-2">
-        <Toggle label="Required" checked={x.required} disabled={limits.always || x.hidden} onChange={(required) => onChange({ required, leadOnly: required && x.leadOnly })} />
-        {members && x.required && !limits.always ? <Toggle label="Required for the team lead only" checked={x.leadOnly} onChange={(leadOnly) => onChange({ leadOnly })} /> : null}
+        <Toggle label="Required" checked={x.required} disabled={limits.always || x.hidden} onChange={(required) => onChange({ required })} />
         <Toggle label="Show this field" checked={!x.hidden} disabled={limits.always} onChange={(shown) => onChange({ hidden: !shown, required: shown && x.required })} />
         {limits.always && limits.why ? (
           <p className="flex items-start gap-1.5 text-xs text-subtle">

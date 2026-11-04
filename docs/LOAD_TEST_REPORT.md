@@ -1,5 +1,7 @@
 # Load test report
 
+> **History.** This report was written for the earlier version of this site, the IIT Delhi Agentic AI Workshop 2026 (October 2026), before the `claude/diu-ai-training` branch turned it into the DIU AI Training Seminars site. The parts it tests that both versions share (admin sign-in, sessions, uploads, form validation and rate limits, caching, the nginx configuration) are unchanged; its findings about the hackathon (team registration, the contest-day load test) no longer apply, as the hackathon has been removed. It has not been re-run on this version.
+
 End-to-end load tests for the three loads in the brief: **100 people on an ordinary day**, **2,000 during
 the submission (registration) period** and **300+ during the hackathon**, each with every visitor on their
 own IP address and with many behind one shared address. Run on 22 October 2026, first on the production

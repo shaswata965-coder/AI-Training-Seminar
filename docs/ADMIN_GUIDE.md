@@ -1,6 +1,6 @@
 # Updating the website — guide for organisers
 
-This guide is for the organising team of the **Agentic AI Workshop 2026**. It explains how to keep the website up to date. No coding is needed. The same guide is inside the admin panel under **Help guide**.
+This guide is for the organising team of the **DIU AI Training Seminars** (Department of Computer Science and Engineering, Daffodil International University). It explains how to keep the website up to date. No coding is needed. A short version of this guide is inside the admin panel under **Help guide**.
 
 - **Admin panel:** `https://<your-site>/admin`. There is also an *Organiser login* link in the website footer.
 - **Who can sign in:** anyone an administrator adds under **Users** or **Volunteers**.
@@ -19,9 +19,9 @@ This guide is for the organising team of the **Agentic AI Workshop 2026**. It ex
   - `[link text](https://example.com)` → a link
   - lines starting with `- ` → a bullet list
 - **Images.** Click **Upload** next to any image field, choose **Library** to reuse an uploaded file, or paste a link. Photos are resized and compressed automatically. Square photos of at least 400 × 400 px look best for people.
-- **Unsaved changes.** In **Site settings** and **Hackathon**, a bar at the bottom shows when you have unsaved changes. Press **Save changes**.
+- **Unsaved changes.** In **Site settings**, a bar at the bottom shows when you have unsaved changes. Press **Save changes**.
 - **Every text and colour of the site** is in **Site settings**, page by page, with a live preview beside it (see section 3).
-- **"To be announced".** Wherever something isn't ready (speakers, schedule, venue hall, prizes), the website automatically shows a friendly placeholder.
+- **"To be announced".** Wherever something isn't ready (trainers, schedule, room, past participants), the website automatically shows a friendly placeholder.
 - **Refresh website** (on the dashboard). Only needed if the site shows old content after the website host deploys an update or changes the database directly. Normal saves don't need it.
 
 ## 2. Signing in and your account
@@ -36,169 +36,133 @@ This guide is for the organising team of the **Agentic AI Workshop 2026**. It ex
 
 ## 3. Site settings: every page, with a live preview
 
-**Site settings** has a tab for each page of the site (*Home*, *About*, *Programme*, *Speakers*, *Tutorials*, *Hackathon*, *Registration*, *Partners*, *Venue*, *Organisers*, *Photo gallery*, *Slides & recordings*, *Meet Aura*) and a **Site-wide** tab for what every page shares. Each tab lists the page's sections in the order they appear.
+**Site settings** has a tab for each page of the site (*Home*, *About*, *Schedule*, *Trainers*, *Hands-on labs*, *Registration*, *Partners*, *Venue*, *Organisers*, *Photo gallery*, *Slides & recordings*, *Past participants*, *Meet Aura*) and a **Site-wide** tab for what every page shares. Each tab lists the page's sections in the order they appear.
 
-- **Section order:** on *Home*, *About*, *Programme*, *Hackathon*, *Partners*, *Venue*, *Organisers* and *Meet Aura*, the last tab, **Section order**, lists the page's sections so you can put them in order of priority: drag a section into place, or move it one step at a time with its arrows. The preview jumps to the section you moved. The hero (the page's landing section) always stays at the top and can't be moved. **Back to the default order** undoes it all. A section that isn't showing right now (the hackathon results before they're switched on, say) keeps its place for when it appears. Backgrounds are set per section, so after a move check that tinted and plain sections still take turns. On *Programme*, the "On this page" bar under the hero follows the new order. The other pages have a single section, or parts that sit side by side (*Registration*), so there is nothing to move.
-- **Hiding a section:** every section of a page except its hero has a **Show this section on the page** switch at the top of its tab (on *Speakers* and *Tutorials* the list, on *Registration* the form, the fees and the deadlines, and every section that has a place in *Section order*). Switch it off and the whole section leaves the page, in the preview at once and for visitors once you save; its texts and settings are kept for when you switch it back on. A hidden section is marked with a crossed-out eye in the page's section tabs and in *Section order*, where it keeps its place. A tab for a part of a hidden section (the *Contact form* in *Home → FAQ & contact*, say) says so. Links that only lead to a hidden section go with it: the *Explore* menu's and the footer's links to the home page's themes, route map, FAQ and contact form, the Hackathon page's *Register your team* buttons (unless teams register on an external platform), the Tutorials page's *Tutorials* and *Demos* buttons, and the like.
-
-- **A section's texts and colours:** its colour, its background (*Plain*, *Tinted band* or *Soft glow*), the small label above the title, the title, the introduction, and its button labels, card texts and the messages shown while something is still empty ("Speakers will be announced soon").
-- **Live preview:** the real page is shown beside the form and follows what you type, with the section you're editing outlined. Switch between **Desktop** and **Phone**. Only you see unsaved changes; visitors see the saved site until you press **Save changes** (or **Discard** to go back). Links don't work inside the preview, so it stays on the page you're editing.
-- **Layout check:** each text has a counter with its recommended length. If a text is so long that it wraps much further or pushes the layout out of line, or so short that it leaves a gap, a warning appears under it and on the page and section tabs. The preview also measures the real page and reports what your changes break, for example a title running onto 4 lines, text spilling out of its box or cut off, the section growing much taller, or the page scrolling sideways. Warnings never stop you saving.
-- **Placeholders:** in many texts you can write `{event}`, `{dates}` or `{venue}`, and they are filled in from *Event details*, so the texts stay right when the dates change. The hint under a field lists the ones it accepts.
-- **Colours:** *Site-wide → Colours* sets the brand colour and the seven accent colours sections choose from. Leave one blank for the built-in shade; lighter tints, dark text and dark mode follow automatically.
+- **Section order:** on *Home*, *About*, *Schedule*, *Past participants*, *Partners*, *Venue*, *Organisers* and *Meet Aura*, the last tab, **Section order**, lists the page's sections so you can put them in order of priority: drag a section into place, or move it one step at a time with its arrows. The preview jumps to the section you moved. The hero (the page's landing section) always stays at the top. **Back to the default order** undoes it all. A section that isn't showing right now (the participants' quotes before any are featured, say) keeps its place for when it appears. Backgrounds are set per section, so after a move check that tinted and plain sections still take turns.
+- **Hiding a section:** every section of a page except its hero has a **Show this section on the page** switch at the top of its tab (on *Trainers* the lead trainer's spotlight and the list, on *Hands-on labs* the list, on *Registration* the form, the fees and the deadlines, and every section that has a place in *Section order*). Switch it off and the whole section leaves the page; its texts and settings are kept for when you switch it back on. Links that only lead to a hidden section go with it.
+- **A section's texts and colours:** its colour, its background (*Plain*, *Tinted band* or *Soft glow*), the small label above the title, the title, the introduction, and its button labels, card texts and the messages shown while something is still empty ("Trainers will be announced soon").
+- **Live preview:** the real page is shown beside the form and follows what you type, with the section you're editing outlined. Switch between **Desktop** and **Phone**. Only you see unsaved changes; visitors see the saved site until you press **Save changes** (or **Discard** to go back).
+- **Layout check:** each text has a counter with its recommended length, and the preview measures the real page and warns when a change breaks the layout (a title running onto many lines, text spilling out of its box, the page scrolling sideways). Warnings never stop you saving.
+- **Placeholders:** in many texts you can write `{event}`, `{dates}` or `{venue}`, and they are filled in from *Programme details*, so the texts stay right when the batch dates change. The hint under a field lists the ones it accepts.
+- **Colours:** *Site-wide → Colours* sets the brand colour and the seven accent colours sections choose from.
 - **Navigation, header, footer and banner** names are under *Site-wide*.
-- The items themselves (speakers, sessions, FAQs…) are still added under their own menu entries; the sections that show them say where.
+- The items themselves (trainers, sessions, past participants, FAQs…) are added under their own menu entries; the sections that show them say where.
 
 If two people edit Site settings at the same time, their previews show each other's unsaved changes. Whoever saves last decides what is saved.
 
-## 4. Event details, dates and registration
+## 4. Programme details, batch dates and registration
 
-**Site settings → Site-wide → Event details**
-- Event name, short name, tagline, short description (used by search engines and social media), organised by. The event name appears everywhere the event is named: the logo, the home page title, page titles, e-mails, calendar invites and the programme PDF. A few texts mention the name in their own words (*Workshop motivation* in the *About* tab, and the *Introduction* in *Partners → Hero*); update those by hand when the name changes, or use `{event}` where a field accepts it.
-- **Starts / Ends** (Indian Standard Time). The programme's days and the calendar invites follow them.
-- Venue, hall/building (leave blank to show "to be announced") and full address.
+**Site settings → Site-wide → Programme details**
+- Name, short name, tagline, short description (used by search engines and social media), organised by. The name appears in the logo, the home page title, page titles, e-mails, calendar invites and the schedule PDF. A year at the end of the name (e.g. *DIU AI Training Seminars 2027*) shows under the logo; without one, the next batch's year does.
+- **Next batch starts / ends** (Bangladesh Standard Time). The schedule's days, the home page's *Next batch* and the calendar invites follow them. **The built-in dates (11–12 December 2026) are a placeholder: set the real ones before launch.**
+- Venue, room/building (leave blank to show "to be announced") and full address.
 
 **Site settings → Site-wide → Registration**
-- **Workshop registration:** *Opening soon*, *Open* or *Closed*, plus the deadline. The deadline appears on the website, and the form closes automatically once it passes. The home page shows the same status on its workshop registration card under the hero (*Open until …*, *Opening soon* or *Closed*) and on Aura's workshop placard. Afterwards, also set the status to *Closed*.
-- **Places confirmed by:** the date by which the organising committee tells registrants whether they have a place. The texts that say *you'll hear from us {replyBy}* (the home page's *Registration open* section and registration strip, the Registration page's introduction, the message after registering and the registration e-mail) show "by" and this date; while it is blank they say "by e-mail".
-- **External form (optional):** paste a Google Form / Unstop / Devfolio link to send people there instead of the built-in form.
-- **Fees:** in the *Registration* tab → *Fees*: one row per category (e.g. Students, Academia, Industry), plus an optional note.
-- **Confirmation e-mail text:** extra lines added to the registration e-mail, for example what to bring.
-- **Hackathon registration:** status, deadline, and optionally the external platform link and its name. Teams register in the *Registration* section of the Hackathon page (`/hackathon#register`; the old `/hackathon/register` address leads there), or on the external platform when a link is set. The home page's hackathon card and Aura's hackathon placard show this status.
+- **Registration** (*Opening soon*, *Open*, *Closed*), its **deadline** (the form closes by itself when it passes) and **Places confirmed by** (the date registrants will hear whether they have a place; while it is blank the site says "by e-mail").
+- An **external form** link (e.g. Google Forms) to use instead of the built-in form, and extra text for the confirmation e-mail.
 
-**Site settings → Home:** whether the loading screen is used and its texts (*Loading screen*: the status lines under the progress ring and the line at lift-off; the first time someone opens the site, and after each update, it caches the site's files so the rest of the visit is quick; it isn't shown in the preview, so open the home page in a private window to see it), the highlight strip (e.g. *Speakers — TBA*, *Prize pool — TBA*; up to 6), the photo of the IIT Delhi building behind Aura in the hero, its sign in Hindi and English readable above her head and the building fading into the background (*Hero*: switch it off, or upload a landscape photo, 16:9 works best, to replace the built-in one; an uploaded photo sits at the top right of the hero instead), the two placards Aura holds up in turn in the hero (*Hero announcements*: one for workshop registration, one for hackathon registration; `{status}` in a placard becomes that registration's status in the words you set below them, *is open!*, *opening soon* or *has closed*, and turns to closed by itself at the deadline; about 35 characters fit; clear one to show only the other, or both and she waves hello instead; a switch under her names them, and she pauses while a visitor points at her or a card), the two compact registration cards along the foot of the hero (*Registration choice*: the heading beside them, their labels, titles, colours and status words; one leads to the workshop registration page, the other to the hackathon's team registration), how many featured speakers turn in the home page's speaker carousel and the link text on their cards (*Speakers*), and the texts of the hackathon section (*Hackathon*: its button labels and the words around the hackathon's one question, the three large 1s for *hackathon*, *track* and *question*; its title, tagline, question and facts come from **Hackathon**). The Themes section ends with a short note that the hackathon doesn't split into themes, linking to its question (*Themes*; clear the note to hide it).
+**The two programmes.** There is one registration for both programmes. The form asks *Which programme would you like to join?* (AI for Professionals, AI for Workspace, or both) and *How much have you used AI tools so far?*. The home page's two programme cards, under the hero, open the form with that programme already ticked (`/register?programme=professionals` or `?programme=workspace`). Aura holds up a placard for each programme in turn, with the registration status (**Home → Hero announcements**).
 
-The home page's sections come in this order to start with: the hero, the three themes, the speakers (*Voices from academia and industry*), the hackathon, announcements and About, then the highlight strip, venue and travel, partners, and the FAQ and contact form. Change it in **Site settings → Home → Section order**.
+**Fees:** **Site settings → Registration → Fees**. The built-in fee is "To be announced".
 
-**Site settings → Home → About and Themes**, and the **About** tab: the topics circled around Aura in the home page About section (up to 8: a two or three word topic, an icon, and the summary she gives in her speech bubble when a visitor hovers over or taps the topic; write {dates}, {venue} or {event} in a summary to fill them in from these settings); the text of the About page (workshop motivation, "What is agentic AI?", who should attend, activities); and the three theme cards of the workshop, Healthcare, Scientific Discovery and Enterprise (title, a 2–3 line description and a photo across the top of the card with Aura stepping out of it: each theme comes with a built-in AI-generated photo, and uploading a landscape image here, 16:9 works best, replaces it).
-
-**The forms' fields.** Every public form's fields can be edited, each in the tab of the page it is on: *Registration → Form fields* (workshop registration), *Hackathon → Team form* (team registration: the team's fields, and the fields asked of each member), *Home → Contact form*, *Programme → Exhibitor form* (*Exhibit with us*) and *Partners → Sponsor form* (*Become a partner*). The admin's sign-in and account forms are not among them. Click a field to open it:
-- **Field name**, **Guide** (the line under the field) and **Example inside the field** (the grey text in an empty field; for a drop-down list, its first line, e.g. *Choose one*).
-- **Type of answer:** short text, long text, e-mail, phone number, number, link, date, drop-down list, one choice (round buttons), several choices (tick boxes) or yes/no (one tick box). For drop-down lists and choices, write each of the **Choices** in its own box (*Add a choice* adds one, the cross removes it).
-- **Required**, **Show this field** (a hidden field isn't asked, and whatever was typed into it is not kept), and **Step** (the workshop form has three steps, the team form's fields come before or after the members). For members of a team, **Required for the team lead only** asks only the lead.
-- The arrows move a field up or down; **Add a question** adds one of your own at the end, and the bin deletes it. Fields with a lock came with the site: you can reword, move or hide them, but not delete them. The few the site relies on (name, e-mail, the consent tick box, the team name, the message) are always asked and keep their type of answer.
-- The texts around each form (step names, buttons, the thank-you message) are in the same section, above its fields.
-
-Answers are checked against these settings on the server too, so a visitor can't skip a required question or pick a choice that isn't there. Registrations and enquiries show the answers under the questions as they now read, and the CSV exports have a column for every question. A question you delete stays in the answers already given, as *Earlier question*. Change a question's choices before registration opens, if you can: answers already given keep the choice as it read then.
+**The forms' fields.** **Registration → Form fields**, **Home → Contact form** and **Partners → Partner form**. Click a field to change its name, guide, example and type of answer, its choices, whether it is required, or to hide it (the *Country* and *Dietary preference* fields come hidden). Add questions of your own with **Add a question**. Fields with a lock came with the site and can't be deleted.
 
 ## 5. Announcements
 
 **Announcements → New announcement**
-- Title, short text, date, style (*Info*, *Important*, *Success*).
+- Title, short text, date, style (*Information*, *Important*, *Good news*).
 - Optional link and link label (e.g. to the registration page or a PDF).
 - **Pin** important news to keep it at the top.
 
 The newest announcements appear in the box on the home page.
 
-## 6. Speakers and the programme
+## 6. Programmes, trainers and the schedule
 
-**Speakers → New speaker**
-- Name, designation, affiliation, **label** (*Academia*, *Industry* or *Panelist*), theme, photo.
-- Bio, talk title and talk abstract. These appear in the pop-up when a visitor clicks the speaker card.
-- Profile links (website, LinkedIn, X, Google Scholar, GitHub).
-- **Keynote speaker** adds a keynote badge. **Feature on the home page** adds the speaker to the home page grid.
-- The "More speakers to be announced" card can be switched off in **Site settings → Home → Speakers** once the line-up is complete.
+**The programmes:** **Site settings → Home → Programmes** holds the title, description and photo of **AI for Professionals** and **AI for Workspace**, shown as two cards on the home page. Sessions, hands-on labs, demos, trainers and past participants each pick a programme, or *General* for both, and the Schedule and Hands-on labs pages can be filtered by programme.
 
-**Registration and places.** Registration is open and free, and places are limited, so registrations are reviewed and confirmed by the organising committee: registrants hear from you by the *Places confirmed by* date (**Site-wide → Registration**), or "by e-mail" while it is blank. The home page says so in its **Registration open** section, under the hero (**Site settings → Home → Registration open**: the heading and introduction, the line above the button, *What to expect*, *Bring your research* with its highlighted theme, "Papers must be on the broader theme of agentic AI", and the poster, with a built-in picture of a poster session across its top; upload a **Poster image** there, a 16:9 landscape picture such as 1920×1080, to replace it). So do the Registration page's introduction and fees (**Registration → Hero** and **→ Fees**), the message after registering (*Registration received!*), the registration e-mail ("We've received your registration") and two FAQs (updated once, on sites that hadn't edited them). Confirm each place by setting the registration's status to *confirmed* (or *waitlisted*) under **Registrations** and letting them know. While the hackathon is hidden, the strip along the foot of the home hero has the workshop registration card alone (**Home → Registration choice**: its heading and text while the hackathon is hidden).
+**Trainers → New trainer**
+- Name, designation, affiliation, **label** (*DIU faculty*, *Industry expert* or *Guest trainer*), **programme** (or *General* for both), photo.
+- **Profile**, **areas of expertise** (comma-separated, shown as tags) and **what they teach**. These appear in the pop-up when a visitor clicks the trainer's card.
+- Profile links (their DIU profile page, LinkedIn, X, Google Scholar, GitHub).
+- **Lead trainer** puts them in the spotlight at the top of the Trainers page: a large profile with their programmes, expertise and the faces of the team they lead (the first lead trainer, if you tick several). **Feature on the home page** adds them to the home page carousel.
+- The nine trainers of the Department of CSE's list are built in, Professor Dr. Sheak Rashed Haider Noori first as the lead trainer. Their designations are generic ("Faculty member, Department of Computer Science and Engineering") until you edit them; add photos, profiles and expertise as you have them.
 
-**Posters.** The registration form asks every registrant **Would you like to present a poster?** (Yes or No, on its second step; reword it or move it under **Registration → Form fields**). Answers show with each registration and in the CSV download. Under the form, the **Call for posters** section (**Registration → Call for posters**) invites arXiv preprints and papers currently under submission to the poster session (Day 1, over lunch), with a highlighted line: papers must be on the broader theme of agentic AI, beside a picture of a poster session (upload another as its **Picture**).
+**The tentative schedule** is built in, for a two-day batch: Day 1 for **AI for Professionals** (welcome, a lecture, two hands-on labs and a discussion on using AI responsibly) and Day 2 for **AI for Workspace** (writing, spreadsheets, slides and meeting notes, a live demo and a *bring your own task* lab), with breaks, and every trainer and room "to be announced". It is added once to a site with no sessions and shown as a draft. Open a session under **Schedule** to change its title, trainers, room and description, delete the ones you don't need and add your own.
 
-**The tentative programme** is built in: both days of talks, panels, tutorials and demos, and the breaks, from the organisers' plan, with every speaker, panelist and room still "to be announced". It is added once, by itself, to a site that has no sessions yet, and the programme status goes from *To be announced* to *Draft*. Day 1 (15 Dec): inauguration at 9:00, three invited talks, tea, three more talks, lunch with the poster session (1:15 to 3:00 pm), panel discussion 1, three talks, panel discussion 2 (five or six panelists, 6:00 to 7:30 pm) and the networking dinner until 9:30 pm. Day 2 (16 Dec): breakfast at 8:00, five talks, tea, three talks, then five tutorials or demos side by side from 1:15 to 2:30 pm. Open a session under **Programme** to give it its title, speakers, room and description as they are confirmed, delete the ones you don't need and add the hackathon final when its time is set. (A site that already had sessions keeps them; `npm run seed` adds the plan to one whose programme is empty.)
+**Schedule → New session**
+- Day, start and end time, title, **type** (*Opening*, *Lecture*, *Discussion*, *Hands-on lab*, *Demo*, *Break* or *Session*), programme, room/lab.
+- **Trainers:** pick from your trainers. If one isn't confirmed yet, use *Trainer text* (e.g. "Trainer to be announced").
+- **Discussions:** choose a *Moderator* and *Panelists*; once they are named the discussion is also listed on the Trainers page.
 
-**Programme → New session**
-- Day, start and end time, title, **type** (*Keynote*, *Talk*, *Panel*, *Tutorial*, *Demo*, *Hackathon*, *Break* or *Other*), theme, room/hall.
-- **Speakers / instructors:** pick from your speakers. Add the speakers first. If a speaker isn't confirmed yet, use *Speaker text* (e.g. "Speaker to be announced").
-- **Panels:** choose the *Moderator* and *Panelists*. The panel then also appears under *Panel discussions* on the Speakers page, linked to each speaker's card.
-
-**Site settings → Programme → Schedule → Programme status**
+**Site settings → Schedule → Schedule → Schedule status**
 - *To be announced:* the website shows "Schedule to be announced".
-- *Draft:* sessions are shown with a "subject to change" note (the default, with the tentative programme).
+- *Draft:* sessions are shown with a "subject to change" note (the default).
 - *Final:* sessions are shown without the note.
 
-The **PDF schedule** is generated automatically from the programme. To use your own PDF instead, upload it under *Schedule PDF*.
+The **PDF schedule** is generated automatically. To use your own PDF instead, upload it under *Schedule PDF*.
 
-## 7. Tutorials, demos, kiosks and partners
+## 7. Past participants
 
-- **Tutorials:** title, instructors (name, affiliation, link), level, duration, schedule text, prerequisites (one per line, e.g. "Laptop with Python 3.11"), materials and GitHub links, capacity.
-- **Demos:** title, team or company, short description, an image and/or a YouTube/Vimeo link.
-- **Industry kiosks:** company, booth, logo, short description of what they show, website. They are listed on the Programme page. Companies can apply through the **Exhibit with us** button there; applications arrive under **Enquiries**.
-- **Partners & sponsors:** name, tier (*Title*, *Platinum*, *Gold* …), logo, website, short text. Their logos loop in a strip near the bottom of the home page (placeholder tiles until the first partner is added) and are grouped by tier on the **Partners & sponsors** page (`/partners`, under *Explore*). Edit the sponsorship tiers, introduction and brochure in **Site settings → Partners & kiosks**; they appear on that page with the **Become a partner** button.
+**Past participants → New participant**, once their batch is completed:
+- Name, designation, organisation, the **programme** they completed (*General* for both) and the **batch**, written the same way for everyone in it (e.g. "Batch 1 · January 2026"), with **Completed on**, the date that puts the batches in order, newest first.
+- A **photo**, a **quote** about the training and a **profile link** are optional: add them only with the participant's permission.
+- **Feature their quote** shows the quote under *What participants say* on the Past participants page and on the home page (the first three).
 
-## 8. Organisers, volunteers, mentors and judges
+The **Past participants** page (`/past-participants`, in the navigation bar) shows the numbers (participants, batches, organisations, programmes), the featured quotes, and everyone batch by batch, with filters by programme and batch and a search. Until the first participant is added it shows a "first batch is on its way" card with the Register button, and the home page section says the same.
 
-**Signing in on the website.** Visitors need to sign in to star sessions and keep their agenda (*My agenda* on the Programme page); it is saved with their account, by e-mail, so it follows them to every device. There is no sign-up: everyone the event knows signs in with their e-mail and what they already have. Workshop attendees use their **registration ID** and hackathon participants (any member of a team) the **team's registration ID**, both in their confirmation e-mails, which now say so. Volunteers, editors and administrators use their **admin panel password** (this never opens the admin panel to anyone else). Mentors, judges and anyone else in **Organisers & volunteers** need a **Sign-in e-mail** and a **Sign-in code** (at least 8 characters) on their entry; send them both, and change the code to sign them out. These two fields are never shown on the website. A cancelled registration or a withdrawn team can't sign in. The texts of the *Sign in* button and window are under **Site settings → Site-wide → Sign-in**. Agendas starred in a browser before this change are moved into the account the first time that browser signs in.
+## 8. Hands-on labs, demos and partners
 
-**Organisers & volunteers → New person.** Choose the **group**:
+- **Hands-on labs:** title, trainers (name, affiliation, link), level, duration, schedule text, prerequisites (one per line, e.g. "Laptop with a spreadsheet app"), materials and links, capacity.
+- **Demos:** title, team, short description, an image and/or a YouTube/Vimeo link.
+- **Partners:** name, tier, logo, website, short text. Their logos loop near the bottom of the home page (placeholder tiles until the first partner is added) and are grouped by tier on the **Partners** page. Edit the partnership tiers, introduction and brochure in **Site settings → Partners**; organisations can enquire with the **Become a partner** button there, and their enquiries arrive under **Enquiries**.
 
-| Group | Shown on |
-| --- | --- |
-| Faculty organiser | Organisers page |
-| Student organiser | Organisers page |
-| Volunteer | Organisers page (a "Coming soon" card shows until the first volunteer is added) |
-| Mentor | Hackathon page |
-| Judge | Hackathon page |
+## 9. Organisers and volunteers
 
-Fill in name, role (e.g. "PhD scholar"), department, affiliation, profile link and photo. Everyone uses the same card style.
+**Signing in on the website.** Visitors sign in to star sessions and keep their agenda (*My agenda* on the Schedule page). There is no sign-up: registered participants use their e-mail and **registration ID** (in their confirmation e-mail); volunteers, editors and administrators their **admin panel password**; anyone else under **Organisers & volunteers** the **Sign-in e-mail** and **Sign-in code** (at least 8 characters) set on their entry, which are never shown on the website.
 
-## 9. Hackathon
-
-**Hidden until announced.** The hackathon is off the site until you switch on **Site settings → Site-wide → Features & post-event → Show the hackathon**. While it is off, the Hackathon page shows only a "details coming soon" poster, with a built-in picture of a hackathon team at work across its top, and a few reasons to join (its texts are under **Site settings → Hackathon → Coming-soon poster**, with a **Poster image** to replace the picture with a 16:9 one of your own; the preview shows the poster above the full page, so both can be prepared). Nothing else mentions it: no Hackathon link in the navigation bar, the phone menu or the footer, no hackathon section on the home page or the Programme page, no hackathon placard or registration card in the home hero, no hackathon card on the Partners and Registration pages, no "interested in the hackathon" box on the registration form, and no About topics, activities, highlights (the prize pool) or FAQs about it. Team registration is refused. Switch it on to bring all of it back.
-
-**Hackathon** (left menu) has tabs:
-- **Overview:** title, tagline, description, team size, who can join, dates and location (leave these two blank to show the workshop's), mode (on-site / hybrid), prize pool, eligibility and the registration note. The first section of the Hackathon page, *At a glance*, shows them. The tagline (under the title, at the top of the Hackathon page, and with the hackathon on the home page and the Programme page) and the overview (the text under *At a glance*'s title) can also be changed beside the live preview, in **Site settings → Hackathon → Hero** and **→ At a glance**, and the prize pool and the prizes (below) in **→ Prize money**: it is the same text, saved here, by whoever may open both.
-- **The question:** there is one hackathon with one track and one question: every team answers the same question, with one timeline, one set of rules and one prize pool, so teams don't pick a theme or track when they register. Set the question (a line, shown large on the Hackathon page and the home page), the challenge (what answering it involves) and a few example ideas. The three themes (Healthcare, Scientific Discovery, Enterprise) are the workshop's, for its talks, panels and tutorials.
-- **Rules & conduct:** rules and code of conduct.
-- **Timeline:** registration → idea submission → shortlisting → final round (15–16 Dec) → results. Add dates as they are confirmed; the timeline highlights the current stage automatically.
-- **Prizes & judging:** prizes and judging criteria (with weights if you like). The first three prizes stand on a podium under the prize pool; any more are listed below it as special awards (sites set up while the hackathon had a track per theme list *Best agent in each track* there; rename or delete it). The prizes can also be changed in **Site settings → Hackathon → Prize money**.
-- **Results:** winners. They stay hidden until you switch on **Post-event: show hackathon winners** in **Site settings → Site-wide → Features & post-event**.
-
-The Hackathon page starts with what teams need to decide: *At a glance* (who can join with the eligibility rules, team size, dates, location and mode, with the prize pool and prizes in a panel beside them, all on one screen on a computer), the timeline, the challenge (*One hackathon, one track, one question*: the hackathon, then its single track, then the question, large, with the challenge and the ideas under it, and a note that the workshop's three themes are for its talks) and the team registration form; judging, mentors and judges, rules and results follow. Change the order in **Site settings → Hackathon → Section order**.
-
-Mentors and judges are added under **Organisers & volunteers** (section 7).
+**Organisers & volunteers → New person.** Choose the **group**: *Faculty coordinator*, *Student organiser* or *Volunteer*. Each group shows on the Organisers page once it has someone in it; volunteers show a "Coming soon" card until the first one is added. Fill in name, role, department, affiliation, profile link and photo.
 
 ## 10. Venue and travel
 
-**Site settings → Venue.** The home page shows a route map: visitors pick how they're arriving and see the route to IIT Delhi. Everything else is on the **Venue & travel** page (`/venue`).
-- **Map location:** the text the embedded Google Map searches for (e.g. "Lecture Hall Complex, IIT Delhi"). For an exact pin, paste the link from Google Maps → *Share* → *Embed a map* → copy the `src` value.
-- **Directions:** by air, train, metro and road. Each one becomes a button on the home page route map, which draws the matching route (airport, railway stations, metro or road), and a card on the Venue & travel page.
+**Site settings → Venue.** The home page shows a route map of north-west Dhaka: visitors pick how they're arriving (from Shahjalal Airport, the Airport railway station, the metro rail at Mirpur 10, or by road from Gabtoli) and see the route to Daffodil Smart City. It is a schematic, not a street map. Everything else is on the **Venue & travel** page (`/venue`).
+- **Map location:** the text the embedded Google Map searches for. For an exact pin, paste the `src` of Google Maps → *Share* → *Embed a map*.
+- **Directions:** by air, train, metro rail and road. Each becomes a button on the home page route map and a card on the Venue & travel page. **Check the built-in directions against how participants actually reach campus, and name the DIU transport routes that run on training days.**
 - **Campus entry information**, e.g. ID requirements and which gate to use.
-- **Nearby accommodation:** guest houses, hotels or areas, with distance and links.
-- **Local tips.**
+- **Nearby accommodation** and **Local tips.**
 
 ## 11. Contact, social links, branding and SEO
 
 All under **Site settings → Site-wide**.
 
-- **Contact & social:** official e-mail, phone (optional), LinkedIn, X, Instagram, YouTube, and the address that is e-mailed about new hackathon teams and enquiries (workshop registrations are listed under **Registrations**).
-- **Logos & images:** the **IIT Delhi** emblem (left corner of the navigation bar; the words *Organised by* and the institute above the home page title are under *Home → Hero*) and the **ScAI** logo (right corner) are built in; Aura wears the emblem as a badge on every page but the home page, where the IIT Delhi building and its sign stand behind her; upload a file only to replace one (PNG or SVG with a transparent background is best). Also: an event logo and a custom social-media preview image (1200 × 630 px).
-- **Colours:** the **brand colour** (e.g. `#3b5bdb`) for buttons and highlights, and the seven accent colours the sections use (see section 3).
-- **SEO & analytics:** the Google Analytics ID (`G-…`) and search keywords.
-- **Banner:** a site-wide notice (e.g. "Registration closes on 30 November"), its link and colour.
-- **Features & post-event:** **Show the hackathon**, and the post-event switches. (The *More speakers* card is under *Home → Speakers*.)
+- **Contact & social:** official e-mail, phone (optional), website, LinkedIn, X, Instagram, YouTube, and the address that is e-mailed about new enquiries (registrations are listed under **Registrations**).
+- **Logos & images:** the **DIU logo** (left corner of the navigation bar) and the **Department of CSE seal** (right corner) are built in, and Aura wears the DIU shield as a badge on every page but the home page; upload a file only to replace one. Also: an event logo and a custom social-media preview image (1200 × 630 px).
+- **Home → Hero:** the campus photo behind Aura (DIU's academic building by day in the light theme, the Knowledge Tower by night in the dark theme, both from Wikimedia Commons and credited in the footer; see `docs/IMAGE_CREDITS.md`). Upload your own to replace it, or switch it off.
+- **Colours**, **SEO & analytics** (Google Analytics ID and keywords) and the site-wide **Banner**.
+- **Features & past batches:** switch on the photo gallery and the slides & recordings when they are ready.
 
 ## 12. FAQs
 
-**FAQs → New question:** question, answer (formatting allowed) and category (*General*, *Registration*, *Programme*, *Hackathon*, *Travel*, *Sponsorship*). Visitors can search and filter them.
+**FAQs → New question:** question, answer (formatting allowed) and category (*General*, *Registration*, *Programmes & schedule*, *Venue & travel*, *Partnerships*). Visitors can search and filter them.
 
 ## 13. Registrations and enquiries
 
 **Registrations**
-- *Workshop* and *Hackathon teams* tabs. Search by name, e-mail, organisation or ID, and filter by status.
-- Change the status and add private notes. Workshop: *registered*, *confirmed*, *waitlisted*, *cancelled*. Hackathon teams: *registered*, *shortlisted*, *not shortlisted*, *withdrawn*.
-- Open a registration to see all its answers, under the questions as they now read (see *The forms' fields* in section 4).
-- **Download CSV** opens in Excel (times are in IST). It has a column for every question of the form, including the ones you added.
-- Each person receives a registration ID (e.g. `AAIW26-7KQ2M`) and an e-mail saying their registration was received and that the organising committee will let them know whether they have a place, with a calendar invite, if e-mail is set up on the server. New registrations are *registered*: set them to *confirmed* (or *waitlisted*) as the committee decides.
+- Search by name, e-mail, organisation or ID, and filter by status. The list shows each person's programme.
+- Change the status (*registered*, *confirmed*, *waitlisted*, *cancelled*) and add private notes. Open a registration to see all its answers.
+- **Download CSV** opens in Excel (times are in BST), with a column for every question of the form.
+- Each person receives a registration ID and an e-mail saying their registration was received and that the organising team will let them know whether they have a place, with a calendar invite, if e-mail is set up on the server. Set registrations to *confirmed* (or *waitlisted*) as you decide.
 
-**Enquiries:** contact-form messages, *Exhibit with us* requests and sponsorship enquiries. Use **Reply** to answer by e-mail, update the status, or download a CSV.
+**Enquiries:** contact-form messages and partnership enquiries. Use **Reply** to answer by e-mail, update the status, or download a CSV.
 
 > If the dashboard says *E-mail is not configured*, forms still work and everything is saved. Ask the website host to add the SMTP settings so confirmation e-mails are sent.
 
-## 14. After the event
+## 14. After a batch
 
-1. **Photo gallery:** upload photos with captions and choose the day.
-2. **Slides & recordings:** add each talk with the slides (PDF upload) and/or a YouTube link.
-3. **Hackathon → Results:** add the winners.
-4. In **Site settings → Site-wide → Features & post-event**, switch on the gallery, the slides & recordings and the winners. They appear in the menu automatically. Until then the pages are hidden from visitors, but the preview in **Site settings → Photo gallery** and **→ Slides & recordings** shows them, so their texts can be prepared in advance.
+1. **Past participants:** add everyone who completed the batch (section 7).
+2. **Photo gallery:** upload photos with captions.
+3. **Slides & recordings:** add each session with the slides (PDF upload) and/or a YouTube link.
+4. In **Site settings → Site-wide → Features & past batches**, switch on the gallery and the slides & recordings. They appear in the menu automatically.
+5. Set the next batch's dates in **Programme details** and update the schedule.
 
 ## 15. Users (administrators only)
 
@@ -206,10 +170,9 @@ All under **Site settings → Site-wide**.
 
 ## 16. Volunteers and the task tracker (administrators only)
 
-**Volunteers → Add volunteer:** name, e-mail, password (type one or press **Generate**), their **responsibility** (for example *"Speaker coordination: keep speaker profiles and the programme up to date"*) and their **permissions**:
-- Tick the areas they may open and change, grouped as in the menu: Hackathon, each content type, Registrations, Enquiries and the Media library. Everything else is hidden from them and refused by the server.
-- **Site settings** is given page by page: one box per tab (Site-wide, Home, About, Programme … Meet Aura). A volunteer given *Home* and *Venue* sees only those two tabs, and the server reads and saves only those pages' fields for them: they never see private settings such as the notification e-mail unless they have *Site-wide*, and whatever else a request contains is ignored. Their previews show only their changes too. *Site-wide* covers the event details, dates, registration, colours, logos, contact and notification e-mails, navigation, footer, banner, features and SEO, so give it sparingly. Volunteers created before this change who had "Site settings" keep every page.
-- **Delete items** is separate. Without it they can add, edit, hide and reorder, but not delete. Only administrators can delete registrations and enquiries.
+**Volunteers → Add volunteer:** name, e-mail, password (type one or press **Generate**), their **responsibility** (for example *"Trainer coordination: keep trainer profiles and the schedule up to date"*) and their **permissions**:
+- Tick the areas they may open and change, grouped as in the menu: each content type (trainers, schedule, past participants…), Registrations, Enquiries and the Media library. Everything else is hidden from them and refused by the server.
+- **Site settings** is given page by page: one box per tab (Site-wide, Home, About, Schedule … Meet Aura). A volunteer given *Home* and *Venue* sees only those two tabs, and the server reads and saves only those pages' fields for them: they never see private settings such as the notification e-mail unless they have *Site-wide*, and whatever else a request contains is ignored. Their previews show only their changes too. *Site-wide* covers the programme details, batch dates, registration, colours, logos, contact and notification e-mails, navigation, footer, banner, features and SEO, so give it sparingly. - **Delete items** is separate. Without it they can add, edit, hide and reorder, but not delete. Only administrators can delete registrations and enquiries.
 - Anyone who edits something with a photo or file can upload images, even without the Media library.
 
 Share the e-mail and password with them safely. **Edit** changes their details, permissions or password; changes apply straight away, even if they are signed in. A new password, **Disable** or **Remove** signs them out at once on every device. **Disable** pauses their access; **Remove** deletes the account. Their entries stay in the task tracker either way (Site settings entries name the pages changed, e.g. *Site settings › Home*).
@@ -232,4 +195,4 @@ To list volunteers on the **website**, use *Organisers & volunteers*; that is se
 | Topic | Who |
 | --- | --- |
 | Website content | Organising team (add names here) |
-| Hosting, domain, e-mail (SMTP), backups | Website host / IIT Delhi IT services (add contact here) |
+| Hosting, domain, e-mail (SMTP), backups | Website host / DIU IT services (add contact here) |

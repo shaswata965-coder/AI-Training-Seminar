@@ -9,7 +9,7 @@ import type { EnquiryType } from "@/lib/content/constants";
 import type { FormField } from "@/lib/forms";
 import { EnquiryForm, type EnquiryText } from "./EnquiryForm";
 
-/** A button that opens the enquiry form in a dialog (Exhibit with us / Become a partner). */
+/** A button that opens the enquiry form in a dialog (Become a partner). */
 export function EnquiryButton({
   type,
   fields,

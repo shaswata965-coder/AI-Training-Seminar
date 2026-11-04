@@ -24,7 +24,7 @@ export function siteVars(s: SiteSettings): Vars {
     venue: venueLine(s),
     venueName: s.venueName,
     tagline: s.tagline,
-    organiser: s.organisedBy.includes("IIT Delhi") ? "IIT Delhi · Yardi School of Artificial Intelligence" : s.organisedBy,
+    organiser: s.organisedBy,
     replyBy: replyBy(s),
   };
 }

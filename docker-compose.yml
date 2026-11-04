@@ -5,7 +5,7 @@
 #
 # Scripts (seed, sample content, users) run in the `tools` container:
 #   docker compose run --rm tools seed
-#   docker compose run --rm tools create-admin -- --email you@iitd.ac.in
+#   docker compose run --rm tools create-admin -- --email you@daffodilvarsity.edu.bd
 #   docker compose run --rm tools seed:demo            # sample content; remove with: seed:demo -- --remove
 #
 # Put the site behind Nginx/Apache with HTTPS in production (see README.md).

@@ -11,7 +11,7 @@ import { COLLECTION_MAP, COLLECTIONS, SETTINGS_PAGES, settingsSectionFields } fr
  */
 
 export type Role = "admin" | "editor" | "volunteer";
-export type Permission = `settings:${string}` | "hackathon" | `content:${string}` | "registrations" | "enquiries" | "media" | "delete";
+export type Permission = `settings:${string}` | `content:${string}` | "registrations" | "enquiries" | "media" | "delete";
 
 export interface PermissionDef {
   key: Permission;
@@ -30,17 +30,17 @@ export const SETTINGS_AREAS: PermissionDef[] = SETTINGS_PAGES.map((p) => ({
   key: settingsPermission(p.key),
   label: p.title,
   href: `/admin/settings?page=${p.key}`,
-  hint: p.key === "site" ? "Event name and dates, registration, colours and logos, contact and notification e-mails, navigation, footer, banner, features and SEO." : undefined,
+  hint: p.key === "site" ? "Programme name and batch dates, registration, colours and logos, contact and notification e-mails, navigation, footer, banner, features and SEO." : undefined,
 }));
 export const SETTINGS_PERMISSIONS: Permission[] = SETTINGS_AREAS.map((a) => a.key);
 
 /** The areas of the panel, grouped as in the sidebar. */
 export const PERMISSION_GROUPS: { title: string; hint?: string; items: PermissionDef[] }[] = [
   { title: "Site settings", hint: "Each page's texts, colours and settings, one tab each.", items: SETTINGS_AREAS },
-  { title: "Event", items: [{ key: "hackathon", label: "Hackathon", href: "/admin/hackathon" }, content("announcements")] },
-  { title: "Programme", items: [content("sessions"), content("speakers"), content("tutorials"), content("demos")] },
-  { title: "Content", items: [content("people"), content("kiosks"), content("sponsors"), content("faqs")] },
-  { title: "Post-event", items: [content("gallery"), content("talks")] },
+  { title: "News", items: [content("announcements")] },
+  { title: "Programme", items: [content("sessions"), content("trainers"), content("tutorials"), content("demos")] },
+  { title: "Content", items: [content("people"), content("sponsors"), content("faqs")] },
+  { title: "Past batches", items: [content("participants"), content("gallery"), content("talks")] },
   {
     title: "Responses",
     items: [
@@ -102,12 +102,11 @@ const hasMedia = (fields: FieldDef[]): boolean => fields.some((f) => f.type === 
 /** Every permission that edits something with an image or file field: these may upload to and pick from the media library. */
 export const UPLOAD_PERMISSIONS: Permission[] = [
   "media",
-  "hackathon",
   ...SETTINGS_PAGES.filter((p) => p.sections.some((s) => hasMedia(settingsSectionFields(p, s)))).map((p) => settingsPermission(p.key)),
   ...COLLECTIONS.filter((c) => hasMedia(c.fields)).map((c) => contentPermission(c.key)),
 ];
 
-/** Who may read a collection: its own editors, and editors of collections that link to it (the programme lists speakers). */
+/** Who may read a collection: its own editors, and editors of collections that link to it (the programme lists trainers). */
 export function contentReaders(resource: string): Permission[] {
   const linking = COLLECTIONS.filter((c) => c.fields.some((f) => (f.type === "ref" || f.type === "refList") && f.resource === resource));
   return [contentPermission(resource), ...linking.map((c) => contentPermission(c.key))];

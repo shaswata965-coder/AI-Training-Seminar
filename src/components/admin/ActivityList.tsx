@@ -117,7 +117,7 @@ export function ActivityItem({ e, you = false, onReview }: { e: ActivityEntry; y
           {action}
         </div>
         <p className="mt-0.5 text-xs text-subtle">
-          {formatDateTime(e.createdAt)} IST{you ? "" : ` · ${e.actorEmail}`}
+          {formatDateTime(e.createdAt)} BST{you ? "" : ` · ${e.actorEmail}`}
           {e.reviewed && e.reviewedBy ? ` · reviewed by ${e.reviewedBy}` : ""}
         </p>
         <Changes e={e} />

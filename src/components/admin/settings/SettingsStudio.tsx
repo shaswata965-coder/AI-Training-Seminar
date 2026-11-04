@@ -10,7 +10,7 @@ import type { SiteSettings } from "@/lib/content/types";
 import { siteVars } from "@/lib/copy";
 import { formatDateTime } from "@/lib/format";
 import { withBase } from "@/lib/paths";
-import { can, settingsPagesFor } from "@/lib/permissions";
+import { settingsPagesFor } from "@/lib/permissions";
 import type { OrderField } from "@/lib/schema/fields";
 import { PAGE_COPY, type CopyField, type CopyKey } from "@/lib/schema/page-copy";
 import { SETTINGS_PAGES, type SettingsPage, type SettingsSection } from "@/lib/schema/resources";
@@ -30,13 +30,6 @@ const labelOf = (key: CopyKey, name: string) => (PAGE_COPY[key] as Record<string
 function sectionOf(key: string): { page: SettingsPage; section: SettingsSection } | null {
   const top = key.split(".")[0];
   for (const page of SETTINGS_PAGES) for (const section of page.sections) if (section.copy === top || section.fields.some((f) => f.name === top)) return { page, section };
-  return null;
-}
-
-/** The section and page showing a hackathon detail that didn't save ("tagline"). */
-function hackathonSectionOf(key: string): { page: SettingsPage; section: SettingsSection } | null {
-  const top = key.split(".")[0];
-  for (const page of SETTINGS_PAGES) for (const section of page.sections) if (section.hackathon?.some((f) => f.name === top)) return { page, section };
   return null;
 }
 
@@ -100,16 +93,9 @@ function Studio({ pages, start }: { pages: SettingsPage[]; start: SettingsPage }
   // On a Section order tab, the preview goes to the section last moved.
   const [moved, setMoved] = useState<{ page: string; anchor: string } | null>(null);
   const hadDraft = useRef(false);
-  // The hackathon details some tabs show (the Hackathon page's tagline and overview), for those who may edit them; saved under Hackathon.
-  const me = useMe();
-  const editsHackathon = can(me, "hackathon") && pages.some((p) => p.sections.some((s) => s.hackathon?.length));
-  const hackathon = useApi<{ data: Values; updatedAt: string | null }>(editsHackathon ? "/singleton/hackathon" : null);
-  const [hackathonDraft, setHackathonDraft] = useState<Values | null>(null);
-  const [hackathonErrors, setHackathonErrors] = useState<Record<string, string>>({});
 
   const value = draft ?? data?.data ?? null;
-  const hackathonValue = hackathonDraft ?? hackathon.data?.data ?? null;
-  const dirty = draft !== null || hackathonDraft !== null;
+  const dirty = draft !== null;
   const page = pages.find((p) => p.key === pageKey) ?? pages[0];
   const section = page.sections.find((s) => s.key === sectionKey) ?? page.sections[0];
   const ordering = orderOf(section);
@@ -119,18 +105,16 @@ function Studio({ pages, start }: { pages: SettingsPage[]; start: SettingsPage }
 
   // Unsaved changes go to the preview a moment after typing stops.
   useEffect(() => {
-    if (!draft && !hackathonDraft) return;
+    if (!draft) return;
     hadDraft.current = true;
     const t = setTimeout(() => {
-      Promise.allSettled([
-        draft ? api("/preview", { method: "POST", json: draft }) : null,
-        hackathonDraft ? api("/preview?key=hackathon", { method: "POST", json: hackathonDraft }) : null,
-      ])
+      api("/preview", { method: "POST", json: draft })
+        .catch(() => {})
         .then(() => setRevision((r) => r + 1))
         .finally(() => setSyncing(false));
     }, 450);
     return () => clearTimeout(t);
-  }, [draft, hackathonDraft]);
+  }, [draft]);
 
   // A draft left behind by an editor that closed without cleaning up (a crash, a lost connection)
   // must not show up in this preview: clear it before the preview opens.
@@ -171,7 +155,6 @@ function Studio({ pages, start }: { pages: SettingsPage[]; start: SettingsPage }
     if (!value) return;
     setSaving(true);
     setErrors({});
-    setHackathonErrors({});
     // Open the tab of the first field that didn't save.
     const show = (where: { page: SettingsPage; section: SettingsSection } | null | undefined) => {
       if (!where) return;
@@ -179,18 +162,6 @@ function Studio({ pages, start }: { pages: SettingsPage[]; start: SettingsPage }
       setSectionKey(where.section.key);
     };
     try {
-      if (hackathonDraft) {
-        try {
-          hackathon.setData(await api<{ data: Values; updatedAt: string }>("/singleton/hackathon", { method: "PUT", json: hackathonDraft }));
-          setHackathonDraft(null);
-        } catch (e) {
-          if (e instanceof ApiError) {
-            setHackathonErrors(e.fieldErrors);
-            show(Object.keys(e.fieldErrors).map(hackathonSectionOf).find(Boolean));
-          }
-          throw e;
-        }
-      }
       if (draft) {
         try {
           setData(await api<{ data: Values; updatedAt: string }>("/singleton/settings", { method: "PUT", json: value }));
@@ -215,19 +186,13 @@ function Studio({ pages, start }: { pages: SettingsPage[]; start: SettingsPage }
 
   async function discard() {
     setDraft(null);
-    setHackathonDraft(null);
     setErrors({});
-    setHackathonErrors({});
     await clearPreview();
   }
 
   const onReport = useCallback((r: Report) => setReport(r), []);
   const edit = (v: Values) => {
     setDraft(v);
-    setSyncing(true);
-  };
-  const editHackathon = (v: Values) => {
-    setHackathonDraft(v);
     setSyncing(true);
   };
   const setShown = (key: string, shown: boolean) => {
@@ -384,18 +349,6 @@ function Studio({ pages, start }: { pages: SettingsPage[]; start: SettingsPage }
                 ) : null}
 
                 <div className="mt-5 grid gap-6">
-                  {/* The section's main text from the hackathon details comes first, above its labels and colours. */}
-                  {section.hackathon?.length ? (
-                    <div className={cn(section.copy && "border-b border-border pb-6")}>
-                      {hackathonValue ? (
-                        <RecordForm fields={section.hackathon} value={hackathonValue} onChange={editHackathon} errors={hackathonErrors} />
-                      ) : (
-                        <p className="text-sm text-muted">
-                          {editsHackathon ? (hackathon.error ?? "Loading…") : `${section.hackathon.map((f) => f.label).join(" and ")}: edited under Hackathon, which your account can't open.`}
-                        </p>
-                      )}
-                    </div>
-                  ) : null}
                   {section.copy ? (
                     <CopyForm
                       key={section.copy}
@@ -442,7 +395,7 @@ function Studio({ pages, start }: { pages: SettingsPage[]; start: SettingsPage }
             {dirty ? (
               <span className="font-semibold text-butter-ink">Unsaved changes: only you can see them, in the preview</span>
             ) : data?.updatedAt ? (
-              `Last saved ${formatDateTime(data.updatedAt)} IST`
+              `Last saved ${formatDateTime(data.updatedAt)} BST`
             ) : (
               "Defaults, not saved yet"
             )}

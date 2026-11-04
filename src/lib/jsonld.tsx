@@ -23,8 +23,8 @@ export function eventJsonLd(s: SiteSettings, extra: Record<string, unknown> = {}
       address: s.venueAddress || s.venueName,
     },
     organizer: [
-      { "@type": "CollegeOrUniversity", name: "Indian Institute of Technology Delhi", url: "https://home.iitd.ac.in" },
-      { "@type": "Organization", name: "Yardi School of Artificial Intelligence, IIT Delhi", url: "https://scai.iitd.ac.in" },
+      { "@type": "CollegeOrUniversity", name: "Daffodil International University", url: "https://daffodilvarsity.edu.bd" },
+      { "@type": "Organization", name: "Department of Computer Science and Engineering, Daffodil International University" },
     ],
     ...extra,
   };

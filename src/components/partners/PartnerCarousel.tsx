@@ -1,7 +1,7 @@
 import { Img } from "@/components/ui/Img";
 import type { Sponsor } from "@/lib/content/types";
 
-const PLACEHOLDERS = ["Your logo here", "Partner", "Sponsor", "Exhibitor", "Community partner", "Your logo here", "Academic partner", "Sponsor"];
+const PLACEHOLDERS = ["Your logo here", "Partner", "Sponsor", "Industry partner", "Community partner", "Your logo here", "Academic partner", "Sponsor"];
 const TILE = "grid h-16 w-44 shrink-0 place-items-center rounded-2xl border border-border sm:h-20 sm:w-52";
 
 /**

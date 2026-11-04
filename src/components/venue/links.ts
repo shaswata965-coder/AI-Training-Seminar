@@ -1,5 +1,5 @@
 import type { SiteSettings } from "@/lib/content/types";
-import { ROUTES, type Mode } from "./delhi-map";
+import { ROUTES, type Mode } from "./dhaka-map";
 
 /** Google Maps search and directions links for the venue. */
 export function mapLinks(s: SiteSettings) {

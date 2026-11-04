@@ -1,11 +1,11 @@
 import type { NextRequest } from "next/server";
 import { stripMarkdown } from "@/components/ui/RichText";
 import { buildIcs } from "@/lib/calendar";
-import { getSavedSettings, getSessions, getSpeakers } from "@/lib/content/queries";
+import { getSavedSettings, getSessions, getTrainers } from "@/lib/content/queries";
 import { venueLine } from "@/lib/event";
-import { eventDayDate, istDateTime } from "@/lib/format";
+import { eventDayDate, localDateTime } from "@/lib/format";
 import { absoluteUrl } from "@/lib/paths";
-import { workshopIcs } from "@/lib/server/emails";
+import { trainingIcs } from "@/lib/server/emails";
 
 function ics(body: string, filename: string) {
   return new Response(body, {
@@ -17,20 +17,20 @@ function ics(body: string, filename: string) {
   });
 }
 
-/** /api/calendar → both workshop days; /api/calendar?session=<id> → one session. */
+/** /api/calendar → every day of the batch; /api/calendar?session=<id> → one session. */
 export async function GET(req: NextRequest) {
   const id = req.nextUrl.searchParams.get("session");
   const s = await getSavedSettings();
-  if (!id) return ics(workshopIcs(s), "agentic-ai-workshop-2026.ics");
+  if (!id) return ics(trainingIcs(s), "diu-ai-training.ics");
 
-  const [sessions, speakers] = await Promise.all([getSessions(), getSpeakers()]);
+  const [sessions, trainers] = await Promise.all([getSessions(), getTrainers()]);
   const x = s.programmeStatus === "tba" ? undefined : sessions.find((v) => v.id === id);
   if (!x) return new Response("Session not found", { status: 404 });
   const date = eventDayDate(s.startDate, x.day);
-  const start = istDateTime(date, x.start);
-  const end = istDateTime(date, x.end || x.start);
+  const start = localDateTime(date, x.start);
+  const end = localDateTime(date, x.end || x.start);
   if (!start || !end) return new Response("Session has no time yet", { status: 404 });
-  const names = [...x.speakers, ...x.panelists].map((sid) => speakers.find((sp) => sp.id === sid)?.name).filter(Boolean);
+  const names = [...x.trainers, ...x.panelists].map((sid) => trainers.find((sp) => sp.id === sid)?.name).filter(Boolean);
   const body = buildIcs(
     [
       {
@@ -38,7 +38,7 @@ export async function GET(req: NextRequest) {
         title: x.title,
         start,
         end: end.getTime() > start.getTime() ? end : new Date(start.getTime() + 30 * 60_000),
-        description: [names.length ? `Speakers: ${names.join(", ")}` : "", stripMarkdown(x.description), absoluteUrl(`/programme?day=${x.day}#session-${x.id}`)].filter(Boolean).join("\n\n"),
+        description: [names.length ? `Trainers: ${names.join(", ")}` : "", stripMarkdown(x.description), absoluteUrl(`/programme?day=${x.day}#session-${x.id}`)].filter(Boolean).join("\n\n"),
         location: [x.room, venueLine(s)].filter(Boolean).join(", "),
         url: absoluteUrl("/programme"),
       },

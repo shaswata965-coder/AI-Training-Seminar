@@ -1,5 +1,5 @@
 import type { CSSProperties, ReactNode } from "react";
-import { IITD_EMBLEM } from "@/components/layout/InstituteLogo";
+import { DIU_SHIELD } from "@/components/layout/InstituteLogo";
 import { withBase } from "@/lib/paths";
 import type { AuraLook, Effect, Emblem, Expression, Headwear, Pose, PropKind } from "./types";
 import { AURA_EYES } from "./presets";
@@ -20,7 +20,7 @@ const PIVOT_R = { x: 198, y: 170 };
 const EYE_L = { x: 110, y: 102 };
 const EYE_R = { x: 150, y: 102 };
 const CHEST = { x: 130, y: 207 };
-/** The IIT Delhi pin, on her upper chest to the right: above a placard, clear of the chest emblem and the fins at rest. */
+/** The DIU pin, on her upper chest to the right: above a placard, clear of the chest emblem and the fins at rest. */
 const BADGE = { x: 155, y: 171, r: 13 };
 
 const ARM_PATH =
@@ -101,7 +101,7 @@ export interface AuraArtProps extends AuraLook {
   placard?: string;
   /** Counts the placard's changes of text; each one flips it over. */
   placardFlip?: number;
-  /** The IIT Delhi emblem pinned on her chest: its address (by default the bundled one), or false for none. */
+  /** The DIU shield pinned on her chest: its address (by default the bundled one), or false for none. */
   badge?: string | false;
 }
 
@@ -123,7 +123,7 @@ export function AuraArt({
   title,
   placard,
   placardFlip = 0,
-  badge = withBase(IITD_EMBLEM),
+  badge = withBase(DIU_SHIELD),
 }: AuraArtProps) {
   const id = (name: string) => `${uid}-${name}`;
   const url = (name: string) => `url(#${id(name)})`;
@@ -978,7 +978,7 @@ function PropArt({
 
 /* ---------------------------------------------------------------- Badge -- */
 
-/** The IIT Delhi emblem on a white pin, so it reads on her in both themes. Props and fins held across her go over it. */
+/** The DIU shield on a white pin, so it reads on her in both themes. Props and fins held across her go over it. */
 function Badge({ href, edge }: { href: string; edge: string }) {
   const { x, y, r } = BADGE;
   return (

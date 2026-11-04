@@ -1,5 +1,5 @@
-export const EVENT_TZ = "Asia/Kolkata";
-const IST_OFFSET_MIN = 330;
+export const EVENT_TZ = "Asia/Dhaka";
+const TZ_OFFSET_MIN = 360;
 
 function parse(iso?: string | null): Date | null {
   if (!iso) return null;
@@ -10,7 +10,7 @@ function parse(iso?: string | null): Date | null {
 export function formatDate(iso: string | null | undefined, opts: Intl.DateTimeFormatOptions = { day: "numeric", month: "long", year: "numeric" }) {
   const d = parse(iso);
   if (!d) return "";
-  return new Intl.DateTimeFormat("en-IN", { timeZone: EVENT_TZ, ...opts }).format(d);
+  return new Intl.DateTimeFormat("en-GB", { timeZone: EVENT_TZ, ...opts }).format(d);
 }
 
 export function formatDateTime(iso: string | null | undefined) {
@@ -23,7 +23,7 @@ export function formatDateRange(startIso: string, endIso: string) {
   const e = parse(endIso);
   if (!s) return "";
   if (!e) return formatDate(startIso);
-  const part = (d: Date, o: Intl.DateTimeFormatOptions) => new Intl.DateTimeFormat("en-IN", { timeZone: EVENT_TZ, ...o }).format(d);
+  const part = (d: Date, o: Intl.DateTimeFormatOptions) => new Intl.DateTimeFormat("en-GB", { timeZone: EVENT_TZ, ...o }).format(d);
   const sm = part(s, { month: "long", year: "numeric" });
   const em = part(e, { month: "long", year: "numeric" });
   if (sm === em) {
@@ -34,41 +34,41 @@ export function formatDateRange(startIso: string, endIso: string) {
   return `${part(s, { day: "numeric", month: "short" })} – ${part(e, { day: "numeric", month: "short", year: "numeric" })}`;
 }
 
-/** YYYY-MM-DD (IST) of the n-th event day (1-based). */
+/** YYYY-MM-DD (BST) of the n-th event day (1-based). */
 export function eventDayDate(startIso: string, day: number | string): string {
   const s = parse(startIso);
   if (!s) return "";
-  const ist = new Date(s.getTime() + IST_OFFSET_MIN * 60_000);
-  ist.setUTCDate(ist.getUTCDate() + (Number(day) - 1));
-  return ist.toISOString().slice(0, 10);
+  const local = new Date(s.getTime() + TZ_OFFSET_MIN * 60_000);
+  local.setUTCDate(local.getUTCDate() + (Number(day) - 1));
+  return local.toISOString().slice(0, 10);
 }
 
 /** Label for an event day: "Tue, 15 Dec". */
 export function eventDayLabel(startIso: string, day: number | string, opts: Intl.DateTimeFormatOptions = { weekday: "short", day: "numeric", month: "short" }) {
   const ymd = eventDayDate(startIso, day);
   if (!ymd) return `Day ${day}`;
-  return formatDate(`${ymd}T12:00:00+05:30`, opts);
+  return formatDate(`${ymd}T12:00:00+06:00`, opts);
 }
 
-/** Convert an IST date (YYYY-MM-DD) + time (HH:mm) to a Date. */
-export function istDateTime(ymd: string, hhmm: string): Date | null {
+/** Convert a BST date (YYYY-MM-DD) + time (HH:mm) to a Date. */
+export function localDateTime(ymd: string, hhmm: string): Date | null {
   if (!/^\d{4}-\d{2}-\d{2}$/.test(ymd) || !/^\d{1,2}:\d{2}$/.test(hhmm)) return null;
   const [h, m] = hhmm.split(":");
-  return parse(`${ymd}T${h.padStart(2, "0")}:${m}:00+05:30`);
+  return parse(`${ymd}T${h.padStart(2, "0")}:${m}:00+06:00`);
 }
 
-/** Admin datetime-local value ("2026-12-15T09:00") ⇄ stored ISO in IST. */
+/** Admin datetime-local value ("2026-12-15T09:00") ⇄ stored ISO in BST. */
 export function localInputToIso(value: string): string {
   if (!value) return "";
   if (/[zZ]|[+-]\d{2}:\d{2}$/.test(value)) return value;
   const v = value.length === 16 ? `${value}:00` : value;
-  return `${v}+05:30`;
+  return `${v}+06:00`;
 }
 export function isoToLocalInput(iso: string): string {
   const d = parse(iso);
   if (!d) return "";
-  const ist = new Date(d.getTime() + IST_OFFSET_MIN * 60_000);
-  return ist.toISOString().slice(0, 16);
+  const local = new Date(d.getTime() + TZ_OFFSET_MIN * 60_000);
+  return local.toISOString().slice(0, 16);
 }
 
 export function timeRange(start?: string, end?: string) {
@@ -78,7 +78,7 @@ export function timeRange(start?: string, end?: string) {
 
 export function initials(name: string) {
   const parts = name
-    .replace(/^(prof|dr|mr|ms|mrs)\.?\s+/i, "")
+    .replace(/^((prof(essor)?|dr|mr|ms|mrs|engr)\.?\s+)+/i, "")
     .split(/\s+/)
     .filter(Boolean);
   return ((parts[0]?.[0] ?? "") + (parts.length > 1 ? parts[parts.length - 1][0] : "")).toUpperCase();

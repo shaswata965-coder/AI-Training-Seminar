@@ -24,7 +24,7 @@ export const contentTitle = (def: CollectionDef, item: Record<string, unknown>) 
 
 interface Entry {
   action: ActivityAction;
-  /** A permission key such as "content:speakers", or "account". */
+  /** A permission key such as "content:trainers", or "account". */
   area: string;
   target?: string;
   targetId?: string;
@@ -66,7 +66,6 @@ const FORM_FIELD_PARTS: FieldDef[] = [
   text("placeholder", "Example"),
   list("options", "Choices"),
   bool("required", "Required"),
-  bool("leadOnly", "Required for the team lead only"),
   bool("hidden", "Hidden"),
   num("step", "Step"),
 ];
@@ -110,13 +109,13 @@ function format(raw: unknown, def: FieldDef | undefined, titles: Map<string, str
   if (!s) return "";
   if (def?.type === "select" || def?.type === "multiselect" || def?.type === "order") return def.options.find((o) => o.value === s)?.label ?? s;
   if (def?.type === "ref" || def?.type === "refList") return titles.get(s) ?? s;
-  if (def?.type === "datetime") return `${formatDateTime(s) || s} IST`;
+  if (def?.type === "datetime") return `${formatDateTime(s) || s} BST`;
   return s;
 }
 
 const clip = (s: string) => (s.length > MAX_VALUE ? `${s.slice(0, MAX_VALUE - 1)}…` : s);
 
-// Names of linked items (a session's speakers), so the tracker doesn't show database IDs.
+// Names of linked items (a session's trainers), so the tracker doesn't show database IDs.
 async function refTitles(leaves: Leaf[]): Promise<Map<string, string>> {
   const wanted = new Map<string, Set<string>>();
   for (const l of leaves) {

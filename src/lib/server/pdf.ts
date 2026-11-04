@@ -3,8 +3,8 @@ import { cacheLife, cacheTag } from "next/cache";
 import { PDFDocument, rgb, StandardFonts, type PDFFont, type PDFPage } from "pdf-lib";
 import { stripMarkdown } from "@/components/ui/RichText";
 import { SESSION_TYPE_META, THEME_META } from "@/lib/content/constants";
-import { CONTENT_TAG, getSavedSettings, getSessions, getSpeakers } from "@/lib/content/queries";
-import type { Session, SiteSettings, Speaker } from "@/lib/content/types";
+import { CONTENT_TAG, getSavedSettings, getSessions, getTrainers } from "@/lib/content/queries";
+import type { Session, SiteSettings, Trainer } from "@/lib/content/types";
 import { eventDays, venueLine } from "@/lib/event";
 import { eventDayLabel, formatDate, formatDateRange, timeRange } from "@/lib/format";
 import { absoluteUrl } from "@/lib/paths";
@@ -65,15 +65,15 @@ function wrap(font: PDFFont, size: number, text: string, width: number): string[
   return lines.length ? lines : [""];
 }
 
-async function build(s: SiteSettings, sessions: Session[], speakers: Speaker[], generated: Date): Promise<Uint8Array> {
+async function build(s: SiteSettings, sessions: Session[], trainers: Trainer[], generated: Date): Promise<Uint8Array> {
   const doc = await PDFDocument.create();
-  doc.setTitle(`${s.eventName} · Programme`);
-  doc.setAuthor("IIT Delhi · Yardi School of Artificial Intelligence");
-  doc.setSubject("Workshop programme");
+  doc.setTitle(`${s.eventName} · Schedule`);
+  doc.setAuthor(s.organisedBy || "Daffodil International University");
+  doc.setSubject("Training schedule");
   doc.setCreator(absoluteUrl("/"));
   const font = await doc.embedFont(StandardFonts.Helvetica);
   const bold = await doc.embedFont(StandardFonts.HelveticaBold);
-  const byId = Object.fromEntries(speakers.map((sp) => [sp.id, sp]));
+  const byId = Object.fromEntries(trainers.map((sp) => [sp.id, sp]));
 
   let page: PDFPage = doc.addPage([A4.w, A4.h]);
   let y = A4.h - M;
@@ -92,7 +92,7 @@ async function build(s: SiteSettings, sessions: Session[], speakers: Speaker[], 
         y -= 34;
       }
     } else {
-      page.drawText(safe(bold, `${s.eventName} · Programme (continued)`), { x: M, y: A4.h - M, size: 10, font: bold, color: SUBTLE });
+      page.drawText(safe(bold, `${s.eventName} · Schedule (continued)`), { x: M, y: A4.h - M, size: 10, font: bold, color: SUBTLE });
       y = A4.h - M - 26;
     }
   };
@@ -131,9 +131,9 @@ async function build(s: SiteSettings, sessions: Session[], speakers: Speaker[], 
       y -= 22;
       for (const x of list) {
         const type = SESSION_TYPE_META[x.type] ?? SESSION_TYPE_META.other;
-        const people = (x.type === "panel" ? x.panelists : x.speakers).map((id) => byId[id]).filter(Boolean);
+        const people = (x.type === "panel" ? x.panelists : x.trainers).map((id) => byId[id]).filter(Boolean);
         const moderator = x.moderator ? byId[x.moderator] : undefined;
-        const who = [moderator ? `Moderator: ${moderator.name}` : "", people.length ? `${x.type === "panel" ? "Panelists: " : ""}${people.map((p) => (p.affiliation ? `${p.name} (${p.affiliation})` : p.name)).join(", ")}` : x.speakerNote]
+        const who = [moderator ? `Moderator: ${moderator.name}` : "", people.length ? `${x.type === "panel" ? "Panelists: " : ""}${people.map((p) => (p.affiliation ? `${p.name} (${p.affiliation})` : p.name)).join(", ")}` : x.trainerNote]
           .filter(Boolean)
           .join("  ·  ");
         const titleLines = wrap(bold, 10.5, x.title, sessionWidth);
@@ -171,18 +171,18 @@ async function build(s: SiteSettings, sessions: Session[], speakers: Speaker[], 
 
   const pages = doc.getPages();
   pages.forEach((p, i) => {
-    const footer = safe(font, `Generated ${formatDate(generated.toISOString(), { day: "numeric", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit", hour12: false })} IST  ·  ${absoluteUrl("/programme")}  ·  Page ${i + 1} of ${pages.length}`);
+    const footer = safe(font, `Generated ${formatDate(generated.toISOString(), { day: "numeric", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit", hour12: false })} BST  ·  ${absoluteUrl("/programme")}  ·  Page ${i + 1} of ${pages.length}`);
     p.drawText(footer, { x: M, y: 24, size: 8, font, color: SUBTLE });
   });
   return doc.save();
 }
 
-/** The programme as a PDF, regenerated automatically when sessions, speakers or settings change. */
+/** The training schedule as a PDF, regenerated automatically when sessions, trainers or settings change. */
 export async function getSchedulePdf(): Promise<Uint8Array> {
   "use cache";
-  cacheTag("sessions", "speakers", "settings", CONTENT_TAG);
+  cacheTag("sessions", "trainers", "settings", CONTENT_TAG);
   cacheLife("cms");
-  const [s, sessions, speakers] = await Promise.all([getSavedSettings(), getSessions(), getSpeakers()]);
+  const [s, sessions, trainers] = await Promise.all([getSavedSettings(), getSessions(), getTrainers()]);
   const plain = sessions.map((x) => ({ ...x, description: stripMarkdown(x.description) }));
-  return build(s, plain, speakers, new Date());
+  return build(s, plain, trainers, new Date());
 }

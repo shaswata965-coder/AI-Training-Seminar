@@ -1,5 +1,7 @@
 # Security report
 
+> **History.** This report was written for the earlier version of this site, the IIT Delhi Agentic AI Workshop 2026 (October 2026), before the `claude/diu-ai-training` branch turned it into the DIU AI Training Seminars site. The parts it tests that both versions share (admin sign-in, sessions, uploads, form validation and rate limits, caching, the nginx configuration) are unchanged; its findings about the hackathon (team registration, the contest-day load test) no longer apply, as the hackathon has been removed. It has not been re-run on this version.
+
 **Site:** Agentic AI Workshop 2026 website and admin panel (Next.js 16, MongoDB)
 **Date:** 15 October 2026
 **Method:**

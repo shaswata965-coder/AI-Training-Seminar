@@ -13,16 +13,16 @@ import { absoluteUrl } from "@/lib/paths";
 
 export const metadata: Metadata = {
   title: "Meet Aura",
-  description: "Aura is the workshop's agentic AI mascot: a friendly hovering robot who changes for every part of the site.",
+  description: "Aura is the AI training programme's mascot: a friendly hovering robot who changes for every part of the site.",
   alternates: { canonical: absoluteUrl("/meet-aura") },
 };
 
 const WHERE: Partial<Record<AuraVariant, string>> = {
   hero: "Home: waving hello", countdown: "Registration opening soon", announcements: "Announcements", thinker: "About: the agent loop",
-  healthcare: "Theme: Healthcare", science: "Theme: Scientific Discovery", enterprise: "Theme: Enterprise",
-  programme: "Programme", speakers: "Speakers", tutorials: "Tutorials", demos: "Live demos", hackathon: "Hackathon", trophy: "Prizes & winners",
-  registration: "Registration", success: "Registration complete", kiosks: "Industry kiosks", venue: "Venue", travel: "Travel tips",
-  sponsors: "Partners & sponsors", organisers: "Organisers", volunteers: "Volunteers (coming soon)", faq: "FAQ", answer: "FAQ: answer found",
+  professionals: "Programme: AI for Professionals", workspace: "Programme: AI for Workspace",
+  programme: "Schedule", trainers: "Trainers", tutorials: "Hands-on labs", demos: "Live demos", participants: "Past participants",
+  registration: "Registration", success: "Registration complete", venue: "Venue", travel: "Travel tips",
+  sponsors: "Partners", organisers: "Organisers", volunteers: "Volunteers (coming soon)", faq: "FAQ", answer: "FAQ: answer found",
   contact: "Contact form", notFound: "Page not found", sleep: "Footer", gallery: "Photo gallery", recordings: "Recordings", admin: "Admin panel", error: "Error page",
 };
 

@@ -4,7 +4,7 @@ import { DRAFT_KEYS } from "@/lib/content/queries";
 import { connectDb } from "@/lib/db";
 import { Singleton } from "@/lib/models";
 import { BASE_PATH } from "@/lib/paths";
-import { can, settingsPermission, SETTINGS_PERMISSIONS } from "@/lib/permissions";
+import { SETTINGS_PERMISSIONS } from "@/lib/permissions";
 import { previewSchema } from "@/lib/schema/field-validation";
 import { flattenFields, SINGLETONS } from "@/lib/schema/resources";
 import { requireAdmin } from "@/lib/server/admin-auth";
@@ -16,8 +16,7 @@ import { scopedSettings } from "@/lib/server/settings-access";
  * The live preview in Admin → Site settings. The editor stores its unsaved
  * draft here and shows the real page in a frame with Next.js Draft Mode on, so
  * getSettings() returns the draft for this browser only. Visitors keep the
- * cached, saved pages. The hackathon details its Hackathon tab edits too (the
- * tagline, the overview) have a draft of their own, read by getHackathon().
+ * cached, saved pages.
  * There is one draft of each at a time: two people editing at once see each
  * other's unsaved changes in their previews.
  */
@@ -37,24 +36,17 @@ export async function GET(req: NextRequest) {
   return new Response(null, { status: 307, headers: { Location: `${BASE_PATH}${path}`, "Cache-Control": "no-store" } });
 }
 
-/**
- * Store the draft being edited and keep Draft Mode on for this browser. A volunteer's draft changes only their pages.
- * ?key=hackathon stores the hackathon details instead, for those who may edit both them and the Hackathon tab.
- */
+/** Store the draft being edited and keep Draft Mode on for this browser. A volunteer's draft changes only their pages. */
 export async function POST(req: NextRequest) {
-  const key = req.nextUrl.searchParams.get("key") === "hackathon" ? "hackathon" : "settings";
   const user = await requireAdmin(req, { permission: SETTINGS_PERMISSIONS });
   if (user instanceof Response) return user;
-  if (key === "hackathon" && !(can(user, "hackathon") && can(user, settingsPermission("hackathon")))) {
-    return error(403, "Your volunteer account doesn't have permission to do this. Ask an administrator.");
-  }
   const input = await readJson(req, 1024 * 1024);
   if (!isRecord(input)) return error(400, "Send the draft as a JSON object of at most 1 MB.");
-  const draft = key === "settings" ? scopedSettings(user, (await getSingleton("settings")).data, input) : input;
-  const parsed = previewSchema(flattenFields(SINGLETONS[key].sections)).safeParse(draft);
+  const draft = scopedSettings(user, (await getSingleton("settings")).data, input);
+  const parsed = previewSchema(flattenFields(SINGLETONS.settings.sections)).safeParse(draft);
   if (!parsed.success) return error(422, "These changes can't be previewed.");
   await connectDb();
-  await Singleton.findOneAndUpdate({ key: DRAFT_KEYS[key] }, { $set: { data: parsed.data } }, { upsert: true });
+  await Singleton.findOneAndUpdate({ key: DRAFT_KEYS.settings }, { $set: { data: parsed.data } }, { upsert: true });
   (await draftMode()).enable();
   return json({ ok: true });
 }

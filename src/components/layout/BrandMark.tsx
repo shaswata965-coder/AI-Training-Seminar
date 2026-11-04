@@ -20,7 +20,7 @@ export function BrandMark({ title, year, compact = false, srSuffix }: { title: s
         </span>
         {!compact ? (
           <span className="mt-1 block text-[11px] font-semibold tracking-wide text-subtle uppercase">
-            {year ? `${year} · ` : null}IIT Delhi
+            {year ? `${year} · ` : null}DIU
           </span>
         ) : null}
         {srSuffix ? <span className="sr-only">{srSuffix}</span> : null}

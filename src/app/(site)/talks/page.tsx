@@ -35,7 +35,7 @@ export default async function TalksPage() {
                   <div className="flex flex-1 flex-col p-6">
                     {t.day ? <p className="text-xs font-bold tracking-[0.12em] text-subtle uppercase">{eventDayLabel(s.startDate, t.day)}</p> : null}
                     <h2 className="mt-1 font-display text-xl font-semibold text-fg">{t.title}</h2>
-                    {t.speakerName ? <p className="text-sm font-semibold text-accent-ink">{t.speakerName}</p> : null}
+                    {t.trainerName ? <p className="text-sm font-semibold text-accent-ink">{t.trainerName}</p> : null}
                     {t.description ? <p className="mt-2 text-sm text-muted">{t.description}</p> : null}
                     {t.slides ? (
                       <div className="mt-auto pt-4">

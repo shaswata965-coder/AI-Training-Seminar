@@ -1,36 +1,37 @@
-# Agentic AI Workshop 2026 — website
+# DIU AI Training Seminars — website
 
-Official website for the **Agentic AI Workshop 2026**, organised by the Indian Institute of Technology Delhi and the Yardi School of Artificial Intelligence (ScAI), IIT Delhi, **15–16 December 2026**.
+Website for the **AI training seminars of the Department of Computer Science and Engineering, Daffodil International University (DIU)**: two programmes, **AI for Professionals** and **AI for Workspace**, run in batches at Daffodil Smart City, Savar, Dhaka, with hands-on sessions led by the department's trainers.
 
-It's a fast, accessible, mobile-first site with light and dark modes, a light pastel palette and **Aura**, an original rounded robot guide. Aura looks different in each section: a stethoscope for healthcare, a flask for science, a rocket for enterprise, a clipboard for the programme, a laptop and headset for the hackathon, and so on. Organisers update all content from a built-in admin panel, with no code changes.
+This branch (`claude/diu-ai-training`) is a second version of the IIT Delhi Agentic AI Workshop 2026 website, which stays on its original branch: the speakers became trainers, the hackathon and the single-event features (talks and panels of one workshop, the poster session, industry kiosks) are gone, and there is a Past participants page. [`docs/REQUIREMENTS_CHECKLIST.md`](docs/REQUIREMENTS_CHECKLIST.md) maps the brief to the changes and lists what the organisers still need to fill in.
+
+It's a fast, accessible, mobile-first site with light and dark modes, a light pastel palette and **Aura**, an original rounded robot guide who looks different in each section: a rocket for AI for Professionals, a laptop and headset for AI for Workspace, a mortarboard and laser pointer on the Trainers page, a graduation cap and confetti for past participants, and so on. Organisers update all content from a built-in admin panel, with no code changes.
 
 **Stack:** Next.js 16 (App Router, React 19, TypeScript) · Node.js · MongoDB (Mongoose) · Tailwind CSS 4.
 
 | Document | For |
 | --- | --- |
 | This README | Developers and whoever hosts the site |
-| [`docs/ADMIN_GUIDE.md`](docs/ADMIN_GUIDE.md) | Organisers updating content (also inside the admin at **/admin/guide**) |
-| [`docs/REQUIREMENTS_CHECKLIST.md`](docs/REQUIREMENTS_CHECKLIST.md) | How each item of the website brief is met |
-| [`docs/LOAD_TEST_REPORT.md`](docs/LOAD_TEST_REPORT.md) | How the site holds up with 100, 2,000 and 300+ people at once, and what a registration rush needs (tests in [`loadtest/`](loadtest/README.md)) |
+| [`docs/ADMIN_GUIDE.md`](docs/ADMIN_GUIDE.md) | Organisers updating content (a short version is inside the admin at **/admin/guide**) |
+| [`docs/REQUIREMENTS_CHECKLIST.md`](docs/REQUIREMENTS_CHECKLIST.md) | How each item of the brief is met, and what is still a placeholder |
+| [`docs/IMAGE_CREDITS.md`](docs/IMAGE_CREDITS.md) | Where the built-in photos and logos come from, and their licences |
+| [`docs/LOAD_TEST_REPORT.md`](docs/LOAD_TEST_REPORT.md), [`docs/SECURITY_REPORT.md`](docs/SECURITY_REPORT.md) | Load and security tests, run on the earlier (IIT Delhi) version of the site, whose server code this one shares (tests in [`loadtest/`](loadtest/README.md)) |
 
 ---
 
 ## What's included
 
 **Public site**
-- **Home (single scroll, sticky navigation):** a loading screen the first time the site is opened in a browser, and after each update (the main pages' scripts, styles, fonts and images are fetched and cached behind it while Aura's ship (shaped like her, her floating head the cockpit) tries to take off from a pad seen through a round window, small Auras in hard hats work on it and a ring around the window fills with the progress; then she lifts off, smoke fills the screen and clears to reveal the page, and the hero's Aura flies down into place); hero with title, tagline, dates, venue, Aura holding up two placards in turn (workshop registration and hackathon registration, each with its live status, with a switch under her), a compact registration strip along its foot (*Two ways to take part* beside two small cards, *Workshop registration* and *Hackathon team registration*, each with its status from Site settings → Site-wide → Registration; the one matching Aura's placard lights up, and pointing at one brings its placard up), and a photo of the IIT Delhi main building behind Aura, its sign (*भारतीय प्रौद्योगिकी संस्थान दिल्ली* / *Indian Institute of Technology Delhi*) readable above her head and the building fading into the background (`public/hero/`; Site settings → Home → Hero replaces it, shown at the top right instead, or switches it off) (the IIT Delhi emblem, large on a white seal, and the ScAI logo sit at the corners of the navigation bar, and the hero opens with *Organised by Indian Institute of Technology Delhi* above the title); then, in this default order (Site settings → Home → Section order): the workshop's three theme cards, Healthcare, Scientific Discovery and Enterprise (each with a photorealistic AI-generated photo of agents at work in that field across its top, from `public/themes/`, fading into the card with Aura, dressed for the theme, stepping out of it; an upload in Site settings → Home → Themes replaces it; under them, a note that the hackathon has no themes, linking to its question); featured speakers in a looping 3D cover-flow carousel (the front card faces you with its edge spinning, the others turn away round it; arrows, dots, swipe or drag, a sideways trackpad scroll, the arrow keys, or clicking a side card turn it, and it turns by itself until paused, never with reduced motion), with the *Meet all speakers* link card under it; the hackathon (title, tagline, its one question under three large 1s, *1 hackathon · 1 track · 1 question*, with Aura thinking it over and a link to the question on the Hackathon page, team size, mode and prize pool, with *Register your team* and *Hackathon details* buttons); an announcements box; About (Aura in a circle of up to 8 topics from the About page; at rest she strikes a thinking pose with nothing above her head; hovering or tapping a topic makes her point at it and answer with its summary in a speech bubble above her head, which goes away again when you move off it; links to the About page); the highlights as a tear-off ticket (TBA values decode out of scrambled letters, numbers count up); venue and travel as an interactive route map (pick air, train, metro or road and a small Aura travels the route to IIT Delhi on a schematic map of Delhi, drawing it as she goes, while the metro lines that matter light up; links to the full travel guide); a looping strip of partner logos; FAQ and contact form. The navigation bar links Home, Programme, Speakers and Hackathon; everything else, About included, is under *Explore*.
-- **Inner pages:** `/about` (why the workshop, what agentic AI is, the agent loop, who should attend, what happens, add to calendar and share), `/programme` (at a glance: each day's hours and session count, the session formats and the themes; then day tabs, filters by theme and type, search, *My agenda* (starring a session needs signing in: `components/account/Account.tsx`, `lib/server/visitor-auth.ts`), add sessions to a calendar, PDF download; then the industry kiosks with *Exhibit with us*, the hackathon with its schedule slots and key dates, and links to plan the visit), `/venue` (the venue on Google Maps, campus entry, directions by air, train, metro and road with Google Maps links, nearby accommodation and local tips), `/partners` (partners by tier, who you'll meet, ways to take part, sponsorship tiers, *Become a partner*, brochure), `/speakers` (filters, pop-up profiles with talk title and abstract, shareable links, panel discussions), `/tutorials` (tutorials and demos), `/hackathon` (at a glance, sized to fit one desktop screen: who can join with the eligibility rules, team size, dates, location and mode, beside a prize panel with the pool and a podium; the timeline; the challenge (one hackathon, one track, one question: the question large, with the challenge and example ideas, and a note that the three themes are the workshop's); team registration at `#register`, with no theme to pick; then judging criteria, mentors, judges, rules and code of conduct, winners; the old `/hackathon/register` redirects to the form), `/register` (workshop registration only), `/organisers` (faculty, students and volunteers) and `/meet-aura`.
-- **Post-event pages**, hidden until switched on in the admin: `/gallery` (photos), `/talks` (slides and recordings) and hackathon winners.
-- **Forms:** workshop registration, hackathon team registration (up to 6 members), and contact / *Exhibit with us* / sponsorship enquiries. They support deadlines and open/closed status, and send confirmation e-mails with a calendar invite. Every field of each of them can be edited in Site settings (*Registration → Form fields*, *Hackathon → Team form*, *Home → Contact form*, *Programme → Exhibitor form*, *Partners → Sponsor form*): its name, guide, example, type of answer (short or long text, e-mail, phone, number, link, date, drop-down list, one choice, several choices, a yes/no tick box), choices, whether it is required, its step and its place; fields can be hidden and questions added. The fields the site relies on (name, e-mail, consent, team name, message) can be reworded but not removed. The server checks answers against the same settings, and the admin's registration views, CSV exports and organiser e-mails follow them.
-- **Extras:** add-to-calendar (Google, Outlook, .ics), share buttons, SEO metadata, Open Graph images, JSON-LD event data, sitemap, robots.txt, web manifest, favicon, Google Analytics (optional), Vercel Web Analytics (live, cookieless page views in the Vercel dashboard when the site is deployed on Vercel with Analytics enabled for the project; it isn't loaded elsewhere, as only Vercel serves it, nor on admin pages or the admin's live preview).
+- **Home (single scroll, sticky navigation):** a loading screen the first time the site is opened (the site's files are cached behind it while Aura's ship takes off); the hero with the programme's name, tagline, the next batch's dates and venue, Aura holding up a placard for each programme in turn with the registration status, two compact registration cards along its foot (*AI for Professionals* and *AI for Workspace*, each opening the form with its programme ticked), and a photo of DIU's campus behind Aura with the university's sign above her head (the academic building by day in the light theme, the Knowledge Tower by night in the dark theme; `public/hero/`; Site settings → Home → Hero replaces it or switches it off). Then, in this default order (Site settings → Home → Section order): *Registration open* with what to expect and a poster; the two **programme cards**; the **trainers** in a 3D cover-flow carousel; announcements; About (Aura in a circle of up to 8 topics); **past participants' quotes**; the highlights as a tear-off ticket; venue and travel as an interactive **route map of north-west Dhaka** (pick air, train, metro rail or road and a small Aura travels the route to Daffodil Smart City); partner logos; FAQ and contact form. The DIU logo and the Department of CSE seal sit at the corners of the navigation bar, which links Home, Schedule, Trainers and Past participants; everything else is under *Explore*.
+- **Inner pages:** `/about` (why the training, what you will learn, who should attend, how a batch runs), `/programme` (the **Schedule** of the next batch: each day's hours, the session formats and programmes, day tabs, filters by programme and type, search, *My agenda* (starring needs signing in), calendar links, PDF download), `/trainers` (the **lead trainer's spotlight**, then every trainer with filters by programme and pop-up profiles with shareable links), `/past-participants` (numbers, featured quotes, everyone by batch with filters and search), `/tutorials` (**hands-on labs** and demos), `/venue`, `/partners` (partners by tier, ways to take part, partnership tiers, *Become a partner*), `/register`, `/organisers` and `/meet-aura`.
+- **After a batch**, hidden until switched on in the admin: `/gallery` (photos) and `/talks` (slides and recordings).
+- **Forms:** training registration (with the programme and the participant's experience with AI tools) and contact / *Become a partner* enquiries. They support deadlines and open/closed status, and send confirmation e-mails with a calendar invite. Every field can be edited in Site settings (*Registration → Form fields*, *Home → Contact form*, *Partners → Partner form*); the server checks answers against the same settings, and the admin's views, CSV exports and e-mails follow them.
+- **Extras:** add-to-calendar (Google, Outlook, .ics), share buttons, SEO metadata, Open Graph images, JSON-LD event data, sitemap, robots.txt, web manifest, Google Analytics (optional), Vercel Web Analytics (when deployed on Vercel).
 
 **Admin panel (`/admin`)**
-- Sign-in with administrator, editor and volunteer roles. Volunteers get a responsibility and only the permissions an administrator ticks, and everything they change goes to a **task tracker** where administrators see who changed what (before and after) and mark it reviewed.
-- **Site settings with a tab per page:** every section's texts, colours and background, the order of each page's sections (drag or arrows; the hero stays at the top), and the site's accent colours, with the real page as a live preview beside the form (Next.js Draft Mode, visible only to the editor until saved) and warnings when text is too long or short for the layout, both from recommended lengths and from measuring the previewed page.
-- Edit everything: event details and dates, registration status and deadlines, announcements, speakers, programme, panels, tutorials, demos, kiosks, sponsors and tiers, organisers, volunteers, mentors and judges, FAQs, venue and travel, contact and social links, branding (logos, brand colour), SEO and Analytics, and the post-event switches.
-- Media library: uploads are resized and compressed automatically and stored in MongoDB.
-- Registrations and enquiries: search, status, notes and CSV export for Excel.
-- Changes appear on the website immediately.
+- Sign-in with administrator, editor and volunteer roles. Volunteers get a responsibility and only the permissions an administrator ticks, and their changes go to a **task tracker**.
+- **Site settings with a tab per page:** every section's texts, colours and background, the order of each page's sections, sections that can be hidden, and the site's accent colours, with the real page as a live preview beside the form.
+- Edit everything: programme details and batch dates, registration status and deadlines, announcements, the two programmes, trainers, the schedule, hands-on labs, demos, **past participants**, partners and tiers, organisers and volunteers, FAQs, venue and travel, contact and social links, branding, SEO, and the past-batch switches.
+- Media library, registrations and enquiries (search, status, notes, CSV export for Excel). Changes appear on the website immediately.
 
 ---
 
@@ -41,27 +42,27 @@ Requirements: **Node.js 20.9+** (22 LTS recommended) and **MongoDB 6+**, either 
 ```bash
 npm install
 cp .env.example .env.local      # set MONGODB_URI, ADMIN_EMAIL, ADMIN_PASSWORD (AUTH_SECRET optional in dev)
-npm run seed                    # stores the default event content (also happens automatically on first start)
-                                # (including the tentative programme, DEFAULT_SESSIONS in src/lib/content/defaults.ts,
-                                #  added once to a site without sessions, which then shows as a draft)
+npm run seed                    # stores the default content (also happens automatically on first start):
+                                # the nine trainers (DEFAULT_TRAINERS), FAQs and the tentative two-day schedule
+                                # (DEFAULT_SESSIONS in src/lib/content/defaults.ts, shown as a draft)
 npm run dev                     # http://localhost:3000
 ```
 
 Sign in at <http://localhost:3000/admin> with `ADMIN_EMAIL` / `ADMIN_PASSWORD`. On an empty database the first sign-in creates the administrator. You can also create users from the command line:
 
 ```bash
-npm run create-admin -- --email you@iitd.ac.in --name "Your Name"            # asks for a password
-npm run create-admin -- --email editor@iitd.ac.in --role editor
+npm run create-admin -- --email you@daffodilvarsity.edu.bd --name "Your Name"            # asks for a password
+npm run create-admin -- --email editor@daffodilvarsity.edu.bd --role editor
 ```
 
 The same command resets the password of an existing user.
 
 ### Sample content for previews
 
-The brief's real speakers, schedule and partners are not announced yet, so the site starts with friendly "to be announced" placeholders. To preview a fully populated site, load sample content. Every sample item is labelled as a sample (names like *Dr. Meera Placeholder*, *Example University*):
+The trainers and a draft schedule are built in, but past participants, labs, demos and partners start empty, with friendly "coming soon" placeholders. To preview a fully populated site, load sample content. Every sample item is labelled as a sample (names like *Ayesha Sample*, *Example Bank PLC*):
 
 ```bash
-npm run seed:demo                 # adds 8 speakers, a 2-day programme, tutorials, demos, kiosks, partners, mentors, judges, volunteers, announcements
+npm run seed:demo                 # adds 8 past participants in 2 batches (with quotes), 3 labs, 2 demos, partners, volunteers, an announcement
 npm run seed:demo -- --remove     # removes exactly those items (your own content is kept)
 ```
 
@@ -90,27 +91,27 @@ All settings are environment variables; [`.env.example`](.env.example) documents
 | --- | --- | --- |
 | `MONGODB_URI` | yes | MongoDB connection string, e.g. `mongodb://127.0.0.1:27017/aaiw` or an Atlas `mongodb+srv://…` URI |
 | `MONGODB_DB` | | Database name, if not in the URI |
-| `NEXT_PUBLIC_SITE_URL` | yes (prod) | Public origin, e.g. `https://agenticai.iitd.ac.in`. Used in e-mails, calendar files, the sitemap and social previews |
-| `NEXT_PUBLIC_BASE_PATH` | | Serve under a path, e.g. `/agentic-ai-workshop` for `https://scai.iitd.ac.in/agentic-ai-workshop` |
+| `NEXT_PUBLIC_SITE_URL` | yes (prod) | Public origin, e.g. `https://ai-training.daffodilvarsity.edu.bd`. Used in e-mails, calendar files, the sitemap and social previews |
+| `NEXT_PUBLIC_BASE_PATH` | | Serve under a path, e.g. `/ai-training` for `https://cse.daffodilvarsity.edu.bd/ai-training` |
 | `AUTH_SECRET` | yes (prod) | 32+ random characters for signing admin sessions (`openssl rand -base64 48`). Without it the admin panel refuses sign-ins in production |
 | `ADMIN_EMAIL`, `ADMIN_PASSWORD` | | First administrator, created on the first sign-in to an empty database (password: 10+ characters) |
 | `COOKIE_SECURE` | | `false` only to test a production build over plain HTTP. Not needed on localhost |
 | `CLIENT_IP_HEADER` | | Header holding the visitor's IP address, if your proxy sets one it overwrites (e.g. `x-real-ip`, `cf-connecting-ip`). By default the last `X-Forwarded-For` entry is used. Used for rate limits |
-| `RATE_LIMIT_EXEMPT` | | IPv4 addresses or ranges (e.g. `103.27.8.0/22, 14.139.60.5`) where many people share one address and may all register at once, such as the institute's network or the hackathon venue's. Elsewhere one address may send at most 100 registrations, 40 teams and 40 messages per 10 to 15 minutes; each person (address and e-mail) 8, 6 and 5 |
+| `RATE_LIMIT_EXEMPT` | | IPv4 addresses or ranges (e.g. `103.27.8.0/22, 14.139.60.5`) where many people share one address and may all register at once, such as the university's network or a computer lab's. Elsewhere one address may send at most 100 registrations and 40 messages per 10 to 15 minutes; each person (address and e-mail) 8 and 5 |
 | `SMTP_HOST`, `SMTP_PORT`, `SMTP_SECURE`, `SMTP_USER`, `SMTP_PASS` | | Outgoing mail for confirmations and organiser notifications. Without them, forms still work but no e-mail is sent |
 | `SMTP_MAX_CONNECTIONS`, `SMTP_MAX_PER_MINUTE` | | Connections to the mail server at once (default 3), and e-mails a minute at most (default no limit; set it under your provider's limit, e.g. 30 for Microsoft 365). E-mails beyond it wait their turn, and one the server turns away for now is tried again for about 8 minutes |
-| `MAIL_FROM` | | Sender, e.g. `"Agentic AI Workshop 2026 <no-reply@iitd.ac.in>"` |
-| `NOTIFY_EMAIL` | | Where organiser notifications go: new hackathon teams and enquiries (overridable in Admin → Site settings → Site-wide → Contact & social) |
+| `MAIL_FROM` | | Sender, e.g. `"DIU AI Training Seminars <no-reply@daffodilvarsity.edu.bd>"` |
+| `NOTIFY_EMAIL` | | Where organiser notifications of new enquiries go (overridable in Admin → Site settings → Site-wide → Contact & social) |
 | `NEXT_PUBLIC_GA_ID` | | Google Analytics 4 ID `G-…` (or set it in Admin → Site settings → Site-wide → SEO & analytics) |
 | `MAX_UPLOAD_MB` | | Max size per upload (default 8) |
 
-**How content is stored:** everything editable lives in MongoDB, including uploaded images and PDFs (GridFS bucket `media`). Backing up the database backs up the whole site. If the database is unreachable, the public site still renders with the built-in default content from the brief, and forms show a friendly error.
+**How content is stored:** everything editable lives in MongoDB, including uploaded images and PDFs (GridFS bucket `media`). Backing up the database backs up the whole site. If the database is unreachable, the public site still renders with the built-in default content (programme details, trainers, schedule, FAQs), and forms show a friendly error.
 
 ---
 
 ## Deployment
 
-The site needs a Node.js server; it is not a static export. Use either of the two options below. Serve it over **HTTPS** at an IIT Delhi subdomain (e.g. `agenticai.iitd.ac.in`) or a path (e.g. `scai.iitd.ac.in/agentic-ai-workshop`, with `NEXT_PUBLIC_BASE_PATH=/agentic-ai-workshop`).
+The site needs a Node.js server; it is not a static export. Use either of the two options below. Serve it over **HTTPS** at a DIU subdomain (e.g. `ai-training.daffodilvarsity.edu.bd`) or a path (e.g. `cse.daffodilvarsity.edu.bd/ai-training`, with `NEXT_PUBLIC_BASE_PATH=/ai-training`).
 
 ### Option A — Docker Compose (website + MongoDB)
 
@@ -118,7 +119,7 @@ The site needs a Node.js server; it is not a static export. Use either of the tw
 cp .env.example .env    # set NEXT_PUBLIC_SITE_URL, AUTH_SECRET, ADMIN_EMAIL, ADMIN_PASSWORD, SMTP_* (MONGODB_URI is set by compose)
 docker compose up -d --build
 docker compose run --rm tools seed                                   # optional: default content (also automatic)
-docker compose run --rm tools create-admin -- --email you@iitd.ac.in --password 'a-long-password'
+docker compose run --rm tools create-admin -- --email you@daffodilvarsity.edu.bd --password 'a-long-password'
 ```
 
 The site listens on port 3000 of this machine only (`PORT` in `.env` changes the port), for the reverse proxy below; set `BIND=0.0.0.0` to publish it on every interface. MongoDB data persists in the `mongo-data` volume. To update, run `git pull && docker compose up -d --build`.
@@ -128,7 +129,7 @@ The image is built without database access, so its pages start with the default 
 ### Option B — Node.js + PM2 on a server
 
 ```bash
-git clone <repo> agentic-ai-workshop && cd agentic-ai-workshop
+git clone <repo> diu-ai-training && cd diu-ai-training
 npm ci
 cp .env.example .env.local        # production values; NODE_ENV is set by `npm start`
 npm run build
@@ -141,7 +142,7 @@ To update: `git pull && npm ci && npm run build && pm2 restart aaiw`.
 
 ### Reverse proxy with HTTPS (Nginx)
 
-Put this in `/etc/nginx/sites-available/agentic-ai-workshop` and enable it (`ln -s ../sites-available/agentic-ai-workshop /etc/nginx/sites-enabled/`):
+Put this in `/etc/nginx/sites-available/diu-ai-training` and enable it (`ln -s ../sites-available/diu-ai-training /etc/nginx/sites-enabled/`):
 
 ```nginx
 upstream aaiw {
@@ -157,9 +158,9 @@ map $http_accept_encoding $aaiw_encoding { ~*gzip gzip; default ""; }
 
 server {
     listen 443 ssl http2;
-    server_name agenticai.iitd.ac.in;
-    ssl_certificate     /etc/ssl/iitd/fullchain.pem;   # institute certificate or Let's Encrypt (certbot --nginx)
-    ssl_certificate_key /etc/ssl/iitd/privkey.pem;
+    server_name ai-training.daffodilvarsity.edu.bd;
+    ssl_certificate     /etc/ssl/diu/fullchain.pem;   # university certificate or Let's Encrypt (certbot --nginx)
+    ssl_certificate_key /etc/ssl/diu/privkey.pem;
     client_max_body_size 10m;                          # uploads (MAX_UPLOAD_MB)
 
     proxy_http_version 1.1;
@@ -198,7 +199,7 @@ server {
         proxy_no_cache $aaiw_no_cache;
     }
 }
-server { listen 80; server_name agenticai.iitd.ac.in; return 301 https://$host$request_uri; }
+server { listen 80; server_name ai-training.daffodilvarsity.edu.bd; return 301 https://$host$request_uri; }
 ```
 
 And in `/etc/nginx/nginx.conf`, give nginx enough connections for a busy day (every visitor holds one, and every request passed to Node.js another; Ubuntu's default is 768 per worker):
@@ -210,15 +211,15 @@ events {
 }
 ```
 
-Then `sudo nginx -t && sudo systemctl reload nginx`. On a 2-core server this served 2,000 people registering within the same minute with no errors, where a plain `proxy_pass` failed most of them ([`docs/LOAD_TEST_REPORT.md`](docs/LOAD_TEST_REPORT.md)).
+Then `sudo nginx -t && sudo systemctl reload nginx`. On a 2-core server this served 2,000 people registering within the same minute with no errors, where a plain `proxy_pass` failed most of them ([`docs/LOAD_TEST_REPORT.md`](docs/LOAD_TEST_REPORT.md), measured on the earlier version of the site, which shares this server code).
 
-`Host` must be passed through: the admin API rejects cross-site requests by comparing the browser's `Origin` with it. For a sub-path, build with `NEXT_PUBLIC_BASE_PATH` set to the same path, put the path in front of every `location` (`/agentic-ai-workshop/api/`, `/agentic-ai-workshop/admin`, `/agentic-ai-workshop/_next/static/`, `/agentic-ai-workshop/`) and proxy without stripping the prefix. Run one Node.js process only: rate limits and the page cache live in its memory.
+`Host` must be passed through: the admin API rejects cross-site requests by comparing the browser's `Origin` with it. For a sub-path, build with `NEXT_PUBLIC_BASE_PATH` set to the same path, put the path in front of every `location` (`/ai-training/api/`, `/ai-training/admin`, `/ai-training/_next/static/`, `/ai-training/`) and proxy without stripping the prefix. Run one Node.js process only: rate limits and the page cache live in its memory.
 
 ### After deploying
 
 1. Open `/api/health`. It should return `{"status":"ok","db":"connected"}`.
 2. Sign in at `/admin`, change the password (My account), and add the other organisers under **Users**.
-3. In **Site settings**, set the contact e-mail and phone, check the registration status and deadlines, and add the Google Analytics ID.
+3. In **Site settings**, set the next batch's dates, the fees, the contact e-mail and phone, check the registration status and deadlines, and add the Google Analytics ID. Then fill in the trainers' designations and photos, and the schedule (see the list at the end of [`docs/REQUIREMENTS_CHECKLIST.md`](docs/REQUIREMENTS_CHECKLIST.md)).
 4. Confirm `NEXT_PUBLIC_SITE_URL` is right. Social previews and e-mail links use it.
 5. Send a test registration to check that e-mail works.
 
@@ -238,47 +239,51 @@ With Docker, run the same commands inside the `mongo` container, e.g. `docker co
 ```
 src/
   app/
-    (site)/            public pages (home, about, programme, speakers, tutorials, hackathon, venue, partners, register, organisers, gallery, talks, meet-aura)
+    (site)/            public pages (home, about, programme (the schedule), trainers, past-participants, tutorials (hands-on labs), venue, partners, register, organisers, gallery, talks, meet-aura)
     admin/             admin panel (login, dashboard, content editors, settings, registrations, media, users, volunteers, task tracker, guide)
-    api/               public APIs (register, hackathon/register, enquiries, calendar, programme/pdf, media, health) and /api/admin/*
+    api/               public APIs (register, enquiries, calendar, programme/pdf, media, health) and /api/admin/*
     opengraph-image.tsx, sitemap.ts, robots.ts, manifest.ts, icon.svg …
   components/
-    aura/              Aura mascot: SVG art, 33 presets, eye-tracking, reactions, fly-in entrances, playground
+    aura/              Aura mascot: SVG art, 29 presets, eye-tracking, reactions, fly-in entrances, playground
     loading/           the home page's loading screen (Aura's ship, the crew, the progress ring, the smoke), the asset caching behind it, and the service worker registration
-    home/ programme/ partners/ speakers/ tutorials/ hackathon/ gallery/ forms/ share/ layout/ ui/ effects/ admin/
+    home/ programme/ partners/ trainers/ participants/ tutorials/ venue/ gallery/ forms/ share/ layout/ ui/ effects/ admin/
   lib/
     schema/            field definitions for every content type (drive the admin forms, validation and database schemas)
-    content/           defaults from the brief, cached queries, bootstrap
+    content/           default content (settings, trainers, schedule, FAQs), cached queries, bootstrap
     server/            auth, e-mail, PDF, CSV, validation, admin CRUD (server-only)
   proxy.ts             protects /admin pages
 scripts/               seed, seed:demo, create-admin
 assets/fonts/          fonts for the social preview images (SIL Open Font License); site fonts are in src/app/fonts
-docs/                  admin guide and requirements checklist
+docs/                  admin guide, requirements checklist, image credits, earlier test reports
 ```
 
 **Section order:** the sections of a page that admins may move are listed, in their default order, in `src/lib/schema/section-order.ts` (by their Site settings section keys). Each such page gets a *Section order* tab in Site settings (an `order` field, `<page>Order`, so volunteers can move only their own pages' sections), and the page renders those sections through `<InOrder s={s} page="…" sections={{ key: <Section …/>, … }}>` (`components/layout/InOrder.tsx`), with its hero outside it, first. A saved order is made whole as it's read: unknown keys are dropped and sections added since are put back after the one they follow by default. To make a new section movable, add its key to the page's list and to the page's `sections`.
 
-**Hidden sections:** the sections that can be hidden are listed per page in `HIDEABLE_SECTIONS` (same file): every movable one, plus the lists of *Speakers* and *Tutorials* and the form, fees and deadlines of *Registration*; the hero always shows. Each page keeps the keys of its hidden ones in a `multiselect` field, `<page>Hidden` (`SettingsPage.hidden` in `src/lib/schema/resources.ts`, scoped to the page like its other fields), switched by the *Show this section on the page* toggle at the top of each section's tab in Site settings. `InOrder` leaves hidden sections out; pages without a Section order check `isShown(s, page, key)`, as do links that only lead to a section (the home sections in `sectionNav`, the Hackathon page's Register buttons). A tab that is part of another section (`within`) is hidden with it.
+**Hidden sections:** the sections that can be hidden are listed per page in `HIDEABLE_SECTIONS` (same file): every movable one, plus the lead trainer's spotlight and the list on *Trainers*, the list on *Hands-on labs* and the form, fees and deadlines of *Registration*; the hero always shows. Each page keeps the keys of its hidden ones in a `multiselect` field, `<page>Hidden` (`SettingsPage.hidden` in `src/lib/schema/resources.ts`, scoped to the page like its other fields), switched by the *Show this section on the page* toggle at the top of each section's tab in Site settings. `InOrder` leaves hidden sections out; pages without a Section order check `isShown(s, page, key)`, as do links that only lead to a section (the home sections in `sectionNav`). A tab that is part of another section (`within`) is hidden with it.
 
-**Hackathon details in Site settings:** a Site settings section can show fields of the hackathon details beside its texts (`hackathon` on the section: the Hackathon page's tagline in *Hero*, its overview in *At a glance*, the prize pool and prizes in *Prize money*). Site settings loads and saves them under `/api/admin/singleton/hackathon`, so they stay one text with Admin → Hackathon, for users who may edit both; their unsaved draft goes to the preview as `hackathon-draft` (`POST /api/admin/preview?key=hackathon`), which `getHackathon()` reads in Draft Mode as `getSettings()` reads `settings-draft`.
+**Programmes:** AI for Professionals and AI for Workspace are the content's *themes* in the code (`THEME_KEYS` in `src/lib/content/constants.ts`: `professionals`, `workspace` and `general` for both), with their labels, colours and Aura looks in `THEME_META`. Sessions, labs, demos, trainers and past participants each have a `theme` field; the home page's programme cards are `themes` in the settings. Links may name a programme (`/programme?theme=workspace`, `/register?programme=professionals`, which ticks it on the form).
 
-**Adding a field to a content type** (for example a "pronouns" field for speakers): add it to the collection's `fields` in `src/lib/schema/resources.ts` and to its type in `src/lib/content/types.ts`, then render it. The admin form, validation and database schema follow automatically.
+**Trainers and past participants:** the trainers of the department's list are `DEFAULT_TRAINERS` (`src/lib/content/defaults.ts`), stored on a site's first start and shown from the code while there is no database; the one marked `lead` is the Trainers page's spotlight (`components/trainers/TrainerSpotlight.tsx`). Past participants are the `participants` collection, grouped by their `batch` text and ordered by `completed` (`src/lib/participants.ts`); those with a quote and `featured` appear in *What participants say* and on the home page.
 
-**Forms:** each public form's built-in fields (their default wording, the types they may take, whether they are always required) are listed in `src/lib/forms.ts`, with the code that checks answers, shared by the browser and the server (`lib/server/validation.ts`). The fields as edited are saved in the site settings (`registerFields`, `hackathonFields`, `hackathonMemberFields`, `contactFields`, `exhibitFields`, `partnerFields`) and made whole as they're read (`formFields()`: unknown keys dropped, missing built-in fields put back, locked types and requirements restored). Answers to built-in fields are stored in their own columns; answers to added questions (keys `q-…`) under `answers`. Answers to a question that was later deleted stay in the record and show as *Earlier question* in the admin and the CSV.
+**Adding a field to a content type** (for example a "pronouns" field for trainers): add it to the collection's `fields` in `src/lib/schema/resources.ts` and to its type in `src/lib/content/types.ts`, then render it. The admin form, validation and database schema follow automatically.
+
+**Forms:** each public form's built-in fields (their default wording, the types they may take, whether they are always required) are listed in `src/lib/forms.ts`, with the code that checks answers, shared by the browser and the server (`lib/server/validation.ts`). The fields as edited are saved in the site settings (`registerFields`, `contactFields`, `partnerFields`) and made whole as they're read (`formFields()`: unknown keys dropped, missing built-in fields put back, locked types and requirements restored). Answers to built-in fields are stored in their own columns; answers to added questions (keys `q-…`) under `answers`. Answers to a question that was later deleted stay in the record and show as *Earlier question* in the admin and the CSV.
 
 **Caching:** public pages are rendered once and cached (`'use cache'` with tags). Saving in the admin expires the matching tags, so the next visitor gets fresh content (behind the nginx configuration above, within about 2 seconds, its micro-cache; organisers signed in see it at once). Time-based refresh (5 minutes) is only a safety net for direct database edits.
 
-**IIT Delhi badge:** every full-size Aura, except on the home page, wears the IIT Delhi emblem on a white pin on her upper chest (`Badge` in `components/aura/AuraArt.tsx`, drawn from `public/logos/iit-delhi.svg`; the social preview images inline it, as they render from a data URI). It sits above a placard and clear of the chest emblem; props and fins held across her go over it. Pass `badge={false}` to leave it off, or wrap part of a page in `<AuraBadge wear={false}>` (`components/aura/Aura.tsx`) to leave it off every Aura inside. The home page has none: `AuraBadgeByPage` (`components/layout/AuraBadgeByPage.tsx`) wraps the site's layout and takes it off at `/`, where the IIT Delhi building and its sign already stand behind her.
+**DIU badge:** every full-size Aura, except on the home page, wears the DIU shield on a white pin on her upper chest (`Badge` in `components/aura/AuraArt.tsx`, drawn from `public/logos/diu-shield.png`; the social preview images inline it, as they render from a data URI). Pass `badge={false}` to leave it off, or wrap part of a page in `<AuraBadge wear={false}>` (`components/aura/Aura.tsx`) to leave it off every Aura inside. The home page has none: `AuraBadgeByPage` (`components/layout/AuraBadgeByPage.tsx`) takes it off at `/`, where the campus and its sign already stand behind her.
 
-**Placard:** `<Aura placard="…">` has Aura hold a large sign with those words in front of her in both fins (the `holdWide` pose); `AuraArt` breaks the text into up to three lines at the largest size that fits the board, from the display font's measured letter widths. When the words change the board flips down to show the new ones (`placardFlip`). The home hero's Aura holds up two in turn, workshop and hackathon registration (`components/home/HeroPlacards.tsx`), from Site settings → Home → Hero announcements: a bar filling under the switch times each one (CSS, so it pauses with the page's animations, while the pointer or focus is on her or a registration card, and never runs with reduced motion); the hero section is marked `data-placard` so the matching ticket in `RegisterChooser.tsx` lights up, and pointing at a card (`data-placard-key`) brings its placard up.
+**Hero photo:** the built-in campus photos (`public/hero/`, `CAMPUS` in `components/home/Hero.tsx`) are placed by their "Daffodil International University" sign (`sx`, `sy`), centred over Aura's column, faded in from the left (`fade`) to keep clear of the title; the day photo shows in the light theme and the night one in the dark theme. An uploaded photo replaces both and sits at the top right instead.
+
+**Placard:** `<Aura placard="…">` has Aura hold a large sign with those words in front of her in both fins (the `holdWide` pose); `AuraArt` breaks the text into up to three lines at the largest size that fits the board, from the display font's measured letter widths. When the words change the board flips down to show the new ones (`placardFlip`). The home hero's Aura holds up two in turn, one per programme with the registration status (`components/home/HeroPlacards.tsx`), from Site settings → Home → Hero announcements: a bar filling under the switch times each one (CSS, so it pauses with the page's animations, while the pointer or focus is on her or a registration card, and never runs with reduced motion); the hero section is marked `data-placard` so the matching ticket in `RegisterChooser.tsx` lights up, and pointing at a card (`data-placard-key`) brings its placard up.
 
 **Motion:** Aura flies into place (Auras smaller than 56 px just appear). Page heroes use `entrance="load"` (pure CSS, on page load); other Auras fly in from the nearest edge when scrolled into view (`components/aura/entrance.ts`). A flight takes 2 s (1.6 s on phones; `zip` 1.1 s, `drift` 2.2 s), set by `--fly-dur` in `components/aura/aura.css`. Pass `entrance="zip" | "drift" | "none"` to change that. Micro-interactions live in `src/app/micro.css` with one delegated script (`components/effects/MicroInteractions.tsx`). Opt an element in with `data-ripple` (ink ripple on press), `data-glow` (cursor-following light on cards), `data-burst` (star spin and ring when pressed), or the `mi-link`, `mi-underline` and `mi-stagger` classes. Segmented controls use `useSlidingPill` (`components/ui/SlidingPill.tsx`). With *reduced motion* turned on, Auras simply appear in place; with JavaScript off, nothing is left hidden. **Loading screen and caching** (`components/loading/`): an inline script in the root layout's `<head>` (`flag.ts`) names the build from the home page's content-hashed script and stylesheet URLs and, if this browser hasn't cached that build's files yet, marks `<html data-launch="run">` before anything is drawn, so the screen covers the page from the first paint and the hero Aura's fly-in waits for it (`"quiet"` instead, with no screen, for `#section` links and reduced motion). The screen draws from the first bytes of HTML: CSS is inlined into the page (`experimental.inlineCss`), so there are no stylesheet requests to wait for, and the fonts aren't preloaded (Chrome holds the first paint for preloaded fonts). The head script moves the ring while the page's own scripts and images load; then `warm.ts` waits for the fonts, prefetches the main pages through the router (their data and scripts), and saves the images they show (listed by the home page from the content) and the build files loaded so far in the `aaiw-assets-v1` Cache Storage cache, from a worker, reporting real progress to the ring. When all is cached (or after 10 s, with caching going on behind), Aura lifts off, and the build is remembered in localStorage, so the screen is skipped until the next update. `public/sw.js`, registered on every public page in production, serves build files and uploads from that cache (cache first; other images are refreshed in the background) and leaves pages, the admin and the API alone. Every moving part of the screen is its own element animated only with `transform` and `opacity`, which the browser's compositor runs off the main thread, so it stays smooth while the page loads; behind it the page is hidden and its animations paused (the hero's network canvas rests too). If the screen's script never runs, it hides itself after 16 s. To see it again, open the site in a private window or clear its site data.
 
 **Hero network:** the animated agent network fills the hero but keeps clear of text: mark an element `data-graph-avoid="text"` to clear just its lines of text, or `data-graph-avoid=""` to clear its whole box (`components/effects/NetworkCanvas.tsx`).
 
-**Buttons and links to other pages:** nothing is pill-shaped. Buttons are keycaps (`.key` in `src/app/micro.css`, used by `Button`/`ButtonLink` in `components/ui/Button.tsx`): rounded rectangles on a solid edge that rise on hover and press down while held; filter toggles that are on stay pressed in. A link from a section to another page is a `Portal` (`components/ui/Portal.tsx`) instead: a card with a small preview of the destination (`components/portals/PortalArt.tsx`: speakers' faces, the agent loop, a crop of the route map, a two-day timetable, the hackathon trophy, FAQ bubbles) and an agent trace that signals the arrow on hover. **Section header labels** (`Eyebrow` in `components/ui/Section.tsx`, used by `SectionHeading` and `PageHero`) are one style everywhere, with no box: larger letter-spaced text in the section's colour, led by a mini Aura in the section's colour that floats, blinks, glances at the label and now and then waves (`components/aura/MiniAura.tsx`); centred headings get one on each side, facing the label (`.eyebrow` in `src/app/tags.css`). **Text tags:** badges and small labels are never pill-shaped. Each section picks a tag style (`bracket`, `underline`, `ribbon`, `slash`, `tab`, `stamp`, `corner` or `label`) with `<Section tags="…">`, `data-tags="…"` or, for a whole page, `<TagScope style="…">`; every `.tag` inside follows (`src/app/tags.css`, `components/ui/Tag.tsx`).
+**Buttons and links to other pages:** nothing is pill-shaped. Buttons are keycaps (`.key` in `src/app/micro.css`, used by `Button`/`ButtonLink` in `components/ui/Button.tsx`): rounded rectangles on a solid edge that rise on hover and press down while held; filter toggles that are on stay pressed in. A link from a section to another page is a `Portal` (`components/ui/Portal.tsx`) instead: a card with a small preview of the destination (`components/portals/PortalArt.tsx`: trainers' or participants' faces, the agent loop, a crop of the route map, a two-day timetable, FAQ bubbles) and an agent trace that signals the arrow on hover. **Section header labels** (`Eyebrow` in `components/ui/Section.tsx`, used by `SectionHeading` and `PageHero`) are one style everywhere, with no box: larger letter-spaced text in the section's colour, led by a mini Aura in the section's colour that floats, blinks, glances at the label and now and then waves (`components/aura/MiniAura.tsx`); centred headings get one on each side, facing the label (`.eyebrow` in `src/app/tags.css`). **Text tags:** badges and small labels are never pill-shaped. Each section picks a tag style (`bracket`, `underline`, `ribbon`, `slash`, `tab`, `stamp`, `corner` or `label`) with `<Section tags="…">`, `data-tags="…"` or, for a whole page, `<TagScope style="…">`; every `.tag` inside follows (`src/app/tags.css`, `components/ui/Tag.tsx`).
 
-**Changing a default:** a site stores the default settings and hackathon details of its day when it is set up, so a new default reaches existing sites only if the old one is listed in `RETIRED` (`src/lib/content/defaults.ts`): a stored value that is still an earlier default, never edited, is read as the current one (`withCurrentDefaults`, for the site and the admin alike), and edited values are kept. Theme keys renamed since they were stored (`entrepreneurship`, now `enterprise`) are read as their new keys (`currentThemeKey` in `src/lib/content/constants.ts`). The database itself is not changed.
+**Changing a default:** a site stores the default settings of its day when it is set up, so a new default reaches existing sites only if the old one is listed in `RETIRED` (`src/lib/content/defaults.ts`, empty for now): a stored value that is still an earlier default, never edited, is read as the current one (`withCurrentDefaults`, for the site and the admin alike), and edited values are kept. Other names for a programme key (`workplace` for `workspace`) are read as the key (`currentThemeKey` in `src/lib/content/constants.ts`). The database itself is not changed.
 
 **No em dashes:** the site's own text avoids them, and stored content is shown with any em dash replaced (`stripEmDashes` in `src/lib/content/normalize.ts`), without changing the database.
 
@@ -288,7 +293,7 @@ docs/                  admin guide and requirements checklist
 
 - Semantic HTML, a skip link, visible focus styles, labelled form fields with inline errors, keyboard-friendly dialogs and tabs, and colour contrast checked in both themes. Animations respect *reduced motion* and are lighter on small screens.
 - Pages are pre-rendered and cached, fonts are self-hosted, images are compressed WebP, heavy widgets (map, videos) load only when clicked or scrolled into view, and there are no large client libraries.
-- Admin sessions are signed JWTs (HS256, `AUTH_SECRET`) in HTTP-only, SameSite cookies, each tied to a session stored in the database: signing out, a password change or a disabled account ends them at once. Passwords are stored only as bcrypt hashes (cost 12). Sign-in is rate-limited by failed attempts (without letting anyone lock an account), takes the same time whether or not an account exists, and state-changing requests must come from the site's own pages. Every field of every form is type- and length-checked on the server and cleaned of control characters; links must be http(s), mailto, tel or a path on the site. Pages send a Content-Security-Policy, HSTS and the usual hardening headers; uploaded SVGs are checked for scripts, downloaded rather than shown when opened directly, and sandboxed; CSV exports are protected against formula injection. Details and test results: [docs/SECURITY_REPORT.md](docs/SECURITY_REPORT.md).
+- Admin sessions are signed JWTs (HS256, `AUTH_SECRET`) in HTTP-only, SameSite cookies, each tied to a session stored in the database: signing out, a password change or a disabled account ends them at once. Passwords are stored only as bcrypt hashes (cost 12). Sign-in is rate-limited by failed attempts (without letting anyone lock an account), takes the same time whether or not an account exists, and state-changing requests must come from the site's own pages. Every field of every form is type- and length-checked on the server and cleaned of control characters; links must be http(s), mailto, tel or a path on the site. Pages send a Content-Security-Policy, HSTS and the usual hardening headers; uploaded SVGs are checked for scripts, downloaded rather than shown when opened directly, and sandboxed; CSV exports are protected against formula injection. Details and test results (from the earlier version of the site, which shares this code): [docs/SECURITY_REPORT.md](docs/SECURITY_REPORT.md).
 
 ## Handover checklist
 
@@ -297,9 +302,9 @@ docs/                  admin guide and requirements checklist
 - [ ] Secrets in the server environment, not in git: `MONGODB_URI`, `AUTH_SECRET`, SMTP credentials.
 - [ ] Admin accounts for each organiser (Admin → Users) and volunteer (Admin → Volunteers); first administrator from `ADMIN_EMAIL` / `ADMIN_PASSWORD` or `npm run create-admin`.
 - [ ] Update guide for organisers: [`docs/ADMIN_GUIDE.md`](docs/ADMIN_GUIDE.md) (also at `/admin/guide`).
-- [ ] Sample content removed (`npm run seed:demo -- --remove`); official logos uploaded; contact details filled in.
+- [ ] Sample content removed (`npm run seed:demo -- --remove`); the next batch's dates, fees, trainers' details, schedule and contact details filled in (see [`docs/REQUIREMENTS_CHECKLIST.md`](docs/REQUIREMENTS_CHECKLIST.md)).
 - [ ] Database backups scheduled.
 
 ## Credits and licences
 
-Aura is an original character drawn in SVG for this site. Fonts: Inter and Outfit, bundled in `src/app/fonts` so builds need no internet access (SIL Open Font License; see `src/app/fonts/LICENSE.md`). Icons: Lucide (ISC). The IIT Delhi and ScAI logos are in `public/logos`: the IIT Delhi emblem as a vector in its red (`iit-delhi.svg`, always set on a white disc), the ScAI wordmark white on transparent (darkened automatically in light mode); Admin → Site settings → Logos & images can replace them.
+Aura is an original character drawn in SVG for this site. Fonts: Inter and Outfit, bundled in `src/app/fonts` so builds need no internet access (SIL Open Font License; see `src/app/fonts/LICENSE.md`). Icons: Lucide (ISC). The DIU logo, the DIU shield and the Department of CSE seal are in `public/logos`, from the department's own documents; Admin → Site settings → Logos & images can replace them. The campus photos are from Wikimedia Commons: the academic building by Nurunnaby Chowdhury (Hasive), CC BY-SA 4.0 (credited in the site's footer), and the Knowledge Tower at night by 0ximjub43r, CC0; see [`docs/IMAGE_CREDITS.md`](docs/IMAGE_CREDITS.md).

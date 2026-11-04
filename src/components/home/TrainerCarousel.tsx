@@ -8,22 +8,22 @@ import { Badge } from "@/components/ui/Badge";
 import { cn } from "@/lib/cn";
 import type { Tone } from "@/lib/content/constants";
 
-export interface SpeakerSlide {
+export interface TrainerSlide {
   id: string;
   href: string;
   name: string;
   photo: string;
   designation: string;
   affiliation: string;
-  keynote: boolean;
+  lead: boolean;
   label: string;
   labelTone: Tone;
   tone: Tone;
   theme?: { label: string; tone: Tone };
-  talkTitle: string;
+  expertise: string;
 }
 
-type Slide = { kind: "speaker"; id: string; sp: SpeakerSlide } | { kind: "more"; id: string };
+type Slide = { kind: "trainer"; id: string; sp: TrainerSlide } | { kind: "more"; id: string };
 
 /** Where slide i sits from the front one: 0 in front, then ±1, ±2… round the loop, the far side shared out evenly. */
 function place(i: number, active: number, n: number) {
@@ -38,7 +38,7 @@ const NAV =
 const STRETCH =
   "after:absolute after:inset-0 after:z-[1] after:rounded-[1.75rem] focus-visible:outline-none focus-visible:after:outline-2 focus-visible:after:outline-offset-[-2px] focus-visible:after:outline-[var(--ring)] focus-visible:after:outline-solid";
 
-function SpeakerCard({ sp, front, link }: { sp: SpeakerSlide; front: boolean; link: string }) {
+function TrainerCard({ sp, front, link }: { sp: TrainerSlide; front: boolean; link: string }) {
   return (
     <div className={cn(`tone-${sp.tone}`, "sp-card relative isolate flex h-full overflow-hidden rounded-[1.75rem] p-[2px] shadow-card-lg")}>
       {/* The edge: a conic gradient spinning behind the front card, seen only in the 2px around it. */}
@@ -49,7 +49,7 @@ function SpeakerCard({ sp, front, link }: { sp: SpeakerSlide; front: boolean; li
           <span aria-hidden className="absolute -top-10 -right-8 h-36 w-36 rounded-full bg-[radial-gradient(closest-side,color-mix(in_oklab,var(--surface)_70%,transparent),transparent)]" />
           <div className="relative flex items-start justify-between gap-2 p-3.5">
             <Badge tone={sp.labelTone} size="xs" className="shadow-card">
-              {sp.keynote ? <Star size={11} aria-hidden fill="currentColor" /> : null}
+              {sp.lead ? <Star size={11} aria-hidden fill="currentColor" /> : null}
               {sp.label}
             </Badge>
             {sp.theme ? (
@@ -73,8 +73,8 @@ function SpeakerCard({ sp, front, link }: { sp: SpeakerSlide; front: boolean; li
           </h3>
           {sp.designation ? <p className="mt-1 line-clamp-2 text-sm text-muted">{sp.designation}</p> : null}
           {sp.affiliation ? <p className="mt-0.5 line-clamp-1 text-sm font-medium text-subtle">{sp.affiliation}</p> : null}
-          {sp.talkTitle ? (
-            <p className="mt-4 line-clamp-3 w-full rounded-2xl bg-accent-soft/70 px-4 py-3 text-sm font-medium text-accent-ink ring-1 ring-[color-mix(in_oklab,var(--accent)_35%,transparent)] ring-inset">“{sp.talkTitle}”</p>
+          {sp.expertise ? (
+            <p className="mt-4 line-clamp-3 w-full rounded-2xl bg-accent-soft/70 px-4 py-3 text-sm font-medium text-accent-ink ring-1 ring-[color-mix(in_oklab,var(--accent)_35%,transparent)] ring-inset">“{sp.expertise}”</p>
           ) : null}
           <span aria-hidden className="mt-auto inline-flex items-center gap-1.5 pt-4 text-sm font-semibold text-accent-ink">
             {link}
@@ -87,16 +87,16 @@ function SpeakerCard({ sp, front, link }: { sp: SpeakerSlide; front: boolean; li
 }
 
 /**
- * The home page's speakers as a looping cover flow: the front card faces you with its edge spinning, the
+ * The home page's trainers as a looping cover flow: the front card faces you with its edge spinning, the
  * others turn away round it, dimmed. Arrows, the dots, a swipe or drag, a sideways trackpad scroll and the
  * arrow keys turn it; pointing at a side card and clicking brings it to the front, and clicking the front
- * card opens that speaker's profile. It turns by itself while a bar fills in the dot of the front card (CSS,
+ * card opens that trainer's profile. It turns by itself while a bar fills in the dot of the front card (CSS,
  * so it holds while the pointer or focus is on the carousel, while it is off screen, after Pause, and never
  * runs with reduced motion). A slide that would have to cross behind the others to keep its place in the
  * loop fades back in at its new place instead.
  */
-export function SpeakerCarousel({ speakers, more, label, link }: { speakers: SpeakerSlide[]; more?: ReactNode; label: string; link: string }) {
-  const slides: Slide[] = [...speakers.map((sp): Slide => ({ kind: "speaker", id: sp.id, sp })), ...(more ? [{ kind: "more" as const, id: "more" }] : [])];
+export function TrainerCarousel({ trainers, more, label, link }: { trainers: TrainerSlide[]; more?: ReactNode; label: string; link: string }) {
+  const slides: Slide[] = [...trainers.map((sp): Slide => ({ kind: "trainer", id: sp.id, sp })), ...(more ? [{ kind: "more" as const, id: "more" }] : [])];
   const n = slides.length;
   const [state, setState] = useState({ active: 0, laps: [] as number[] });
   const [playing, setPlaying] = useState(true);
@@ -129,7 +129,7 @@ export function SpeakerCarousel({ speakers, more, label, link }: { speakers: Spe
     });
     if (announce) {
       const s = slides[next];
-      setSaid(`${next + 1} of ${n}${s.kind === "speaker" ? `: ${s.sp.name}` : ""}`);
+      setSaid(`${next + 1} of ${n}${s.kind === "trainer" ? `: ${s.sp.name}` : ""}`);
     }
   }
 
@@ -215,7 +215,7 @@ export function SpeakerCarousel({ speakers, more, label, link }: { speakers: Spe
     >
       <div
         ref={stageRef}
-        id="speaker-carousel-stage"
+        id="trainer-carousel-stage"
         onPointerDown={onPointerDown}
         onPointerMove={onPointerMove}
         onPointerUp={onPointerEnd}
@@ -242,7 +242,7 @@ export function SpeakerCarousel({ speakers, more, label, link }: { speakers: Spe
               onClick={front ? undefined : () => go(i, true)}
               className={cn("sp-slide group/slide relative col-start-1 row-start-1 justify-self-center", !front && "cursor-pointer")}
             >
-              {s.kind === "speaker" ? <SpeakerCard sp={s.sp} front={front} link={link} /> : more}
+              {s.kind === "trainer" ? <TrainerCard sp={s.sp} front={front} link={link} /> : more}
             </div>
           );
         })}
@@ -250,10 +250,10 @@ export function SpeakerCarousel({ speakers, more, label, link }: { speakers: Spe
 
       {controls ? (
         <div className="mt-6 flex items-center justify-center gap-2 sm:gap-3">
-          <button type="button" onClick={() => go(active - 1, true)} aria-controls="speaker-carousel-stage" aria-label="Previous speaker" data-ripple="" className={cn(NAV, "h-11 w-11")}>
+          <button type="button" onClick={() => go(active - 1, true)} aria-controls="trainer-carousel-stage" aria-label="Previous trainer" data-ripple="" className={cn(NAV, "h-11 w-11")}>
             <ChevronLeft size={20} aria-hidden />
           </button>
-          <div role="group" aria-label="Choose a speaker" className="flex max-w-[70vw] flex-wrap items-center justify-center rounded-full border border-border bg-surface/80 px-2 py-1 shadow-card backdrop-blur">
+          <div role="group" aria-label="Choose a trainer" className="flex max-w-[70vw] flex-wrap items-center justify-center rounded-full border border-border bg-surface/80 px-2 py-1 shadow-card backdrop-blur">
             {slides.map((s, i) => {
               const on = i === active;
               return (
@@ -261,9 +261,9 @@ export function SpeakerCarousel({ speakers, more, label, link }: { speakers: Spe
                   key={s.id}
                   type="button"
                   onClick={() => go(i, true)}
-                  aria-controls="speaker-carousel-stage"
+                  aria-controls="trainer-carousel-stage"
                   aria-current={on ? "true" : undefined}
-                  aria-label={s.kind === "speaker" ? s.sp.name : `${i + 1} of ${n}`}
+                  aria-label={s.kind === "trainer" ? s.sp.name : `${i + 1} of ${n}`}
                   className="group/dot grid h-7 place-items-center px-1"
                 >
                   <span
@@ -284,7 +284,7 @@ export function SpeakerCarousel({ speakers, more, label, link }: { speakers: Spe
               );
             })}
           </div>
-          <button type="button" onClick={() => go(active + 1, true)} aria-controls="speaker-carousel-stage" aria-label="Next speaker" data-ripple="" className={cn(NAV, "h-11 w-11")}>
+          <button type="button" onClick={() => go(active + 1, true)} aria-controls="trainer-carousel-stage" aria-label="Next trainer" data-ripple="" className={cn(NAV, "h-11 w-11")}>
             <ChevronRight size={20} aria-hidden />
           </button>
           <button

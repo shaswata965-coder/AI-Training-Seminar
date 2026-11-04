@@ -5,7 +5,7 @@ import { AddToCalendar } from "@/components/share/AddToCalendar";
 import { ShareButtons } from "@/components/share/ShareButtons";
 import { InstagramIcon, LinkedInIcon, XIcon, YouTubeIcon } from "@/components/ui/BrandIcons";
 import type { SiteSettings } from "@/lib/content/types";
-import { brandName, eventCalendarLinks, hackathonRegistrationHref, hackathonShown, registrationHref, venueLine } from "@/lib/event";
+import { brandName, eventCalendarLinks, registrationHref, venueLine } from "@/lib/event";
 import { copy } from "@/lib/copy";
 import { formatDateRange } from "@/lib/format";
 import { explorePages, homeNav, postEventNav, primaryNav, registrationNav, sectionNav } from "@/lib/nav";
@@ -50,8 +50,7 @@ export function SiteFooter({ s }: { s: SiteSettings }) {
   const nav = s.siteNav;
   const involve = [
     { href: registrationHref(s), label: c.register },
-    ...(hackathonShown(s) ? [{ href: hackathonRegistrationHref(s), label: c.hackathon }] : []),
-    { href: "/programme#kiosks", label: c.exhibit },
+    { href: "/past-participants", label: c.participants },
     { href: "/partners#become-a-partner", label: c.partner },
     // The contact form is in the home page's FAQ section.
     ...(isShown(s, "home", "faq") ? [{ href: "/#contact", label: c.contact }] : []),
@@ -91,14 +90,14 @@ export function SiteFooter({ s }: { s: SiteSettings }) {
           </ul>
           <div className="mt-5 grid justify-items-start gap-3">
             <AddToCalendar links={eventCalendarLinks(s)} variant="outline" size="sm" />
-            <ShareButtons url={absoluteUrl("/")} text={`${s.eventName} at IIT Delhi, ${formatDateRange(s.startDate, s.endDate)}`} />
+            <ShareButtons url={absoluteUrl("/")} text={`${s.eventName} at Daffodil International University, ${formatDateRange(s.startDate, s.endDate)}`} />
           </div>
           <SocialLinks s={s} className="mt-5 flex gap-2" />
         </div>
         <nav aria-label="Pages">
           <h2 className="font-display text-sm font-bold tracking-[0.12em] text-fg uppercase">{c.pagesHeading}</h2>
           <ul className="mt-4 space-y-2.5">
-            {[homeNav(nav), ...primaryNav(nav, hackathonShown(s)), ...explorePages(nav), registrationNav(nav)].map((i) => (
+            {[homeNav(nav), ...primaryNav(nav), ...explorePages(nav), registrationNav(nav)].map((i) => (
               <li key={i.href}>
                 <Link className={linkCls} href={i.href}>
                   {i.label}
@@ -137,7 +136,25 @@ export function SiteFooter({ s }: { s: SiteSettings }) {
       </div>
       <div className="relative border-t border-border">
         <div className="container-site flex flex-col gap-3 py-6 text-sm text-subtle sm:flex-row sm:items-center sm:justify-between">
-          <p>{c.copyright}</p>
+          <div>
+            <p>{c.copyright}</p>
+            {/* The built-in campus photos (public/hero, public/themes, public/posters) are from Wikimedia Commons; one is CC BY-SA, which asks for this credit. */}
+            <p className="mt-1 text-xs">
+              Campus photos via Wikimedia Commons:{" "}
+              <a className="mi-underline hover:text-fg" href="https://commons.wikimedia.org/wiki/File:Daffodil_International_University_parmanent_campus_academic_building_and_university_bus.jpg" target="_blank" rel="noopener noreferrer">
+                Nurunnaby Chowdhury (Hasive)
+              </a>
+              ,{" "}
+              <a className="mi-underline hover:text-fg" href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener noreferrer">
+                CC BY-SA 4.0
+              </a>
+              , cropped;{" "}
+              <a className="mi-underline hover:text-fg" href="https://commons.wikimedia.org/wiki/File:Daffodil_International_University_Knowledge_Tower_night_view.jpg" target="_blank" rel="noopener noreferrer">
+                0ximjub43r
+              </a>
+              , CC0.
+            </p>
+          </div>
           <p className="flex flex-wrap gap-x-4 gap-y-1">
             <Link className="mi-underline hover:text-fg" href="/meet-aura">
               {c.meetAura}

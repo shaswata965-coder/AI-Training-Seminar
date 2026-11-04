@@ -14,8 +14,8 @@ const STRETCH =
   "after:absolute after:inset-0 after:z-[1] after:rounded-3xl focus-visible:outline-none focus-visible:after:outline-2 focus-visible:after:outline-offset-[-2px] focus-visible:after:outline-[var(--ring)] focus-visible:after:outline-solid";
 
 /**
- * The shared card used for speakers, organisers, volunteers, mentors and
- * judges, so every person on the site is presented consistently.
+ * The shared card used for trainers, organisers, volunteers and past
+ * participants, so every person on the site is presented consistently.
  */
 export function PersonCard({
   name,

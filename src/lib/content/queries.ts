@@ -4,17 +4,17 @@ import { connectDb, isDbConfigured, once } from "@/lib/db";
 import { getCollectionModel, Singleton } from "@/lib/models";
 import { COLLECTION_MAP } from "@/lib/schema/resources";
 import { ensureDefaultContent } from "./bootstrap";
-import { DEFAULT_FAQS, DEFAULT_HACKATHON, DEFAULT_PEOPLE, DEFAULT_SESSIONS, DEFAULT_SETTINGS, withCurrentDefaults } from "./defaults";
+import { DEFAULT_FAQS, DEFAULT_PEOPLE, DEFAULT_SESSIONS, DEFAULT_SETTINGS, DEFAULT_TRAINERS, withCurrentDefaults } from "./defaults";
 import { fillDefaults, mergeDefaults, stripEmDashes, toPlain } from "./normalize";
-import type { CollectionKey, CollectionTypes, HackathonInfo, SiteSettings } from "./types";
+import type { CollectionKey, CollectionTypes, SiteSettings } from "./types";
 
 /*
  * Read-side data access for the public website. Every getter is cached with
  * `use cache` and tagged; saving in the admin expires the tag immediately.
  * If the database is not configured or unreachable, defaults are returned
  * with a short cache life so real content replaces them as soon as possible.
- * Stored text is passed through `stripEmDashes`: the site shows no em dashes. Settings and hackathon details
- * still holding an earlier default get the current one (`withCurrentDefaults`).
+ * Stored text is passed through `stripEmDashes`: the site shows no em dashes. Settings still holding an
+ * earlier default get the current one (`withCurrentDefaults`).
  */
 
 /** Added to every cached query, so "Refresh website" can expire everything at once. */
@@ -34,11 +34,8 @@ async function load<T>(fn: () => Promise<T>): Promise<Loaded<T>> {
   }
 }
 
-/**
- * Unsaved changes shown by the live preview in the admin (see /api/admin/preview): Site settings, and the
- * hackathon details its Hackathon tab edits too.
- */
-export const DRAFT_KEYS = { settings: "settings-draft", hackathon: "hackathon-draft" } as const;
+/** Unsaved changes shown by the live preview in the admin (see /api/admin/preview): Site settings. */
+export const DRAFT_KEYS = { settings: "settings-draft" } as const;
 const DRAFT_MAX_AGE = 2 * 60 * 60_000;
 
 /** A singleton as saved or, in the admin's preview, as its draft (while it is fresh). */
@@ -88,21 +85,8 @@ async function readSettings(preview: boolean): Promise<SiteSettings> {
   return stripEmDashes(withCurrentDefaults("settings", mergeDefaults(DEFAULT_SETTINGS, toPlain<{ data?: unknown }>(res.data ?? {}).data)));
 }
 
-export async function getHackathon(): Promise<HackathonInfo> {
-  "use cache";
-  cacheTag("hackathon", CONTENT_TAG);
-  // Like getSettings: the draft in the admin's preview, the saved details for visitors.
-  const { isEnabled: preview } = await draftMode();
-  const res = await load(() => findSingleton("hackathon", preview));
-  if (!res.ok) {
-    cacheLife("fallback");
-    return DEFAULT_HACKATHON;
-  }
-  cacheLife("cms");
-  return stripEmDashes(withCurrentDefaults("hackathon", mergeDefaults(DEFAULT_HACKATHON, toPlain<{ data?: unknown }>(res.data ?? {}).data)));
-}
-
 const FALLBACKS: Partial<Record<CollectionKey, object[]>> = {
+  trainers: DEFAULT_TRAINERS.map((t, i) => ({ ...t, id: `default-trainer-${i}` })),
   people: DEFAULT_PEOPLE.map((p, i) => ({ ...p, id: `default-person-${i}` })),
   faqs: DEFAULT_FAQS.map((f, i) => ({ ...f, id: `default-faq-${i}` })),
   sessions: DEFAULT_SESSIONS.map((s, i) => ({ ...s, id: `default-session-${i}` })),
@@ -131,13 +115,13 @@ async function list<K extends CollectionKey>(key: K): Promise<CollectionTypes[K]
 }
 
 export const getAnnouncements = () => list("announcements");
-export const getSpeakers = () => list("speakers");
+export const getTrainers = () => list("trainers");
 export const getSessions = () => list("sessions");
 export const getTutorials = () => list("tutorials");
 export const getDemos = () => list("demos");
-export const getKiosks = () => list("kiosks");
 export const getSponsors = () => list("sponsors");
 export const getPeople = () => list("people");
 export const getFaqs = () => list("faqs");
 export const getGallery = () => list("gallery");
 export const getTalks = () => list("talks");
+export const getParticipants = () => list("participants");

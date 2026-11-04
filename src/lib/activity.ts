@@ -22,9 +22,9 @@ export interface ActivityEntry {
   actorName: string;
   actorEmail: string;
   action: ActivityAction;
-  /** A permission key such as "content:speakers", or "account". */
+  /** A permission key such as "content:trainers", or "account". */
   area: string;
-  /** What was changed, e.g. a speaker's name. */
+  /** What was changed, e.g. a trainer's name. */
   target: string;
   targetId: string;
   changes: ActivityChange[];

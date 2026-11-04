@@ -2,7 +2,7 @@ import { LoopArt } from "@/components/portals/PortalArt";
 import { Portal } from "@/components/ui/Portal";
 import { Eyebrow, Section } from "@/components/ui/Section";
 import type { SiteSettings } from "@/lib/content/types";
-import { venueLine, withoutHackathon } from "@/lib/event";
+import { venueLine } from "@/lib/event";
 import { copy } from "@/lib/copy";
 import { formatDateRange } from "@/lib/format";
 import { AboutOrbit } from "./AboutOrbit";
@@ -19,7 +19,7 @@ export function About({ s }: { s: SiteSettings }) {
       .replaceAll("{dates}", formatDateRange(s.startDate, s.endDate))
       .replaceAll("{venue}", venueLine(s))
       .replaceAll("{event}", s.eventName);
-  const points = withoutHackathon(s, s.aboutPoints, (p) => p.title)
+  const points = s.aboutPoints
     .slice(0, 8)
     .map((p) => ({ ...p, title: fill(p.title), description: fill(p.description) }));
   const c = copy(s, "homeAbout");

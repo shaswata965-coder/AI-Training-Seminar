@@ -13,10 +13,10 @@ import { AnswerFields } from "./AnswerField";
 import { Honeypot } from "./fields";
 import { postJson } from "./submit";
 
-/** The texts of an enquiry form (Site settings: Home → Contact form, Programme → Exhibit form, Partners → Partner form). */
+/** The texts of an enquiry form (Site settings: Home → Contact form, Partners → Partner form). */
 export type EnquiryText = PageCopy["contactFormText"];
 
-/** A contact, exhibitor or partner enquiry, with the fields and texts set for it in Site settings. */
+/** A contact or partner enquiry, with the fields and texts set for it in Site settings. */
 export function EnquiryForm({ type = "contact", fields, text, onDone }: { type?: EnquiryType; fields: FormField[]; text: EnquiryText; onDone?: () => void }) {
   const toast = useToast();
   const form = ENQUIRY_FORMS[type];

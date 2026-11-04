@@ -24,17 +24,17 @@ const SECTIONS: { id: string; title: string; steps: (string | [string, string])[
       ["Live preview", "The real page beside the form shows your changes as you type, on desktop or phone. Visitors only see them once you press Save changes."],
       ["Hiding a section", "Every section below a page's hero has a “Show this section on the page” switch at the top of its tab. Switch it off to take the whole section off the page; its texts are kept for when you switch it back on."],
       ["Layout check", "Each text has a counter. Too much or too little text, or a title wrapping onto many lines, text spilling out of its box or the page scrolling sideways, is flagged on the field, the tabs and in the Layout check box."],
-      "In many texts you can write `{event}`, `{dates}` or `{venue}`: they are filled in from Event details.",
+      "In many texts you can write `{event}`, `{dates}` or `{venue}`: they are filled in from Programme details.",
     ],
   },
   {
     id: "event",
-    title: "Event details, dates & registration",
+    title: "Programme details, batch dates & registration",
     steps: [
-      ["Site settings → Site-wide → Event details", "Name, tagline, dates, venue and hall."],
-      ["Site settings → Site-wide → Registration", "Open or close workshop and hackathon registration, set deadlines (forms close automatically once a deadline passes) and fees. Paste a Google Form / Unstop / Devfolio link to use an external form instead of the built-in one."],
-      ["The forms' fields", "Registration → Form fields, Hackathon → Team form, Home → Contact form, Programme → Exhibitor form and Partners → Sponsor form. Click a field to change its name, guide, example and type of answer (text, e-mail, phone, number, link, date, a drop-down list, choices or a tick box), its choices, whether it is required, or to hide it. Add questions of your own with “Add a question”. Fields with a lock came with the site and can't be deleted."],
-      ["Site settings → Site-wide → Colours and Logos", "Set the brand colour and the accent colours, and replace the built-in IIT Delhi and ScAI logos if ever needed."],
+      ["Site settings → Site-wide → Programme details", "Name, tagline, the next batch's dates, the venue and the room."],
+      ["Site settings → Site-wide → Registration", "Open or close registration, set its deadline (the form closes automatically once it passes) and the fees. Paste a Google Form link to use an external form instead of the built-in one."],
+      ["The forms' fields", "Registration → Form fields, Home → Contact form and Partners → Partner form. Click a field to change its name, guide, example and type of answer (text, e-mail, phone, number, link, date, a drop-down list, choices or a tick box), its choices, whether it is required, or to hide it. Add questions of your own with “Add a question”. Fields with a lock came with the site and can't be deleted."],
+      ["Site settings → Site-wide → Colours and Logos", "Set the brand colour and the accent colours, and replace the built-in DIU logo and Department of CSE seal if ever needed."],
       ["Site settings → Site-wide → Contact & social", "Official e-mail, phone and social links shown in the footer and contact section."],
     ],
   },
@@ -45,40 +45,39 @@ const SECTIONS: { id: string; title: string; steps: (string | [string, string])[
   },
   {
     id: "programme",
-    title: "Programme, speakers & panels",
+    title: "Programmes, schedule & trainers",
     steps: [
-      ["Speakers", "Add each speaker with a photo, designation, affiliation, label (Academia / Industry / Panelist), bio, talk title and abstract. Tick “Feature on the home page” for the highlight grid."],
-      ["Programme", "Add sessions with day, start/end time, type, theme and room. Link speakers, or for panels choose a moderator and panelists."],
-      ["Programme status", "Site settings → Programme → Schedule. Keep “To be announced” until the schedule is ready; switch to “Draft” or “Final” to show it. The PDF download updates automatically."],
+      ["Programmes", "Site settings → Home → Programmes: the titles, descriptions and photos of AI for Professionals and AI for Workspace. Sessions, labs, demos, trainers and past participants each pick a programme, or General for both."],
+      ["Trainers", "Add each trainer with a photo, designation, affiliation, label (DIU faculty / Industry expert / Guest trainer), programme, profile, areas of expertise and what they teach. Tick “Lead trainer” for the one shown in the spotlight at the top of the Trainers page, and “Feature on the home page” for the home page carousel."],
+      ["Schedule", "Add sessions with day, start/end time, type (opening, lecture, discussion, hands-on lab, demo, break), programme and room, and link their trainers."],
+      ["Schedule status", "Site settings → Schedule → Schedule. Keep “To be announced” until the schedule is ready; switch to “Draft” or “Final” to show it. The PDF download updates automatically."],
     ],
   },
   {
     id: "learn",
-    title: "Tutorials, demos, kiosks & partners",
+    title: "Hands-on labs, demos & partners",
     steps: [
-      "Tutorials: instructors, level, duration, prerequisites (laptop, software, accounts) and material links such as GitHub.",
-      "Demos: title, team or company, description, an image and/or a YouTube link.",
-      "Industry kiosks and Partners & sponsors: logo, name, website and description. Kiosks are listed on the Programme page; partner logos loop on the home page and are grouped by tier on the Partners & sponsors page. Sponsor tiers and intro text are in Site settings → Partners & kiosks.",
+      "Hands-on labs: trainers, level, duration, prerequisites (laptop, software, accounts) and material links.",
+      "Demos: title, team, description, an image and/or a YouTube link.",
+      "Partners: logo, name, website and description. Partner logos loop on the home page and are grouped by tier on the Partners page. Partnership tiers and the introduction are in Site settings → Partners.",
+    ],
+  },
+  {
+    id: "participants",
+    title: "Past participants",
+    steps: [
+      "Past participants → New participant, once their batch is completed: name, designation, organisation, the programme they completed (General for both) and the batch, written the same way for everyone in it (e.g. “Batch 1 · January 2026”), with the date it was completed to put the batches in order.",
+      "A photo, a quote and a profile link are optional: add them only with the participant's permission. Tick “Feature their quote” to show it under “What participants say” and on the home page.",
+      "The numbers at the top of the Past participants page (participants, batches, organisations) are counted from the list.",
     ],
   },
   {
     id: "people",
-    title: "Organisers, volunteers, mentors & judges",
+    title: "Organisers & volunteers",
     steps: [
-      "Organisers & volunteers → New person. Choose the group: Faculty organiser, Student organiser, Volunteer, Mentor or Judge.",
-      "Volunteers show a “Coming soon” card until you add the first one. Mentors and judges appear on the Hackathon page.",
+      "Organisers & volunteers → New person. Choose the group: Faculty coordinator, Student organiser or Volunteer.",
+      "A group shows on the Organisers page once it has someone in it; volunteers show a “Coming soon” card until you add the first one.",
       "Square photos (at least 400×400 px) look best. Uploads are compressed automatically.",
-    ],
-  },
-  {
-    id: "hackathon",
-    title: "Hackathon",
-    steps: [
-      "The hackathon is hidden until you switch on Site settings → Site-wide → Features → Show the hackathon; until then its page shows only the coming-soon poster (Site settings → Hackathon → Coming-soon poster).",
-      "Hackathon → Overview, the question, rules, timeline, prizes and judging criteria. The tagline, the overview and the prizes can also be changed beside the live preview, in Site settings → Hackathon → Hero, At a glance and Prize money.",
-      "There is one hackathon with one track: every team answers the same question (Hackathon → The question), so teams don't pick a theme. The three themes are the workshop's, for its talks, panels and tutorials.",
-      "Fill in timeline dates as they are confirmed. The timeline shows progress automatically.",
-      "After the event, add winners under Hackathon → Results, then enable “Post-event: show hackathon winners” in Site settings → Site-wide → Features & post-event.",
     ],
   },
   {
@@ -86,15 +85,15 @@ const SECTIONS: { id: string; title: string; steps: (string | [string, string])[
     title: "Registrations & enquiries",
     steps: [
       "Registrations lists everyone who registered on the website. Change a status (e.g. confirmed / waitlisted), add notes, or download a CSV for Excel.",
-      "Places are limited, so registrations are reviewed: new ones are “registered” until the organising committee sets them to confirmed or waitlisted. Registrants are told they'll hear by the date in Site settings → Site-wide → Registration → Places confirmed by (or “by e-mail” while it is blank).",
-      "Enquiries collects contact-form messages, exhibitor and sponsorship requests. Use “Reply” to answer by e-mail.",
+      "Places are limited, so registrations are reviewed: new ones are “registered” until the organising team sets them to confirmed or waitlisted. Registrants are told they'll hear by the date in Site settings → Site-wide → Registration → Places confirmed by (or “by e-mail” while it is blank).",
+      "Enquiries collects contact-form messages and partnership requests. Use “Reply” to answer by e-mail.",
       "Confirmation e-mails are sent automatically when e-mail (SMTP) is configured on the server.",
     ],
   },
   {
     id: "post",
-    title: "After the event",
-    steps: ["Upload photos under Photo gallery and add slides / YouTube links under Slides & recordings.", "Then switch them on in Site settings → Site-wide → Features & post-event."],
+    title: "After a batch",
+    steps: ["Upload photos under Photo gallery and add slides / YouTube links under Slides & recordings.", "Then switch them on in Site settings → Site-wide → Features & past batches."],
   },
   {
     id: "access",
@@ -144,7 +143,7 @@ export default function GuidePage() {
       <div className="card mb-6 flex items-center gap-4 p-5">
         <Aura variant="admin" size={90} lite />
         <p className="text-[15px] text-muted">
-          Start with <Link className="font-semibold text-brand underline" href="/admin/settings">Site settings</Link>, then add <Link className="font-semibold text-brand underline" href="/admin/content/speakers">speakers</Link> and the{" "}
+          Start with <Link className="font-semibold text-brand underline" href="/admin/settings">Site settings</Link>, then add <Link className="font-semibold text-brand underline" href="/admin/content/trainers">trainers</Link> and the{" "}
           <Link className="font-semibold text-brand underline" href="/admin/content/sessions">programme</Link>. A printable version of this guide is in <code>docs/ADMIN_GUIDE.md</code>.
         </p>
       </div>

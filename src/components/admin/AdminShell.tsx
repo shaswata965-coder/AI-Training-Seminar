@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  Award,
   BookOpen,
   CalendarDays,
   CircleQuestionMark,
@@ -20,9 +21,7 @@ import {
   Mic,
   MonitorPlay,
   Settings,
-  Store,
   Ticket,
-  Trophy,
   UserCog,
   Users,
   Video,
@@ -68,24 +67,23 @@ const content = (key: string, label: string, Icon: LucideIcon): Item => ({ href:
 const NAV: { title: string; items: Item[] }[] = [
   { title: "Overview", items: [{ href: "/admin", label: "Dashboard", Icon: LayoutDashboard }] },
   {
-    title: "Event",
+    title: "Site",
     items: [
       { href: "/admin/settings", label: "Site settings", Icon: Settings, permission: SETTINGS_PERMISSIONS },
-      { href: "/admin/hackathon", label: "Hackathon", Icon: Trophy, permission: "hackathon" },
       content("announcements", "Announcements", Megaphone),
     ],
   },
   {
     title: "Programme",
-    items: [content("sessions", "Programme", CalendarDays), content("speakers", "Speakers", Mic), content("tutorials", "Tutorials", GraduationCap), content("demos", "Demos", MonitorPlay)],
+    items: [content("sessions", "Schedule", CalendarDays), content("trainers", "Trainers", Mic), content("tutorials", "Hands-on labs", GraduationCap), content("demos", "Demos", MonitorPlay)],
   },
   {
     title: "Content",
-    items: [content("people", "Organisers & volunteers", Users), content("kiosks", "Industry kiosks", Store), content("sponsors", "Partners & sponsors", Handshake), content("faqs", "FAQs", CircleQuestionMark)],
+    items: [content("people", "Organisers & volunteers", Users), content("sponsors", "Partners", Handshake), content("faqs", "FAQs", CircleQuestionMark)],
   },
   {
-    title: "Post-event",
-    items: [content("gallery", "Photo gallery", Images), content("talks", "Slides & recordings", Video)],
+    title: "Past batches",
+    items: [content("participants", "Past participants", Award), content("gallery", "Photo gallery", Images), content("talks", "Slides & recordings", Video)],
   },
   {
     title: "Responses",
