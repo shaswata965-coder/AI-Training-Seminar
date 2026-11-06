@@ -17,7 +17,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { path: "/organisers", priority: 0.6, freq: "monthly" },
     { path: "/meet-aura", priority: 0.3, freq: "monthly" },
     ...(s.showGallery ? [{ path: "/gallery", priority: 0.6, freq: "weekly" as const }] : []),
-    ...(s.showTalks ? [{ path: "/talks", priority: 0.6, freq: "weekly" as const }] : []),
+    ...(s.showTalks ? [{ path: "/recordings", priority: 0.6, freq: "weekly" as const }] : []),
   ];
   return pages.map((p) => ({ url: absoluteUrl(p.path), changeFrequency: p.freq, priority: p.priority }));
 }

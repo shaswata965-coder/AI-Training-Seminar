@@ -4,7 +4,7 @@ import { CalendarPlus, ChevronDown, Download } from "lucide-react";
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { buttonClasses } from "@/components/ui/Button";
 import { cn } from "@/lib/cn";
-import type { CalendarLinks } from "@/lib/event";
+import type { CalendarLinks } from "@/lib/training";
 import { withBase } from "@/lib/paths";
 
 export function AddToCalendar({

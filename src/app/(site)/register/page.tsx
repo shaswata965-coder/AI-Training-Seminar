@@ -14,7 +14,7 @@ import { cn } from "@/lib/cn";
 import { getSettings, inPreview } from "@/lib/content/queries";
 import type { SiteSettings } from "@/lib/content/types";
 import { copy } from "@/lib/copy";
-import { eventCalendarLinks } from "@/lib/event";
+import { batchCalendarLinks } from "@/lib/training";
 import { formatDateRange } from "@/lib/format";
 import { absoluteUrl } from "@/lib/paths";
 import { isShown } from "@/lib/schema/section-order";
@@ -23,7 +23,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const s = await getSettings();
   return {
     title: "Registration",
-    description: `Register for the next batch of the ${s.eventName} at Daffodil International University, ${formatDateRange(s.startDate, s.endDate)}. Fees, deadlines and the registration form.`,
+    description: `Register for the next batch of the ${s.programmeName} at Daffodil International University, ${formatDateRange(s.startDate, s.endDate)}. Fees, deadlines and the registration form.`,
     alternates: { canonical: absoluteUrl("/register") },
   };
 }
@@ -45,8 +45,8 @@ export default async function RegisterPage() {
     </Badge>
   );
   const status =
-    s.workshopStatus === "open" ? (
-      <DeadlineGate deadline={s.workshopDeadline} closed={closedBadge}>
+    s.registrationStatus === "open" ? (
+      <DeadlineGate deadline={s.registrationDeadline} closed={closedBadge}>
         <Badge tone="mint" dot>
           {hero.open}
         </Badge>
@@ -75,14 +75,14 @@ export default async function RegisterPage() {
           <div className={cn("container-site grid gap-8", showForm && showAside && "lg:grid-cols-[1.35fr_0.65fr]")}>
             {showForm ? (
               <div>
-                {s.workshopUrl ? (
+                {s.registrationUrl ? (
                   <div className="card flex flex-col items-center gap-5 p-8 text-center sm:flex-row sm:text-left">
                     <Aura variant="registration" size={150} />
                     <div>
                       <h2 className="font-display text-2xl font-bold text-fg">{form.externalTitle}</h2>
                       {form.externalText ? <p className="mt-2 text-muted">{form.externalText}</p> : null}
                       <div className="mt-5">
-                        <ButtonLink href={s.workshopUrl} size="lg" iconRight={<ExternalLink size={17} aria-hidden />}>
+                        <ButtonLink href={s.registrationUrl} size="lg" iconRight={<ExternalLink size={17} aria-hidden />}>
                           {form.externalButton}
                         </ButtonLink>
                       </div>
@@ -90,10 +90,10 @@ export default async function RegisterPage() {
                   </div>
                 ) : preview ? (
                   // The admin's live preview shows the form whatever the status, so its fields can be edited.
-                  <RegistrationForm fields={fields} text={copy(s, "registerFormText")} calendar={eventCalendarLinks(s)} shareUrl={absoluteUrl("/")} eventName={s.eventName} />
-                ) : s.workshopStatus === "open" ? (
-                  <DeadlineGate deadline={s.workshopDeadline} closed={<PausedCard s={s} />}>
-                    <RegistrationForm fields={fields} text={copy(s, "registerFormText")} calendar={eventCalendarLinks(s)} shareUrl={absoluteUrl("/")} eventName={s.eventName} />
+                  <RegistrationForm fields={fields} text={copy(s, "registerFormText")} calendar={batchCalendarLinks(s)} shareUrl={absoluteUrl("/")} programmeName={s.programmeName} />
+                ) : s.registrationStatus === "open" ? (
+                  <DeadlineGate deadline={s.registrationDeadline} closed={<PausedCard s={s} />}>
+                    <RegistrationForm fields={fields} text={copy(s, "registerFormText")} calendar={batchCalendarLinks(s)} shareUrl={absoluteUrl("/")} programmeName={s.programmeName} />
                   </DeadlineGate>
                 ) : (
                   <PausedCard s={s} />
@@ -140,7 +140,7 @@ export default async function RegisterPage() {
                   <div data-edit="register.deadlines" className="grid content-start gap-5">
                     <div className="card grid gap-3 p-6">
                       <h2 className="font-display text-xl font-bold text-fg">{dl.title}</h2>
-                      {s.workshopDeadline ? <Deadline iso={s.workshopDeadline} label={dl.workshop} /> : <p className="text-sm text-muted">{dl.workshopTba}</p>}
+                      {s.registrationDeadline ? <Deadline iso={s.registrationDeadline} label={dl.closes} /> : <p className="text-sm text-muted">{dl.rolling}</p>}
                     </div>
                     {dl.portalTitle && isShown(s, "home", "themes") ? (
                       <div>

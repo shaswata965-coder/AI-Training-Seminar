@@ -36,7 +36,7 @@ export function FacesArt({ people, total, unit = ["trainer", "trainers"] }: { pe
   );
 }
 
-/** About: Aura inside the agent loop, with a signal going round. */
+/** About: Aura inside the loop of working with AI (frame, brief, draft, check, apply), with a signal going round. */
 export function LoopArt() {
   const nodes = [
     { a: -90, c: "var(--azure)" },

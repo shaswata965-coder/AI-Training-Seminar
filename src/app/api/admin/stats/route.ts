@@ -22,7 +22,7 @@ export async function GET(req: NextRequest) {
   const user = await requireAdmin(req);
   if (user instanceof Response) return user;
   const weekAgo = new Date(Date.now() - 7 * 86_400_000);
-  const [workshop, workshopWeek, enquiriesNew, enquiriesTotal, byCategory, recentRegs, recentEnquiries, counts, demoItems, toReview] = await Promise.all([
+  const [registrations, registrationsWeek, enquiriesNew, enquiriesTotal, byCategory, recentRegs, recentEnquiries, counts, demoItems, toReview] = await Promise.all([
     Registration.countDocuments(),
     Registration.countDocuments({ createdAt: { $gte: weekAgo } }),
     Enquiry.countDocuments({ status: "new" }),
@@ -36,8 +36,8 @@ export async function GET(req: NextRequest) {
   ]);
   return json({
     data: {
-      workshop,
-      workshopWeek,
+      registrations,
+      registrationsWeek,
       enquiriesNew,
       enquiriesTotal,
       byCategory: byName(byCategory),

@@ -18,7 +18,7 @@ export interface AssistantEntry {
 }
 
 export interface AssistantFacts {
-  eventName: string;
+  programmeName: string;
   /** The next batch's dates. */
   dates: string;
   venue: string;
@@ -200,7 +200,7 @@ export function AuraAssistant({ entries, facts }: { entries: AssistantEntry[]; f
               {wantsFacts || !query ? (
                 <div className="tone-aqua mb-3 rounded-2xl bg-accent-soft p-4">
                   <p className="flex items-center gap-2 text-sm font-bold text-accent-ink">
-                    <Sparkles size={16} aria-hidden /> {facts.eventName}: new batches all year round
+                    <Sparkles size={16} aria-hidden /> {facts.programmeName}: new batches all year round
                   </p>
                   {facts.dates ? (
                     <p className="mt-2 flex items-center gap-2 text-[15px] text-fg">

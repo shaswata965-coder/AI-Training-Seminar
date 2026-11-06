@@ -32,7 +32,7 @@ export function person(id) {
   return { name, email: `diuai-${RUN_ID}-${id}@example.com`, phone: `+880 17${digits(8)}`, organisation: pick(ORGS) };
 }
 
-export function workshopPayload(id) {
+export function registrationPayload(id) {
   const p = person(id);
   return {
     ...p,
@@ -65,7 +65,7 @@ export function enquiryPayload(id, type = "contact") {
   };
 }
 
-const ENDPOINT = { workshop: "/api/register", enquiry: "/api/enquiries" };
+const ENDPOINT = { register: "/api/register", enquiry: "/api/enquiries" };
 
 function postParams(form, from) {
   return {

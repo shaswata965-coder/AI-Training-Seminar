@@ -68,7 +68,7 @@ function crouch(ship: HTMLElement | null) {
 
 const count = (text: string, done: number, total: number) => text.replace(/\{done\}/g, String(done)).replace(/\{total\}/g, String(total));
 
-export function LoadingScreen({ eventName, routes, files, text }: { eventName: string; routes: string[]; files: string[]; text: PageCopy["homeLoader"] }) {
+export function LoadingScreen({ programmeName, routes, files, text }: { programmeName: string; routes: string[]; files: string[]; text: PageCopy["homeLoader"] }) {
   const flag = useSyncExternalStore(subscribe, readFlag, () => "run");
   const progress = useSyncExternalStore(warmup.subscribe, warmup.get, warmup.initial);
   const [phase, setPhase] = useState<Phase>("work");
@@ -137,7 +137,7 @@ export function LoadingScreen({ eventName, routes, files, text }: { eventName: s
           </div>
         </div>
         <div className="launch-status" aria-hidden>
-          <p className="launch-kicker">{eventName}</p>
+          <p className="launch-kicker">{programmeName}</p>
           <p className="launch-percent" />
           <p className="launch-line">
             <span key={stage}>{line}</span>

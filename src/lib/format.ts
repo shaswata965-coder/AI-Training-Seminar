@@ -34,8 +34,8 @@ export function formatDateRange(startIso: string, endIso: string) {
   return `${part(s, { day: "numeric", month: "short" })} – ${part(e, { day: "numeric", month: "short", year: "numeric" })}`;
 }
 
-/** YYYY-MM-DD (BST) of the n-th event day (1-based). */
-export function eventDayDate(startIso: string, day: number | string): string {
+/** YYYY-MM-DD (BST) of the n-th day of the batch (1-based). */
+export function batchDayDate(startIso: string, day: number | string): string {
   const s = parse(startIso);
   if (!s) return "";
   const local = new Date(s.getTime() + TZ_OFFSET_MIN * 60_000);
@@ -43,9 +43,9 @@ export function eventDayDate(startIso: string, day: number | string): string {
   return local.toISOString().slice(0, 10);
 }
 
-/** Label for an event day: "Tue, 15 Dec". */
-export function eventDayLabel(startIso: string, day: number | string, opts: Intl.DateTimeFormatOptions = { weekday: "short", day: "numeric", month: "short" }) {
-  const ymd = eventDayDate(startIso, day);
+/** Label for a day of the batch: "Tue, 15 Dec". */
+export function batchDayLabel(startIso: string, day: number | string, opts: Intl.DateTimeFormatOptions = { weekday: "short", day: "numeric", month: "short" }) {
+  const ymd = batchDayDate(startIso, day);
   if (!ymd) return `Day ${day}`;
   return formatDate(`${ymd}T12:00:00+06:00`, opts);
 }

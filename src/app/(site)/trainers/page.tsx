@@ -10,7 +10,7 @@ import { Eyebrow } from "@/components/ui/Section";
 import { TagScope } from "@/components/ui/Tag";
 import { getSessions, getSettings, getTrainers } from "@/lib/content/queries";
 import { copy } from "@/lib/copy";
-import { eventDayLabel } from "@/lib/format";
+import { batchDayLabel } from "@/lib/format";
 import { absoluteUrl } from "@/lib/paths";
 import { isShown } from "@/lib/schema/section-order";
 
@@ -18,7 +18,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const s = await getSettings();
   return {
     title: "Trainers",
-    description: `The trainers of the ${s.eventName}: faculty of the Department of Computer Science and Engineering, Daffodil International University.`,
+    description: `The trainers of the ${s.programmeName}: faculty of the Department of Computer Science and Engineering, Daffodil International University.`,
     alternates: { canonical: absoluteUrl("/trainers") },
   };
 }
@@ -38,7 +38,7 @@ export default async function TrainersPage() {
     trainers: x.trainers,
     panelists: x.panelists,
     moderator: x.moderator,
-    dayLabel: eventDayLabel(s.startDate, x.day),
+    dayLabel: batchDayLabel(s.startDate, x.day),
   }));
   const hero = copy(s, "trainersHero");
   const list = copy(s, "trainersList");

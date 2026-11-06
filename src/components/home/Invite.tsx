@@ -5,7 +5,7 @@ import { Poster } from "@/components/ui/Poster";
 import { Section, SectionHeading } from "@/components/ui/Section";
 import type { SiteSettings } from "@/lib/content/types";
 import { copy } from "@/lib/copy";
-import { registrationHref, venueLine } from "@/lib/event";
+import { registrationHref, venueLine } from "@/lib/training";
 import { formatDateRange } from "@/lib/format";
 import { isShown } from "@/lib/schema/section-order";
 

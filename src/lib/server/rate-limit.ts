@@ -31,7 +31,7 @@ export function isLimited(key: string, limit: number, windowMs: number): { limit
   return hits.length >= limit ? { limited: true, retryAfter: Math.ceil((windowMs - (now - hits[0])) / 1000) } : { limited: false, retryAfter: 0 };
 }
 
-/** Count one event against `key` (e.g. a failed sign-in). */
+/** Count one attempt against `key` (e.g. a failed sign-in). */
 export function hit(key: string, windowMs: number) {
   const now = Date.now();
   sweep(now);

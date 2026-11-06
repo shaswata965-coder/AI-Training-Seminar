@@ -16,7 +16,7 @@ export const DEFAULT_SETTINGS: SiteSettings = {
   ...SECTION_ORDER_DEFAULTS,
   ...HIDDEN_SECTIONS_DEFAULTS,
   ...FORM_DEFAULTS,
-  eventName: "DIU AI Training Seminars",
+  programmeName: "DIU AI Training Seminars",
   shortName: "DIU AI Training",
   tagline: "Practical, hands-on AI training for professionals and the modern workspace.",
   description:
@@ -28,10 +28,10 @@ export const DEFAULT_SETTINGS: SiteSettings = {
   venueHall: "",
   venueAddress: "Daffodil International University, Daffodil Smart City, Birulia, Savar, Dhaka 1216, Bangladesh",
 
-  workshopStatus: "open",
-  workshopDeadline: "",
-  workshopReplyBy: "",
-  workshopUrl: "",
+  registrationStatus: "open",
+  registrationDeadline: "",
+  registrationReplyBy: "",
+  registrationUrl: "",
   fees: [{ category: "Everyone", amount: "On request", note: "Places in each batch are limited" }],
   feeNote: "Ask the organisers for the current fee. Places in each batch are limited, so registrations are reviewed and confirmed by the organising team.",
   confirmationNote: "",
@@ -51,7 +51,7 @@ export const DEFAULT_SETTINGS: SiteSettings = {
 
   motivation:
     "AI tools have moved out of research labs and into everyday work. They draft documents, summarise reports, analyse data and answer questions in seconds, and people who know how to use them well get more done, with better results.\n\nThe AI Training Seminars at Daffodil International University help professionals, teachers, students and entrepreneurs make that shift with confidence. In two programmes, **AI for Professionals** and **AI for Workspace**, trainers from DIU's Department of Computer Science and Engineering show you how to use AI tools on real tasks, safely and responsibly.",
-  agenticAI:
+  learningText:
     "How today's AI assistants work and where they fall short; how to write clear instructions (prompts) and check the answers; how to use AI for **writing**, **research**, **data analysis**, **presentations** and **meetings**; and how to protect **privacy** and keep **your own judgement** in charge. Every session is hands-on, so you leave with skills you can use the next day.",
   aboutPoints: [
     { title: "Why now", icon: "rocket", description: "AI tools now draft, summarise and analyse in seconds. Using them well is fast becoming a core skill at work." },
@@ -169,7 +169,7 @@ export const DEFAULT_SETTINGS: SiteSettings = {
 
   logoUniversity: "",
   logoDepartment: "",
-  eventLogo: "",
+  programmeLogo: "",
   brandColor: "",
   palette: { azure: "", lilac: "", mint: "", peach: "", blush: "", butter: "", aqua: "" },
   ogImage: "",
@@ -298,15 +298,15 @@ const slot = (day: "1" | "2", start: string, end: string, session: Slot) => ({ d
 const TRAINERS = "DIU CSE trainers";
 
 export const DEFAULT_SESSIONS: NewDoc<Session>[] = [
-  slot("1", "09:30", "10:00", { type: "keynote", title: "Registration and welcome", description: "Meet the trainers and the rest of the batch, and see what you'll be able to do by the end." }),
-  slot("1", "10:00", "11:00", { type: "talk", theme: "professionals", title: "AI in your profession: what today's tools can and can't do" }),
+  slot("1", "09:30", "10:00", { type: "opening", title: "Registration and welcome", description: "Meet the trainers and the rest of the batch, and see what you'll be able to do by the end." }),
+  slot("1", "10:00", "11:00", { type: "lecture", theme: "professionals", title: "AI in your profession: what today's tools can and can't do" }),
   slot("1", "11:00", "11:15", { type: "break", title: "Tea break" }),
   slot("1", "11:15", "12:30", { type: "tutorial", theme: "professionals", title: "Prompting for professional work: clear instructions, better answers" }),
   slot("1", "12:30", "14:30", { type: "break", title: "Lunch and prayer break" }),
   slot("1", "14:30", "15:45", { type: "tutorial", theme: "professionals", title: "Research, analysis and reports with AI" }),
-  slot("1", "15:45", "16:30", { type: "panel", title: "Using AI responsibly: privacy, accuracy and judgement" }),
+  slot("1", "15:45", "16:30", { type: "discussion", title: "Using AI responsibly: privacy, accuracy and judgement" }),
   slot("1", "16:30", "17:00", { type: "other", title: "Wrap-up and questions" }),
-  slot("2", "09:30", "10:00", { type: "talk", theme: "workspace", title: "AI across your workspace: an overview" }),
+  slot("2", "09:30", "10:00", { type: "lecture", theme: "workspace", title: "AI across your workspace: an overview" }),
   slot("2", "10:00", "11:00", { type: "tutorial", theme: "workspace", title: "Writing with AI: e-mails, letters and documents" }),
   slot("2", "11:00", "11:15", { type: "break", title: "Tea break" }),
   slot("2", "11:15", "12:30", { type: "tutorial", theme: "workspace", title: "Spreadsheets and data with AI" }),
@@ -351,7 +351,7 @@ const RETIRED: Retired = {
     "description": ["AI training seminars at Daffodil International University: AI for Professionals and AI for Workspace, hands-on sessions led by faculty of the Department of Computer Science and Engineering."],
     "feeNote": ["Fees for each batch will be announced here. Places are limited, so registrations are reviewed and confirmed by the organising team."],
     "fees": [[{"category": "Everyone", "amount": "To be announced", "note": "Places are limited"}]],
-    "galleryHero.description": ["Moments from the {event}."],
+    "galleryHero.description": ["Moments from the {programme}."],
     "galleryHero.empty": ["Photos are on their way!"],
     "highlights": [[{"label": "Programmes", "value": "2", "icon": "sparkles"}, {"label": "Trainers", "value": "9", "icon": "users"}, {"label": "Days per batch", "value": "2", "icon": "calendar"}, {"label": "Hands-on labs", "value": "6", "icon": "laptop"}, {"label": "Seats per batch", "value": "TBA", "icon": "graduation"}]],
     "homeFaq.noEmail": ["Official e-mail address coming soon. Use the form below."],
@@ -392,8 +392,8 @@ const RETIRED: Retired = {
     "programmeSchedule.tbaText": ["Session times, rooms and trainers will appear here, with filters by programme and format, a personal agenda and calendar links."],
     "programmeSchedule.tbaTitle": ["Schedule to be announced"],
     "registerDeadlines.title": ["Deadlines"],
-    "registerDeadlines.workshop": ["Registration closes"],
-    "registerDeadlines.workshopTba": ["Registration deadline: to be announced."],
+    "registerDeadlines.closes": ["Registration closes"],
+    "registerDeadlines.rolling": ["Registration deadline: to be announced."],
     "registerFees.tba": ["TBA"],
     "registerForm.closedText": ["Thank you for your interest! Registration for this batch has closed. Follow the announcements for the next one."],
     "registerForm.closedTitle": ["Registration is closed"],
@@ -445,6 +445,59 @@ function withoutRetired<T extends object>(data: T, defaults: T, { values, texts 
   return out as T;
 }
 
+/*
+ * Settings stored by the site's first version under names it no longer uses, read under their current ones (the
+ * current name wins where both are stored), and the {programme} placeholder in place of its earlier spelling.
+ * Applied to stored settings before they are merged over the defaults; the database itself is not changed, and
+ * the next save stores the current names.
+ */
+const RENAMED_FIELDS: Record<string, string> = {
+  eventName: "programmeName",
+  eventLogo: "programmeLogo",
+  workshopStatus: "registrationStatus",
+  workshopDeadline: "registrationDeadline",
+  workshopReplyBy: "registrationReplyBy",
+  workshopUrl: "registrationUrl",
+  agenticAI: "learningText",
+};
+const RENAMED_TEXTS: Record<string, Record<string, string>> = {
+  siteAccount: { whoWorkshop: "whoParticipants" },
+  registerDeadlines: { workshop: "closes", workshopTba: "rolling" },
+  aboutMotivation: { agenticTone: "learnTone", agenticTitle: "learnTitle" },
+  programmeOverview: { keynote: "opening", talk: "lecture", panel: "discussion" },
+};
+const OLD_PLACEHOLDER = /\{event\}/g;
+
+const isRecord = (v: unknown): v is Record<string, unknown> => typeof v === "object" && v !== null && !Array.isArray(v);
+
+function renamed(obj: Record<string, unknown>, names: Record<string, string>): Record<string, unknown> {
+  const out: Record<string, unknown> = {};
+  for (const [k, v] of Object.entries(obj)) {
+    const name = names[k] ?? k;
+    if (name !== k && Object.hasOwn(obj, name)) continue;
+    out[name] = v;
+  }
+  return out;
+}
+
+function withCurrentPlaceholder(v: unknown): unknown {
+  if (typeof v === "string") return v.replace(OLD_PLACEHOLDER, "{programme}");
+  if (Array.isArray(v)) return v.map(withCurrentPlaceholder);
+  if (isRecord(v)) return Object.fromEntries(Object.entries(v).map(([k, x]) => [k, withCurrentPlaceholder(x)]));
+  return v;
+}
+
+/** Stored settings with the names they are read under today (see above); anything else is returned as it is. */
+export function withCurrentNames(stored: unknown): unknown {
+  if (!isRecord(stored)) return stored;
+  const top = renamed(stored, RENAMED_FIELDS);
+  for (const [section, names] of Object.entries(RENAMED_TEXTS)) {
+    const texts = top[section];
+    if (isRecord(texts)) top[section] = renamed(texts, names);
+  }
+  return withCurrentPlaceholder(top);
+}
+
 /** Each form's fields made whole (src/lib/forms.ts), as they are read. */
 function withWholeForms<T extends object>(settings: T): T {
   const out = { ...settings } as Record<string, unknown>;
@@ -458,7 +511,7 @@ function withWholeForms<T extends object>(settings: T): T {
  */
 function withCurrentStatus<T extends object>(settings: T): T {
   const out = settings as Record<string, unknown>;
-  return (REGISTRATION_STATUSES as readonly unknown[]).includes(out.workshopStatus) ? settings : ({ ...out, workshopStatus: "open" } as T);
+  return (REGISTRATION_STATUSES as readonly unknown[]).includes(out.registrationStatus) ? settings : ({ ...out, registrationStatus: "open" } as T);
 }
 
 /**

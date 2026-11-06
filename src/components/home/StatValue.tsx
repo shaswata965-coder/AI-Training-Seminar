@@ -109,7 +109,7 @@ export function StatValue({ value }: { value: string }) {
   }, [target]);
 
   if (!match) {
-    const text = value.trim() || "TBA";
+    const text = value.trim() || "–";
     return <Scramble text={text} repeat={PLACEHOLDER.test(text)} />;
   }
   const n = shown ?? target;

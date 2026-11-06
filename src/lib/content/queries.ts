@@ -4,7 +4,7 @@ import { connectDb, isDbConfigured, once } from "@/lib/db";
 import { getCollectionModel, Singleton } from "@/lib/models";
 import { COLLECTION_MAP } from "@/lib/schema/resources";
 import { ensureDefaultContent } from "./bootstrap";
-import { DEFAULT_FAQS, DEFAULT_PEOPLE, DEFAULT_SESSIONS, DEFAULT_SETTINGS, DEFAULT_TRAINERS, withCurrentDefaults } from "./defaults";
+import { DEFAULT_FAQS, DEFAULT_PEOPLE, DEFAULT_SESSIONS, DEFAULT_SETTINGS, DEFAULT_TRAINERS, withCurrentDefaults, withCurrentNames } from "./defaults";
 import { fillDefaults, mergeDefaults, stripEmDashes, toPlain } from "./normalize";
 import type { CollectionKey, CollectionTypes, SiteSettings } from "./types";
 
@@ -82,7 +82,7 @@ async function readSettings(preview: boolean): Promise<SiteSettings> {
     return DEFAULT_SETTINGS;
   }
   cacheLife("cms");
-  return stripEmDashes(withCurrentDefaults("settings", mergeDefaults(DEFAULT_SETTINGS, toPlain<{ data?: unknown }>(res.data ?? {}).data)));
+  return stripEmDashes(withCurrentDefaults("settings", mergeDefaults(DEFAULT_SETTINGS, withCurrentNames(toPlain<{ data?: unknown }>(res.data ?? {}).data))));
 }
 
 const FALLBACKS: Partial<Record<CollectionKey, object[]>> = {

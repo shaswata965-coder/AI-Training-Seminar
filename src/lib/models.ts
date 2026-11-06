@@ -216,7 +216,7 @@ const sessionSchema = new Schema<SessionDoc>(
     lastSeenAt: { type: Date, default: () => new Date() },
     expiresAt: { type: Date, required: true },
   },
-  // Not "Session"/"sessions": that is the programme's sessions (talks).
+  // Not "Session"/"sessions": that is the schedule's sessions.
   { timestamps: { createdAt: true, updatedAt: false }, collection: "admin_sessions" },
 );
 sessionSchema.index({ expiresAt: 1 }, { expireAfterSeconds: 0 });
@@ -232,7 +232,7 @@ export interface VisitorSessionDoc {
   _id: string;
   email: string;
   name: string;
-  /** How they signed in: "team" (admin panel account), "workshop" (a registrant) or a people group (faculty, volunteer…). */
+  /** How they signed in: "team" (admin panel account), "participant" (a registrant) or a people group (faculty, volunteer…). */
   kind: string;
   expiresAt: Date;
   createdAt?: Date;

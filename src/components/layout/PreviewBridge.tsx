@@ -12,7 +12,7 @@ import { isPreviewMessage, PREVIEW_SOURCE, type FromFrame, type LayoutIssue, typ
  */
 
 // Each section as first measured at each width: its height, to tell when text makes it much taller or
-// shorter, and the quirks it already had (cards that clamp long talk titles by design), which aren't
+// shorter, and the quirks it already had (cards that clamp long session titles by design), which aren't
 // the edit's doing and so aren't reported.
 const baseline = new Map<string, number>();
 const known = new Map<string, Set<string>>();

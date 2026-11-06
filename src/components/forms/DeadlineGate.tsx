@@ -2,7 +2,7 @@
 
 import type { ReactNode } from "react";
 import { useNow } from "@/lib/client-hooks";
-import { deadlinePassed } from "@/lib/event";
+import { deadlinePassed } from "@/lib/training";
 
 /**
  * Shows `children` until the deadline passes, then `closed`. Pages are cached,

@@ -2,7 +2,7 @@ import { ArrowRight } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import type { CSSProperties } from "react";
-import { AgentLoop } from "@/components/home/AgentLoop";
+import { WorkflowLoop } from "@/components/home/WorkflowLoop";
 import { InOrder } from "@/components/layout/InOrder";
 import { PageHero } from "@/components/layout/PageHero";
 import { AddToCalendar } from "@/components/share/AddToCalendar";
@@ -13,7 +13,7 @@ import { Section, SectionHeading } from "@/components/ui/Section";
 import { TagScope } from "@/components/ui/Tag";
 import { getSettings } from "@/lib/content/queries";
 import { copy } from "@/lib/copy";
-import { eventCalendarLinks } from "@/lib/event";
+import { batchCalendarLinks } from "@/lib/training";
 import { formatDateRange } from "@/lib/format";
 import { absoluteUrl } from "@/lib/paths";
 
@@ -21,7 +21,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const s = await getSettings();
   return {
     title: "About",
-    description: `Why the ${s.eventName} matters, what you will learn, who should attend and how a batch runs.`,
+    description: `Why the ${s.programmeName} matters, what you will learn, who should attend and how a batch runs.`,
     alternates: { canonical: absoluteUrl("/about") },
   };
 }
@@ -45,8 +45,8 @@ export default async function AboutPage() {
   return (
     <TagScope style="underline">
       <PageHero edit="about.hero" home={s.siteNav.home} tone={hero.tone} crumb={hero.crumb} eyebrow={hero.eyebrow} title={hero.title} aura="guide" description={hero.description}>
-        <AddToCalendar links={eventCalendarLinks(s)} variant="outline" size="sm" />
-        <ShareButtons url={absoluteUrl("/")} text={`${s.eventName} at Daffodil International University, ${formatDateRange(s.startDate, s.endDate)}`} />
+        <AddToCalendar links={batchCalendarLinks(s)} variant="outline" size="sm" />
+        <ShareButtons url={absoluteUrl("/")} text={`${s.programmeName} at Daffodil International University, ${formatDateRange(s.startDate, s.endDate)}`} />
       </PageHero>
 
       <InOrder
@@ -61,18 +61,18 @@ export default async function AboutPage() {
                     {m.title}
                   </h2>
                   <RichText text={s.motivation} className="text-[17px] leading-relaxed text-muted" />
-                  <div className={`tone-${m.agenticTone} card mt-8 p-6`} data-reveal>
+                  <div className={`tone-${m.learnTone} card mt-8 p-6`} data-reveal>
                     <h3 className="flex items-center gap-2 font-display text-xl font-semibold text-fg">
                       <span className="grid h-8 w-8 place-items-center rounded-xl bg-accent-soft text-accent-ink">
                         <CmsIcon name="sparkles" size={18} />
                       </span>
-                      {m.agenticTitle}
+                      {m.learnTitle}
                     </h3>
-                    <RichText text={s.agenticAI} className="mt-3 text-[15.5px] leading-relaxed text-muted" />
+                    <RichText text={s.learningText} className="mt-3 text-[15.5px] leading-relaxed text-muted" />
                   </div>
                 </div>
                 <div data-reveal>
-                  <AgentLoop />
+                  <WorkflowLoop />
                 </div>
               </div>
             </Section>

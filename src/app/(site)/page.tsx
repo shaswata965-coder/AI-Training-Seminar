@@ -37,7 +37,7 @@ export default async function HomePage() {
       [
         s.logoUniversity,
         s.logoDepartment,
-        s.eventLogo,
+        s.programmeLogo,
         ...(s.showHeroPhoto && !s.heroPhoto ? BUILT_IN_HERO_PHOTOS : [heroPhoto(s)]),
         ...s.themes.map(themePhoto),
         ...trainers.map((x) => x.photo),
@@ -50,7 +50,7 @@ export default async function HomePage() {
   ];
   return (
     <>
-      {s.showLoader ? <LoadingScreen eventName={s.eventName} routes={routes} files={files} text={copy(s, "homeLoader")} /> : null}
+      {s.showLoader ? <LoadingScreen programmeName={s.programmeName} routes={routes} files={files} text={copy(s, "homeLoader")} /> : null}
       <JsonLd data={trainingJsonLd(s)} />
       <Hero s={s} />
       <InOrder

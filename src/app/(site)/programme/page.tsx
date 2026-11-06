@@ -15,8 +15,8 @@ import { TagScope } from "@/components/ui/Tag";
 import { getSessions, getSettings, getTrainers } from "@/lib/content/queries";
 import type { SiteSettings } from "@/lib/content/types";
 import { copy } from "@/lib/copy";
-import { eventCalendarLinks, eventDays, registrationHref } from "@/lib/event";
-import { eventDayDate, eventDayLabel, formatDateRange } from "@/lib/format";
+import { batchCalendarLinks, batchDays, registrationHref } from "@/lib/training";
+import { batchDayDate, batchDayLabel, formatDateRange } from "@/lib/format";
 import { absoluteUrl } from "@/lib/paths";
 import { shownSections } from "@/lib/schema/section-order";
 
@@ -24,22 +24,22 @@ export async function generateMetadata(): Promise<Metadata> {
   const s = await getSettings();
   return {
     title: "Schedule",
-    description: `Day-wise schedule of the next batch of the ${s.eventName}: lectures, hands-on labs and live demos for AI for Professionals and AI for Workspace, ${formatDateRange(s.startDate, s.endDate)}.`,
+    description: `Day-wise schedule of the next batch of the ${s.programmeName}: lectures, hands-on labs and live demos for AI for Professionals and AI for Workspace, ${formatDateRange(s.startDate, s.endDate)}.`,
     alternates: { canonical: absoluteUrl("/programme") },
   };
 }
 
 function registrationText(s: SiteSettings) {
   const c = copy(s, "programmePlan");
-  return s.workshopStatus === "open" ? c.registrationOpen : c.registrationClosed;
+  return s.registrationStatus === "open" ? c.registrationOpen : c.registrationClosed;
 }
 
 export default async function ProgrammePage() {
   const [s, sessions, trainers] = await Promise.all([getSettings(), getSessions(), getTrainers()]);
-  const days = eventDays(s).map((d) => ({ day: d.day, label: eventDayLabel(s.startDate, d.day) }));
+  const days = batchDays(s).map((d) => ({ day: d.day, label: batchDayLabel(s.startDate, d.day) }));
   const tba = s.programmeStatus === "tba" || sessions.length === 0;
   const withTimes: ProgrammeSession[] = sessions.map((x) => {
-    const date = eventDayDate(s.startDate, x.day);
+    const date = batchDayDate(s.startDate, x.day);
     return { ...x, startIso: `${date}T${x.start || "00:00"}:00+06:00`, endIso: `${date}T${x.end || x.start || "23:59"}:00+06:00` };
   });
   const mini: Record<string, MiniTrainer> = Object.fromEntries(trainers.map((sp) => [sp.id, { id: sp.id, name: sp.name, slug: sp.slug, affiliation: sp.affiliation }]));
@@ -71,7 +71,7 @@ export default async function ProgrammePage() {
             {hero.pdf}
           </ButtonLink>
         ) : null}
-        <AddToCalendar links={eventCalendarLinks(s)} />
+        <AddToCalendar links={batchCalendarLinks(s)} />
       </PageHero>
 
       <nav aria-label="On this page" className="border-b border-border bg-bg-soft">

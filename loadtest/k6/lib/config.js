@@ -47,9 +47,9 @@ export const thresholds = {
   // Listed so they appear in the summary.
   "submissions{outcome:ok}": ["count>=0"],
   "submissions{outcome:duplicate}": ["count>=0"],
-  "people_registered{form:workshop}": ["count>=0"],
+  "people_registered{form:register}": ["count>=0"],
   "people_registered{form:enquiry}": ["count>=0"],
-  "people_blocked{form:workshop}": ["count>=0"],
+  "people_blocked{form:register}": ["count>=0"],
   "people_blocked{form:enquiry}": ["count>=0"],
 };
 

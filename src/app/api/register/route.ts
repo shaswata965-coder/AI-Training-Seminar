@@ -1,7 +1,7 @@
 import { after, type NextRequest } from "next/server";
 import { getSavedSettings } from "@/lib/content/queries";
 import { connectDb, isDuplicateKeyError } from "@/lib/db";
-import { deadlinePassed } from "@/lib/event";
+import { deadlinePassed } from "@/lib/training";
 import { Registration } from "@/lib/models";
 import { registrationEmail } from "@/lib/server/emails";
 import { formLimit } from "@/lib/server/form-limits";
@@ -27,12 +27,12 @@ export async function POST(req: NextRequest) {
   if (!limit.ok) return error(429, "Too many attempts. Please wait a few minutes and try again.", { retryAfter: limit.retryAfter });
   if (!isRecord(body)) return error(400, "Invalid request.");
   // Honeypot: bots fill the hidden "website" field. Pretend success, store nothing.
-  if ((body as { website?: string }).website) return mailConfigured() ? accepted() : json({ data: { regId: "AAIW26-THANKS", emailSent: false } }, { status: 201 });
+  if ((body as { website?: string }).website) return mailConfigured() ? accepted() : json({ data: { regId: "DIUAI-THANKS", emailSent: false } }, { status: 201 });
 
   const s = await getSavedSettings();
-  if (s.workshopUrl) return error(409, "Registration is handled through the official external form.");
-  if (s.workshopStatus !== "open") return error(403, s.workshopStatus === "closed" ? "Registration is closed." : "Registration has not opened yet.");
-  if (deadlinePassed(s.workshopDeadline)) return error(403, "Registration is closed: the deadline has passed.");
+  if (s.registrationUrl) return error(409, "Registration is handled through the official external form.");
+  if (s.registrationStatus !== "open") return error(403, "Registration is paused for now. New batches run all year: please try again later.");
+  if (deadlinePassed(s.registrationDeadline)) return error(403, "Registration for the next batch has closed: its deadline has passed.");
 
   const parsed = checkRegistration(s, body);
   if (!parsed.ok) return error(422, "Please check the highlighted fields.", { fieldErrors: parsed.fieldErrors });

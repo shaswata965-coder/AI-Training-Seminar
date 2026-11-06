@@ -69,7 +69,7 @@ export function TrainersView({
   trainers: Trainer[];
   sessions: TrainerSession[];
   showMore: boolean;
-  /** The “More trainers to be announced” card, from Site settings → Home → Trainers. */
+  /** The “More trainers” card, from Site settings → Home → Trainers. */
   more: { title: string; text: string };
 }) {
   const [filter, setFilter] = useState<Filter>("all");
@@ -86,7 +86,7 @@ export function TrainersView({
 
   const bySlug = useMemo(() => Object.fromEntries(trainers.map((s) => [s.slug, s])), [trainers]);
   const byId = useMemo(() => Object.fromEntries(trainers.map((s) => [s.id, s])), [trainers]);
-  const panels = sessions.filter((s) => s.type === "panel");
+  const panels = sessions.filter((s) => s.type === "discussion");
 
   // Discussions with someone on them; the others are listed in the schedule only.
   const staffed = panels.filter((p) => p.moderator || p.panelists.length);
@@ -212,7 +212,7 @@ export function TrainersView({
       </ul>
       {!shown.length && (filter !== "all" || q) ? <p className="mt-6 rounded-2xl border border-dashed border-border-strong p-8 text-center text-muted">No trainers match your filters yet.</p> : null}
 
-      {/* Discussions with their moderators and panelists, once they are named. */}
+      {/* Discussions with their moderators and discussion leads, once they are named. */}
       {staffed.length ? (
       <section id="panels" aria-labelledby="panels-title" className="mt-20 scroll-mt-28">
         <h2 id="panels-title" className="font-display text-3xl font-bold text-fg">
@@ -238,7 +238,7 @@ export function TrainersView({
                       <CalendarDays size={15} aria-hidden /> {p.dayLabel} · {timeRange(p.start, p.end)}
                     </span>
                     <span className="inline-flex items-center gap-1.5">
-                      <MapPin size={15} aria-hidden /> {p.room || "Room TBA"}
+                      <MapPin size={15} aria-hidden /> {p.room || "Room e-mailed before your batch"}
                     </span>
                   </p>
                   <div className="mt-4 grid gap-2">
@@ -253,12 +253,12 @@ export function TrainersView({
                         </button>
                       </p>
                     ) : null}
-                    <div className="flex flex-wrap items-center gap-2 text-sm">
-                      <span className="inline-flex items-center gap-1 font-semibold text-subtle">
-                        <Users size={15} aria-hidden /> Panelists
-                      </span>
-                      {p.panelists.length ? (
-                        p.panelists
+                    {p.panelists.length ? (
+                      <div className="flex flex-wrap items-center gap-2 text-sm">
+                        <span className="inline-flex items-center gap-1 font-semibold text-subtle">
+                          <Users size={15} aria-hidden /> Discussion leads
+                        </span>
+                        {p.panelists
                           .map((id) => byId[id])
                           .filter(Boolean)
                           .map((sp) => (
@@ -266,11 +266,9 @@ export function TrainersView({
                               <Avatar name={sp.name} src={sp.photo} size={26} className="transition-[scale,rotate] duration-300 group-hover/chip:scale-110 group-hover/chip:-rotate-6" />
                               {sp.name}
                             </button>
-                          ))
-                      ) : (
-                        <span className="text-muted">To be announced</span>
-                      )}
-                    </div>
+                          ))}
+                      </div>
+                    ) : null}
                   </div>
                 </li>
               );
@@ -334,7 +332,7 @@ export function TrainersView({
                           <span>
                             <span className="block font-semibold text-fg">{a.title}</span>
                             <span className="text-sm text-muted">
-                              {a.dayLabel} · {timeRange(a.start, a.end)} · {a.room || "Room TBA"}
+                              {a.dayLabel} · {timeRange(a.start, a.end)} · {a.room || "Room e-mailed before your batch"}
                             </span>
                           </span>
                           <span className="btn-ico-r text-subtle">

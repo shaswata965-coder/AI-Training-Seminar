@@ -28,9 +28,9 @@ function withEarlier(cols: { key: string; label: string }[], rows: Row[]) {
   return cols;
 }
 
-const TITLES: Record<string, string> = { workshop: "Registrations (CSV)", enquiries: "Enquiries (CSV)" };
+const TITLES: Record<string, string> = { registrations: "Registrations (CSV)", enquiries: "Enquiries (CSV)" };
 
-/** CSV downloads: /api/admin/export/workshop (the registrations) | enquiries */
+/** CSV downloads: /api/admin/export/registrations | enquiries */
 export async function GET(req: NextRequest, ctx: RouteContext<"/api/admin/export/[kind]">) {
   const { kind } = await ctx.params;
   const area = kind === "enquiries" ? "enquiries" : "registrations";
@@ -38,7 +38,7 @@ export async function GET(req: NextRequest, ctx: RouteContext<"/api/admin/export
   if (user instanceof Response) return user;
   const s = await getSavedSettings();
   let csv: string;
-  if (kind === "workshop") {
+  if (kind === "registrations") {
     const rows = (await Registration.find({}).sort({ createdAt: 1 }).lean()) as unknown as Row[];
     const cols = columns(s.registerFields, rows);
     csv = toCsv(
@@ -66,7 +66,7 @@ export async function GET(req: NextRequest, ctx: RouteContext<"/api/admin/export
   return new Response(csv, {
     headers: {
       "Content-Type": "text/csv; charset=utf-8",
-      "Content-Disposition": `attachment; filename="diu-ai-training-${kind === "workshop" ? "registrations" : kind}-${stamp}.csv"`,
+      "Content-Disposition": `attachment; filename="diu-ai-training-${kind}-${stamp}.csv"`,
       "Cache-Control": "no-store",
     },
   });

@@ -10,7 +10,7 @@ import { SlidingPill, useSlidingPill } from "@/components/ui/SlidingPill";
 import { formatDateTime } from "@/lib/format";
 import { ENQUIRY_FORMS, FORM_DEFAULTS, FORM_SETTINGS, isBuiltIn, responseRows, type FormField, type FormKey } from "@/lib/forms";
 import { withBase } from "@/lib/paths";
-import { PageTitle, useEventName, useMe } from "./AdminShell";
+import { PageTitle, useProgrammeName, useMe } from "./AdminShell";
 import { api, useApi } from "./api";
 
 interface Enquiry {
@@ -32,7 +32,7 @@ const STATUS = { new: "blush", "in-progress": "butter", closed: "mint" } as cons
 
 export function EnquiriesManager() {
   const me = useMe();
-  const eventName = useEventName();
+  const programmeName = useProgrammeName();
   const toast = useToast();
   const { data, loading, setData, reload } = useApi<Enquiry[]>("/enquiries");
   // The forms' questions, for the answers to questions added in Site settings.
@@ -114,7 +114,7 @@ export function EnquiriesManager() {
                 ) : null}
               </div>
               <div className="flex shrink-0 flex-wrap items-center gap-2">
-                <a href={`mailto:${e.email}?subject=${encodeURIComponent(`Re: ${e.subject || "your enquiry"} · ${eventName}`)}`} onClick={() => e.status === "new" && setStatus(e, "in-progress")} className="inline-flex h-9 items-center gap-1.5 rounded-full border border-border px-3 text-sm font-semibold hover:border-brand hover:text-brand">
+                <a href={`mailto:${e.email}?subject=${encodeURIComponent(`Re: ${e.subject || "your enquiry"} · ${programmeName}`)}`} onClick={() => e.status === "new" && setStatus(e, "in-progress")} className="inline-flex h-9 items-center gap-1.5 rounded-full border border-border px-3 text-sm font-semibold hover:border-brand hover:text-brand">
                   <Mail size={15} aria-hidden /> Reply
                 </a>
                 <select value={e.status} onChange={(ev) => setStatus(e, ev.target.value as Enquiry["status"])} className="h-9 rounded-full border border-border bg-surface px-3 text-sm font-semibold" aria-label="Status">

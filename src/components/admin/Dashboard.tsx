@@ -10,13 +10,13 @@ import { ATTENDEE_CATEGORY_META } from "@/lib/content/constants";
 import { formatDateTime } from "@/lib/format";
 import { withBase } from "@/lib/paths";
 import { COLLECTIONS } from "@/lib/schema/resources";
-import { PageTitle, useEventName, useMe, type AdminMe } from "./AdminShell";
+import { PageTitle, useProgrammeName, useMe, type AdminMe } from "./AdminShell";
 import { api, useApi } from "./api";
 import { VolunteerHome } from "./VolunteerHome";
 
 interface Stats {
-  workshop: number;
-  workshopWeek: number;
+  registrations: number;
+  registrationsWeek: number;
   enquiriesNew: number;
   enquiriesTotal: number;
   byCategory: { category: string; count: number }[];
@@ -38,9 +38,9 @@ export function Dashboard() {
 }
 
 function StaffDashboard({ me, data, error }: { me: AdminMe; data: Stats | null; error: string | null }) {
-  const eventName = useEventName();
+  const programmeName = useProgrammeName();
   const tiles = [
-    { label: "Registrations", value: data?.workshop, note: data ? `+${data.workshopWeek} this week` : "", Icon: Ticket, tone: "tone-peach", href: "/admin/registrations" },
+    { label: "Registrations", value: data?.registrations, note: data ? `+${data.registrationsWeek} this week` : "", Icon: Ticket, tone: "tone-peach", href: "/admin/registrations" },
     { label: "Past participants", value: data?.counts?.participants, note: "", Icon: Award, tone: "tone-aqua", href: "/admin/content/participants" },
     { label: "New enquiries", value: data?.enquiriesNew, note: data ? `${data.enquiriesTotal} in total` : "", Icon: Inbox, tone: "tone-blush", href: "/admin/enquiries" },
     { label: "Trainers", value: data?.counts?.trainers, note: "", Icon: Mic, tone: "tone-lilac", href: "/admin/content/trainers" },
@@ -55,7 +55,7 @@ function StaffDashboard({ me, data, error }: { me: AdminMe; data: Stats | null; 
 
   return (
     <div>
-      <PageTitle title={`Welcome${me.name ? `, ${me.name.split(" ")[0]}` : ""}!`} description={`Here's what's happening with the ${eventName}.`} />
+      <PageTitle title={`Welcome${me.name ? `, ${me.name.split(" ")[0]}` : ""}!`} description={`Here's what's happening with the ${programmeName}.`} />
       {error ? <p className="card mb-6 p-4 text-blush-ink">{error}</p> : null}
       {data?.toReview ? (
         <Link href="/admin/tracker" className="tone-lilac card mb-6 flex items-center gap-3 p-4 text-sm transition hover:-translate-y-0.5 hover:shadow-card-lg">
@@ -110,7 +110,7 @@ function StaffDashboard({ me, data, error }: { me: AdminMe; data: Stats | null; 
               <h2 id="recent-regs" className="font-display text-xl font-bold text-fg">
                 Latest registrations
               </h2>
-              <a href={withBase("/api/admin/export/workshop")} className="mi-link inline-flex items-center gap-1.5 text-sm font-semibold text-brand">
+              <a href={withBase("/api/admin/export/registrations")} className="mi-link inline-flex items-center gap-1.5 text-sm font-semibold text-brand">
                 <Download size={15} aria-hidden /> CSV
               </a>
             </div>

@@ -15,7 +15,7 @@ export function trainingJsonLd(s: SiteSettings) {
   return {
     "@context": "https://schema.org",
     "@type": "Course",
-    name: s.eventName,
+    name: s.programmeName,
     description: s.description || s.tagline,
     url: absoluteUrl("/"),
     image: [absoluteUrl("/opengraph-image")],
@@ -23,7 +23,7 @@ export function trainingJsonLd(s: SiteSettings) {
     hasCourseInstance: [
       {
         "@type": "CourseInstance",
-        name: `${s.eventName}: next batch`,
+        name: `${s.programmeName}: next batch`,
         courseMode: "Onsite",
         startDate: s.startDate,
         endDate: s.endDate,

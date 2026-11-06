@@ -9,7 +9,7 @@ import { Badge } from "@/components/ui/Badge";
 import { RichText } from "@/components/ui/RichText";
 import { useToast } from "@/components/ui/Toast";
 import { cn } from "@/lib/cn";
-import { currentThemeKey, SESSION_TYPE_META, SESSION_TYPES, THEME_KEYS, THEME_META, type SessionType, type ThemeKey } from "@/lib/content/constants";
+import { currentSessionType, currentThemeKey, SESSION_TYPE_META, SESSION_TYPES, THEME_KEYS, THEME_META, type SessionType, type ThemeKey } from "@/lib/content/constants";
 import type { Session } from "@/lib/content/types";
 import { timeRange } from "@/lib/format";
 import { replaceQuery, useNow, useUrlHash, useUrlParam } from "@/lib/client-hooks";
@@ -61,12 +61,12 @@ export function ProgrammeView({
 }) {
   const toast = useToast();
   const now = useNow();
-  // Initial filters come from the URL (?day=2&theme=science&type=panel or #session-id);
+  // Initial filters come from the URL (?day=2&theme=workspace&type=discussion or #session-id);
   // once the visitor changes something, local state takes over.
   const urlDay = useUrlParam("day");
   // An old link's earlier theme key ("entrepreneurship") filters by the current one.
   const urlTheme = useUrlParam("theme")?.replace(/[^,]+/g, currentThemeKey) ?? null;
-  const urlType = useUrlParam("type");
+  const urlType = useUrlParam("type")?.replace(/[^,]+/g, currentSessionType) ?? null;
   const hash = useUrlHash();
   const hashDay = hash.startsWith("session-") ? sessions.find((x) => `session-${x.id}` === hash)?.day : undefined;
   const defaultDay = days[0]?.day ?? 1;
@@ -167,7 +167,7 @@ export function ProgrammeView({
 
   const upcomingId = useMemo(() => {
     if (now === null) return null;
-    // Only meaningful on the day: flag the next session when it starts within 12 hours.
+    // Only meaningful during a batch: flag the next session when it starts within 12 hours.
     const soon = sessions.filter((s) => Date.parse(s.startIso) > now && Date.parse(s.startIso) - now < 12 * 3_600_000);
     return soon.sort((a, b) => Date.parse(a.startIso) - Date.parse(b.startIso))[0]?.id ?? null;
   }, [now, sessions]);
@@ -298,7 +298,7 @@ export function ProgrammeView({
                     const next = s.id === upcomingId;
                     const starred = agenda.has(s.id);
                     const isBreak = s.type === "break";
-                    const people = (s.type === "panel" ? s.panelists : s.trainers).map((id) => trainers[id]).filter(Boolean);
+                    const people = (s.type === "discussion" ? s.panelists : s.trainers).map((id) => trainers[id]).filter(Boolean);
                     const moderator = s.moderator ? trainers[s.moderator] : undefined;
                     return (
                       <li
@@ -365,7 +365,7 @@ export function ProgrammeView({
                             ) : null}
                             {people.length ? (
                               <p>
-                                {s.type === "panel" ? <span className="font-semibold text-subtle">Panelists: </span> : null}
+                                {s.type === "discussion" ? <span className="font-semibold text-subtle">Discussion leads: </span> : null}
                                 {people.map((p, i) => (
                                   <span key={p.id}>
                                     {i ? ", " : ""}

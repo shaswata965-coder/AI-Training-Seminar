@@ -3,7 +3,7 @@ import Link from "next/link";
 import { BrandMark } from "@/components/layout/BrandMark";
 import { NotFoundContent } from "@/components/layout/NotFoundContent";
 import { getSettings } from "@/lib/content/queries";
-import { brandName } from "@/lib/event";
+import { brandName } from "@/lib/training";
 
 export const metadata: Metadata = { title: "Page not found" };
 

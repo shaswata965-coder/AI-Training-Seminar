@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/Button";
 import { useToast } from "@/components/ui/Toast";
 import { fill } from "@/lib/copy";
 import { useUrlParam } from "@/lib/client-hooks";
-import type { CalendarLinks } from "@/lib/event";
+import type { CalendarLinks } from "@/lib/training";
 import { checkAnswers, emptyAnswer, type Answer, type FormField } from "@/lib/forms";
 import type { PageCopy } from "@/lib/schema/page-copy";
 import { AnswerFields } from "./AnswerField";
@@ -29,7 +29,7 @@ const PROGRAMME_CHOICE: Record<string, string> = { professionals: "AI for Profes
  * Form fields (a step with no fields shown is left out). Answers are checked here as on the server. A link with
  * ?programme=professionals or ?programme=workspace ticks that programme until the visitor changes it.
  */
-export function RegistrationForm({ fields, text, calendar, shareUrl, eventName }: { fields: FormField[]; text: PageCopy["registerFormText"]; calendar: CalendarLinks; shareUrl: string; eventName: string }) {
+export function RegistrationForm({ fields, text, calendar, shareUrl, programmeName }: { fields: FormField[]; text: PageCopy["registerFormText"]; calendar: CalendarLinks; shareUrl: string; programmeName: string }) {
   const toast = useToast();
   const shown = useMemo(() => fields.filter((f) => !f.hidden), [fields]);
   const steps = [1, 2, 3].filter((n) => shown.some((f) => f.step === n));
@@ -99,7 +99,7 @@ export function RegistrationForm({ fields, text, calendar, shareUrl, eventName }
           <div className="mt-6 flex flex-wrap justify-center gap-3">
             <AddToCalendar links={calendar} />
           </div>
-          {text.share ? <ShareButtons className="mt-5 justify-center" url={shareUrl} text={fill(text.shareText, { event: eventName })} label={text.share} /> : null}
+          {text.share ? <ShareButtons className="mt-5 justify-center" url={shareUrl} text={fill(text.shareText, { programme: programmeName })} label={text.share} /> : null}
         </div>
       </div>
     );

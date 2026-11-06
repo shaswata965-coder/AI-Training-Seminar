@@ -1,6 +1,6 @@
 import "server-only";
 import mongoose from "mongoose";
-import { DEFAULT_SETTINGS, withCurrentDefaults } from "@/lib/content/defaults";
+import { DEFAULT_SETTINGS, withCurrentDefaults, withCurrentNames } from "@/lib/content/defaults";
 import { fillDefaults, mergeDefaults, toPlain } from "@/lib/content/normalize";
 import { connectDb } from "@/lib/db";
 import { slugify } from "@/lib/format";
@@ -111,7 +111,7 @@ export function isSingletonKey(key: string): key is SingletonKey {
 export async function getSingleton(key: SingletonKey) {
   await connectDb();
   const doc = await Singleton.findOne({ key }).lean();
-  return { data: withCurrentDefaults(key, mergeDefaults(SINGLETON_DEFAULTS[key] as object, doc?.data)), updatedAt: doc?.updatedAt ?? null };
+  return { data: withCurrentDefaults(key, mergeDefaults(SINGLETON_DEFAULTS[key] as object, withCurrentNames(doc?.data))), updatedAt: doc?.updatedAt ?? null };
 }
 
 export async function saveSingleton(key: SingletonKey, input: unknown) {
@@ -121,5 +121,5 @@ export async function saveSingleton(key: SingletonKey, input: unknown) {
   await connectDb();
   const doc = await Singleton.findOneAndUpdate({ key }, { $set: { data: parsed.data } }, { upsert: true, returnDocument: "after" }).lean();
   expireTags(def.tags);
-  return { data: withCurrentDefaults(key, mergeDefaults(SINGLETON_DEFAULTS[key] as object, doc?.data)), updatedAt: doc?.updatedAt ?? null };
+  return { data: withCurrentDefaults(key, mergeDefaults(SINGLETON_DEFAULTS[key] as object, withCurrentNames(doc?.data))), updatedAt: doc?.updatedAt ?? null };
 }

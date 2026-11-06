@@ -5,8 +5,8 @@ import { BASE_PATH } from "@/lib/paths";
 export default async function manifest(): Promise<MetadataRoute.Manifest> {
   const s = await getSettings();
   return {
-    name: `${s.eventName} · DIU`,
-    short_name: s.shortName || s.eventName,
+    name: `${s.programmeName} · DIU`,
+    short_name: s.shortName || s.programmeName,
     description: s.description || s.tagline,
     start_url: `${BASE_PATH}/`,
     display: "standalone",

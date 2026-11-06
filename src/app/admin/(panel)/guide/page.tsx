@@ -24,11 +24,11 @@ const SECTIONS: { id: string; title: string; steps: (string | [string, string])[
       ["Live preview", "The real page beside the form shows your changes as you type, on desktop or phone. Visitors only see them once you press Save changes."],
       ["Hiding a section", "Every section below a page's hero has a “Show this section on the page” switch at the top of its tab. Switch it off to take the whole section off the page; its texts are kept for when you switch it back on."],
       ["Layout check", "Each text has a counter. Too much or too little text, or a title wrapping onto many lines, text spilling out of its box or the page scrolling sideways, is flagged on the field, the tabs and in the Layout check box."],
-      "In many texts you can write `{event}`, `{dates}` or `{venue}`: they are filled in from Programme details.",
+      "In many texts you can write `{programme}`, `{dates}` or `{venue}`: they are filled in from Programme details.",
     ],
   },
   {
-    id: "event",
+    id: "details",
     title: "Programme details, batch dates & registration",
     steps: [
       ["Site settings → Site-wide → Programme details", "Name, tagline, the next batch's dates, the venue and the room. The training runs continuously: when a batch starts, move the dates on to the next one."],

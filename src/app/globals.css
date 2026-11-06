@@ -539,15 +539,15 @@ html[data-aura-build="classic"] .aura-b-strong { display: none; }
 .venue-pin-label[data-side="top"] { bottom: calc(100% + 6px); left: 50%; translate: -50% 0; }
 .venue-pin-label[data-side="top-start"] { bottom: calc(100% + 6px); left: -4px; }
 .venue-pin-label[data-side="bottom"] { top: calc(100% + 6px); left: 50%; translate: -50% 0; }
-.venue-agent {
+.venue-traveller {
   opacity: 0;
   transition: opacity 0.6s ease;
 }
-.venue-stage[data-travelling] .venue-agent {
+.venue-stage[data-travelling] .venue-traveller {
   opacity: 1;
   transition-duration: 0.3s;
 }
-.venue-agent > span {
+.venue-traveller > span {
   animation: venue-bob 1.4s ease-in-out infinite;
 }
 .venue-stage[data-arrived] .venue-arrive {

@@ -18,7 +18,7 @@ export const metadata: Metadata = {
 };
 
 const WHERE: Partial<Record<AuraVariant, string>> = {
-  hero: "Home: waving hello", announcements: "Announcements", thinker: "About: the agent loop",
+  hero: "Home: waving hello", announcements: "Announcements", thinker: "About: working with AI",
   professionals: "Programme: AI for Professionals", workspace: "Programme: AI for Workspace",
   programme: "Schedule", trainers: "Trainers", tutorials: "Hands-on labs", demos: "Live demos", participants: "Past participants",
   registration: "Registration", success: "Registration complete", venue: "Venue", travel: "Travel tips",

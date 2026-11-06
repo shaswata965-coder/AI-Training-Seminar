@@ -158,7 +158,7 @@ function SignInForm({ text, reason, onSignedIn, onLeave }: { text: PageCopy["sit
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const whoId = useId();
-  const who = [text.whoWorkshop, text.whoTeam, text.whoPeople].filter(Boolean);
+  const who = [text.whoParticipants, text.whoTeam, text.whoPeople].filter(Boolean);
 
   async function onSubmit(e: FormEvent) {
     e.preventDefault();

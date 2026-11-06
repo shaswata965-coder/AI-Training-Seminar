@@ -24,7 +24,7 @@ export type Palette = Record<Tone, string>;
 
 /** Everything in Admin → Site settings, including every section's texts and colours (PageCopy) and the forms' fields. */
 export interface SiteSettings extends PageCopy, SectionOrders, HiddenSections, FormSettings {
-  eventName: string;
+  programmeName: string;
   shortName: string;
   tagline: string;
   description: string;
@@ -35,11 +35,11 @@ export interface SiteSettings extends PageCopy, SectionOrders, HiddenSections, F
   venueHall: string;
   venueAddress: string;
 
-  workshopStatus: RegistrationStatus;
-  workshopDeadline: string;
+  registrationStatus: RegistrationStatus;
+  registrationDeadline: string;
   /** When the organising committee will have told registrants whether they have a place; empty for “by e-mail”. */
-  workshopReplyBy: string;
-  workshopUrl: string;
+  registrationReplyBy: string;
+  registrationUrl: string;
   fees: { category: string; amount: string; note: string }[];
   feeNote: string;
   confirmationNote: string;
@@ -55,7 +55,7 @@ export interface SiteSettings extends PageCopy, SectionOrders, HiddenSections, F
   featuredTrainers: number;
 
   motivation: string;
-  agenticAI: string;
+  learningText: string;
   /** Short points circled around Aura in the home page About section. */
   aboutPoints: IconItem[];
   audience: IconItem[];
@@ -91,7 +91,7 @@ export interface SiteSettings extends PageCopy, SectionOrders, HiddenSections, F
   /** The university's logo (left corner of the navigation bar) and the department's seal (right corner). */
   logoUniversity: string;
   logoDepartment: string;
-  eventLogo: string;
+  programmeLogo: string;
   brandColor: string;
   palette: Palette;
   ogImage: string;

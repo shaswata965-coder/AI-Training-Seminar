@@ -22,7 +22,7 @@ export function SessionBadges({ session }: { session: Session }) {
 }
 
 export function trainerNames(session: Session, byId: Record<string, Trainer>) {
-  const ids = session.type === "panel" ? session.panelists : session.trainers;
+  const ids = session.type === "discussion" ? session.panelists : session.trainers;
   return ids.map((id) => byId[id]).filter(Boolean);
 }
 
@@ -54,7 +54,7 @@ export function SessionPeople({ session, byId, linked = true }: { session: Sessi
         <p className="flex items-start gap-1.5">
           <Users size={15} aria-hidden className="mt-0.5 shrink-0 text-subtle" />
           <span>
-            {session.type === "panel" ? "Panelists: " : null}
+            {session.type === "discussion" ? "Discussion leads: " : null}
             {people.map((sp, i) => (
               <span key={sp.id}>
                 {i > 0 ? ", " : null}

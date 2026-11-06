@@ -29,7 +29,7 @@ npm("seed:demo"); // past participants, labs, demos, partners …
 npm("create-admin", "--", "--email", admin.email, "--name", "Load test organiser", "--role", "admin", "--password", admin.password);
 
 // Registration open with no deadline, and the schedule published (calendar and PDF have sessions).
-const open = { "data.workshopStatus": "open", "data.workshopUrl": "", "data.workshopDeadline": "", "data.programmeStatus": "final" };
+const open = { "data.registrationStatus": "open", "data.registrationUrl": "", "data.registrationDeadline": "", "data.programmeStatus": "final" };
 await db.collection("singletons").updateOne({ key: "settings" }, { $set: open });
 console.log("Opened registration; schedule status final.");
 await mongoose.disconnect();

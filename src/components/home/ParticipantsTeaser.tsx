@@ -6,7 +6,7 @@ import { Portal } from "@/components/ui/Portal";
 import { Section, SectionHeading } from "@/components/ui/Section";
 import type { Participant, SiteSettings } from "@/lib/content/types";
 import { copy, plural } from "@/lib/copy";
-import { registrationHref } from "@/lib/event";
+import { registrationHref } from "@/lib/training";
 
 /** Home: up to three past participants' quotes, and the link to the Past participants page. */
 export function ParticipantsTeaser({ s, participants }: { s: SiteSettings; participants: Participant[] }) {

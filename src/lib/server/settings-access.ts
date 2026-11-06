@@ -5,13 +5,13 @@ import type { AdminUser } from "./admin-auth";
 
 /*
  * Volunteers may be given only some pages of Site settings. They read only
- * those pages' fields (plus the public event details the texts' placeholders
+ * those pages' fields (plus the public programme details the texts' placeholders
  * use), and what they save or preview is merged over the saved settings so
  * that only those pages' fields can change, whatever the request contains.
  */
 
-/** Shown on every page of the site, and used by placeholders such as {event} and {dates}. */
-const PLACEHOLDER_FIELDS = ["eventName", "shortName", "startDate", "endDate", "venueName", "venueHall", "tagline", "organisedBy"];
+/** Shown on every page of the site, and used by placeholders such as {programme} and {dates}. */
+const PLACEHOLDER_FIELDS = ["programmeName", "shortName", "startDate", "endDate", "venueName", "venueHall", "tagline", "organisedBy"];
 
 /** The top-level settings fields a page tab edits: its sections' texts and colours, their other settings, and which are hidden. */
 export function pageFields(page: SettingsPage): string[] {

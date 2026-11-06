@@ -23,7 +23,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const s = await getSettings();
   return {
     title: "Venue & travel",
-    description: `How to reach ${s.venueName} for the ${s.eventName}: directions by air, train, metro and road, campus entry, places to stay and local tips.`,
+    description: `How to reach ${s.venueName} for the ${s.programmeName}: directions by air, train, metro and road, campus entry, places to stay and local tips.`,
     alternates: { canonical: absoluteUrl("/venue") },
   };
 }

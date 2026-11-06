@@ -5,8 +5,8 @@ import { stripMarkdown } from "@/components/ui/RichText";
 import { SESSION_TYPE_META, THEME_META } from "@/lib/content/constants";
 import { CONTENT_TAG, getSavedSettings, getSessions, getTrainers } from "@/lib/content/queries";
 import type { Session, SiteSettings, Trainer } from "@/lib/content/types";
-import { eventDays, venueLine } from "@/lib/event";
-import { eventDayLabel, formatDate, formatDateRange, timeRange } from "@/lib/format";
+import { batchDays, venueLine } from "@/lib/training";
+import { batchDayLabel, formatDate, formatDateRange, timeRange } from "@/lib/format";
 import { absoluteUrl } from "@/lib/paths";
 
 const A4 = { w: 595.28, h: 841.89 };
@@ -67,7 +67,7 @@ function wrap(font: PDFFont, size: number, text: string, width: number): string[
 
 async function build(s: SiteSettings, sessions: Session[], trainers: Trainer[], generated: Date): Promise<Uint8Array> {
   const doc = await PDFDocument.create();
-  doc.setTitle(`${s.eventName} · Schedule`);
+  doc.setTitle(`${s.programmeName} · Schedule`);
   doc.setAuthor(s.organisedBy || "Daffodil International University");
   doc.setSubject("Training schedule");
   doc.setCreator(absoluteUrl("/"));
@@ -82,7 +82,7 @@ async function build(s: SiteSettings, sessions: Session[], trainers: Trainer[], 
     if (first) {
       page.drawRectangle({ x: 0, y: A4.h - 150, width: A4.w, height: 150, color: rgb(0.94, 0.95, 1) });
       page.drawText(safe(bold, "PROGRAMME"), { x: M, y: A4.h - 52, size: 10, font: bold, color: BRAND });
-      page.drawText(safe(bold, s.eventName), { x: M, y: A4.h - 82, size: 24, font: bold, color: INK });
+      page.drawText(safe(bold, s.programmeName), { x: M, y: A4.h - 82, size: 24, font: bold, color: INK });
       page.drawText(safe(font, `${formatDateRange(s.startDate, s.endDate)}  ·  ${venueLine(s)}`), { x: M, y: A4.h - 104, size: 11, font, color: MUTED });
       page.drawText(safe(font, s.organisedBy), { x: M, y: A4.h - 122, size: 9, font, color: SUBTLE });
       y = A4.h - 178;
@@ -92,7 +92,7 @@ async function build(s: SiteSettings, sessions: Session[], trainers: Trainer[], 
         y -= 34;
       }
     } else {
-      page.drawText(safe(bold, `${s.eventName} · Schedule (continued)`), { x: M, y: A4.h - M, size: 10, font: bold, color: SUBTLE });
+      page.drawText(safe(bold, `${s.programmeName} · Schedule (continued)`), { x: M, y: A4.h - M, size: 10, font: bold, color: SUBTLE });
       y = A4.h - M - 26;
     }
   };
@@ -118,11 +118,11 @@ async function build(s: SiteSettings, sessions: Session[], trainers: Trainer[], 
     y -= 8;
     page.drawText(safe(font, `Latest updates: ${absoluteUrl("/programme")}`), { x: M, y, size: 11, font, color: BRAND });
   } else {
-    for (const d of eventDays(s)) {
+    for (const d of batchDays(s)) {
       const list = sessions.filter((x) => Number(x.day) === d.day);
       if (!list.length) continue;
       ensure(70);
-      page.drawText(safe(bold, `Day ${d.day}  ·  ${eventDayLabel(s.startDate, d.day, { weekday: "long", day: "numeric", month: "long", year: "numeric" })}`), { x: M, y, size: 14, font: bold, color: INK });
+      page.drawText(safe(bold, `Day ${d.day}  ·  ${batchDayLabel(s.startDate, d.day, { weekday: "long", day: "numeric", month: "long", year: "numeric" })}`), { x: M, y, size: 14, font: bold, color: INK });
       y -= 20;
       page.drawLine({ start: { x: M, y: y + 6 }, end: { x: A4.w - M, y: y + 6 }, thickness: 1, color: LINE });
       for (const [label, x] of [["TIME", cols.time], ["SESSION", cols.session], ["TYPE", cols.type], ["ROOM", cols.room]] as const) {
@@ -131,15 +131,15 @@ async function build(s: SiteSettings, sessions: Session[], trainers: Trainer[], 
       y -= 22;
       for (const x of list) {
         const type = SESSION_TYPE_META[x.type] ?? SESSION_TYPE_META.other;
-        const people = (x.type === "panel" ? x.panelists : x.trainers).map((id) => byId[id]).filter(Boolean);
+        const people = (x.type === "discussion" ? x.panelists : x.trainers).map((id) => byId[id]).filter(Boolean);
         const moderator = x.moderator ? byId[x.moderator] : undefined;
-        const who = [moderator ? `Moderator: ${moderator.name}` : "", people.length ? `${x.type === "panel" ? "Panelists: " : ""}${people.map((p) => (p.affiliation ? `${p.name} (${p.affiliation})` : p.name)).join(", ")}` : x.trainerNote]
+        const who = [moderator ? `Moderator: ${moderator.name}` : "", people.length ? `${x.type === "discussion" ? "Discussion leads: " : ""}${people.map((p) => (p.affiliation ? `${p.name} (${p.affiliation})` : p.name)).join(", ")}` : x.trainerNote]
           .filter(Boolean)
           .join("  ·  ");
         const titleLines = wrap(bold, 10.5, x.title, sessionWidth);
         const whoLines = who ? wrap(font, 8.5, who, sessionWidth) : [];
         const themeLine = x.theme && x.theme !== "general" ? THEME_META[x.theme].short : "";
-        const roomLines = wrap(font, 8.5, x.type === "break" ? "" : x.room || "TBA", 72);
+        const roomLines = wrap(font, 8.5, x.type === "break" ? "" : x.room || "By e-mail", 72);
         const h = Math.max(titleLines.length * 13 + whoLines.length * 11 + (themeLine ? 11 : 0), roomLines.length * 11, 16) + 12;
         ensure(h);
         if (x.type === "break") page.drawRectangle({ x: M - 6, y: y - h + 10, width: A4.w - 2 * M + 12, height: h - 2, color: TINT.butter });

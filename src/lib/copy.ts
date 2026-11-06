@@ -1,11 +1,11 @@
 import type { SiteSettings } from "@/lib/content/types";
-import { venueLine } from "@/lib/event";
+import { venueLine } from "@/lib/training";
 import { formatDate, formatDateRange } from "@/lib/format";
 import type { CopyKey, PageCopy } from "@/lib/schema/page-copy";
 
 /*
  * Section texts from Site settings (src/lib/schema/page-copy.ts), with their
- * placeholders filled in: {event}, {short}, {dates}, {venue}, {venueName},
+ * placeholders filled in: {programme}, {short}, {dates}, {venue}, {venueName},
  * {tagline}, {organiser}, {replyBy}, plus any a section passes itself (e.g. {count}).
  */
 
@@ -18,7 +18,7 @@ export function fill(text: string, vars: Vars): string {
 
 export function siteVars(s: SiteSettings): Vars {
   return {
-    event: s.eventName,
+    programme: s.programmeName,
     short: s.shortName,
     dates: formatDateRange(s.startDate, s.endDate),
     venue: venueLine(s),
@@ -31,7 +31,7 @@ export function siteVars(s: SiteSettings): Vars {
 
 /** When registrants hear whether they have a place: "by 20 November 2026", or "by e-mail" before the date is set. */
 export function replyBy(s: SiteSettings) {
-  const date = formatDate(s.workshopReplyBy);
+  const date = formatDate(s.registrationReplyBy);
   return date ? `by ${date}` : "by e-mail";
 }
 

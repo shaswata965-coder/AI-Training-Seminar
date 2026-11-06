@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/Badge";
 import { ButtonLink } from "@/components/ui/Button";
 import type { SiteSettings } from "@/lib/content/types";
 import { copy } from "@/lib/copy";
-import { eventCalendarLinks, registrationHref } from "@/lib/event";
+import { batchCalendarLinks, registrationHref } from "@/lib/training";
 
 /** Shown instead of the schedule while it is hidden (Site settings → Schedule) or has no sessions: each batch's plan is e-mailed. */
 export function ScheduleTba({ s }: { s: SiteSettings }) {
@@ -26,7 +26,7 @@ export function ScheduleTba({ s }: { s: SiteSettings }) {
           {s.programmeNote ? <p className="mt-3 max-w-xl text-muted">{s.programmeNote}</p> : null}
           {c.tbaText ? <p className="mt-3 max-w-xl text-muted">{c.tbaText}</p> : null}
           <div className="mt-6 flex flex-wrap gap-3">
-            <AddToCalendar links={eventCalendarLinks(s)} label={c.tbaCalendar} />
+            <AddToCalendar links={batchCalendarLinks(s)} label={c.tbaCalendar} />
             {c.tbaRegister ? (
               <ButtonLink href={registrationHref(s)} variant="soft">
                 {c.tbaRegister}

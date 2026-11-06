@@ -11,7 +11,7 @@ import { sleep } from "k6";
 import { adminGet, signIn } from "./lib/admin.js";
 import { download, openPage, readManifest } from "./lib/browser.js";
 import { BASE, baseOptions, between, dur, PACE, pick, thresholds, users, weighted } from "./lib/config.js";
-import { enquiryPayload, settle, submit, workshopPayload } from "./lib/forms.js";
+import { enquiryPayload, settle, submit, registrationPayload } from "./lib/forms.js";
 import { summarise } from "./lib/summary.js";
 
 const USERS = users(Number(__ENV.USERS || 100));
@@ -58,12 +58,12 @@ export function visitor({ manifest, sessions }) {
   if (Math.random() < 0.04) download("/api/programme/pdf", "programme PDF");
   if (Math.random() < 0.04) download(sessions.length ? pick(sessions) : "/api/calendar", "calendar entry");
 
-  const action = weighted({ none: 93, workshop: 5, enquiry: 2 });
+  const action = weighted({ none: 93, register: 5, enquiry: 2 });
   if (action !== "none") {
     const form = action === "enquiry" ? "/" : "/register";
     if (page !== form) openPage(manifest, form, { from: page });
     sleep(between(30, 90) * PACE); // filling in the form
-    const payload = action === "workshop" ? workshopPayload(id) : enquiryPayload(id, "contact");
+    const payload = action === "register" ? registrationPayload(id) : enquiryPayload(id, "contact");
     settle(action, [submit(action, payload, form)]);
   }
   sleep(between(5, 15) * PACE);

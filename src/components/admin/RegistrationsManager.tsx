@@ -86,7 +86,7 @@ export function RegistrationsManager() {
         title="Registrations"
         description="Everyone who registered through the website. Update statuses, add notes and download spreadsheets."
         actions={
-          <a href={withBase("/api/admin/export/workshop")} data-ripple="" className="btn-shine inline-flex h-11 items-center gap-2 rounded-full bg-brand px-4 text-sm font-semibold text-brand-fg hover:-translate-y-0.5 hover:bg-brand-strong">
+          <a href={withBase("/api/admin/export/registrations")} data-ripple="" className="btn-shine inline-flex h-11 items-center gap-2 rounded-full bg-brand px-4 text-sm font-semibold text-brand-fg hover:-translate-y-0.5 hover:bg-brand-strong">
             <Download size={16} aria-hidden /> Download CSV
           </a>
         }

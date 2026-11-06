@@ -6,7 +6,7 @@ import { cn } from "@/lib/cn";
 import type { RegistrationStatus, Tone } from "@/lib/content/constants";
 import type { SiteSettings } from "@/lib/content/types";
 import { copy } from "@/lib/copy";
-import { registrationHref } from "@/lib/event";
+import { registrationHref } from "@/lib/training";
 import { formatDate } from "@/lib/format";
 import type { PageCopy } from "@/lib/schema/page-copy";
 import type { PlacardKey } from "./HeroPlacards";
@@ -79,8 +79,8 @@ export function RegisterChooser({ s, className }: { s: SiteSettings; className?:
       kicker: c.professionalsKicker,
       title: c.professionalsTitle,
       href: programmeHref(s, "professionals"),
-      status: s.workshopStatus,
-      deadline: s.workshopDeadline,
+      status: s.registrationStatus,
+      deadline: s.registrationDeadline,
     },
     {
       key: "workspace",
@@ -89,8 +89,8 @@ export function RegisterChooser({ s, className }: { s: SiteSettings; className?:
       kicker: c.workspaceKicker,
       title: c.workspaceTitle,
       href: programmeHref(s, "workspace"),
-      status: s.workshopStatus,
-      deadline: s.workshopDeadline,
+      status: s.registrationStatus,
+      deadline: s.registrationDeadline,
     },
   ];
   return (

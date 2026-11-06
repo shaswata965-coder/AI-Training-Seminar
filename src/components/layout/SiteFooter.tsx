@@ -5,7 +5,7 @@ import { AddToCalendar } from "@/components/share/AddToCalendar";
 import { ShareButtons } from "@/components/share/ShareButtons";
 import { InstagramIcon, LinkedInIcon, XIcon, YouTubeIcon } from "@/components/ui/BrandIcons";
 import type { SiteSettings } from "@/lib/content/types";
-import { brandName, eventCalendarLinks, registrationHref, venueLine } from "@/lib/event";
+import { brandName, batchCalendarLinks, registrationHref, venueLine } from "@/lib/training";
 import { copy } from "@/lib/copy";
 import { formatDate, formatDateRange } from "@/lib/format";
 import { explorePages, homeNav, pastBatchNav, primaryNav, registrationNav, sectionNav } from "@/lib/nav";
@@ -90,8 +90,8 @@ export function SiteFooter({ s }: { s: SiteSettings }) {
             ) : null}
           </ul>
           <div className="mt-5 grid justify-items-start gap-3">
-            <AddToCalendar links={eventCalendarLinks(s)} variant="outline" size="sm" />
-            <ShareButtons url={absoluteUrl("/")} text={`${s.eventName} at Daffodil International University, ${formatDateRange(s.startDate, s.endDate)}`} />
+            <AddToCalendar links={batchCalendarLinks(s)} variant="outline" size="sm" />
+            <ShareButtons url={absoluteUrl("/")} text={`${s.programmeName} at Daffodil International University, ${formatDateRange(s.startDate, s.endDate)}`} />
           </div>
           <SocialLinks s={s} className="mt-5 flex gap-2" />
         </div>

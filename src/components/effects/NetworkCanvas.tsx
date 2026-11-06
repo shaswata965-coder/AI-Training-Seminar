@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 import { cn } from "@/lib/cn";
 
 /**
- * Subtle "agent network" background: drifting nodes linked when close, gently
+ * Subtle "network of ideas" background: drifting nodes linked when close, gently
  * attracted to the pointer. Desktop only; paused off-screen, in background
  * tabs and for reduced motion.
  *

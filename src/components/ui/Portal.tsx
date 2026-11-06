@@ -6,8 +6,8 @@ import type { Tone } from "@/lib/content/constants";
 
 /**
  * A link to another page, drawn as a preview of where it leads instead of a button: a small
- * picture of the destination (components/portals/PortalArt.tsx), what you'll find there, and an
- * agent trace that sends a signal to the arrow on hover. The whole card is the link.
+ * picture of the destination (components/portals/PortalArt.tsx), what you'll find there, and a
+ * signal trace that sends a pulse to the arrow on hover. The whole card is the link.
  */
 export function Portal({
   href,

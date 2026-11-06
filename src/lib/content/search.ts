@@ -20,7 +20,7 @@ export async function buildAssistantIndex(s: SiteSettings): Promise<AssistantEnt
     { kind: "Page", title: n.home, href: "/", keywords: "home overview start next batch dates" },
     { kind: "Page", title: n.programme, subtitle: "Each batch, day by day", href: "/programme", keywords: "schedule timetable agenda sessions day pdf calendar times rooms" },
     { kind: "Page", title: n.trainers, subtitle: "DIU faculty who lead every batch", href: "/trainers", keywords: "trainers teachers faculty instructors lead profile" },
-    { kind: "Page", title: n.registration, subtitle: "Enrol any time for the next batch", href: s.workshopUrl || "/register", keywords: "register registration enrol enroll sign up apply seat fee fees deadline batch" },
+    { kind: "Page", title: n.registration, subtitle: "Enrol any time for the next batch", href: s.registrationUrl || "/register", keywords: "register registration enrol enroll sign up apply seat fee fees deadline batch" },
     { kind: "Page", title: n.about, subtitle: n.aboutText, href: "/about", keywords: "about why what you will learn who should attend audience how it works" },
     { kind: "Page", title: n.tutorials, subtitle: n.tutorialsText, href: "/tutorials", keywords: "labs hands-on practical demos prerequisites laptop software materials" },
     { kind: "Page", title: n.participants, subtitle: "Earlier batches, in their own words", href: "/past-participants", keywords: "past participants alumni testimonials quotes batches certificate" },
@@ -30,7 +30,7 @@ export async function buildAssistantIndex(s: SiteSettings): Promise<AssistantEnt
     { kind: "Page", title: n.meetAura, subtitle: "Our mascot", href: "/meet-aura", keywords: "aura mascot robot" },
   ];
   if (s.showGallery) entries.push({ kind: "Page", title: n.gallery, subtitle: n.galleryText, href: "/gallery", keywords: "photos pictures gallery past batches" });
-  if (s.showTalks) entries.push({ kind: "Page", title: n.talks, subtitle: n.talksText, href: "/talks", keywords: "slides recordings videos past batches" });
+  if (s.showTalks) entries.push({ kind: "Page", title: n.talks, subtitle: n.talksText, href: "/recordings", keywords: "slides recordings videos past batches" });
 
   if (home("invite")) entries.push({ kind: "Section", title: "Enrol for the next batch", subtitle: "New batches start all year round", href: "/#join", keywords: "enrol enroll register next batch dates places continuous" });
   if (home("themes")) entries.push({ kind: "Section", title: n.themes, subtitle: n.themesText, href: "/#themes", keywords: "programmes professionals workspace compare which programme" });

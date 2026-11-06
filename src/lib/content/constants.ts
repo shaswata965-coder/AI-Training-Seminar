@@ -10,6 +10,10 @@ export type ThemeKey = (typeof THEME_KEYS)[number];
 const RENAMED_THEMES: Record<string, ThemeKey> = { professional: "professionals", workplace: "workspace" };
 export const currentThemeKey = (key: string): string => (Object.hasOwn(RENAMED_THEMES, key) ? RENAMED_THEMES[key] : key);
 
+/** Session types stored by the site's first version under other names, read as their current ones. */
+const RENAMED_SESSION_TYPES: Record<string, string> = { keynote: "opening", talk: "lecture", panel: "discussion" };
+export const currentSessionType = (key: string): string => (Object.hasOwn(RENAMED_SESSION_TYPES, key) ? RENAMED_SESSION_TYPES[key] : key);
+
 export const THEME_META: Record<
   ThemeKey,
   { label: string; short: string; tone: Tone; aura: AuraVariant; icon: "briefcase" | "laptop" | "spark" }
@@ -19,13 +23,13 @@ export const THEME_META: Record<
   general: { label: "Both programmes", short: "General", tone: "azure", aura: "guide", icon: "spark" },
 };
 
-export const SESSION_TYPES = ["keynote", "talk", "panel", "tutorial", "demo", "break", "other"] as const;
+export const SESSION_TYPES = ["opening", "lecture", "discussion", "tutorial", "demo", "break", "other"] as const;
 export type SessionType = (typeof SESSION_TYPES)[number];
 
 export const SESSION_TYPE_META: Record<SessionType, { label: string; tone: Tone }> = {
-  keynote: { label: "Opening", tone: "lilac" },
-  talk: { label: "Lecture", tone: "azure" },
-  panel: { label: "Discussion", tone: "peach" },
+  opening: { label: "Opening", tone: "lilac" },
+  lecture: { label: "Lecture", tone: "azure" },
+  discussion: { label: "Discussion", tone: "peach" },
   tutorial: { label: "Hands-on lab", tone: "mint" },
   demo: { label: "Demo", tone: "aqua" },
   break: { label: "Break", tone: "butter" },

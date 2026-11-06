@@ -2,8 +2,8 @@ import type { NextRequest } from "next/server";
 import { stripMarkdown } from "@/components/ui/RichText";
 import { buildIcs } from "@/lib/calendar";
 import { getSavedSettings, getSessions, getTrainers } from "@/lib/content/queries";
-import { venueLine } from "@/lib/event";
-import { eventDayDate, localDateTime } from "@/lib/format";
+import { venueLine } from "@/lib/training";
+import { batchDayDate, localDateTime } from "@/lib/format";
 import { absoluteUrl } from "@/lib/paths";
 import { trainingIcs } from "@/lib/server/emails";
 
@@ -26,7 +26,7 @@ export async function GET(req: NextRequest) {
   const [sessions, trainers] = await Promise.all([getSessions(), getTrainers()]);
   const x = s.programmeStatus === "tba" ? undefined : sessions.find((v) => v.id === id);
   if (!x) return new Response("Session not found", { status: 404 });
-  const date = eventDayDate(s.startDate, x.day);
+  const date = batchDayDate(s.startDate, x.day);
   const start = localDateTime(date, x.start);
   const end = localDateTime(date, x.end || x.start);
   if (!start || !end) return new Response("Session has no time yet", { status: 404 });
@@ -43,7 +43,7 @@ export async function GET(req: NextRequest) {
         url: absoluteUrl("/programme"),
       },
     ],
-    s.eventName,
+    s.programmeName,
   );
   return ics(body, `session-${x.id}.ics`);
 }

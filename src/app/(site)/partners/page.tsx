@@ -19,7 +19,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const s = await getSettings();
   return {
     title: "Partners & sponsors",
-    description: `Partners of the ${s.eventName}, sponsorship tiers and how to become a partner.`,
+    description: `Partners of the ${s.programmeName}, sponsorship tiers and how to become a partner.`,
     alternates: { canonical: absoluteUrl("/partners") },
   };
 }
@@ -127,7 +127,7 @@ export default async function PartnersPage() {
                 {enquire}
                 {brochure}
                 {s.contactEmail ? (
-                  <a className="mi-underline text-sm font-semibold text-accent-ink" href={`mailto:${s.contactEmail}?subject=${encodeURIComponent(`Sponsorship enquiry · ${s.eventName}`)}`}>
+                  <a className="mi-underline text-sm font-semibold text-accent-ink" href={`mailto:${s.contactEmail}?subject=${encodeURIComponent(`Sponsorship enquiry · ${s.programmeName}`)}`}>
                     {tiers.email ? `${tiers.email} ${s.contactEmail}` : s.contactEmail}
                   </a>
                 ) : null}

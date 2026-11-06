@@ -58,7 +58,7 @@ export default async function OpenGraphImage() {
             <div style={{ display: "flex", fontSize: 30, fontWeight: 700, color: "#5b3cc4", letterSpacing: 2 }}>
               {`Next batch · ${formatDateRange(s.startDate, s.endDate)}`.toUpperCase()}
             </div>
-            <div style={{ display: "flex", fontSize: 86, fontWeight: 800, lineHeight: 1.02, marginTop: 14 }}>{s.eventName}</div>
+            <div style={{ display: "flex", fontSize: 86, fontWeight: 800, lineHeight: 1.02, marginTop: 14 }}>{s.programmeName}</div>
             <div style={{ display: "flex", fontSize: 30, color: "#475569", marginTop: 22, lineHeight: 1.3 }}>{s.tagline}</div>
           </div>
           <div style={{ display: "flex", gap: 14, fontSize: 24, color: "#334155" }}>

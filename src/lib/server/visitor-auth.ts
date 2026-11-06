@@ -49,7 +49,7 @@ export async function identify(email: string, code: string): Promise<Visitor | n
   // The password is checked even without an account, so a wrong e-mail takes as long as a wrong password.
   const passwordOk = await verifyPassword(code, user?.passwordHash);
   if (user?.active && passwordOk) return { email, name: user.name || email, kind: "team" };
-  if (registration && sameText(registration.regId.toUpperCase(), id)) return { email, name: registration.name, kind: "workshop" };
+  if (registration && sameText(registration.regId.toUpperCase(), id)) return { email, name: registration.name, kind: "participant" };
   const personCode = typeof person?.loginCode === "string" ? person.loginCode.trim() : "";
   if (person && personCode.length >= MIN_CODE && sameText(personCode, code.trim())) {
     const group = String(person.group) as PeopleGroup;

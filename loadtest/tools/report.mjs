@@ -30,7 +30,7 @@ const summary = json("summary.json");
 const metric = (key) => summary?.metrics[key]?.values ?? {};
 const k6count = (key) => metric(key).count ?? 0;
 const expected = {
-  workshop: k6count("people_registered{form:workshop}"),
+  register: k6count("people_registered{form:register}"),
   enquiries: k6count("submissions{form:enquiry,outcome:ok}"),
 };
 const failedThresholds = summary
@@ -45,12 +45,12 @@ async function readDb() {
   const duplicates = async (collection, field) => (await db.collection(collection).aggregate([{ $group: { _id: field, n: { $sum: 1 } } }, { $match: { n: { $gt: 1 } } }]).toArray()).length;
   const out = {
     stored: {
-      workshop: await db.collection("registrations").countDocuments(),
+      register: await db.collection("registrations").countDocuments(),
       enquiries: await db.collection("enquiries").countDocuments(),
     },
     dupEmails: await duplicates("registrations", "$email"),
     emailSentFlags: {
-      workshop: await db.collection("registrations").countDocuments({ emailSent: true }),
+      register: await db.collection("registrations").countDocuments({ emailSent: true }),
     },
   };
   await mongoose.disconnect();
@@ -144,11 +144,11 @@ const browser = probe.length
 
 /* ---- Checks -------------------------------------------------------------------------------------- */
 const checks = [
-  // The browser probe registers for the workshop too.
-  ["every registered person is stored once (workshop)", stored.workshop === expected.workshop + (browser?.registered ?? 0), `${stored.workshop} stored, ${expected.workshop} expected from k6 + ${browser?.registered ?? 0} from the browser probe`],
+  // The browser probe registers too.
+  ["every registered person is stored once", stored.register === expected.register + (browser?.registered ?? 0), `${stored.register} stored, ${expected.register} expected from k6 + ${browser?.registered ?? 0} from the browser probe`],
   ["every saved enquiry is stored", stored.enquiries === expected.enquiries, `${stored.enquiries} stored, ${expected.enquiries} expected`],
   ["no e-mail address registered twice", dupEmails === 0, `${dupEmails} duplicates`],
-  ["a confirmation e-mail for every workshop registration", kind("workshop-confirmation") >= stored.workshop && emailSentFlags.workshop === stored.workshop, `${kind("workshop-confirmation")} sent, ${emailSentFlags.workshop}/${stored.workshop} marked sent`],
+  ["a confirmation e-mail for every registration", kind("registration-confirmation") >= stored.register && emailSentFlags.register === stored.register, `${kind("registration-confirmation")} sent, ${emailSentFlags.register}/${stored.register} marked sent`],
   ["an acknowledgement and an organiser notice for every enquiry", kind("enquiry-ack") === stored.enquiries && kind("organiser-enquiry-notice") === stored.enquiries, `${kind("enquiry-ack")} acks, ${kind("organiser-enquiry-notice")} notices`],
   ["no visitor address got more than 3 e-mails", visitorMax <= 3, `max ${visitorMax}`],
   ["no server errors (5xx) at nginx", !Object.keys(statuses).some((s) => s >= 500), Object.entries(statuses).filter(([s]) => s >= 500).map(([s, n]) => `${s}×${n}`).join(", ") || "none"],

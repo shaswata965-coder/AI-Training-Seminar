@@ -7,7 +7,7 @@ import type { FieldDef } from "./fields";
  * background, headings, button labels and empty-state texts. Defaults are the
  * site's original text. Shared by client and server code.
  *
- * Texts may contain placeholders such as {event} or {dates}; see src/lib/copy.ts.
+ * Texts may contain placeholders such as {programme} or {dates}; see src/lib/copy.ts.
  */
 
 export type Background = "plain" | "band" | "wash";
@@ -32,7 +32,7 @@ export const LENGTHS: Record<Exclude<Kind, "tone" | "background">, { min: number
   long: { min: 40, max: 480, cap: 1500 },
 };
 
-const PLACEHOLDERS = "You can write {event}, {dates} or {venue}; they are filled in from Programme details.";
+const PLACEHOLDERS = "You can write {programme}, {dates} or {venue}; they are filled in from Programme details.";
 const STATUS = "{status} is replaced by that registration's status, in the words below.";
 const REPLY_BY = "{replyBy} becomes “by” and the date in Site-wide → Registration → Places confirmed by, or “by e-mail” while it is blank.";
 
@@ -111,7 +111,7 @@ export const PAGE_COPY = {
     email: label("E-mail field", "E-mail"),
     code: label("Second field", "Password, registration ID or sign-in code"),
     whoTitle: short("Who can sign in: title", "Who can sign in"),
-    whoWorkshop: text("Who can sign in: participants", "Registered participants: your registration e-mail and registration ID (in your confirmation)."),
+    whoParticipants: text("Who can sign in: participants", "Registered participants: your registration e-mail and registration ID (in your confirmation)."),
     whoTeam: text("Who can sign in: volunteers", "Volunteers and organisers: your admin panel e-mail and password."),
     whoPeople: text("Who can sign in: coordinators", "Coordinators listed on the site: the e-mail and sign-in code the organisers sent you."),
     submit: label("Sign-in window: button", "Sign in"),
@@ -141,7 +141,7 @@ export const PAGE_COPY = {
     pages: short("Status: loading pages", "Loading pages ({done} of {total})", "{done} and {total} count the pages as they arrive."),
     files: short("Status: caching files", "Caching files ({done} of {total})", "{done} and {total} count the images and scripts."),
     ready: label("Status: all loaded", "Lift-off!"),
-    status: note("Status for screen readers", "Loading the {event} website"),
+    status: note("Status for screen readers", "Loading the {programme} website"),
   },
   homeHero: {
     organisedBy: label("Above the university's name", "Organised by"),
@@ -195,7 +195,7 @@ export const PAGE_COPY = {
     posterLink: label("Bring a task: link to the programmes", "Compare the programmes"),
     posterKicker: short("Poster: label", "Now enrolling"),
     posterBadge: label("Poster: badge", "New batches all year"),
-    posterTitle: heading("Poster: title", "Join the {event}"),
+    posterTitle: heading("Poster: title", "Join the {programme}"),
     posterText: text("Poster: text", "AI for Professionals and AI for Workspace: hands-on AI training at Daffodil International University, running batch after batch throughout the year."),
     when: label("Poster fact: dates", "Next batch"),
     where: label("Poster fact: venue", "Where"),
@@ -300,8 +300,8 @@ export const PAGE_COPY = {
     tone: tone("mint"),
     background: bg("plain"),
     title: heading("Heading (for screen readers)", "Why this training"),
-    agenticTone: tone("lilac", "“What you will learn” card colour"),
-    agenticTitle: heading("“What you will learn” card: title", "What you will learn"),
+    learnTone: tone("lilac", "“What you will learn” card colour"),
+    learnTitle: heading("“What you will learn” card: title", "What you will learn"),
   },
   aboutAudience: { tone: tone("lilac"), background: bg("band"), eyebrow: eyebrow("Audience"), title: title("Who should attend") },
   aboutActivities: { tone: tone("peach"), background: bg("plain"), eyebrow: eyebrow("How it works"), title: title("What happens in every batch") },
@@ -329,9 +329,9 @@ export const PAGE_COPY = {
     day: label("Day label", "Day"),
     noSessions: label("Day without sessions", "No sessions on this day"),
     formats: label("Session formats heading", "Session formats"),
-    keynote: text("Format: opening", "A welcome and an overview of the programme and what you'll be able to do by the end."),
-    talk: text("Format: lecture", "Short lectures on the ideas behind each tool and when to use it."),
-    panel: text("Format: discussion", "Open discussions on using AI responsibly at work and in class."),
+    opening: text("Format: opening", "A welcome and an overview of the programme and what you'll be able to do by the end."),
+    lecture: text("Format: lecture", "Short lectures on the ideas behind each tool and when to use it."),
+    discussion: text("Format: discussion", "Open discussions on using AI responsibly at work and in class."),
     tutorial: text("Format: hands-on lab", "Guided practice where you use AI tools on real tasks yourself."),
     demo: text("Format: demo", "Live demonstrations of AI tools at work."),
     themes: label("Programmes heading", "Programmes"),
@@ -462,7 +462,7 @@ export const PAGE_COPY = {
       REPLY_BY,
     ),
     share: label("Once registered: share label", "Tell your friends"),
-    shareText: note("Once registered: shared message", "I've registered for the {event} at DIU!"),
+    shareText: note("Once registered: shared message", "I've registered for the {programme} at DIU!"),
   },
   registerFees: {
     title: heading("Title", "Fees"),
@@ -472,8 +472,8 @@ export const PAGE_COPY = {
   },
   registerDeadlines: {
     title: heading("Title", "Enrolment"),
-    workshop: short("Registration deadline", "Registration for the next batch closes"),
-    workshopTba: text("Without a deadline", "Enrolment is rolling: register any time, and we'll place you in the next batch with free seats."),
+    closes: short("Registration deadline", "Registration for the next batch closes"),
+    rolling: text("Without a deadline", "Enrolment is rolling: register any time, and we'll place you in the next batch with free seats."),
     portalKicker: short("Programmes card: label", "Not sure which programme?"),
     portalTitle: heading("Programmes card: title", "Compare the programmes"),
     portalText: text("Programmes card: text", "What AI for Professionals and AI for Workspace each cover, and who they are for."),
@@ -581,7 +581,7 @@ export const PAGE_COPY = {
     eyebrow: eyebrow("The team"),
     title: title("Organisers"),
     description: intro(
-      "The {event} is organised by the Department of Computer Science and Engineering, Daffodil International University.",
+      "The {programme} is organised by the Department of Computer Science and Engineering, Daffodil International University.",
       "Introduction",
       PLACEHOLDERS,
     ),
@@ -608,7 +608,7 @@ export const PAGE_COPY = {
     crumb: crumb("Photo gallery"),
     eyebrow: eyebrow("Past batches"),
     title: title("Photo gallery"),
-    description: intro("Moments from the batches of the {event}.", "Introduction", PLACEHOLDERS),
+    description: intro("Moments from the batches of the {programme}.", "Introduction", PLACEHOLDERS),
     empty: heading("No photos yet", "Photos from each batch are added here."),
   },
   talksHero: {
@@ -616,7 +616,7 @@ export const PAGE_COPY = {
     crumb: crumb("Slides & recordings"),
     eyebrow: eyebrow("Past batches"),
     title: title("Session slides & recordings"),
-    description: intro("Catch up on the sessions of the {event}.", "Introduction", PLACEHOLDERS),
+    description: intro("Catch up on the sessions of the {programme}.", "Introduction", PLACEHOLDERS),
     slides: label("Slides button", "Slides"),
     empty: heading("No recordings yet", "Slides and recordings are added here after each batch."),
   },
@@ -627,7 +627,7 @@ export const PAGE_COPY = {
     crumb: crumb("Past participants"),
     eyebrow: eyebrow("Past participants"),
     title: title("Our past participants"),
-    description: intro("Professionals, teachers, students and entrepreneurs who have completed a batch of the {event}.", "Introduction", PLACEHOLDERS),
+    description: intro("Professionals, teachers, students and entrepreneurs who have completed a batch of the {programme}.", "Introduction", PLACEHOLDERS),
     register: label("Button: register", "Join the next batch"),
   },
   participantsStats: {

@@ -38,13 +38,13 @@ export const AURA_PRESETS: Record<AuraVariant, AuraPreset> = {
     tips: ["Over here! This bit is important.", "Still stuck? The FAQ at the bottom of the home page has answers."],
   },
   thinker: {
-    label: "Aura thinking, surrounded by a network of ideas",
+    label: "Aura thinking a task through, with ideas circling him",
     expression: "curious",
     pose: "think",
-    emblem: "atom",
+    emblem: "bulb",
     effects: ["orbit"],
     tips: [
-      "Learn how today's AI tools think, plan and get work done.",
+      "Frame the task, brief the AI, then check what it gives you.",
       "AI is a tool: the judgement stays with you.",
       "Try clicking each step of the loop!",
     ],
@@ -280,7 +280,7 @@ export const AURA_PRESETS: Record<AuraVariant, AuraPreset> = {
     tips: ["Say cheese! Moments from our training sessions."],
   },
   recordings: {
-    label: "Aura with a film clapper for talk recordings",
+    label: "Aura with a film clapper for session recordings",
     expression: "star",
     pose: "raise",
     prop: "clapper",

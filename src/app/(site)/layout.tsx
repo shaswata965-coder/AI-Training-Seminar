@@ -12,7 +12,7 @@ import { ToastProvider } from "@/components/ui/Toast";
 import { getSettings } from "@/lib/content/queries";
 import { buildAssistantIndex } from "@/lib/content/search";
 import { copy } from "@/lib/copy";
-import { registrationHref, venueLine } from "@/lib/event";
+import { registrationHref, venueLine } from "@/lib/training";
 import { formatDateRange } from "@/lib/format";
 import { pastBatchNav } from "@/lib/nav";
 import { isShown } from "@/lib/schema/section-order";
@@ -40,7 +40,7 @@ export default async function SiteLayout({ children }: LayoutProps<"/">) {
             <AuraAssistant
               entries={index}
               facts={{
-                eventName: s.eventName,
+                programmeName: s.programmeName,
                 dates: formatDateRange(s.startDate, s.endDate),
                 venue: venueLine(s),
                 registerHref: registrationHref(s),

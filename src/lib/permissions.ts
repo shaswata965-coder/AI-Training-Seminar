@@ -44,7 +44,7 @@ export const PERMISSION_GROUPS: { title: string; hint?: string; items: Permissio
   {
     title: "Responses",
     items: [
-      { key: "registrations", label: "Registrations", href: "/admin/registrations", hint: "Attendees' personal details: change statuses and notes, download CSVs." },
+      { key: "registrations", label: "Registrations", href: "/admin/registrations", hint: "Participants' personal details: change statuses and notes, download CSVs." },
       { key: "enquiries", label: "Enquiries", href: "/admin/enquiries", hint: "Change statuses and download CSVs." },
     ],
   },

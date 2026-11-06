@@ -15,7 +15,7 @@ import { sleep } from "k6";
 import { adminGet, signIn } from "./lib/admin.js";
 import { openPage, readManifest } from "./lib/browser.js";
 import { baseOptions, between, dur, PACE, thresholds, users, weighted } from "./lib/config.js";
-import { enquiryPayload, settle, submit, submitTwice, workshopPayload } from "./lib/forms.js";
+import { enquiryPayload, settle, submit, submitTwice, registrationPayload } from "./lib/forms.js";
 import { summarise } from "./lib/summary.js";
 
 const USERS = users(Number(__ENV.USERS || 2000));
@@ -31,8 +31,8 @@ export const options = {
   },
 };
 
-const FORM_PAGE = { workshop: "/register", enquiry: "/" };
-const PAYLOAD = { workshop: workshopPayload, enquiry: (id) => enquiryPayload(id, "contact") };
+const FORM_PAGE = { register: "/register", enquiry: "/" };
+const PAYLOAD = { register: registrationPayload, enquiry: (id) => enquiryPayload(id, "contact") };
 
 export function setup() {
   return { manifest: readManifest() };
@@ -40,7 +40,7 @@ export function setup() {
 
 export function applicant({ manifest }) {
   sleep(between(0, ARRIVAL) * PACE);
-  const form = weighted({ workshop: 92, enquiry: 8 });
+  const form = weighted({ register: 92, enquiry: 8 });
   const page = FORM_PAGE[form];
 
   let cold = true;
@@ -79,7 +79,7 @@ export function organiser() {
   adminGet("/api/admin/stats", "admin dashboard");
   sleep(between(10, 20) * PACE);
   adminGet("/api/admin/registrations", "admin registrations");
-  if (Math.random() < 0.3) adminGet("/api/admin/export/workshop", "admin CSV export");
+  if (Math.random() < 0.3) adminGet("/api/admin/export/registrations", "admin CSV export");
   sleep(between(10, 20) * PACE);
 }
 

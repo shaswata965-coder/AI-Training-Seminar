@@ -12,7 +12,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const s = await getSettings();
   return {
     title: "Tutorials & Demos",
-    description: `Hands-on tutorials and live demos at the ${s.eventName}: instructors, prerequisites and materials.`,
+    description: `Hands-on tutorials and live demos at the ${s.programmeName}: instructors, prerequisites and materials.`,
     alternates: { canonical: absoluteUrl("/tutorials") },
   };
 }

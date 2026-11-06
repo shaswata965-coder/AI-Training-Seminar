@@ -1,6 +1,6 @@
 /* Calendar helpers: Google / Outlook links and RFC 5545 .ics files. */
 
-export interface CalEvent {
+export interface CalendarEntry {
   uid: string;
   title: string;
   start: Date;
@@ -17,7 +17,7 @@ export function icsDate(d: Date) {
   return `${d.getUTCFullYear()}${pad(d.getUTCMonth() + 1)}${pad(d.getUTCDate())}T${pad(d.getUTCHours())}${pad(d.getUTCMinutes())}${pad(d.getUTCSeconds())}Z`;
 }
 
-/** 20261215 for all-day events (date in BST). */
+/** 20261215 for whole-day calendar entries (date in BST). */
 function ymdCompact(d: Date) {
   const local = new Date(d.getTime() + 360 * 60_000);
   return `${local.getUTCFullYear()}${pad(local.getUTCMonth() + 1)}${pad(local.getUTCDate())}`;
@@ -44,9 +44,9 @@ function fold(line: string) {
   return out.join("\r\n");
 }
 
-export function buildIcs(events: CalEvent[], calName = "DIU AI Training Seminars", stamp = new Date()) {
+export function buildIcs(entries: CalendarEntry[], calName = "DIU AI Training Seminars", stamp = new Date()) {
   const lines = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//Daffodil International University CSE//AI Training Seminars//EN", "CALSCALE:GREGORIAN", "METHOD:PUBLISH", `X-WR-CALNAME:${escapeIcs(calName)}`];
-  for (const e of events) {
+  for (const e of entries) {
     lines.push(
       "BEGIN:VEVENT",
       `UID:${e.uid}`,

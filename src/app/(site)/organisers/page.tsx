@@ -17,7 +17,7 @@ import { isShown } from "@/lib/schema/section-order";
 
 export async function generateMetadata(): Promise<Metadata> {
   const s = await getSettings();
-  return { title: "Organisers", description: `Faculty coordinators, student organisers and volunteers of the ${s.eventName}.`, alternates: { canonical: absoluteUrl("/organisers") } };
+  return { title: "Organisers", description: `Faculty coordinators, student organisers and volunteers of the ${s.programmeName}.`, alternates: { canonical: absoluteUrl("/organisers") } };
 }
 
 function Grid({ people, label, tone }: { people: Person[]; label: string; tone: Tone }) {

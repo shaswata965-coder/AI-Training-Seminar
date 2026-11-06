@@ -13,7 +13,7 @@ import { TagScope } from "@/components/ui/Tag";
 import { cn } from "@/lib/cn";
 import { getParticipants, getSettings } from "@/lib/content/queries";
 import { copy } from "@/lib/copy";
-import { registrationHref } from "@/lib/event";
+import { registrationHref } from "@/lib/training";
 import { participantStats } from "@/lib/participants";
 import { absoluteUrl } from "@/lib/paths";
 
@@ -21,7 +21,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const s = await getSettings();
   return {
     title: "Past participants",
-    description: `The people who have completed a batch of the ${s.eventName} at Daffodil International University: AI for Professionals and AI for Workspace.`,
+    description: `The people who have completed a batch of the ${s.programmeName} at Daffodil International University: AI for Professionals and AI for Workspace.`,
     alternates: { canonical: absoluteUrl("/past-participants") },
   };
 }

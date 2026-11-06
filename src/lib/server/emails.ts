@@ -2,7 +2,7 @@ import "server-only";
 import { buildIcs } from "@/lib/calendar";
 import type { SiteSettings } from "@/lib/content/types";
 import { replyBy } from "@/lib/copy";
-import { eventDays, venueLine } from "@/lib/event";
+import { batchDays, venueLine } from "@/lib/training";
 import { formatDateRange } from "@/lib/format";
 import { absoluteUrl } from "@/lib/paths";
 import type { MailInput } from "./mail";
@@ -15,7 +15,7 @@ function layout(s: SiteSettings, title: string, body: string) {
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="padding:24px 12px"><tr><td align="center">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:600px;background:#ffffff;border-radius:20px;overflow:hidden;border:1px solid #e1e7f1">
 <tr><td style="padding:28px 32px;background:linear-gradient(135deg,#eaf5ff,#f2eeff);">
-<p style="margin:0;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#5b3cc4;font-weight:700">${esc(s.eventName)}</p>
+<p style="margin:0;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#5b3cc4;font-weight:700">${esc(s.programmeName)}</p>
 <h1 style="margin:8px 0 0;font-size:24px;line-height:1.25">${esc(title)}</h1></td></tr>
 <tr><td style="padding:28px 32px;font-size:15px;line-height:1.6;color:#334155">${body}</td></tr>
 <tr><td style="padding:20px 32px;background:#f3f6fb;font-size:13px;color:#64748b">
@@ -29,16 +29,16 @@ const button = (href: string, label: string) =>
 
 export function trainingIcs(s: SiteSettings) {
   return buildIcs(
-    eventDays(s).map((d) => ({
+    batchDays(s).map((d) => ({
       uid: `diu-ai-training-day-${d.day}@${new URL(absoluteUrl("/")).hostname}`,
-      title: `${s.eventName}, Day ${d.day}`,
+      title: `${s.programmeName}, Day ${d.day}`,
       start: d.start,
       end: d.end,
       description: `${s.tagline}\n${absoluteUrl("/programme")}`,
       location: s.venueAddress || venueLine(s),
       url: absoluteUrl("/"),
     })),
-    s.eventName,
+    s.programmeName,
   );
 }
 
@@ -46,7 +46,7 @@ export function registrationEmail(s: SiteSettings, r: { name: string; email: str
   const dates = formatDateRange(s.startDate, s.endDate);
   const review = `Places in each batch are limited, so the organising committee reviews every registration: you'll hear from us ${replyBy(s)} with your place in the next batch with free seats.`;
   const body = `<p>Hi ${esc(r.name)},</p>
-<p>Thank you for registering for the <strong>${esc(s.eventName)}</strong>. ${esc(review)}</p>
+<p>Thank you for registering for the <strong>${esc(s.programmeName)}</strong>. ${esc(review)}</p>
 ${box(`<p style="margin:0;font-size:13px;color:#64748b">Your registration ID</p><p style="margin:4px 0 0;font-size:22px;font-weight:700;letter-spacing:.06em;color:#3b5bdb">${esc(r.regId)}</p>`)}
 <p><strong>Next batch:</strong> ${esc(dates)}<br/><strong>Where:</strong> ${esc(venueLine(s))}</p>
 <p>Keep this registration ID: once your place is confirmed, carry it and a valid photo ID to the campus gate, and bring a charged laptop to the hands-on sessions. The exact room and any updates will be shared on the website and by e-mail.</p>
@@ -56,7 +56,7 @@ ${s.confirmationNote ? `<p>${esc(s.confirmationNote)}</p>` : ""}
 <p style="margin-top:24px">Best wishes,<br/>The organising team</p>`;
   const text = `Hi ${r.name},
 
-Thank you for registering for the ${s.eventName}. ${review}
+Thank you for registering for the ${s.programmeName}. ${review}
 
 Your registration ID: ${r.regId}
 Next batch: ${dates}
@@ -70,7 +70,7 @@ Schedule: ${absoluteUrl("/programme")}
 The organising team`;
   return {
     to: r.email,
-    subject: `Registration received: ${s.eventName} (${r.regId})`,
+    subject: `Registration received: ${s.programmeName} (${r.regId})`,
     html: layout(s, "We've received your registration", body),
     text,
     replyTo: s.contactEmail || undefined,
@@ -91,7 +91,7 @@ export function enquiryAckEmail(s: SiteSettings, e: { email: string; type: keyof
   const body = `<p>Hello,</p><p>Thanks for your ${label}. The organising team has received it and will get back to you soon.</p><p>If you didn't send it, you can ignore this e-mail.</p><p>The organising team</p>`;
   return {
     to: e.email,
-    subject: `We received your ${label} · ${s.eventName}`,
+    subject: `We received your ${label} · ${s.programmeName}`,
     html: layout(s, "Thanks for getting in touch", body),
     text: `Hello,\n\nThanks for your ${label}. The organising team will get back to you soon.\n\nIf you didn't send it, you can ignore this e-mail.\n\nThe organising team`,
     replyTo: s.contactEmail || undefined,

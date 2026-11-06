@@ -4,7 +4,7 @@ import { NetworkCanvas } from "@/components/effects/NetworkCanvas";
 import { Img } from "@/components/ui/Img";
 import type { SiteSettings } from "@/lib/content/types";
 import { copy } from "@/lib/copy";
-import { splitEventName, venueLine } from "@/lib/event";
+import { splitProgrammeName, venueLine } from "@/lib/training";
 import { formatDateRange } from "@/lib/format";
 import { HeroPlacards, type HeroPlacard } from "./HeroPlacards";
 import { RegisterChooser } from "./RegisterChooser";
@@ -13,7 +13,7 @@ import { RegisterChooser } from "./RegisterChooser";
  * The built-in photos of Daffodil International University's campus at Daffodil Smart City (public/hero, from
  * Wikimedia Commons, 1280×712): the academic building by day in the light theme, the Knowledge Tower by night in
  * the dark one. Each is placed by its "Daffodil International University" sign: `sx` is the sign's centre across
- * the photo and `sy` its top down it (fractions), `avoid` the box the agent network keeps off (left, top, width,
+ * the photo and `sy` its top down it (fractions), `avoid` the box the network of ideas keeps off (left, top, width,
  * height in %) and `fade` where the photo fades in from the left (from, to in %), so it stays clear of the title.
  */
 const CAMPUS = [
@@ -33,7 +33,7 @@ export const heroPhoto = (s: SiteSettings): string | undefined => (s.showHeroPho
  * The built-in campus photo behind Aura, placed so that the university's sign sits just above his head and clear of
  * the text: --w is the photo's width, the sign is centred on his column, its top --y from the column's top. The
  * photo fades in from the left and out below, behind him; while the text is above him (below lg) it starts a little
- * above the sign, and his column leaves room for it. The agent network keeps off the sign.
+ * above the sign, and his column leaves room for it. The network of ideas keeps off the sign.
  */
 function BuildingSign() {
   return CAMPUS.map((c) => (
@@ -80,17 +80,17 @@ export function Hero({ s }: { s: SiteSettings }) {
   const tones = copy(s, "homeRegister");
   // Aura's two placards, in turn: one per programme, both with the registration status ({status} is filled in as they show).
   const placards: HeroPlacard[] = [
-    { key: "professionals" as const, text: p.text, tab: p.professionalsTab, tone: tones.professionalsTone, status: s.workshopStatus, deadline: s.workshopDeadline },
-    { key: "workspace" as const, text: p.workspace, tab: p.workspaceTab, tone: tones.workspaceTone, status: s.workshopStatus, deadline: s.workshopDeadline },
+    { key: "professionals" as const, text: p.text, tab: p.professionalsTab, tone: tones.professionalsTone, status: s.registrationStatus, deadline: s.registrationDeadline },
+    { key: "workspace" as const, text: p.workspace, tab: p.workspaceTab, tone: tones.workspaceTone, status: s.registrationStatus, deadline: s.registrationDeadline },
   ].filter((x) => x.text.trim());
   // "DIU AI Training Seminars 2026" → highlighted "DIU AI Training", then "Seminars", then a muted "2026".
-  const { title, year } = splitEventName(s.eventName);
+  const { title, year } = splitProgrammeName(s.programmeName);
   const lead = title.split(/\s+/);
   const last = lead.pop();
   const photo = heroPhoto(s);
   return (
     <section data-edit="home.hero" className="fit-reset relative isolate overflow-hidden" aria-labelledby="hero-title">
-      {/* Background: pastel mesh, dotted grid and the live agent network, which keeps clear of every [data-graph-avoid] text block. */}
+      {/* Background: pastel mesh, dotted grid and the live network of ideas, which keeps clear of every [data-graph-avoid] text block. */}
       <div aria-hidden className="absolute inset-0 -z-20 bg-[radial-gradient(70%_60%_at_15%_10%,color-mix(in_oklab,var(--azure)_38%,transparent),transparent_70%),radial-gradient(50%_55%_at_85%_20%,color-mix(in_oklab,var(--lilac)_34%,transparent),transparent_70%),radial-gradient(45%_50%_at_60%_95%,color-mix(in_oklab,var(--mint)_26%,transparent),transparent_70%)] dark:opacity-50" />
       {photo && photo !== BUILDING ? (
         // An uploaded photo at the top right, melting into the background to the left and downwards. While the

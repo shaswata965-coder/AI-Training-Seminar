@@ -19,18 +19,18 @@ const outfit = localFont({ src: "./fonts/outfit-latin-var.woff2", weight: "100 9
 
 export async function generateMetadata(): Promise<Metadata> {
   const s = await getSettings();
-  const title = `${s.eventName} · Daffodil International University`;
+  const title = `${s.programmeName} · Daffodil International University`;
   const description = s.description || s.tagline;
   return {
     metadataBase: new URL(`${SITE_ORIGIN}${BASE_PATH}/`),
-    title: { default: title, template: `%s · ${s.eventName}` },
+    title: { default: title, template: `%s · ${s.programmeName}` },
     description,
     keywords: s.keywords,
-    applicationName: s.eventName,
+    applicationName: s.programmeName,
     authors: [{ name: s.organisedBy || "Daffodil International University" }],
     openGraph: {
       type: "website",
-      siteName: s.eventName,
+      siteName: s.programmeName,
       title,
       description,
       locale: "en_BD",

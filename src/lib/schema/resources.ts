@@ -189,7 +189,7 @@ export const COLLECTIONS: CollectionDef[] = [
     tags: ["sessions"],
     publicPath: "/programme",
     sort: { day: 1, start: 1, order: 1 },
-    defaults: { published: true, day: "1", type: "talk", theme: "general", order: 0 },
+    defaults: { published: true, day: "1", type: "lecture", theme: "general", order: 0 },
     columns: [
       { key: "day", label: "Day", kind: "option" },
       { key: "start", label: "Start" },
@@ -209,7 +209,7 @@ export const COLLECTIONS: CollectionDef[] = [
       text("trainerNote", "Trainer text", { width: "half", help: "Shown when no trainer is linked, e.g. “DIU CSE trainers”." }),
       refList("trainers", "Trainers", "trainers"),
       ref("moderator", "Moderator (discussions)", "trainers", { width: "half" }),
-      refList("panelists", "Panelists (discussions)", "trainers"),
+      refList("panelists", "Discussion leads (discussions)", "trainers"),
       richtext("description", "Description"),
       order,
       published,
@@ -426,7 +426,7 @@ export const COLLECTIONS: CollectionDef[] = [
     group: "Past batches",
     titleKey: "title",
     tags: ["talks"],
-    publicPath: "/talks",
+    publicPath: "/recordings",
     sort: { order: 1, title: 1 },
     defaults: { published: true, order: 100 },
     columns: [
@@ -559,11 +559,11 @@ export const SETTINGS_PAGES: SettingsPage[] = [
     description: "Programme details, registration, colours and the parts every page shares: navigation, header, footer and banner.",
     sections: [
       section(
-        "event",
+        "details",
         "Programme details",
         undefined,
         [
-          text("eventName", "Name", { required: true, width: "half", help: "Used in the logo, page titles, e-mails and calendar invites. The training runs all year, so it is best without a year; one written at the end (e.g. 2027) appears under the logo." }),
+          text("programmeName", "Name", { required: true, width: "half", help: "Used in the logo, page titles, e-mails and calendar invites. The training runs all year, so it is best without a year; one written at the end (e.g. 2027) appears under the logo." }),
           text("shortName", "Short name", { width: "half", help: "Used where space is tight: the admin panel and the name of the site when installed as an app." }),
           text("tagline", "Tagline"),
           textarea("description", "Short description", { help: "Used for search engines and social media previews.", maxLength: 300 }),
@@ -581,13 +581,13 @@ export const SETTINGS_PAGES: SettingsPage[] = [
         "Registration",
         undefined,
         [
-          select("workshopStatus", "Registration", statusOptions, { width: "half", help: "Also shown on Aura's placards and the registration cards on the home page." }),
-          datetime("workshopDeadline", "Registration deadline", { width: "half" }),
-          datetime("workshopReplyBy", "Places confirmed by", {
+          select("registrationStatus", "Registration", statusOptions, { width: "half", help: "Also shown on Aura's placards and the registration cards on the home page." }),
+          datetime("registrationDeadline", "Registration deadline", { width: "half" }),
+          datetime("registrationReplyBy", "Places confirmed by", {
             width: "half",
             help: "The date by which the organising committee tells registrants whether they have a place. Texts that say {replyBy} show “by” and this date; leave it blank for “by e-mail”.",
           }),
-          url("workshopUrl", "External registration form (optional)", { help: "Leave blank to use the built-in registration form." }),
+          url("registrationUrl", "External registration form (optional)", { help: "Leave blank to use the built-in registration form." }),
           textarea("confirmationNote", "Extra text for the confirmation e-mail"),
         ],
         { description: "Use the built-in form, or paste a link to an external form (Google Forms…).", path: "/register", anchor: "register.hero" },
@@ -615,7 +615,7 @@ export const SETTINGS_PAGES: SettingsPage[] = [
         [
           image("logoUniversity", "University logo", { width: "half", help: "Left corner of the navigation bar. Leave blank for the built-in DIU logo." }),
           image("logoDepartment", "Department logo", { width: "half", help: "Right corner of the navigation bar. Leave blank for the built-in Department of CSE seal." }),
-          image("eventLogo", "Programme logo", { width: "half" }),
+          image("programmeLogo", "Programme logo", { width: "half" }),
           image("ogImage", "Social preview image (optional)", { help: "1200×630 px. Leave blank to use the generated preview." }),
         ],
         { description: "The DIU logo and the Department of CSE seal are built in. Upload one here only to replace it.", anchor: "site.header" },
@@ -723,7 +723,7 @@ export const SETTINGS_PAGES: SettingsPage[] = [
         objects("aboutPoints", "Topics around Aura", "Topic", [
           text("title", "Topic (two or three words)", { required: true, width: "half", maxLength: 24 }),
           select("icon", "Icon", iconOptions, { width: "half" }),
-          textarea("description", "Summary (shown in Aura's speech bubble)", { rows: 2, maxLength: 150, help: "You can write {dates}, {venue} or {event}; they are filled in from these settings." }),
+          textarea("description", "Summary (shown in Aura's speech bubble)", { rows: 2, maxLength: 150, help: "You can write {dates}, {venue} or {programme}; they are filled in from these settings." }),
         ], { maxItems: 8, help: "Up to 8 topics around Aura, each summarising part of the About page. Aura waits in a thinking pose; hovering or tapping a topic makes him point at it and answer with its summary." }),
       ]),
       section("trainers", "Trainers", "homeTrainers", [
@@ -747,7 +747,7 @@ export const SETTINGS_PAGES: SettingsPage[] = [
     path: "/about",
     sections: [
       section("hero", "Hero", "aboutHero"),
-      section("motivation", "Motivation", "aboutMotivation", [richtext("motivation", "Why this training"), richtext("agenticAI", "What you will learn")]),
+      section("motivation", "Motivation", "aboutMotivation", [richtext("motivation", "Why this training"), richtext("learningText", "What you will learn")]),
       section("audience", "Who should attend", "aboutAudience", [
         objects("audience", "Audiences", "Audience", [
           text("title", "Title", { required: true, width: "half" }),
@@ -913,7 +913,7 @@ export const SETTINGS_PAGES: SettingsPage[] = [
   {
     key: "talks",
     title: "Slides & recordings",
-    path: "/talks",
+    path: "/recordings",
     description: "Shown once “Past batches: show session slides & recordings” is on (Site-wide → Features); the preview here shows it before that. Recordings are added under Slides & recordings.",
     sections: [section("hero", "Page", "talksHero")],
   },

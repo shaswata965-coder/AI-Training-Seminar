@@ -1,20 +1,21 @@
 "use client";
 
-import { Brain, Eye, RefreshCw, Route, Zap, type LucideIcon } from "lucide-react";
+import { MessageSquareText, PenLine, Rocket, ShieldCheck, Target, type LucideIcon } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { Aura } from "@/components/aura/Aura";
 import { cn } from "@/lib/cn";
 
+/** How a professional puts AI to work on a real task, the method both programmes teach. */
 const STEPS: { title: string; text: string; Icon: LucideIcon; tone: string }[] = [
-  { title: "Perceive", text: "Takes in the goal and its surroundings: user requests, documents, sensor data and tool outputs.", Icon: Eye, tone: "tone-azure" },
-  { title: "Reason", text: "Makes sense of the situation and decides what matters, often with a large language model as its engine.", Icon: Brain, tone: "tone-lilac" },
-  { title: "Plan", text: "Breaks the goal into steps and chooses which tools, data or other agents to use.", Icon: Route, tone: "tone-mint" },
-  { title: "Act", text: "Executes the plan (calls APIs, runs code, searches, writes) or asks a human when it should.", Icon: Zap, tone: "tone-peach" },
-  { title: "Reflect", text: "Checks the outcome, learns from feedback and adapts the plan for the next loop.", Icon: RefreshCw, tone: "tone-blush" },
+  { title: "Frame", text: "Start from a real task at work: the goal, who it is for and what a good result looks like.", Icon: Target, tone: "tone-azure" },
+  { title: "Brief", text: "Give the AI clear instructions and the context it needs, without sharing confidential data.", Icon: MessageSquareText, tone: "tone-lilac" },
+  { title: "Draft", text: "Let it produce a first version in minutes: a report, an analysis, a summary, a letter or slides.", Icon: PenLine, tone: "tone-mint" },
+  { title: "Check", text: "Verify the facts, figures and sources. The AI assists; your professional judgement decides.", Icon: ShieldCheck, tone: "tone-peach" },
+  { title: "Apply", text: "Refine it, put it to work, and keep the prompt to reuse on the next task.", Icon: Rocket, tone: "tone-blush" },
 ];
 
-/** Interactive perceive → reason → plan → act → reflect loop with Aura at the centre. */
-export function AgentLoop() {
+/** Interactive frame → brief → draft → check → apply loop, Aura at its centre: working with AI as a professional. */
+export function WorkflowLoop() {
   const [active, setActive] = useState(0);
   const [turns, setTurns] = useState(0);
   const [auto, setAuto] = useState(true);

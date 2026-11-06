@@ -45,6 +45,6 @@ export const sectionNav = (n: NavCopy, hidden: readonly string[] = []): NavItem[
 export function pastBatchNav(flags: { showGallery: boolean; showTalks: boolean }, n: NavCopy): NavItem[] {
   return [
     ...(flags.showGallery ? [{ href: "/gallery", label: n.gallery, description: n.galleryText }] : []),
-    ...(flags.showTalks ? [{ href: "/talks", label: n.talks, description: n.talksText }] : []),
+    ...(flags.showTalks ? [{ href: "/recordings", label: n.talks, description: n.talksText }] : []),
   ];
 }

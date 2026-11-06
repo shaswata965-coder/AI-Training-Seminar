@@ -43,7 +43,7 @@ This guide is for the organising team of the **DIU AI Training Seminars** (Depar
 - **A section's texts and colours:** its colour, its background (*Plain*, *Tinted band* or *Soft glow*), the small label above the title, the title, the introduction, and its button labels, card texts and the messages shown while something is still empty ("Your name could be here").
 - **Live preview:** the real page is shown beside the form and follows what you type, with the section you're editing outlined. Switch between **Desktop** and **Phone**. Only you see unsaved changes; visitors see the saved site until you press **Save changes** (or **Discard** to go back).
 - **Layout check:** each text has a counter with its recommended length, and the preview measures the real page and warns when a change breaks the layout (a title running onto many lines, text spilling out of its box, the page scrolling sideways). Warnings never stop you saving.
-- **Placeholders:** in many texts you can write `{event}`, `{dates}` or `{venue}`, and they are filled in from *Programme details*, so the texts stay right when the batch dates change. The hint under a field lists the ones it accepts.
+- **Placeholders:** in many texts you can write `{programme}`, `{dates}` or `{venue}`, and they are filled in from *Programme details*, so the texts stay right when the batch dates change. The hint under a field lists the ones it accepts.
 - **Colours:** *Site-wide → Colours* sets the brand colour and the seven accent colours sections choose from.
 - **Navigation, header, footer and banner** names are under *Site-wide*.
 - The items themselves (trainers, sessions, past participants, FAQs…) are added under their own menu entries; the sections that show them say where.
@@ -93,7 +93,7 @@ The newest announcements appear in the box on the home page.
 **Schedule → New session**
 - Day, start and end time, title, **type** (*Opening*, *Lecture*, *Discussion*, *Hands-on lab*, *Demo*, *Break* or *Session*), programme, room/lab.
 - **Trainers:** pick from your trainers, or write a *Trainer text* (e.g. "DIU CSE trainers").
-- **Discussions:** choose a *Moderator* and *Panelists*; once they are named the discussion is also listed on the Trainers page.
+- **Discussions:** choose a *Moderator* and *Discussion leads*; once they are named the discussion is also listed on the Trainers page.
 
 **Site settings → Schedule → Schedule → Schedule status**
 - *Hidden:* instead of sessions, the website says every batch follows the same plan and its times, rooms and trainers are e-mailed before it starts.

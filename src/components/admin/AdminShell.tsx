@@ -51,9 +51,9 @@ export interface AdminMe {
 const MeContext = createContext<AdminMe | null>(null);
 export const useMe = () => useContext(MeContext);
 
-const EventNameContext = createContext("");
+const ProgrammeNameContext = createContext("");
 /** The programme's name from Site settings. */
-export const useEventName = () => useContext(EventNameContext);
+export const useProgrammeName = () => useContext(ProgrammeNameContext);
 
 interface Item {
   href: string;
@@ -168,7 +168,7 @@ function NavItems({ me, onNavigate, pathname }: NavProps & { pathname: string | 
   );
 }
 
-export function AdminShell({ eventName, shortName, children }: { eventName: string; shortName: string; children: ReactNode }) {
+export function AdminShell({ programmeName, shortName, children }: { programmeName: string; shortName: string; children: ReactNode }) {
   const { data: me } = useApi<AdminMe>("/auth/me");
   const [open, setOpen] = useState(false);
 
@@ -183,7 +183,7 @@ export function AdminShell({ eventName, shortName, children }: { eventName: stri
         <AuraHead size={30} />
       </span>
       <span className="leading-tight">
-        <span className="block font-display text-[15px] font-bold text-fg">{shortName || eventName}</span>
+        <span className="block font-display text-[15px] font-bold text-fg">{shortName || programmeName}</span>
         <span className="block text-xs font-semibold text-subtle">Content manager</span>
       </span>
     </Link>
@@ -243,11 +243,11 @@ export function AdminShell({ eventName, shortName, children }: { eventName: stri
         ) : null}
 
         <main id="main" className="min-w-0 px-4 py-6 sm:px-8 sm:py-8">
-          <EventNameContext.Provider value={eventName}>
+          <ProgrammeNameContext.Provider value={programmeName}>
             <Suspense fallback={<div className="card p-10 text-center text-muted">Loading…</div>}>
               <PageGate me={me}>{children}</PageGate>
             </Suspense>
-          </EventNameContext.Provider>
+          </ProgrammeNameContext.Provider>
         </main>
       </div>
     </MeContext.Provider>

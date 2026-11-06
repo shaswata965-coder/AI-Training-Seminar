@@ -35,7 +35,7 @@ export function VenueMap({ directions, query, children }: { directions: SiteSett
   const root = useRef<HTMLDivElement>(null);
   const stage = useRef<HTMLDivElement>(null);
   const paths = useRef<(SVGPathElement | null)[]>([]);
-  const agents = useRef<(HTMLSpanElement | null)[]>([]);
+  const travellers = useRef<(HTMLSpanElement | null)[]>([]);
   const { listRef, pillRef } = useSlidingPill<HTMLDivElement>(active, '[aria-pressed="true"]');
 
   const current = directions[Math.min(active, directions.length - 1)];
@@ -68,7 +68,7 @@ export function VenueMap({ directions, query, children }: { directions: SiteSett
       root.current?.style.setProperty("--trip", String(t));
       ps.forEach((p, i) => {
         p!.style.strokeDashoffset = String(1 - t);
-        const a = agents.current[i];
+        const a = travellers.current[i];
         if (!a) return;
         const pt = p!.getPointAtLength(t * lens[i]);
         a.style.left = pct(pt.x, MAP_W);
@@ -285,12 +285,12 @@ export function VenueMap({ directions, query, children }: { directions: SiteSett
           {/* Aura, travelling */}
           {routes.map((_, i) => (
             <span
-              key={`${mode}-agent-${i}`}
+              key={`${mode}-traveller-${i}`}
               ref={(el) => {
-                agents.current[i] = el;
+                travellers.current[i] = el;
               }}
               aria-hidden
-              className="venue-agent pointer-events-none absolute z-30 -translate-x-1/2 -translate-y-[70%]"
+              className="venue-traveller pointer-events-none absolute z-30 -translate-x-1/2 -translate-y-[70%]"
             >
               <span className="block rounded-full bg-surface p-1 shadow-[0_0_0_5px_color-mix(in_oklab,var(--brand)_22%,transparent),0_8px_20px_-6px_rgb(15_23_42/0.4)]">
                 <AuraHead size={30} />

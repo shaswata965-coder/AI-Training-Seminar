@@ -8,10 +8,10 @@ import { VideoEmbed } from "@/components/ui/VideoEmbed";
 import { TagScope } from "@/components/ui/Tag";
 import { getSettings, getTalks, inPreview } from "@/lib/content/queries";
 import { copy } from "@/lib/copy";
-import { eventDayLabel } from "@/lib/format";
+import { batchDayLabel } from "@/lib/format";
 import { absoluteUrl } from "@/lib/paths";
 
-export const metadata: Metadata = { title: "Slides & recordings", alternates: { canonical: absoluteUrl("/talks") } };
+export const metadata: Metadata = { title: "Slides & recordings", alternates: { canonical: absoluteUrl("/recordings") } };
 
 export default async function TalksPage() {
   const [s, talks, preview] = await Promise.all([getSettings(), getTalks(), inPreview()]);
@@ -33,7 +33,7 @@ export default async function TalksPage() {
                     </div>
                   ) : null}
                   <div className="flex flex-1 flex-col p-6">
-                    {t.day ? <p className="text-xs font-bold tracking-[0.12em] text-subtle uppercase">{eventDayLabel(s.startDate, t.day)}</p> : null}
+                    {t.day ? <p className="text-xs font-bold tracking-[0.12em] text-subtle uppercase">{batchDayLabel(s.startDate, t.day)}</p> : null}
                     <h2 className="mt-1 font-display text-xl font-semibold text-fg">{t.title}</h2>
                     {t.trainerName ? <p className="text-sm font-semibold text-accent-ink">{t.trainerName}</p> : null}
                     {t.description ? <p className="mt-2 text-sm text-muted">{t.description}</p> : null}
