@@ -90,8 +90,8 @@ All settings are environment variables; [`.env.example`](.env.example) documents
 
 | Variable | Required | Purpose |
 | --- | --- | --- |
-| `MONGODB_URI` | yes | MongoDB connection string, e.g. `mongodb://127.0.0.1:27017/diu-ai-training` or an Atlas `mongodb+srv://…` URI. Give this site **a database of its own**: one shared with another website would show that site's settings, content and registrations here |
-| `MONGODB_DB` | | Database name, if not in the URI |
+| `MONGODB_URI` | yes | MongoDB connection string, e.g. `mongodb://127.0.0.1:27017/diu-ai-training` or an Atlas `mongodb+srv://…` URI. Give this site **a database of its own**. If the database it names was set up by the site's earlier version (recognised by the `hackathon` record that version stored), the site uses its own database, `diu-ai-training`, on the same server instead, with the admin accounts carried over, and leaves the earlier one untouched (`src/lib/db.ts`) |
+| `MONGODB_DB` | | Database name, if not in the URI (the same rule applies) |
 | `NEXT_PUBLIC_SITE_URL` | yes (prod) | Public origin, e.g. `https://ai-training.daffodilvarsity.edu.bd`. Used in e-mails, calendar files, the sitemap and social previews |
 | `NEXT_PUBLIC_BASE_PATH` | | Serve under a path, e.g. `/ai-training` for `https://cse.daffodilvarsity.edu.bd/ai-training` |
 | `AUTH_SECRET` | yes (prod) | 32+ random characters for signing admin sessions (`openssl rand -base64 48`). Without it the admin panel refuses sign-ins in production |
