@@ -52,7 +52,7 @@ const MeContext = createContext<AdminMe | null>(null);
 export const useMe = () => useContext(MeContext);
 
 const EventNameContext = createContext("");
-/** The event name from Site settings. */
+/** The programme's name from Site settings. */
 export const useEventName = () => useContext(EventNameContext);
 
 interface Item {

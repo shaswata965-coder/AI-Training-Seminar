@@ -9,10 +9,10 @@ import { showProgress, warmAssets, warmup } from "./warm";
 
 /*
  * The home page's loading screen. While the site's files are fetched and cached (warm.ts), Aura's
- * ship (shaped like her: her floating head is the cockpit) tries to take off from a pad seen through a
+ * ship (shaped like him: his head is the cockpit) tries to take off from a pad seen through a
  * round window, while small Auras in hard hats work on it: one tightens bolts from the gantry, one
  * polishes the cockpit, one welds, one flies in parts and one ticks off the checklist. The ring around
- * the window fills with the real progress. Once everything is cached she lifts off, the smoke fills
+ * the window fills with the real progress. Once everything is cached he lifts off, the smoke fills
  * the screen, and as it clears the page is there, with the hero's Aura flying down into place.
  *
  * Every moving part is its own element, moved only with transform and opacity (loading.css), so the
@@ -281,8 +281,8 @@ function Window() {
 }
 
 /**
- * Aura's ship, shaped like her: her floating head is the cockpit, her fin-like arms are the side
- * boosters, and her eyes (drawn on top, so they can blink and change) look out of the visor.
+ * Aura's ship, shaped like him: his head is the cockpit, his arms are the side
+ * boosters, and his eyes (drawn on top, so they can blink and change) look out of the visor.
  */
 function Ship({ uid, shipRef }: { uid: string; shipRef: RefObject<HTMLDivElement | null> }) {
   const u = (name: string) => `url(#${uid}-${name})`;
@@ -298,7 +298,7 @@ function Ship({ uid, shipRef }: { uid: string; shipRef: RefObject<HTMLDivElement
           {/* Landing fins */}
           <path d="M26 128 C14 138 9 152 9 166 L30 157 Z" fill={u("fin")} />
           <path d="M74 128 C86 138 91 152 91 166 L70 157 Z" fill={u("fin")} />
-          {/* Side boosters: her arms */}
+          {/* Side boosters: his arms */}
           <ellipse cx="13" cy="106" rx="6.5" ry="17" transform="rotate(14 13 106)" fill={u("shell")} stroke="var(--aura-edge, #c9d4e5)" strokeWidth="0.8" />
           <ellipse cx="87" cy="106" rx="6.5" ry="17" transform="rotate(-14 87 106)" fill={u("shell")} stroke="var(--aura-edge, #c9d4e5)" strokeWidth="0.8" />
           {/* Nozzle */}
@@ -311,13 +311,23 @@ function Ship({ uid, shipRef }: { uid: string; shipRef: RefObject<HTMLDivElement
           <circle cx="50" cy="106" r="7" fill={u("visor")} />
           <path d="M50 100 Q51 105 56 106 Q51 107 50 112 Q49 107 44 106 Q49 105 50 100 Z" fill={EYE} />
           <path d="M28 138 C38 146 62 146 72 138" fill="none" stroke={EYE} strokeOpacity="0.7" strokeWidth="2" strokeLinecap="round" />
-          {/* The glow her head floats on */}
-          <ellipse cx="50" cy="63.5" rx="19" ry="2.2" fill={EYE} opacity="0.55" />
-          {/* Head: the cockpit */}
-          <path d="M50 8 C70 8 82 20 82 36 C82 52 68 60 50 60 C32 60 18 52 18 36 C18 20 30 8 50 8 Z" fill={u("shell")} stroke="var(--aura-edge, #c9d4e5)" strokeWidth="0.8" />
-          <path d="M28 20 C33 14 40 11 47 10.5" fill="none" stroke="#fff" strokeOpacity="0.95" strokeWidth="2.6" strokeLinecap="round" />
-          <path d="M50 18 C64 18 73 26 73 37 C73 47 63 52 50 52 C37 52 27 47 27 37 C27 26 36 18 50 18 Z" fill={u("visor")} />
-          <path d="M34 26 C38 22.5 43 21 49 21" fill="none" stroke="#fff" strokeOpacity="0.18" strokeWidth="1.6" strokeLinecap="round" />
+          {/* Head: the cockpit, in the build chosen in Site settings (globals.css shows one) */}
+          <g className="aura-b-classic">
+            {/* The glow his head floats on */}
+            <ellipse cx="50" cy="63.5" rx="19" ry="2.2" fill={EYE} opacity="0.55" />
+            <path d="M50 8 C70 8 82 20 82 36 C82 52 68 60 50 60 C32 60 18 52 18 36 C18 20 30 8 50 8 Z" fill={u("shell")} stroke="var(--aura-edge, #c9d4e5)" strokeWidth="0.8" />
+            <path d="M28 20 C33 14 40 11 47 10.5" fill="none" stroke="#fff" strokeOpacity="0.95" strokeWidth="2.6" strokeLinecap="round" />
+            <path d="M50 18 C64 18 73 26 73 37 C73 47 63 52 50 52 C37 52 27 47 27 37 C27 26 36 18 50 18 Z" fill={u("visor")} />
+            <path d="M34 26 C38 22.5 43 21 49 21" fill="none" stroke="#fff" strokeOpacity="0.18" strokeWidth="1.6" strokeLinecap="round" />
+          </g>
+          <g className="aura-b-strong">
+            {/* His neck joint */}
+            <rect x="41" y="57" width="18" height="12" rx="3" fill={STEEL_DARK} />
+            <path d="M32 8 H68 C77 8 82 13 82 22 V44 C82 52 77 57 70 59 L64 61 H36 L30 59 C23 57 18 52 18 44 V22 C18 13 23 8 32 8 Z" fill={u("shell")} stroke="var(--aura-edge, #c9d4e5)" strokeWidth="0.8" />
+            <path d="M25 18 C28 13 33 10.5 40 10" fill="none" stroke="#fff" strokeOpacity="0.9" strokeWidth="2.6" strokeLinecap="round" />
+            <path d="M30 22 L48 25 Q50 25.4 52 25 L70 22 C72.5 21.7 74 23.2 74 25.5 V44 C74 48 71.5 50.5 67.5 50.5 H32.5 C28.5 50.5 26 48 26 44 V25.5 C26 23.2 27.5 21.7 30 22 Z" fill={u("visor")} />
+            <rect x="43" y="53" width="14" height="4" rx="1.6" fill={STEEL_DARK} opacity="0.8" />
+          </g>
           {/* Headset */}
           <path d="M19.5 37 C17 8 83 8 80.5 37" fill="none" stroke={STEEL_DARK} strokeWidth="3" strokeLinecap="round" />
           <rect x="14" y="30" width="7" height="13" rx="3.5" fill="#2b3550" stroke={EYE} strokeWidth="1" />
@@ -398,6 +408,10 @@ function Crew({ uid }: { uid: string }) {
 
 const HEAD = "M20 2.5 C31 2.5 36.5 8 36.5 14.5 C36.5 21 30 25 20 25 C10 25 3.5 21 3.5 14.5 C3.5 8 9 2.5 20 2.5 Z";
 const VISOR = "M20 7 C28 7 31.5 10.5 31.5 14.5 C31.5 18.5 27 21 20 21 C13 21 8.5 18.5 8.5 14.5 C8.5 10.5 12 7 20 7 Z";
+/* The strong build (Site settings → Site-wide → Aura): a squarer helmet and visor, a broad torso and arms with fists. */
+const STRONG_HEAD = "M11 2.5 H29 C33 2.5 35.5 5 35.5 9 V17 C35.5 21 33 23.5 29.5 24.5 H10.5 C7 23.5 4.5 21 4.5 17 V9 C4.5 5 7 2.5 11 2.5 Z";
+const STRONG_VISOR = "M9.5 7.6 L18.5 9.2 Q20 9.5 21.5 9.2 L30.5 7.6 C31.8 7.4 32.6 8.2 32.6 9.4 V16.3 C32.6 18.4 31.2 19.8 29.1 19.8 H10.9 C8.8 19.8 7.4 18.4 7.4 16.3 V9.4 C7.4 8.2 8.2 7.4 9.5 7.6 Z";
+const STRONG_BODY = "M13.5 25.5 H26.5 C31.5 25.5 34 27.8 34 31 C34 35.5 29 40.5 23 41 H17 C11 40.5 6 35.5 6 31 C6 27.8 8.5 25.5 13.5 25.5 Z";
 
 /**
  * A small Aura in a hard hat, its right arm at `arm` degrees (0 hangs down, -90 points ahead). Without a
@@ -410,19 +424,37 @@ function Member({ uid, style, bob, arm, flip, children }: { uid: string; style?:
       <div className={flip ? "lx-flip" : undefined}>
         <svg viewBox="0 0 40 46" className="lx-member" focusable="false">
           <ellipse cx="20" cy="44" rx="7" ry="1.4" fill="currentColor" opacity="0.12" />
-          <ellipse cx="9.5" cy="31" rx="2.6" ry="4.4" fill={shell} />
-          <ellipse cx="20" cy="31.5" rx="9.5" ry="8.5" fill={shell} stroke="var(--aura-edge, #c9d4e5)" strokeWidth="0.6" />
-          <circle cx="20" cy="31" r="2.2" fill={EYE} />
-          <path d={HEAD} fill={shell} stroke="var(--aura-edge, #c9d4e5)" strokeWidth="0.6" />
-          <path d={VISOR} fill={`url(#${uid}-visor)`} />
-          <g fill={EYE}>
-            <ellipse cx="16.5" cy="14.5" rx="2.1" ry="2.8" />
-            <ellipse cx="25.5" cy="14.5" rx="2.1" ry="2.8" />
+          <g className="aura-b-classic">
+            <ellipse cx="9.5" cy="31" rx="2.6" ry="4.4" fill={shell} />
+            <ellipse cx="20" cy="31.5" rx="9.5" ry="8.5" fill={shell} stroke="var(--aura-edge, #c9d4e5)" strokeWidth="0.6" />
+            <circle cx="20" cy="31" r="2.2" fill={EYE} />
+            <path d={HEAD} fill={shell} stroke="var(--aura-edge, #c9d4e5)" strokeWidth="0.6" />
+            <path d={VISOR} fill={`url(#${uid}-visor)`} />
+            <g fill={EYE}>
+              <ellipse cx="16.5" cy="14.5" rx="2.1" ry="2.8" />
+              <ellipse cx="25.5" cy="14.5" rx="2.1" ry="2.8" />
+            </g>
+          </g>
+          <g className="aura-b-strong">
+            <rect x="6" y="28" width="5" height="9" rx="2.5" fill={shell} />
+            <circle cx="8.5" cy="38" r="2.6" fill="var(--aura-trim-2, #1c2a4d)" />
+            <path d={STRONG_BODY} fill={shell} stroke="var(--aura-edge, #c9d4e5)" strokeWidth="0.6" />
+            <circle cx="20" cy="31" r="2.2" fill={EYE} />
+            <path d={STRONG_HEAD} fill={shell} stroke="var(--aura-edge, #c9d4e5)" strokeWidth="0.6" />
+            <path d={STRONG_VISOR} fill={`url(#${uid}-visor)`} />
+            <g fill={EYE}>
+              <rect x="13" y="12.7" width="6" height="3.4" rx="1.4" />
+              <rect x="22" y="12.7" width="6" height="3.4" rx="1.4" />
+            </g>
           </g>
           <path d="M7.5 7 C7.5 -3 32.5 -3 32.5 7 Z" fill={HAZARD} />
           <rect x="4" y="5.6" width="32" height="2.8" rx="1.4" fill="#e09a12" />
           <rect x="18.6" y="-1.4" width="2.8" height="7" rx="1.4" fill="#ffe08f" />
-          <ellipse cx="30.5" cy="31" rx="2.6" ry="4.4" transform={`rotate(${arm} 30.5 27)`} fill={shell} />
+          <ellipse className="aura-b-classic" cx="30.5" cy="31" rx="2.6" ry="4.4" transform={`rotate(${arm} 30.5 27)`} fill={shell} />
+          <g className="aura-b-strong" transform={`rotate(${arm} 31.5 27)`}>
+            <rect x="29" y="28" width="5" height="9" rx="2.5" fill={shell} />
+            <circle cx="31.5" cy="38" r="2.6" fill="var(--aura-trim-2, #1c2a4d)" />
+          </g>
         </svg>
         {children}
       </div>

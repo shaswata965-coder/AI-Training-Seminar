@@ -75,7 +75,7 @@ export function Poster({
           {labels}
         </div>
       ) : (
-        // The head: a tint in the poster's colour, dotted like the hero, with Aura giving her lecture in front of it.
+        // The head: a tint in the poster's colour, dotted like the hero, with Aura giving his lecture in front of it.
         <div className="relative bg-[linear-gradient(160deg,color-mix(in_oklab,var(--accent)_38%,var(--surface)),color-mix(in_oklab,var(--lilac)_22%,var(--surface))_70%)] px-6 pt-6 sm:px-8 sm:pt-8">
           <div aria-hidden className="bg-dots pointer-events-none absolute inset-0 opacity-60 [mask-image:linear-gradient(to_bottom,black,transparent)]" />
           {labels}

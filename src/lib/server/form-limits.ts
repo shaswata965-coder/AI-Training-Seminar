@@ -7,11 +7,11 @@ import { hit, isLimited } from "./rate-limit";
  *   - per person (their IP address and the e-mail address they typed): a small allowance, so one person
  *     can't hammer a form;
  *   - per IP address as a whole: a ceiling high enough for a campus, hostel or office network where dozens
- *     of people share one address, and low enough to stop one machine flooding the forms (and the event's
+ *     of people share one address, and low enough to stop one machine flooding the forms (and the site's
  *     mail server, which sends a confirmation for each).
  * Networks listed in RATE_LIMIT_EXEMPT skip the second layer: the university's own network, or a computer
- * lab's during a session, where a whole batch may register or write in at once. Load-tested in
- * docs/LOAD_TEST_REPORT.md (finding 1).
+ * lab's during a session, where a whole batch may register or write in at once. The load tests in
+ * loadtest/ exercise both layers.
  */
 
 export type FormKind = "register" | "enquiry";

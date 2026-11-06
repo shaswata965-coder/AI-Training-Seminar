@@ -175,7 +175,7 @@
     z-index: -1;
     inset: 20% 14% 30%;
     border-radius: 50%;
-    background: radial-gradient(closest-side, color-mix(in oklab, var(--aura-eye) 70%, transparent), transparent);
+    background: radial-gradient(closest-side, color-mix(in oklab, var(--aura-eye, #5fe3ff) 70%, transparent), transparent);
     filter: blur(14px);
     pointer-events: none;
     animation: aura-trail var(--fly-dur, 2s) ease-out var(--fly-delay, 0s) both;
@@ -189,7 +189,7 @@
     bottom: 0;
     height: 8%;
     border-radius: 50%;
-    border: 2px solid color-mix(in oklab, var(--aura-eye) 75%, transparent);
+    border: 2px solid color-mix(in oklab, var(--aura-eye, #5fe3ff) 75%, transparent);
     pointer-events: none;
     animation: aura-land var(--fly-dur, 2s) ease-out var(--fly-delay, 0s) both;
   }
@@ -242,7 +242,7 @@
   .aura-wrap { opacity: 1 !important; animation: none !important; }
 }
 
-/* New words on the placard: the board flips down from the top edge her fins hold (Aura's placardFlip). */
+/* New words on the placard: the board flips down from the top edge his hands hold (Aura's placardFlip). */
 .aura-svg .aura-placard-flip {
   transform-box: fill-box;
   transform-origin: 50% 0%;

@@ -57,7 +57,7 @@
     }
   }
 
-  /* Mini Aura (components/aura/MiniAura.tsx), coloured by the surrounding tone. She floats,
+  /* Mini Aura (components/aura/MiniAura.tsx), coloured by the surrounding tone. He floats,
      blinks, glances toward the label and every few seconds waves. */
   .mini-aura {
     flex-shrink: 0;
@@ -226,7 +226,7 @@
     scale: 1 0.12;
   }
 }
-/* Eyes drift toward the label (to her right), rest, then come back. */
+/* Eyes drift toward the label (to his right), rest, then come back. */
 @keyframes mini-aura-glance {
   0%,
   22%,

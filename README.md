@@ -2,9 +2,9 @@
 
 Website for the **AI training seminars of the Department of Computer Science and Engineering, Daffodil International University (DIU)**: two programmes, **AI for Professionals** and **AI for Workspace**, run in batches at Daffodil Smart City, Savar, Dhaka, with hands-on sessions led by the department's trainers.
 
-This branch (`claude/diu-ai-training`) is a second version of the IIT Delhi Agentic AI Workshop 2026 website, which stays on its original branch: the speakers became trainers, the hackathon and the single-event features (talks and panels of one workshop, the poster session, industry kiosks) are gone, and there is a Past participants page. [`docs/REQUIREMENTS_CHECKLIST.md`](docs/REQUIREMENTS_CHECKLIST.md) maps the brief to the changes and lists what the organisers still need to fill in.
+The training runs **continuously**: new batches start all year round, anyone can register at any time and is placed in the next batch with free seats, and the site always shows the next batch's dates. There are no "coming soon" posters, countdowns or one-off event pages. [`docs/REQUIREMENTS_CHECKLIST.md`](docs/REQUIREMENTS_CHECKLIST.md) maps the brief to the site and lists what the organisers still need to fill in.
 
-It's a fast, accessible, mobile-first site with light and dark modes, a light pastel palette and **Aura**, an original rounded robot guide who looks different in each section: a rocket for AI for Professionals, a laptop and headset for AI for Workspace, a mortarboard and laser pointer on the Trainers page, a graduation cap and confetti for past participants, and so on. Organisers update all content from a built-in admin panel, with no code changes.
+It's a fast, accessible, mobile-first site with light and dark modes, a light pastel palette and **Aura**, an original robot guide (square-jawed and broad-shouldered by default; his build, colours and eyes are chosen in the admin panel) who looks different in each section: a rocket for AI for Professionals, a laptop and headset for AI for Workspace, a mortarboard and laser pointer on the Trainers page, a graduation cap and confetti for past participants, and so on. Organisers update all content from a built-in admin panel, with no code changes.
 
 **Stack:** Next.js 16 (App Router, React 19, TypeScript) · Node.js · MongoDB (Mongoose) · Tailwind CSS 4.
 
@@ -14,22 +14,23 @@ It's a fast, accessible, mobile-first site with light and dark modes, a light pa
 | [`docs/ADMIN_GUIDE.md`](docs/ADMIN_GUIDE.md) | Organisers updating content (a short version is inside the admin at **/admin/guide**) |
 | [`docs/REQUIREMENTS_CHECKLIST.md`](docs/REQUIREMENTS_CHECKLIST.md) | How each item of the brief is met, and what is still a placeholder |
 | [`docs/IMAGE_CREDITS.md`](docs/IMAGE_CREDITS.md) | Where the built-in photos and logos come from, and their licences |
-| [`docs/LOAD_TEST_REPORT.md`](docs/LOAD_TEST_REPORT.md), [`docs/SECURITY_REPORT.md`](docs/SECURITY_REPORT.md) | Load and security tests, run on the earlier (IIT Delhi) version of the site, whose server code this one shares (tests in [`loadtest/`](loadtest/README.md)) |
+| [`loadtest/README.md`](loadtest/README.md) | End-to-end load tests (k6, nginx, a real browser) and how to run them |
 
 ---
 
 ## What's included
 
 **Public site**
-- **Home (single scroll, sticky navigation):** a loading screen the first time the site is opened (the site's files are cached behind it while Aura's ship takes off); the hero with the programme's name, tagline, the next batch's dates and venue, Aura holding up a placard for each programme in turn with the registration status, two compact registration cards along its foot (*AI for Professionals* and *AI for Workspace*, each opening the form with its programme ticked), and a photo of DIU's campus behind Aura with the university's sign above her head (the academic building by day in the light theme, the Knowledge Tower by night in the dark theme; `public/hero/`; Site settings → Home → Hero replaces it or switches it off). Then, in this default order (Site settings → Home → Section order): *Registration open* with what to expect and a poster; the two **programme cards**; the **trainers** in a 3D cover-flow carousel; announcements; About (Aura in a circle of up to 8 topics); **past participants' quotes**; the highlights as a tear-off ticket; venue and travel as an interactive **route map of north-west Dhaka** (pick air, train, metro rail or road and a small Aura travels the route to Daffodil Smart City); partner logos; FAQ and contact form. The DIU logo and the Department of CSE seal sit at the corners of the navigation bar, which links Home, Schedule, Trainers and Past participants; everything else is under *Explore*.
+- **Home (single scroll, sticky navigation):** a loading screen the first time the site is opened (the site's files are cached behind it while Aura's ship takes off); the hero with the programme's name, tagline, the next batch's dates and venue, Aura holding up a placard for each programme in turn with the registration status (*enrolling now!*), two compact registration cards along its foot (*AI for Professionals* and *AI for Workspace*, each opening the form with its programme ticked), and a photo of DIU's campus behind Aura with the university's sign above his head (the academic building by day in the light theme, the Knowledge Tower by night in the dark theme; `public/hero/`; Site settings → Home → Hero replaces it or switches it off). Then, in this default order (Site settings → Home → Section order): *Enrolment* (new batches all year round) with what to expect and a *Now enrolling* poster; the two **programme cards**; the **trainers** in a 3D cover-flow carousel; announcements; About (Aura in a circle of up to 8 topics); **past participants' quotes**; the highlights as a tear-off ticket; venue and travel as an interactive **route map of north-west Dhaka** (pick air, train, metro rail or road and a small Aura travels the route to Daffodil Smart City); partner logos; FAQ and contact form. The DIU logo and the Department of CSE seal sit at the corners of the navigation bar, which links Home, Schedule, Trainers and Past participants; everything else is under *Explore*.
 - **Inner pages:** `/about` (why the training, what you will learn, who should attend, how a batch runs), `/programme` (the **Schedule** of the next batch: each day's hours, the session formats and programmes, day tabs, filters by programme and type, search, *My agenda* (starring needs signing in), calendar links, PDF download), `/trainers` (the **lead trainer's spotlight**, then every trainer with filters by programme and pop-up profiles with shareable links), `/past-participants` (numbers, featured quotes, everyone by batch with filters and search), `/tutorials` (**hands-on labs** and demos), `/venue`, `/partners` (partners by tier, ways to take part, partnership tiers, *Become a partner*), `/register`, `/organisers` and `/meet-aura`.
 - **After a batch**, hidden until switched on in the admin: `/gallery` (photos) and `/talks` (slides and recordings).
 - **Forms:** training registration (with the programme and the participant's experience with AI tools) and contact / *Become a partner* enquiries. They support deadlines and open/closed status, and send confirmation e-mails with a calendar invite. Every field can be edited in Site settings (*Registration → Form fields*, *Home → Contact form*, *Partners → Partner form*); the server checks answers against the same settings, and the admin's views, CSV exports and e-mails follow them.
-- **Extras:** add-to-calendar (Google, Outlook, .ics), share buttons, SEO metadata, Open Graph images, JSON-LD event data, sitemap, robots.txt, web manifest, Google Analytics (optional), Vercel Web Analytics (when deployed on Vercel).
+- **Ask Aura:** a button in the bottom-right corner of every page (or Ctrl/⌘ + K) opens a search over the pages, home sections, FAQs, trainers, sessions and labs, with the next batch's dates, the venue and *Register* at hand (`components/aura/AuraAssistant.tsx`, index in `src/lib/content/search.ts`). Site settings → Site-wide → Features & past batches switches it off.
+- **Extras:** add-to-calendar (Google, Outlook, .ics), share buttons, SEO metadata, Open Graph images, JSON-LD course data (the training as a `Course` with the next batch as its `CourseInstance`), sitemap, robots.txt, web manifest, Google Analytics (optional), Vercel Web Analytics (when deployed on Vercel).
 
 **Admin panel (`/admin`)**
 - Sign-in with administrator, editor and volunteer roles. Volunteers get a responsibility and only the permissions an administrator ticks, and their changes go to a **task tracker**.
-- **Site settings with a tab per page:** every section's texts, colours and background, the order of each page's sections, sections that can be hidden, and the site's accent colours, with the real page as a live preview beside the form.
+- **Site settings with a tab per page:** every section's texts, colours and background, the order of each page's sections, sections that can be hidden, the site's accent colours and **Aura's look** (build, colours, eyes), with the real page as a live preview beside the form.
 - Edit everything: programme details and batch dates, registration status and deadlines, announcements, the two programmes, trainers, the schedule, hands-on labs, demos, **past participants**, partners and tiers, organisers and volunteers, FAQs, venue and travel, contact and social links, branding, SEO, and the past-batch switches.
 - Media library, registrations and enquiries (search, status, notes, CSV export for Excel). Changes appear on the website immediately.
 
@@ -59,7 +60,7 @@ The same command resets the password of an existing user.
 
 ### Sample content for previews
 
-The trainers and a draft schedule are built in, but past participants, labs, demos and partners start empty, with friendly "coming soon" placeholders. To preview a fully populated site, load sample content. Every sample item is labelled as a sample (names like *Ayesha Sample*, *Example Bank PLC*):
+The trainers and a draft schedule are built in, but past participants, labs, demos and partners start empty, with friendly placeholders that invite people in rather than say "coming soon". To preview a fully populated site, load sample content. Every sample item is labelled as a sample (names like *Ayesha Sample*, *Example Bank PLC*):
 
 ```bash
 npm run seed:demo                 # adds 8 past participants in 2 batches (with quotes), 3 labs, 2 demos, partners, volunteers, an announcement
@@ -89,7 +90,7 @@ All settings are environment variables; [`.env.example`](.env.example) documents
 
 | Variable | Required | Purpose |
 | --- | --- | --- |
-| `MONGODB_URI` | yes | MongoDB connection string, e.g. `mongodb://127.0.0.1:27017/aaiw` or an Atlas `mongodb+srv://…` URI |
+| `MONGODB_URI` | yes | MongoDB connection string, e.g. `mongodb://127.0.0.1:27017/diu-ai-training` or an Atlas `mongodb+srv://…` URI. Give this site **a database of its own**: one shared with another website would show that site's settings, content and registrations here |
 | `MONGODB_DB` | | Database name, if not in the URI |
 | `NEXT_PUBLIC_SITE_URL` | yes (prod) | Public origin, e.g. `https://ai-training.daffodilvarsity.edu.bd`. Used in e-mails, calendar files, the sitemap and social previews |
 | `NEXT_PUBLIC_BASE_PATH` | | Serve under a path, e.g. `/ai-training` for `https://cse.daffodilvarsity.edu.bd/ai-training` |
@@ -97,7 +98,7 @@ All settings are environment variables; [`.env.example`](.env.example) documents
 | `ADMIN_EMAIL`, `ADMIN_PASSWORD` | | First administrator, created on the first sign-in to an empty database (password: 10+ characters) |
 | `COOKIE_SECURE` | | `false` only to test a production build over plain HTTP. Not needed on localhost |
 | `CLIENT_IP_HEADER` | | Header holding the visitor's IP address, if your proxy sets one it overwrites (e.g. `x-real-ip`, `cf-connecting-ip`). By default the last `X-Forwarded-For` entry is used. Used for rate limits |
-| `RATE_LIMIT_EXEMPT` | | IPv4 addresses or ranges (e.g. `103.27.8.0/22, 14.139.60.5`) where many people share one address and may all register at once, such as the university's network or a computer lab's. Elsewhere one address may send at most 100 registrations and 40 messages per 10 to 15 minutes; each person (address and e-mail) 8 and 5 |
+| `RATE_LIMIT_EXEMPT` | | IPv4 addresses or ranges (e.g. `203.0.113.0/24, 198.51.100.7`) where many people share one address and may all register at once, such as the university's network or a computer lab's. Elsewhere one address may send at most 100 registrations and 40 messages per 10 to 15 minutes; each person (address and e-mail) 8 and 5 |
 | `SMTP_HOST`, `SMTP_PORT`, `SMTP_SECURE`, `SMTP_USER`, `SMTP_PASS` | | Outgoing mail for confirmations and organiser notifications. Without them, forms still work but no e-mail is sent |
 | `SMTP_MAX_CONNECTIONS`, `SMTP_MAX_PER_MINUTE` | | Connections to the mail server at once (default 3), and e-mails a minute at most (default no limit; set it under your provider's limit, e.g. 30 for Microsoft 365). E-mails beyond it wait their turn, and one the server turns away for now is tried again for about 8 minutes |
 | `MAIL_FROM` | | Sender, e.g. `"DIU AI Training Seminars <no-reply@daffodilvarsity.edu.bd>"` |
@@ -134,27 +135,27 @@ npm ci
 cp .env.example .env.local        # production values; NODE_ENV is set by `npm start`
 npm run build
 npm install -g pm2
-pm2 start npm --name aaiw -- start -- -H 127.0.0.1   # port 3000, for the reverse proxy only; add `-p 4000` for another port
+pm2 start npm --name diuai -- start -- -H 127.0.0.1   # port 3000, for the reverse proxy only; add `-p 4000` for another port
 pm2 save && pm2 startup                     # restart on reboot
 ```
 
-To update: `git pull && npm ci && npm run build && pm2 restart aaiw`.
+To update: `git pull && npm ci && npm run build && pm2 restart diuai`.
 
 ### Reverse proxy with HTTPS (Nginx)
 
 Put this in `/etc/nginx/sites-available/diu-ai-training` and enable it (`ln -s ../sites-available/diu-ai-training /etc/nginx/sites-enabled/`):
 
 ```nginx
-upstream aaiw {
+upstream diuai {
     server 127.0.0.1:3000;
     keepalive 64;                                      # reuse connections to Node.js
 }
 # Build files are cached for good, pages for 2 seconds (nginx creates the folder).
-proxy_cache_path /var/cache/nginx/aaiw levels=1:2 keys_zone=aaiw:10m max_size=512m inactive=7d use_temp_path=off;
+proxy_cache_path /var/cache/nginx/diuai levels=1:2 keys_zone=diuai:10m max_size=512m inactive=7d use_temp_path=off;
 # Signed-in organisers and the admin's live preview always get fresh pages.
-map "$cookie_aaiw_admin$cookie___prerender_bypass" $aaiw_no_cache { default 1; "" 0; }
+map "$cookie_diuai_admin$cookie___prerender_bypass" $diuai_no_cache { default 1; "" 0; }
 # One gzipped and one plain copy of everything cached.
-map $http_accept_encoding $aaiw_encoding { ~*gzip gzip; default ""; }
+map $http_accept_encoding $diuai_encoding { ~*gzip gzip; default ""; }
 
 server {
     listen 443 ssl http2;
@@ -170,15 +171,15 @@ server {
     proxy_set_header X-Forwarded-For $remote_addr;     # overwrite (not append) so clients can't spoof their IP
 
     # Forms, APIs and the admin panel: never cached.
-    location /api/  { proxy_pass http://aaiw; }
-    location /admin { proxy_pass http://aaiw; }
+    location /api/  { proxy_pass http://diuai; }
+    location /admin { proxy_pass http://diuai; }
 
     # Build files: a file's name changes with its content, so each is fetched from Node.js once.
     location /_next/static/ {
-        proxy_pass http://aaiw;
-        proxy_set_header Accept-Encoding $aaiw_encoding;
-        proxy_cache aaiw;
-        proxy_cache_key "$host$request_uri|$aaiw_encoding";
+        proxy_pass http://diuai;
+        proxy_set_header Accept-Encoding $diuai_encoding;
+        proxy_cache diuai;
+        proxy_cache_key "$host$request_uri|$diuai_encoding";
         proxy_cache_valid 200 30d;
         proxy_ignore_headers Vary;
     }
@@ -186,17 +187,17 @@ server {
     # Pages, prefetches and files in public/: cached for 2 seconds, so a rush reaches Node.js about once
     # per page every 2 seconds, and an edit saved in the admin reaches visitors within about 2 seconds.
     location / {
-        proxy_pass http://aaiw;
-        proxy_set_header Accept-Encoding $aaiw_encoding;
-        proxy_cache aaiw;
-        proxy_cache_key "$host$request_uri|$aaiw_encoding|$http_rsc|$http_next_router_prefetch|$http_next_router_segment_prefetch|$http_next_router_state_tree|$http_next_url";
+        proxy_pass http://diuai;
+        proxy_set_header Accept-Encoding $diuai_encoding;
+        proxy_cache diuai;
+        proxy_cache_key "$host$request_uri|$diuai_encoding|$http_rsc|$http_next_router_prefetch|$http_next_router_segment_prefetch|$http_next_router_state_tree|$http_next_url";
         proxy_cache_valid 200 301 302 307 308 404 2s;
         proxy_ignore_headers Cache-Control Expires Vary; # the key above holds every header a page varies on
         proxy_cache_lock on;
         proxy_cache_use_stale updating error timeout http_500 http_502 http_503 http_504;
         proxy_cache_background_update on;
-        proxy_cache_bypass $aaiw_no_cache;
-        proxy_no_cache $aaiw_no_cache;
+        proxy_cache_bypass $diuai_no_cache;
+        proxy_no_cache $diuai_no_cache;
     }
 }
 server { listen 80; server_name ai-training.daffodilvarsity.edu.bd; return 301 https://$host$request_uri; }
@@ -211,7 +212,7 @@ events {
 }
 ```
 
-Then `sudo nginx -t && sudo systemctl reload nginx`. On a 2-core server this served 2,000 people registering within the same minute with no errors, where a plain `proxy_pass` failed most of them ([`docs/LOAD_TEST_REPORT.md`](docs/LOAD_TEST_REPORT.md), measured on the earlier version of the site, which shares this server code).
+Then `sudo nginx -t && sudo systemctl reload nginx`. In load tests on a 2-core server this served 2,000 people registering within the same minute with no errors, where a plain `proxy_pass` failed most of them (`loadtest/` reproduces them).
 
 `Host` must be passed through: the admin API rejects cross-site requests by comparing the browser's `Origin` with it. For a sub-path, build with `NEXT_PUBLIC_BASE_PATH` set to the same path, put the path in front of every `location` (`/ai-training/api/`, `/ai-training/admin`, `/ai-training/_next/static/`, `/ai-training/`) and proxy without stripping the prefix. Run one Node.js process only: rate limits and the page cache live in its memory.
 
@@ -226,8 +227,8 @@ Then `sudo nginx -t && sudo systemctl reload nginx`. On a 2-core server this ser
 ### Backups
 
 ```bash
-mongodump --uri "$MONGODB_URI" --archive=aaiw-$(date +%F).gz --gzip     # includes uploaded files
-mongorestore --uri "$MONGODB_URI" --archive=aaiw-2026-12-01.gz --gzip
+mongodump --uri "$MONGODB_URI" --archive=diuai-$(date +%F).gz --gzip     # includes uploaded files
+mongorestore --uri "$MONGODB_URI" --archive=diuai-2026-12-01.gz --gzip
 ```
 
 With Docker, run the same commands inside the `mongo` container, e.g. `docker compose exec mongo mongodump --archive --gzip > backup.gz`.
@@ -244,7 +245,7 @@ src/
     api/               public APIs (register, enquiries, calendar, programme/pdf, media, health) and /api/admin/*
     opengraph-image.tsx, sitemap.ts, robots.ts, manifest.ts, icon.svg …
   components/
-    aura/              Aura mascot: SVG art, 29 presets, eye-tracking, reactions, fly-in entrances, playground
+    aura/              Aura mascot: SVG art in two builds (builds.ts), presets, eye-tracking, reactions, fly-in entrances, playground, Ask Aura
     loading/           the home page's loading screen (Aura's ship, the crew, the progress ring, the smoke), the asset caching behind it, and the service worker registration
     home/ programme/ partners/ trainers/ participants/ tutorials/ venue/ gallery/ forms/ share/ layout/ ui/ effects/ admin/
   lib/
@@ -254,7 +255,7 @@ src/
   proxy.ts             protects /admin pages
 scripts/               seed, seed:demo, create-admin
 assets/fonts/          fonts for the social preview images (SIL Open Font License); site fonts are in src/app/fonts
-docs/                  admin guide, requirements checklist, image credits, earlier test reports
+docs/                  admin guide, requirements checklist, image credits
 ```
 
 **Section order:** the sections of a page that admins may move are listed, in their default order, in `src/lib/schema/section-order.ts` (by their Site settings section keys). Each such page gets a *Section order* tab in Site settings (an `order` field, `<page>Order`, so volunteers can move only their own pages' sections), and the page renders those sections through `<InOrder s={s} page="…" sections={{ key: <Section …/>, … }}>` (`components/layout/InOrder.tsx`), with its hero outside it, first. A saved order is made whole as it's read: unknown keys are dropped and sections added since are put back after the one they follow by default. To make a new section movable, add its key to the page's list and to the page's `sections`.
@@ -271,19 +272,21 @@ docs/                  admin guide, requirements checklist, image credits, earli
 
 **Caching:** public pages are rendered once and cached (`'use cache'` with tags). Saving in the admin expires the matching tags, so the next visitor gets fresh content (behind the nginx configuration above, within about 2 seconds, its micro-cache; organisers signed in see it at once). Time-based refresh (5 minutes) is only a safety net for direct database edits.
 
-**DIU badge:** every full-size Aura, except on the home page, wears the DIU shield on a white pin on her upper chest (`Badge` in `components/aura/AuraArt.tsx`, drawn from `public/logos/diu-shield.png`; the social preview images inline it, as they render from a data URI). Pass `badge={false}` to leave it off, or wrap part of a page in `<AuraBadge wear={false}>` (`components/aura/Aura.tsx`) to leave it off every Aura inside. The home page has none: `AuraBadgeByPage` (`components/layout/AuraBadgeByPage.tsx`) takes it off at `/`, where the campus and its sign already stand behind her.
+**Aura's look:** Site settings → Site-wide → Aura stores `auraBuild` (`strong` or `classic`), `auraColor` (`steel`, `navy`, `graphite`, `white`) and `auraEyes` (`auto` for each section's own, or one colour); the options and colours are in `components/aura/builds.ts`. The root layout (`src/app/layout.tsx`) puts the build on `<html data-aura-build>` and the colours in CSS custom properties (`--aura-body-1` … `--aura-trim-2`, `--aura-shine`, and `--aura-eye` for one eye colour). Every Aura drawing (`AuraArt`, `AuraHead`, `MiniAura`, the loading screen's ship and crew) is drawn in both builds, parts marked `aura-b-strong` / `aura-b-classic`, and `globals.css` shows the chosen one, so server-rendered pages, the admin's live preview and cached pages all follow the setting without JavaScript. Both builds share the anchor points (eyes, chest, shoulders, grip), so every prop, hat and effect fits either. Where there is no stylesheet (the social preview image), `AuraArt` takes `build` and `colors` and draws just one; `<Aura build="…">` does the same for one Aura (the Meet Aura playground, which also offers the colours).
+
+**DIU badge:** every full-size Aura, except on the home page, wears the DIU shield on a white pin on his upper chest (`Badge` in `components/aura/AuraArt.tsx`, drawn from `public/logos/diu-shield.png`; the social preview images inline it, as they render from a data URI). Pass `badge={false}` to leave it off, or wrap part of a page in `<AuraBadge wear={false}>` (`components/aura/Aura.tsx`) to leave it off every Aura inside. The home page has none: `AuraBadgeByPage` (`components/layout/AuraBadgeByPage.tsx`) takes it off at `/`, where the campus and its sign already stand behind him.
 
 **Hero photo:** the built-in campus photos (`public/hero/`, `CAMPUS` in `components/home/Hero.tsx`) are placed by their "Daffodil International University" sign (`sx`, `sy`), centred over Aura's column, faded in from the left (`fade`) to keep clear of the title; the day photo shows in the light theme and the night one in the dark theme. An uploaded photo replaces both and sits at the top right instead.
 
-**Placard:** `<Aura placard="…">` has Aura hold a large sign with those words in front of her in both fins (the `holdWide` pose); `AuraArt` breaks the text into up to three lines at the largest size that fits the board, from the display font's measured letter widths. When the words change the board flips down to show the new ones (`placardFlip`). The home hero's Aura holds up two in turn, one per programme with the registration status (`components/home/HeroPlacards.tsx`), from Site settings → Home → Hero announcements: a bar filling under the switch times each one (CSS, so it pauses with the page's animations, while the pointer or focus is on her or a registration card, and never runs with reduced motion); the hero section is marked `data-placard` so the matching ticket in `RegisterChooser.tsx` lights up, and pointing at a card (`data-placard-key`) brings its placard up.
+**Placard:** `<Aura placard="…">` has Aura hold a large sign with those words in front of him in both hands (the `holdWide` pose); `AuraArt` breaks the text into up to three lines at the largest size that fits the board, from the display font's measured letter widths. When the words change the board flips down to show the new ones (`placardFlip`). The home hero's Aura holds up two in turn, one per programme with the registration status (`components/home/HeroPlacards.tsx`), from Site settings → Home → Hero announcements: a bar filling under the switch times each one (CSS, so it pauses with the page's animations, while the pointer or focus is on him or a registration card, and never runs with reduced motion); the hero section is marked `data-placard` so the matching ticket in `RegisterChooser.tsx` lights up, and pointing at a card (`data-placard-key`) brings its placard up.
 
-**Motion:** Aura flies into place (Auras smaller than 56 px just appear). Page heroes use `entrance="load"` (pure CSS, on page load); other Auras fly in from the nearest edge when scrolled into view (`components/aura/entrance.ts`). A flight takes 2 s (1.6 s on phones; `zip` 1.1 s, `drift` 2.2 s), set by `--fly-dur` in `components/aura/aura.css`. Pass `entrance="zip" | "drift" | "none"` to change that. Micro-interactions live in `src/app/micro.css` with one delegated script (`components/effects/MicroInteractions.tsx`). Opt an element in with `data-ripple` (ink ripple on press), `data-glow` (cursor-following light on cards), `data-burst` (star spin and ring when pressed), or the `mi-link`, `mi-underline` and `mi-stagger` classes. Segmented controls use `useSlidingPill` (`components/ui/SlidingPill.tsx`). With *reduced motion* turned on, Auras simply appear in place; with JavaScript off, nothing is left hidden. **Loading screen and caching** (`components/loading/`): an inline script in the root layout's `<head>` (`flag.ts`) names the build from the home page's content-hashed script and stylesheet URLs and, if this browser hasn't cached that build's files yet, marks `<html data-launch="run">` before anything is drawn, so the screen covers the page from the first paint and the hero Aura's fly-in waits for it (`"quiet"` instead, with no screen, for `#section` links and reduced motion). The screen draws from the first bytes of HTML: CSS is inlined into the page (`experimental.inlineCss`), so there are no stylesheet requests to wait for, and the fonts aren't preloaded (Chrome holds the first paint for preloaded fonts). The head script moves the ring while the page's own scripts and images load; then `warm.ts` waits for the fonts, prefetches the main pages through the router (their data and scripts), and saves the images they show (listed by the home page from the content) and the build files loaded so far in the `aaiw-assets-v1` Cache Storage cache, from a worker, reporting real progress to the ring. When all is cached (or after 10 s, with caching going on behind), Aura lifts off, and the build is remembered in localStorage, so the screen is skipped until the next update. `public/sw.js`, registered on every public page in production, serves build files and uploads from that cache (cache first; other images are refreshed in the background) and leaves pages, the admin and the API alone. Every moving part of the screen is its own element animated only with `transform` and `opacity`, which the browser's compositor runs off the main thread, so it stays smooth while the page loads; behind it the page is hidden and its animations paused (the hero's network canvas rests too). If the screen's script never runs, it hides itself after 16 s. To see it again, open the site in a private window or clear its site data.
+**Motion:** Aura flies into place (Auras smaller than 56 px just appear). Page heroes use `entrance="load"` (pure CSS, on page load); other Auras fly in from the nearest edge when scrolled into view (`components/aura/entrance.ts`). A flight takes 2 s (1.6 s on phones; `zip` 1.1 s, `drift` 2.2 s), set by `--fly-dur` in `components/aura/aura.css`. Pass `entrance="zip" | "drift" | "none"` to change that. Micro-interactions live in `src/app/micro.css` with one delegated script (`components/effects/MicroInteractions.tsx`). Opt an element in with `data-ripple` (ink ripple on press), `data-glow` (cursor-following light on cards), `data-burst` (star spin and ring when pressed), or the `mi-link`, `mi-underline` and `mi-stagger` classes. Segmented controls use `useSlidingPill` (`components/ui/SlidingPill.tsx`). With *reduced motion* turned on, Auras simply appear in place; with JavaScript off, nothing is left hidden. **Loading screen and caching** (`components/loading/`): an inline script in the root layout's `<head>` (`flag.ts`) names the build from the home page's content-hashed script and stylesheet URLs and, if this browser hasn't cached that build's files yet, marks `<html data-launch="run">` before anything is drawn, so the screen covers the page from the first paint and the hero Aura's fly-in waits for it (`"quiet"` instead, with no screen, for `#section` links and reduced motion). The screen draws from the first bytes of HTML: CSS is inlined into the page (`experimental.inlineCss`), so there are no stylesheet requests to wait for, and the fonts aren't preloaded (Chrome holds the first paint for preloaded fonts). The head script moves the ring while the page's own scripts and images load; then `warm.ts` waits for the fonts, prefetches the main pages through the router (their data and scripts), and saves the images they show (listed by the home page from the content) and the build files loaded so far in the `diuai-assets-v1` Cache Storage cache, from a worker, reporting real progress to the ring. When all is cached (or after 10 s, with caching going on behind), Aura lifts off, and the build is remembered in localStorage, so the screen is skipped until the next update. `public/sw.js`, registered on every public page in production, serves build files and uploads from that cache (cache first; other images are refreshed in the background) and leaves pages, the admin and the API alone. Every moving part of the screen is its own element animated only with `transform` and `opacity`, which the browser's compositor runs off the main thread, so it stays smooth while the page loads; behind it the page is hidden and its animations paused (the hero's network canvas rests too). If the screen's script never runs, it hides itself after 16 s. To see it again, open the site in a private window or clear its site data.
 
 **Hero network:** the animated agent network fills the hero but keeps clear of text: mark an element `data-graph-avoid="text"` to clear just its lines of text, or `data-graph-avoid=""` to clear its whole box (`components/effects/NetworkCanvas.tsx`).
 
-**Buttons and links to other pages:** nothing is pill-shaped. Buttons are keycaps (`.key` in `src/app/micro.css`, used by `Button`/`ButtonLink` in `components/ui/Button.tsx`): rounded rectangles on a solid edge that rise on hover and press down while held; filter toggles that are on stay pressed in. A link from a section to another page is a `Portal` (`components/ui/Portal.tsx`) instead: a card with a small preview of the destination (`components/portals/PortalArt.tsx`: trainers' or participants' faces, the agent loop, a crop of the route map, a two-day timetable, FAQ bubbles) and an agent trace that signals the arrow on hover. **Section header labels** (`Eyebrow` in `components/ui/Section.tsx`, used by `SectionHeading` and `PageHero`) are one style everywhere, with no box: larger letter-spaced text in the section's colour, led by a mini Aura in the section's colour that floats, blinks, glances at the label and now and then waves (`components/aura/MiniAura.tsx`); centred headings get one on each side, facing the label (`.eyebrow` in `src/app/tags.css`). **Text tags:** badges and small labels are never pill-shaped. Each section picks a tag style (`bracket`, `underline`, `ribbon`, `slash`, `tab`, `stamp`, `corner` or `label`) with `<Section tags="…">`, `data-tags="…"` or, for a whole page, `<TagScope style="…">`; every `.tag` inside follows (`src/app/tags.css`, `components/ui/Tag.tsx`).
+**Buttons and links to other pages:** nothing is pill-shaped. Buttons are keycaps (`.key` in `src/app/micro.css`, used by `Button`/`ButtonLink` in `components/ui/Button.tsx`): rounded rectangles on a solid edge that rise on hover and press down while held; filter toggles that are on stay pressed in. A link from a section to another page is a `Portal` (`components/ui/Portal.tsx`) instead: a card with a small preview of the destination (`components/portals/PortalArt.tsx`: trainers' or participants' faces, the agent loop, a crop of the route map, a batch's timetable, FAQ bubbles) and an agent trace that signals the arrow on hover. **Section header labels** (`Eyebrow` in `components/ui/Section.tsx`, used by `SectionHeading` and `PageHero`) are one style everywhere, with no box: larger letter-spaced text in the section's colour, led by a mini Aura in the section's colour that floats, blinks, glances at the label and now and then waves (`components/aura/MiniAura.tsx`); centred headings get one on each side, facing the label (`.eyebrow` in `src/app/tags.css`). **Text tags:** badges and small labels are never pill-shaped. Each section picks a tag style (`bracket`, `underline`, `ribbon`, `slash`, `tab`, `stamp`, `corner` or `label`) with `<Section tags="…">`, `data-tags="…"` or, for a whole page, `<TagScope style="…">`; every `.tag` inside follows (`src/app/tags.css`, `components/ui/Tag.tsx`).
 
-**Changing a default:** a site stores the default settings of its day when it is set up, so a new default reaches existing sites only if the old one is listed in `RETIRED` (`src/lib/content/defaults.ts`, empty for now): a stored value that is still an earlier default, never edited, is read as the current one (`withCurrentDefaults`, for the site and the admin alike), and edited values are kept. Other names for a programme key (`workplace` for `workspace`) are read as the key (`currentThemeKey` in `src/lib/content/constants.ts`). The database itself is not changed.
+**Changing a default:** a site stores the default settings of its day when it is set up, so a new default reaches existing sites only if the old one is listed in `RETIRED` (`src/lib/content/defaults.ts`; it holds the wording from before the training was presented as continuous): a stored value that is still an earlier default, never edited, is read as the current one (`withCurrentDefaults`, for the site and the admin alike), and edited values are kept. Other names for a programme key (`workplace` for `workspace`) are read as the key (`currentThemeKey` in `src/lib/content/constants.ts`). The database itself is not changed.
 
 **No em dashes:** the site's own text avoids them, and stored content is shown with any em dash replaced (`stripEmDashes` in `src/lib/content/normalize.ts`), without changing the database.
 
@@ -293,7 +296,7 @@ docs/                  admin guide, requirements checklist, image credits, earli
 
 - Semantic HTML, a skip link, visible focus styles, labelled form fields with inline errors, keyboard-friendly dialogs and tabs, and colour contrast checked in both themes. Animations respect *reduced motion* and are lighter on small screens.
 - Pages are pre-rendered and cached, fonts are self-hosted, images are compressed WebP, heavy widgets (map, videos) load only when clicked or scrolled into view, and there are no large client libraries.
-- Admin sessions are signed JWTs (HS256, `AUTH_SECRET`) in HTTP-only, SameSite cookies, each tied to a session stored in the database: signing out, a password change or a disabled account ends them at once. Passwords are stored only as bcrypt hashes (cost 12). Sign-in is rate-limited by failed attempts (without letting anyone lock an account), takes the same time whether or not an account exists, and state-changing requests must come from the site's own pages. Every field of every form is type- and length-checked on the server and cleaned of control characters; links must be http(s), mailto, tel or a path on the site. Pages send a Content-Security-Policy, HSTS and the usual hardening headers; uploaded SVGs are checked for scripts, downloaded rather than shown when opened directly, and sandboxed; CSV exports are protected against formula injection. Details and test results (from the earlier version of the site, which shares this code): [docs/SECURITY_REPORT.md](docs/SECURITY_REPORT.md).
+- Admin sessions are signed JWTs (HS256, `AUTH_SECRET`) in HTTP-only, SameSite cookies, each tied to a session stored in the database: signing out, a password change or a disabled account ends them at once. Passwords are stored only as bcrypt hashes (cost 12). Sign-in is rate-limited by failed attempts (without letting anyone lock an account), takes the same time whether or not an account exists, and state-changing requests must come from the site's own pages. Every field of every form is type- and length-checked on the server and cleaned of control characters; links must be http(s), mailto, tel or a path on the site. Pages send a Content-Security-Policy, HSTS and the usual hardening headers; uploaded SVGs are checked for scripts, downloaded rather than shown when opened directly, and sandboxed; CSV exports are protected against formula injection. 
 
 ## Handover checklist
 

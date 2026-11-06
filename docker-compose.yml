@@ -39,7 +39,7 @@ services:
     ports:
       - "${BIND:-127.0.0.1}:${PORT:-3000}:3000"
     environment:
-      MONGODB_URI: mongodb://mongo:27017/aaiw
+      MONGODB_URI: mongodb://mongo:27017/diu-ai-training
       AUTH_SECRET: ${AUTH_SECRET:?Set AUTH_SECRET in .env (32+ random characters)}
       ADMIN_EMAIL: ${ADMIN_EMAIL:-}
       ADMIN_PASSWORD: ${ADMIN_PASSWORD:-}
@@ -65,7 +65,7 @@ services:
       <<: *build
       target: build
     environment:
-      MONGODB_URI: mongodb://mongo:27017/aaiw
+      MONGODB_URI: mongodb://mongo:27017/diu-ai-training
     entrypoint: ["npm", "run", "--silent"]
     command: ["seed"]
     depends_on:

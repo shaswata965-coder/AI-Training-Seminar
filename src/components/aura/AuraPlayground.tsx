@@ -1,9 +1,10 @@
 "use client";
 
 import { Shuffle } from "lucide-react";
-import { useState } from "react";
+import { useState, type CSSProperties } from "react";
 import { cn } from "@/lib/cn";
 import { Aura } from "./Aura";
+import { AURA_BUILDS, AURA_COLOR_KEYS, AURA_COLORS, auraColourVars, type AuraBuild, type AuraColorKey } from "./builds";
 import { AURA_EYES } from "./presets";
 import type { Effect, Emblem, Expression, Headwear, Pose, PropKind } from "./types";
 
@@ -42,8 +43,20 @@ function Group<T extends string>({ title, items, value, onChange }: { title: str
   );
 }
 
-/** Mix and match Aura's expressions, poses, props and effects. */
-export function AuraPlayground() {
+const COLOR_NAMES: Record<AuraColorKey, string> = { steel: "Steel", navy: "DIU blue", graphite: "Graphite", white: "Classic white" };
+
+/** The colours' custom properties as a style, so one Aura can wear colours other than the site's. */
+function colourStyle(color: AuraColorKey): CSSProperties {
+  return Object.fromEntries(auraColourVars(color, "auto").map((v) => v.split(":") as [string, string])) as CSSProperties;
+}
+
+/**
+ * Mix and match Aura's build, colours, expressions, poses, props and effects. It starts in the look chosen in
+ * Site settings → Site-wide → Aura; changes here only affect this preview.
+ */
+export function AuraPlayground({ build: siteBuild = "strong", color: siteColor = "steel" }: { build?: AuraBuild; color?: AuraColorKey }) {
+  const [build, setBuild] = useState<AuraBuild>(siteBuild);
+  const [color, setColor] = useState<AuraColorKey>(siteColor);
   const [expression, setExpression] = useState<Expression>("happy");
   const [pose, setPose] = useState<Pose>("wave");
   const [prop, setProp] = useState<PropKind | "none">("none");
@@ -62,18 +75,20 @@ export function AuraPlayground() {
     setEmblem(pick(EMBLEMS));
     setEffects([pick(EFFECTS)]);
     setEye(pick(Object.values(AURA_EYES)));
+    setColor(pick(AURA_COLOR_KEYS));
   }
 
   return (
     <div className="grid grid-cols-1 gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
       <div className="card sticky top-24 flex min-w-0 flex-col items-center p-4 sm:p-6">
-        <div className="relative grid min-h-[380px] w-full grid-cols-1 place-items-center rounded-3xl bg-[radial-gradient(circle_at_50%_40%,var(--azure-soft),transparent_70%)]">
+        <div style={colourStyle(color)} className="relative grid min-h-[380px] w-full grid-cols-1 place-items-center rounded-3xl bg-[radial-gradient(circle_at_50%_40%,var(--azure-soft),transparent_70%)]">
           <Aura
             variant="hero"
             size={300}
             className="max-w-full"
+            build={build}
             interactive
-            tips={["Nice combo!", "I love this look.", "Try the surprise button!"]}
+            tips={["Nice combo!", "Looking sharp.", "Try the surprise button!"]}
             overrides={{ expression, pose, prop: prop === "none" ? undefined : prop, headwear: headwear === "none" ? undefined : headwear, emblem, effects, eyeColor: eye }}
           />
         </div>
@@ -82,6 +97,28 @@ export function AuraPlayground() {
         </button>
       </div>
       <div className="card grid min-w-0 gap-6 p-4 sm:p-6">
+        <Group title="Build" items={AURA_BUILDS} value={build} onChange={setBuild} />
+        <fieldset>
+          <legend className="text-xs font-bold tracking-[0.12em] text-subtle uppercase">Colours</legend>
+          <div className="mt-2 flex flex-wrap gap-1.5">
+            {AURA_COLOR_KEYS.map((k) => {
+              const c = AURA_COLORS[k].colours;
+              return (
+                <button
+                  key={k}
+                  type="button"
+                  aria-pressed={color === k}
+                  onClick={() => setColor(k)}
+                  data-ripple=""
+                  className={cn("inline-flex items-center gap-2 rounded-md px-3 py-1.5 text-sm font-semibold transition hover:-translate-y-0.5", color === k ? "bg-brand text-brand-fg" : "bg-surface-2 text-muted hover:text-fg")}
+                >
+                  <span aria-hidden className="h-3.5 w-3.5 rounded-full ring-1 ring-black/10" style={{ background: `linear-gradient(135deg, ${c.body1}, ${c.body3} 60%, ${c.trim2} 61%)` }} />
+                  {COLOR_NAMES[k]}
+                </button>
+              );
+            })}
+          </div>
+        </fieldset>
         <Group title="Expression" items={EXPRESSIONS} value={expression} onChange={setExpression} />
         <Group title="Pose" items={POSES} value={pose} onChange={setPose} />
         <Group

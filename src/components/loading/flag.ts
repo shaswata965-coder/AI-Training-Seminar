@@ -19,7 +19,7 @@
  */
 
 /** localStorage key holding the version of the files last cached in full. */
-export const ASSETS_KEY = "aaiw-assets";
+export const ASSETS_KEY = "diuai-assets";
 
 /** How far the ring gets while the page itself loads (warm.ts's first stage ends there). */
 export const PAGE_SHARE = 0.25;

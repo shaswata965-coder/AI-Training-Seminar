@@ -6,7 +6,7 @@ import type { SiteSettings } from "@/lib/content/types";
 import { copy } from "@/lib/copy";
 import { eventCalendarLinks, registrationHref } from "@/lib/event";
 
-/** Shown instead of the schedule while the programme status is "To be announced" or no sessions exist yet. */
+/** Shown instead of the schedule while it is hidden (Site settings → Schedule) or has no sessions: each batch's plan is e-mailed. */
 export function ScheduleTba({ s }: { s: SiteSettings }) {
   const c = copy(s, "programmeSchedule");
   return (
@@ -14,7 +14,7 @@ export function ScheduleTba({ s }: { s: SiteSettings }) {
       <div aria-hidden className="wash pointer-events-none absolute inset-0" />
       <div className="relative grid items-center gap-8 md:grid-cols-[auto_1fr]">
         <div className="mx-auto">
-          <Aura variant="programme" size={210} interactive tips={["The schedule is being finalised. Check back soon!", "Add the dates to your calendar meanwhile."]} />
+          <Aura variant="programme" size={210} interactive tips={["Every batch follows the same hands-on plan.", "Add the next batch to your calendar!"]} />
         </div>
         <div>
           {c.tbaBadge ? (

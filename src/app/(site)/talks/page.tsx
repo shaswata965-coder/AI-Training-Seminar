@@ -15,7 +15,7 @@ export const metadata: Metadata = { title: "Slides & recordings", alternates: { 
 
 export default async function TalksPage() {
   const [s, talks, preview] = await Promise.all([getSettings(), getTalks(), inPreview()]);
-  // Hidden until switched on after the event; the admin's live preview shows it anyway.
+  // Hidden until switched on after a batch; the admin's live preview shows it anyway.
   if (!s.showTalks && !preview) notFound();
   const c = copy(s, "talksHero");
   return (

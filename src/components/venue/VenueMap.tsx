@@ -24,7 +24,7 @@ const ease = (t: number) => 0.5 - Math.cos(Math.PI * t) / 2;
 /**
  * The home page's Venue & travel map: a schematic of north-west Dhaka with Daffodil Smart City in it.
  * Pick how you are arriving (the routes come from Site settings → Venue → Getting here) and
- * a small Aura travels the route to campus, drawing it as she goes; the metro line, when it matters,
+ * a small Aura travels the route to campus, drawing it as he goes; the metro line, when it matters,
  * light up. Pins on the map pick a route too. Without JavaScript or with reduced motion the route
  * is simply drawn. `children` go under the map and the route (the venue card on the home page).
  */

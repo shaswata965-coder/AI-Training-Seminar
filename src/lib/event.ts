@@ -1,6 +1,6 @@
 import { googleCalendarUrl, outlookCalendarUrl } from "./calendar";
 import type { SiteSettings } from "./content/types";
-import { eventDayDate, formatDate, formatDateRange, localDateTime } from "./format";
+import { eventDayDate, formatDateRange, localDateTime } from "./format";
 import { absoluteUrl } from "./paths";
 
 export interface EventDay {
@@ -37,10 +37,9 @@ export function splitEventName(name: string): { title: string; year: string } {
   return m ? { title: m[1], year: m[2] } : { title: name.trim(), year: "" };
 }
 
-/** Event name and year for the logo: the year comes from the name, or else from the start date. */
+/** The programme's name for the logo, and a year only if the name ends with one: the training runs all year round. */
 export function brandName(s: SiteSettings): { title: string; year: string } {
-  const { title, year } = splitEventName(s.eventName);
-  return { title, year: year || formatDate(s.startDate, { year: "numeric" }) };
+  return splitEventName(s.eventName);
 }
 
 export function venueLine(s: SiteSettings) {

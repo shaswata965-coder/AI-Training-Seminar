@@ -1,4 +1,5 @@
 import { FORM_DEFAULTS, FORM_SETTINGS, formFields, type FormKey } from "@/lib/forms";
+import { REGISTRATION_STATUSES } from "./constants";
 import { PAGE_COPY_DEFAULTS } from "@/lib/schema/page-copy";
 import { HIDDEN_SECTIONS_DEFAULTS, SECTION_ORDER_DEFAULTS } from "@/lib/schema/section-order";
 import type { Faq, Person, Session, SiteSettings, Trainer } from "./types";
@@ -6,8 +7,8 @@ import type { Faq, Person, Session, SiteSettings, Trainer } from "./types";
 /*
  * Default content. Used when the database is not configured/reachable and to
  * bootstrap a fresh database on first run. Everything here can be edited in
- * the admin panel. Items still to be confirmed by the organisers are marked TBA,
- * and the next batch's dates and schedule are a draft to be replaced.
+ * the admin panel. The training runs continuously, in batches: the dates are
+ * the next batch's, and its schedule is the plan every batch follows.
  */
 
 export const DEFAULT_SETTINGS: SiteSettings = {
@@ -19,7 +20,7 @@ export const DEFAULT_SETTINGS: SiteSettings = {
   shortName: "DIU AI Training",
   tagline: "Practical, hands-on AI training for professionals and the modern workspace.",
   description:
-    "AI training seminars at Daffodil International University: AI for Professionals and AI for Workspace, hands-on sessions led by faculty of the Department of Computer Science and Engineering.",
+    "Continuous AI training at Daffodil International University: AI for Professionals and AI for Workspace, hands-on batches led by faculty of the Department of Computer Science and Engineering, all year round.",
   organisedBy: "Department of Computer Science and Engineering, Daffodil International University",
   startDate: "2026-12-11T09:30:00+06:00",
   endDate: "2026-12-12T17:00:00+06:00",
@@ -31,8 +32,8 @@ export const DEFAULT_SETTINGS: SiteSettings = {
   workshopDeadline: "",
   workshopReplyBy: "",
   workshopUrl: "",
-  fees: [{ category: "Everyone", amount: "To be announced", note: "Places are limited" }],
-  feeNote: "Fees for each batch will be announced here. Places are limited, so registrations are reviewed and confirmed by the organising team.",
+  fees: [{ category: "Everyone", amount: "On request", note: "Places in each batch are limited" }],
+  feeNote: "Ask the organisers for the current fee. Places in each batch are limited, so registrations are reviewed and confirmed by the organising team.",
   confirmationNote: "",
 
   showLoader: true,
@@ -44,7 +45,7 @@ export const DEFAULT_SETTINGS: SiteSettings = {
     { label: "Trainers", value: "9", icon: "users" },
     { label: "Days per batch", value: "2", icon: "calendar" },
     { label: "Hands-on labs", value: "6", icon: "laptop" },
-    { label: "Seats per batch", value: "TBA", icon: "graduation" },
+    { label: "New batches", value: "All year", icon: "clock" },
   ],
   featuredTrainers: 9,
 
@@ -58,7 +59,7 @@ export const DEFAULT_SETTINGS: SiteSettings = {
     { title: "Hands-on", icon: "code", description: "Every session is practical: you use real AI tools on real tasks from the first hour." },
     { title: "Our trainers", icon: "landmark", description: "Faculty of the Department of Computer Science and Engineering at Daffodil International University." },
     { title: "Who it is for", icon: "users", description: "Working professionals, teachers, students, entrepreneurs and office teams. No programming needed." },
-    { title: "Each batch", icon: "calendar", description: "{dates}: short lectures, hands-on labs and live demos at {venue}." },
+    { title: "All year round", icon: "calendar", description: "New batches start regularly: short lectures, hands-on labs and live demos at {venue}. The next one is {dates}." },
     { title: "Responsible use", icon: "heart", description: "Privacy, accuracy and judgement: using AI safely is part of every session." },
     { title: "Past batches", icon: "award", description: "Meet the people who have trained with us on the Past participants page." },
   ],
@@ -92,10 +93,12 @@ export const DEFAULT_SETTINGS: SiteSettings = {
   ],
 
   programmeStatus: "draft",
-  programmeNote: "A tentative schedule for the next batch: trainers and rooms will be confirmed, and times may still change.",
+  programmeNote: "The plan every batch follows. Rooms and trainers for your batch are confirmed by e-mail before it starts, and times may change a little.",
   schedulePdf: "",
 
   mapQuery: "Daffodil International University, Daffodil Smart City, Birulia, Savar, Dhaka",
+  // DIU's main buildings at Daffodil Smart City, so the map never depends on how a search is read.
+  mapPin: "23.8770, 90.3200",
   mapEmbedUrl: "",
   directions: [
     {
@@ -172,6 +175,10 @@ export const DEFAULT_SETTINGS: SiteSettings = {
   ogImage: "",
 
   showMoreTrainers: false,
+  showAssistant: true,
+  auraBuild: "strong",
+  auraColor: "steel",
+  auraEyes: "auto",
   showGallery: false,
   showTalks: false,
   bannerText: "",
@@ -255,7 +262,12 @@ export const DEFAULT_FAQS: NewDoc<Faq>[] = [
     question: "How do I register?",
     answer: "Use the registration form on this site and pick the programme you'd like to join. Places are limited, so the organising team reviews every registration and lets you know whether we can offer you a place.",
   },
-  { category: "registration", question: "Is there a fee?", answer: "The fee for each batch is announced on the Registration page." },
+  {
+    category: "registration",
+    question: "When does the next batch start?",
+    answer: "New batches start throughout the year, and you can register at any time. The next batch's dates are on the home page; we place you in the next batch with free seats and confirm it by e-mail.",
+  },
+  { category: "registration", question: "Is there a fee?", answer: "See the Registration page for the current fee, or ask the organisers." },
   { category: "programme", question: "What should I bring?", answer: "A charged laptop and its charger. Tell us in the registration form if you will need a computer in the lab instead." },
   { category: "programme", question: "Do I need to know programming?", answer: "No. Both programmes are designed for non-programmers: if you can use a web browser and an office suite, you can follow every session." },
   {
@@ -277,13 +289,13 @@ export const DEFAULT_FAQS: NewDoc<Faq>[] = [
 ].map((f, i) => ({ ...f, order: i + 1, published: true }));
 
 /*
- * The tentative schedule of a batch: Day 1 for AI for Professionals, Day 2 for AI for Workspace, with the
- * trainers and rooms still to be announced. Added once to a site without sessions (bootstrap.ts), shown as a
- * draft ("subject to change"); every session is then edited under Schedule in the admin panel.
+ * The plan every batch follows: Day 1 for AI for Professionals, Day 2 for AI for Workspace, with the rooms and
+ * each batch's trainers e-mailed to its participants. Added once to a site without sessions (bootstrap.ts),
+ * shown as a draft ("subject to change"); every session is then edited under Schedule in the admin panel.
  */
 type Slot = { type: Session["type"]; title: string; theme?: Session["theme"]; description?: string };
 const slot = (day: "1" | "2", start: string, end: string, session: Slot) => ({ day, start, end, ...session });
-const TBA = "Trainer to be announced";
+const TRAINERS = "DIU CSE trainers";
 
 export const DEFAULT_SESSIONS: NewDoc<Session>[] = [
   slot("1", "09:30", "10:00", { type: "keynote", title: "Registration and welcome", description: "Meet the trainers and the rest of the batch, and see what you'll be able to do by the end." }),
@@ -307,7 +319,7 @@ export const DEFAULT_SESSIONS: NewDoc<Session>[] = [
   description: "",
   theme: "general" as const,
   ...x,
-  trainerNote: x.type === "break" ? "" : TBA,
+  trainerNote: x.type === "break" ? "" : TRAINERS,
   room: "",
   trainers: [],
   moderator: "",
@@ -328,7 +340,82 @@ interface Retired {
   texts: Record<string, Record<string, string>>;
 }
 
-const RETIRED: Retired = { values: {}, texts: {} };
+const RETIRED: Retired = {
+  values: {
+    // Wording of the site's first version (a single upcoming batch, "coming soon" placeholders), before
+    // the training was presented as running continuously, batch after batch.
+    "aboutActivities.title": ["What happens in a batch"],
+    // Aura was "she", rounded with a floating head, before his strong build.
+    "auraHero.description": ["Aura is the training programme's AI guide: a rounded, hovering robot with a floating head and glowing eyes. Like a good assistant, she adapts to her task, so you'll find her in a different role in every section of the site. Click her for tips."],
+    "aboutPoints": [[{"title": "Why now", "icon": "rocket", "description": "AI tools now draft, summarise and analyse in seconds. Using them well is fast becoming a core skill at work."}, {"title": "Two programmes", "icon": "sparkles", "description": "AI for Professionals and AI for Workspace: pick the one that fits how you work, or take both."}, {"title": "Hands-on", "icon": "code", "description": "Every session is practical: you use real AI tools on real tasks from the first hour."}, {"title": "Our trainers", "icon": "landmark", "description": "Faculty of the Department of Computer Science and Engineering at Daffodil International University."}, {"title": "Who it is for", "icon": "users", "description": "Working professionals, teachers, students, entrepreneurs and office teams. No programming needed."}, {"title": "Each batch", "icon": "calendar", "description": "{dates}: short lectures, hands-on labs and live demos at {venue}."}, {"title": "Responsible use", "icon": "heart", "description": "Privacy, accuracy and judgement: using AI safely is part of every session."}, {"title": "Past batches", "icon": "award", "description": "Meet the people who have trained with us on the Past participants page."}]],
+    "description": ["AI training seminars at Daffodil International University: AI for Professionals and AI for Workspace, hands-on sessions led by faculty of the Department of Computer Science and Engineering."],
+    "feeNote": ["Fees for each batch will be announced here. Places are limited, so registrations are reviewed and confirmed by the organising team."],
+    "fees": [[{"category": "Everyone", "amount": "To be announced", "note": "Places are limited"}]],
+    "galleryHero.description": ["Moments from the {event}."],
+    "galleryHero.empty": ["Photos are on their way!"],
+    "highlights": [[{"label": "Programmes", "value": "2", "icon": "sparkles"}, {"label": "Trainers", "value": "9", "icon": "users"}, {"label": "Days per batch", "value": "2", "icon": "calendar"}, {"label": "Hands-on labs", "value": "6", "icon": "laptop"}, {"label": "Seats per batch", "value": "TBA", "icon": "graduation"}]],
+    "homeFaq.noEmail": ["Official e-mail address coming soon. Use the form below."],
+    "homeInvite.description": ["Places are limited, so registrations are reviewed and confirmed by the organising team. Register below: you'll hear from us {replyBy} on whether we can offer you a place."],
+    "homeInvite.eyebrow": ["Registration"],
+    "homeInvite.posterBadge": ["Hands-on · places limited"],
+    "homeInvite.posterKicker": ["Registration open"],
+    "homeInvite.posterText": ["AI for Professionals and AI for Workspace: practical, hands-on AI training at Daffodil International University."],
+    "homeInvite.title": ["Registration for the next batch is open"],
+    "homeInvite.when": ["When"],
+    "homeNews.emptyText": ["Check back soon: registration and batch news will be posted here."],
+    "homeParticipants.emptyText": ["Participants are listed here once their batch is completed. Want to be in the first one?"],
+    "homeParticipants.emptyTitle": ["Our first batch is on its way"],
+    "homePlacard.closed": ["closed"],
+    "homePlacard.open": ["now open!"],
+    "homeRegister.closed": ["Closed"],
+    "homeRegister.description": ["Register once and pick AI for Professionals, AI for Workspace, or both. Places are confirmed by the organising team {replyBy}."],
+    "homeRegister.open": ["Open"],
+    "homeTrainers.emptyText": ["We are finalising the trainers for each programme. Follow the announcements for updates."],
+    "homeTrainers.emptyTitle": ["Trainers will be announced soon"],
+    "homeTrainers.moreText": ["New trainers join as the programmes grow. Stay tuned!"],
+    "homeTrainers.moreTitle": ["More trainers to be announced"],
+    "homeVenue.hallTba": ["Room to be announced"],
+    "organisersVolunteers.emptyBadge": ["Coming soon"],
+    "organisersVolunteers.emptyText": ["Names and photos of our volunteers will appear here soon. Want to help out at a session?"],
+    "organisersVolunteers.emptyTitle": ["The volunteer list is on its way"],
+    "participantsList.emptyBadge": ["Coming soon"],
+    "participantsList.emptyText": ["Participants are listed here once their batch is completed. Want to be in the first one?"],
+    "participantsList.emptyTitle": ["Our first batch is on its way"],
+    "partnersList.emptyTitle": ["Partners will be announced soon"],
+    "programmeNote": ["A tentative schedule for the next batch: trainers and rooms will be confirmed, and times may still change."],
+    "programmeOverview.noSessions": ["Sessions to be announced"],
+    "programmePlan.registrationClosed": ["Registration has closed."],
+    "programmePlan.registrationOpen": ["Registration is open. Save your seat."],
+    "programmeSchedule.tbaBadge": ["Coming soon"],
+    "programmeSchedule.tbaCalendar": ["Add the dates to your calendar"],
+    "programmeSchedule.tbaRegister": ["Register to get updates"],
+    "programmeSchedule.tbaText": ["Session times, rooms and trainers will appear here, with filters by programme and format, a personal agenda and calendar links."],
+    "programmeSchedule.tbaTitle": ["Schedule to be announced"],
+    "registerDeadlines.title": ["Deadlines"],
+    "registerDeadlines.workshop": ["Registration closes"],
+    "registerDeadlines.workshopTba": ["Registration deadline: to be announced."],
+    "registerFees.tba": ["TBA"],
+    "registerForm.closedText": ["Thank you for your interest! Registration for this batch has closed. Follow the announcements for the next one."],
+    "registerForm.closedTitle": ["Registration is closed"],
+    "registerHero.closed": ["Registration closed"],
+    "registerHero.description": ["{dates} · {venue}. Places are limited, so registrations are reviewed and confirmed by the organising team. Register below: you'll hear from us {replyBy} on whether we can offer you a place. Registering takes about two minutes."],
+    "registerHero.open": ["Registration open"],
+    "siteFooter.copyright": ["© 2026 {organiser}. All rights reserved."],
+    "talksHero.empty": ["Recordings will be published soon."],
+    "trainersList.emptyButton": ["Follow the announcements"],
+    "trainersList.emptyText": ["We're finalising the trainers for each programme. Their profiles will appear here as they are confirmed."],
+    "trainersList.emptyTitle": ["More trainers to be announced"],
+    "venuePlace.hallTba": ["to be announced"],
+  },
+  texts: {
+    highlights: { "Seats per batch": "New batches", TBA: "All year" },
+    fees: { "To be announced": "On request", "Places are limited": "Places in each batch are limited" },
+    aboutPoints: {
+      "Each batch": "All year round",
+      "{dates}: short lectures, hands-on labs and live demos at {venue}.": "New batches start regularly: short lectures, hands-on labs and live demos at {venue}. The next one is {dates}.",
+    },
+  },
+};
 
 const same = (a: unknown, b: unknown) => JSON.stringify(a) === JSON.stringify(b);
 
@@ -366,10 +453,19 @@ function withWholeForms<T extends object>(settings: T): T {
 }
 
 /**
+ * Registration is either open (enrolling for the next batch) or paused. A status from before (such as "soon",
+ * when the site waited for one batch to open) reads as open: the training enrols continuously.
+ */
+function withCurrentStatus<T extends object>(settings: T): T {
+  const out = settings as Record<string, unknown>;
+  return (REGISTRATION_STATUSES as readonly unknown[]).includes(out.workshopStatus) ? settings : ({ ...out, workshopStatus: "open" } as T);
+}
+
+/**
  * Stored settings (merged over the defaults) with any earlier, unedited default replaced by the current one,
- * and the forms' fields made whole.
+ * the registration status brought up to date and the forms' fields made whole.
  */
 export function withCurrentDefaults<T extends object>(key: "settings", data: T): T {
   void key;
-  return withWholeForms(withoutRetired(data, DEFAULT_SETTINGS as T, RETIRED));
+  return withWholeForms(withCurrentStatus(withoutRetired(data, DEFAULT_SETTINGS as T, RETIRED)));
 }

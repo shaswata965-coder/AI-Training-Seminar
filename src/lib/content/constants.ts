@@ -79,7 +79,8 @@ export const FAQ_CATEGORY_META: Record<(typeof FAQ_CATEGORIES)[number], string> 
   sponsorship: "Partnerships",
 };
 
-export const REGISTRATION_STATUSES = ["soon", "open", "closed"] as const;
+/** "open": enrolling for the next batch (the training runs continuously); "closed": registration paused. */
+export const REGISTRATION_STATUSES = ["open", "closed"] as const;
 export type RegistrationStatus = (typeof REGISTRATION_STATUSES)[number];
 
 export const PROGRAMME_STATUSES = ["tba", "draft", "final"] as const;

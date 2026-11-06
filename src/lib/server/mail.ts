@@ -13,7 +13,7 @@ export interface MailInput {
   /**
    * The addresses were typed into a public form. Each gets at most a few
    * e-mails a day, so the forms can't be used to flood someone's inbox through
-   * the event's mail server.
+   * the site's mail server.
    */
   visitor?: boolean;
 }

@@ -109,7 +109,7 @@ async function build(s: SiteSettings, sessions: Session[], trainers: Trainer[], 
   const sessionWidth = cols.type - cols.session - 12;
 
   if (s.programmeStatus === "tba" || sessions.length === 0) {
-    page.drawText(safe(bold, "Schedule to be announced"), { x: M, y, size: 20, font: bold, color: INK });
+    page.drawText(safe(bold, "Your batch's schedule is e-mailed before it starts"), { x: M, y, size: 20, font: bold, color: INK });
     y -= 26;
     for (const line of wrap(font, 11, s.programmeNote, A4.w - 2 * M)) {
       page.drawText(line, { x: M, y, size: 11, font, color: MUTED });

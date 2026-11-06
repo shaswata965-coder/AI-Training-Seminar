@@ -1,7 +1,7 @@
 import { AuraHead } from "@/components/aura/AuraHead";
 
 /**
- * Logo lockup: the event name (from `brandName()`) with its last word highlighted, then the year.
+ * Logo lockup: the programme's name (from `brandName()`) with its last word highlighted, then a year if the name has one.
  * Inside a home link, pass `srSuffix` (e.g. ", home page") so the link name includes the visible text.
  */
 export function BrandMark({ title, year, compact = false, srSuffix }: { title: string; year: string; compact?: boolean; srSuffix?: string }) {

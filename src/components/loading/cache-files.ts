@@ -5,7 +5,7 @@
  */
 
 /** The Cache Storage cache the files go into. public/sw.js uses the same name. */
-export const ASSET_CACHE = "aaiw-assets-v1";
+export const ASSET_CACHE = "diuai-assets-v1";
 
 export type FilesProgress = { stage: "files"; done: number; total: number };
 

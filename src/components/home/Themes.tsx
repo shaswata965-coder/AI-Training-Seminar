@@ -22,7 +22,7 @@ export const themePhoto = (t: Theme): string | undefined => t.image || THEME_PHO
 
 /**
  * The two training programmes as cards, each with its photo across the top and Aura, dressed for the programme,
- * stepping out of its lower edge across from its number. A programme without a photo shows Aura on her own. Side by
+ * stepping out of its lower edge across from its number. A programme without a photo shows Aura on his own. Side by
  * side, the cards share one grid's rows (subgrid), so their titles, texts and links line up however long each one is.
  */
 export function Themes({ s }: { s: SiteSettings }) {

@@ -13,8 +13,8 @@ export function NotFoundContent() {
         <p className="mt-3 max-w-lg text-muted">The link may be broken or the page may have moved. Here are some places Aura can take you instead.</p>
         <div className="mt-10 grid w-full max-w-4xl gap-4 md:grid-cols-3">
           <Portal href="/" tone="lilac" compact kicker="Home" title="Back to the start" art={<HomeArt />} />
-          <Portal href="/programme" tone="azure" compact kicker="Programme" title="The two days" art={<ScheduleArt />} />
-          <Portal href="/trainers" tone="aqua" compact kicker="Trainers" title="Who's speaking" art={<FacesArt people={[]} total={0} />} />
+          <Portal href="/programme" tone="azure" compact kicker="Schedule" title="A batch, day by day" art={<ScheduleArt />} />
+          <Portal href="/trainers" tone="aqua" compact kicker="Trainers" title="Who teaches you" art={<FacesArt people={[]} total={0} />} />
         </div>
       </div>
     </section>

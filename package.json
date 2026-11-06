@@ -1,8 +1,8 @@
 {
-  "name": "agentic-ai-workshop",
+  "name": "diu-ai-training",
   "version": "0.1.0",
   "private": true,
-  "description": "Website for the Agentic AI Workshop 2026 (IIT Delhi & Yardi School of Artificial Intelligence) — Next.js, Node.js and MongoDB.",
+  "description": "Website for the DIU AI Training Seminars, continuous hands-on AI training at Daffodil International University: Next.js, Node.js and MongoDB.",
   "scripts": {
     "dev": "next dev",
     "build": "next build",

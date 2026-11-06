@@ -20,7 +20,7 @@ import { BASE } from "./config.js";
 /** Time from asking for a page to having its HTML and, on a first visit, every file it needs. */
 export const pageReady = new Trend("page_ready", true);
 
-const UA = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36 aaiw-loadtest";
+const UA = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36 diuai-loadtest";
 const COMMON = { "User-Agent": UA, "Accept-Language": "en-GB,en;q=0.9", "Accept-Encoding": "gzip, deflate, br" };
 
 /** The pages the home page's loading screen prefetches (warm.ts), and those in the navigation bar. */

@@ -46,7 +46,7 @@ export async function ensureDefaultContent({ fillEmpty = false }: { fillEmpty?: 
     if ((await Sessions.countDocuments()) === 0) {
       const def = COLLECTION_MAP.sessions;
       await Sessions.insertMany(DEFAULT_SESSIONS.map((s) => objectSchema(def.fields).parse({ ...def.defaults, ...s })));
-      // The plan is shown as a draft ("subject to change") instead of "to be announced".
+      // The plan is shown as a draft ("subject to change") instead of being hidden.
       await Singleton.updateOne({ key: "settings", "data.programmeStatus": "tba" }, { $set: { "data.programmeStatus": "draft" } });
       created.push(`the tentative schedule (${DEFAULT_SESSIONS.length} sessions)`);
     }

@@ -2,15 +2,16 @@
  * Geometry for the schematic route map of north-west Dhaka (VenueMap), from the airport and Uttara to
  * Mirpur, Gabtoli and Daffodil Smart City across the Turag. Everything is latitude/longitude, projected
  * once onto a 1000-wide canvas, so landmarks, the metro line and the routes keep their places relative to
- * each other. It is a sketch, not a street map: positions are approximate and lines smoothed and simplified.
+ * each other. It is a sketch, not a street map: lines are smoothed and simplified. The venue's pin is at DIU's
+ * main buildings (as on Google Maps), with room around it so the pin and its label are never at the edge.
  */
 
 type LatLng = readonly [lat: number, lng: number];
 export type Pt = readonly [x: number, y: number];
 
-const NORTH = 23.902;
+const NORTH = 23.915;
 const SOUTH = 23.772;
-const WEST = 90.282;
+const WEST = 90.262;
 const EAST = 90.452;
 const COS = Math.cos((((NORTH + SOUTH) / 2) * Math.PI) / 180);
 
@@ -41,7 +42,14 @@ function smooth(points: readonly LatLng[], closed = false): string {
 // --- Places -----------------------------------------------------------------
 
 const P = {
-  diu: [23.8768, 90.3207],
+  /** Daffodil International University, Daffodil Smart City: the same point as the venue's map pin (Site settings → Venue). */
+  diu: [23.877, 90.32],
+  /** Khagan, on the Birulia–Akran road, where DIU Road turns off to the campus. */
+  khagan: [23.8755, 90.311],
+  /** Where the Ashulia road meets the Birulia–Akran road. */
+  akran: [23.8885, 90.3095],
+  /** The bridge over the Turag between Mirpur's embankment road and Birulia. */
+  biruliaBridge: [23.8475, 90.333],
   airport: [23.8505, 90.4065],
   airportStation: [23.8545, 90.4125],
   abdullahpur: [23.8795, 90.4005],
@@ -50,7 +58,7 @@ const P = {
   mirpur10: [23.807, 90.3686],
   mirpur1: [23.7957, 90.3537],
   gabtoli: [23.7836, 90.3446],
-  birulia: [23.8452, 90.3265],
+  birulia: [23.8533, 90.3142],
   botanical: [23.8178, 90.346],
 } as const satisfies Record<string, LatLng>;
 
@@ -80,8 +88,8 @@ export const PLACES: Place[] = [
 const GREEN_SHAPES: LatLng[][] = [
   // National Botanical Garden and the zoo, Mirpur
   [[23.8225, 90.3425], [23.822, 90.3505], [23.8125, 90.3515], [23.8115, 90.3435]],
-  // The low fields along the Turag, Birulia
-  [[23.862, 90.302], [23.858, 90.322], [23.835, 90.324], [23.83, 90.306]],
+  // The low fields between Birulia and the Turag
+  [[23.8705, 90.3175], [23.868, 90.3365], [23.852, 90.3345], [23.8575, 90.3185]],
   // Uttara's lake and parks
   [[23.8735, 90.3875], [23.872, 90.3935], [23.866, 90.3925], [23.8675, 90.3865]],
 ];
@@ -90,16 +98,21 @@ export const GREEN = GREEN_SHAPES.map((shape) => smooth(shape, true));
 export const AIRPORT = smooth([[23.869, 90.3885], [23.8665, 90.4075], [23.8395, 90.4145], [23.8265, 90.4045], [23.8405, 90.3875]], true);
 export const RUNWAYS = [smooth([[23.8625, 90.3915], [23.833, 90.4035]])];
 
-export const CAMPUS = smooth([[23.8812, 90.3152], [23.8806, 90.3262], [23.8726, 90.3268], [23.8722, 90.3158]], true);
+export const CAMPUS = smooth([[23.8835, 90.3165], [23.8828, 90.3268], [23.8752, 90.3272], [23.8748, 90.3172]], true);
 
 /** The Turag, round the north-west of the city from Tongi to Gabtoli. */
 export const RIVER = smooth([[23.8935, 90.44], [23.8885, 90.405], [23.8885, 90.378], [23.8805, 90.352], [23.8655, 90.3405], [23.845, 90.3355], [23.822, 90.3335], [23.801, 90.3375], [23.785, 90.3405], [23.772, 90.3455]]);
 
+/** The Ashulia road, from Abdullahpur west over the Turag towards Baipail. */
+const ASHULIA_ROAD: LatLng[] = [P.abdullahpur, [23.8845, 90.382], [23.889, 90.358], [23.8905, 90.336], P.akran];
+
 export const ROADS: { id: string; d: string; major?: boolean }[] = [
-  { id: "airport-road", d: smooth([[23.772, 90.4075], [23.8, 90.4095], [23.83, 90.4135], [23.8545, 90.4105], [23.8795, 90.4005], [23.9, 90.4005]]), major: true },
-  { id: "ashulia", d: smooth([[23.8795, 90.4005], [23.8845, 90.382], [23.8865, 90.358], [23.8835, 90.338], [23.8775, 90.3235], [23.8745, 90.3], [23.875, 90.282]]), major: true },
-  { id: "beribadh", d: smooth([[23.7836, 90.3446], [23.799, 90.3405], [23.818, 90.3385], [23.8375, 90.3345], [23.8452, 90.3265], [23.8605, 90.3225], [23.8768, 90.3207]]) },
-  { id: "aricha", d: smooth([[23.7836, 90.3446], [23.788, 90.322], [23.795, 90.3], [23.8, 90.282]]), major: true },
+  { id: "airport-road", d: smooth([[23.772, 90.4075], [23.8, 90.4095], [23.83, 90.4135], [23.8545, 90.4105], [23.8795, 90.4005], [23.915, 90.4005]]), major: true },
+  { id: "ashulia", d: smooth([...ASHULIA_ROAD, [23.8935, 90.285], [23.9, 90.262]]), major: true },
+  { id: "akran", d: smooth([P.akran, P.khagan, [23.865, 90.3115], P.birulia, [23.835, 90.317], [23.81, 90.319], [23.7915, 90.316]]) },
+  { id: "diu-road", d: smooth([P.khagan, [23.8764, 90.3155], P.diu]) },
+  { id: "beribadh", d: smooth([P.gabtoli, [23.799, 90.3405], [23.818, 90.3385], [23.8375, 90.3345], P.biruliaBridge, P.birulia]) },
+  { id: "aricha", d: smooth([P.gabtoli, [23.788, 90.322], [23.795, 90.3], [23.8, 90.282], [23.805, 90.262]]), major: true },
   { id: "mirpur", d: smooth([[23.772, 90.367], [23.7957, 90.3537], [23.807, 90.3686], [23.8262, 90.3646], [23.8458, 90.3634]]) },
   { id: "uttara", d: smooth([[23.8693, 90.367], [23.8735, 90.381], [23.8795, 90.4005]]) },
 ];
@@ -119,10 +132,10 @@ export const METRO: { id: LineId; name: string; color: string; d: string; statio
 export const AREA_LABELS: { label: string; at: Pt; rotate?: number }[] = [
   { label: "Uttara", at: project([23.8745, 90.3975]) },
   { label: "Mirpur", at: project([23.8035, 90.3605]) },
-  { label: "Ashulia", at: project([23.893, 90.345]) },
-  { label: "Savar", at: project([23.825, 90.293]) },
-  { label: "Birulia", at: project([23.851, 90.311]) },
-  { label: "Turag", at: project([23.832, 90.3315]), rotate: -84 },
+  { label: "Ashulia", at: project([23.9025, 90.331]) },
+  { label: "Savar", at: project([23.835, 90.284]) },
+  { label: "Birulia", at: project([23.8555, 90.298]) },
+  { label: "Turag", at: project([23.828, 90.3305]), rotate: -84 },
 ];
 
 // --- Routes -----------------------------------------------------------------
@@ -140,7 +153,10 @@ export interface Route {
   travel: "driving" | "transit";
 }
 
-const VIA_ASHULIA: LatLng[] = [P.abdullahpur, [23.8845, 90.382], [23.8865, 90.358], [23.8835, 90.338], P.diu];
+/** From Abdullahpur along the Ashulia road, south down the Birulia–Akran road to Khagan, then DIU Road to campus. */
+const VIA_ASHULIA: LatLng[] = [...ASHULIA_ROAD, [23.882, 90.3102], P.khagan, [23.8764, 90.3155], P.diu];
+/** From Mirpur's embankment road over the Birulia bridge, north through Birulia and Khagan to campus. */
+const VIA_BIRULIA: LatLng[] = [[23.818, 90.3385], [23.8375, 90.3345], P.biruliaBridge, P.birulia, [23.865, 90.3115], P.khagan, [23.8764, 90.3155], P.diu];
 
 export const ROUTES: Record<Mode, Route[]> = {
   air: [
@@ -164,7 +180,7 @@ export const ROUTES: Record<Mode, Route[]> = {
   metro: [
     {
       from: "mirpur10",
-      d: smooth([P.mirpur10, [23.8015, 90.3605], P.mirpur1, [23.799, 90.3405], [23.818, 90.3385], [23.8375, 90.3345], P.birulia, [23.8605, 90.3225], P.diu]),
+      d: smooth([P.mirpur10, [23.8015, 90.3605], P.mirpur1, [23.799, 90.3405], ...VIA_BIRULIA]),
       lines: ["mrt6"],
       origin: "Mirpur 10 Metro Station, Dhaka",
       travel: "driving",
@@ -173,7 +189,7 @@ export const ROUTES: Record<Mode, Route[]> = {
   road: [
     {
       from: "gabtoli",
-      d: smooth([P.gabtoli, [23.799, 90.3405], [23.818, 90.3385], [23.8375, 90.3345], P.birulia, [23.8605, 90.3225], P.diu]),
+      d: smooth([P.gabtoli, [23.799, 90.3405], ...VIA_BIRULIA]),
       lines: [],
       origin: "Gabtoli Bus Terminal, Dhaka",
       travel: "driving",

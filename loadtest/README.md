@@ -2,7 +2,7 @@
 
 End-to-end load tests for the website: real HTTPS through nginx (configured as the README says) to
 `next start` and MongoDB, with every form actually submitted, stored and e-mailed, from many client IP
-addresses or from one. Results of the last full run: [`docs/LOAD_TEST_REPORT.md`](../docs/LOAD_TEST_REPORT.md).
+addresses or from one. `tools/report.mjs` writes a report of each run.
 
 ```
 k6 (one source IP per user) ──HTTPS/2──▶ nginx :443 ──X-Forwarded-For──▶ next start :3000 ──▶ MongoDB
@@ -63,9 +63,8 @@ A run fails if any of these is missed ([`k6/lib/config.js`](k6/lib/config.js)):
 ### Data checks
 
 After each run, [`tools/report.mjs`](tools/report.mjs) checks MongoDB and the SMTP sink against what k6 was
-told: every person k6 saw registered is stored exactly once (one registration per e-mail address, one team
-per name, nobody in two teams), every saved enquiry is stored, every registration and team got its
-confirmation e-mail and the organisers their notices, no visitor address got more than the site's 3 e-mails
+told: every person k6 saw registered is stored exactly once (one registration per e-mail address), every saved
+enquiry is stored, every registration got its confirmation e-mail and the organisers their notices, no visitor address got more than the site's 3 e-mails
 a day, nginx returned no 5xx and had enough connections, and the site logged no errors.
 
 ### The real browser
@@ -81,7 +80,7 @@ Linux, as root (nginx listens on 443). Needs nginx, [k6](https://grafana.com/doc
 (tested with v1.3.0), MongoDB 6+ and Playwright with Chromium for the browser probe.
 
 ```bash
-mongod --dbpath /tmp/aaiw-loadtest-db --fork --logpath /tmp/mongod.log      # or any MongoDB; the test uses the aaiw-loadtest database
+mongod --dbpath /tmp/diuai-loadtest-db --fork --logpath /tmp/mongod.log      # or any MongoDB; the test uses the diuai-loadtest database
 NEXT_PUBLIC_SITE_URL=https://localhost npm run build
 SERVER_CPUS=0,1 K6_CPUS=2,3 loadtest/run.sh                                 # everything, about 70 minutes
 SERVER_CPUS=0,1 K6_CPUS=2,3 loadtest/run.sh submission:distinct submission:shared
@@ -92,7 +91,7 @@ RATE_LIMIT_EXEMPT=127.20.0.1 LABEL=exempt loadtest/run.sh submission:shared   # 
 ```
 
 `run.sh` starts a fresh stack for every run ([`stack/up.sh`](stack/up.sh): nginx, `next start`, the SMTP sink),
-empties and prepares the `aaiw-loadtest` database ([`tools/prepare.mjs`](tools/prepare.mjs): default and sample
+empties and prepares the `diuai-loadtest` database ([`tools/prepare.mjs`](tools/prepare.mjs): default and sample
 content, both registrations open, the programme published, an organiser account; it refuses any database
 whose name lacks "loadtest"), presses "Refresh website", runs k6 with the browser probe and a resource
 monitor, and writes everything to `loadtest/results/<time>/<scenario>-<mode>/`:

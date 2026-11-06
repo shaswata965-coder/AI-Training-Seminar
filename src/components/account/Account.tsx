@@ -47,18 +47,6 @@ export function useAccount() {
   return ctx;
 }
 
-/** Where agendas were kept, in the browser, before they needed an account: moved into the account at sign-in. */
-const OLD_AGENDA_KEY = "aaiw-agenda";
-
-function oldAgenda(): string[] {
-  try {
-    const list: unknown = JSON.parse(window.localStorage.getItem(OLD_AGENDA_KEY) ?? "[]");
-    return Array.isArray(list) ? list.filter((x): x is string => typeof x === "string").slice(0, 200) : [];
-  } catch {
-    return [];
-  }
-}
-
 export function AccountProvider({ text, children }: { text: PageCopy["siteAccount"]; children: ReactNode }) {
   const toast = useToast();
   const [account, setAccount] = useState<Account | null | undefined>(undefined);
@@ -123,9 +111,6 @@ export function AccountProvider({ text, children }: { text: PageCopy["siteAccoun
       setAccount(a);
       setAgenda(saved);
       setDialog(null);
-      try {
-        window.localStorage.removeItem(OLD_AGENDA_KEY);
-      } catch {}
       toast(text.signedIn, "success");
       const then = pending.current;
       pending.current = null;
@@ -179,7 +164,7 @@ function SignInForm({ text, reason, onSignedIn, onLeave }: { text: PageCopy["sit
     e.preventDefault();
     setBusy(true);
     setError(null);
-    const res = await postJson<{ account: Account; agenda: string[] }>("/api/account/login", { email, code, agenda: oldAgenda() });
+    const res = await postJson<{ account: Account; agenda: string[] }>("/api/account/login", { email, code });
     setBusy(false);
     if (res.ok && res.data) onSignedIn(res.data.account, res.data.agenda);
     else setError(res.message ?? "Sign-in failed.");

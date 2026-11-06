@@ -1,14 +1,17 @@
 import type { CSSProperties, ReactNode } from "react";
 import { DIU_SHIELD } from "@/components/layout/InstituteLogo";
 import { withBase } from "@/lib/paths";
+import { AURA_COLORS, type AuraBuild, type AuraBuildChoice, type AuraColorKey } from "./builds";
 import type { AuraLook, Effect, Emblem, Expression, Headwear, Pose, PropKind } from "./types";
 import { AURA_EYES } from "./presets";
 
 /*
- * Aura: an original, EVE-inspired agentic AI mascot: a glossy, egg-shaped
- * hovering robot with a floating head, a dark visor with glowing eyes and
- * fin-like arms. Pure SVG with no hooks so it can be rendered on the server,
- * in client components and inside OG images.
+ * Aura: an original robot mascot, the training's AI guide, hovering on a thruster with glowing eyes behind a dark
+ * visor. He comes in two builds (builds.ts): "strong", a square-jawed helmet with ear modules and an antenna on a
+ * neck joint, a broad V-shaped torso with a chest plate, shoulder pads and arms ending in fists; and "classic",
+ * the original glossy, egg-shaped robot with a floating head and fin-like arms. Both share the anchor points
+ * below (eyes, chest, shoulders, grip), so every prop, hat and effect fits either. Pure SVG with no hooks so it
+ * can be rendered on the server, in client components and inside OG images.
  */
 
 export const AURA_W = 260;
@@ -20,7 +23,7 @@ const PIVOT_R = { x: 198, y: 170 };
 const EYE_L = { x: 110, y: 102 };
 const EYE_R = { x: 150, y: 102 };
 const CHEST = { x: 130, y: 207 };
-/** The DIU pin, on her upper chest to the right: above a placard, clear of the chest emblem and the fins at rest. */
+/** The DIU pin, on his upper chest to the right: above a placard, clear of the chest emblem and the arms at rest. */
 const BADGE = { x: 155, y: 171, r: 13 };
 
 const ARM_PATH =
@@ -34,6 +37,22 @@ const BODY_PATH =
 const HEART_PATH =
   "M0 17 C-6 12 -21 3 -21 -7 C-21 -14 -15.5 -19 -9.5 -19 C-5 -19 -1.6 -16.3 0 -12.6 C1.6 -16.3 5 -19 9.5 -19 C15.5 -19 21 -14 21 -7 C21 3 6 12 0 17 Z";
 const SPARK_PATH = "M0 -11 Q1.8 -1.8 11 0 Q1.8 1.8 0 11 Q-1.8 1.8 -11 0 Q-1.8 -1.8 0 -11 Z";
+
+/* The strong build: a helmet with a squared jaw, a visor whose top dips to a brow between the eyes, a broad
+   torso tapering to the waist, and an arm (drawn hanging from its shoulder) ending in a fist at the grip. */
+const STRONG_HEAD_PATH =
+  "M98 48 H162 C182 48 194 60 194 80 V110 C194 126 186 138 172 144 L160 148 H100 L88 144 C74 138 66 126 66 110 V80 C66 60 78 48 98 48 Z";
+const STRONG_VISOR_PATH =
+  "M87 75 L124 81.5 Q130 82.6 136 81.5 L173 75 C178.5 74.2 182 77.5 182 82.5 V112 C182 121 176 127 167 127 H93 C84 127 78 121 78 112 V82.5 C78 77.5 81.5 74.2 87 75 Z";
+const STRONG_BODY_PATH =
+  "M92 152 H168 C192 152 208 164 208 184 C208 206 194 230 178 247 C168 257 154 263 140 264 H120 C106 263 92 257 82 247 C66 230 52 206 52 184 C52 164 68 152 92 152 Z";
+const STRONG_CHEST_PATH = "M96 167 C110 163 122 165 130 171 C138 165 150 163 164 167 C168 193 158 220 130 233 C102 220 92 193 96 167 Z";
+const STRONG_ARM_PATH = "M-12 -6 C-12 -13 12 -13 12 -6 L10.5 35 C10.5 40 -10.5 40 -10.5 35 Z";
+
+/** Draw a part in one build: with "auto" both builds are drawn and CSS (globals.css) shows the chosen one. */
+function inBuild(build: AuraBuildChoice, b: AuraBuild) {
+  return { show: build === "auto" || build === b, className: build === "auto" ? `aura-b-${b}` : undefined };
+}
 
 const FRONT_PROPS = new Set<PropKind>([
   "clipboard", "book", "tablet", "laptop", "camera", "bigHeart", "heartPulse", "ticket", "stopwatch", "poster",
@@ -55,7 +74,7 @@ export const POSES: Record<Pose, ArmPose> = {
   think: { l: -150, r: -7 },
   cheer: { l: 150, r: -150, wave: "both" },
   type: { l: -48, r: 48, tap: true },
-  /** Left fin up at her side, holding a poster open; right fin across her, aiming a laser pointer at it. */
+  /** Left arm up at his side, holding a poster open; right arm across him, aiming a laser pointer at it. */
   lecture: { l: 115, r: 70 },
 };
 
@@ -64,30 +83,10 @@ function armTip(pivot: { x: number; y: number }, deg: number) {
   return { x: pivot.x - ARM_LEN * Math.sin(t), y: pivot.y + ARM_LEN * Math.cos(t) };
 }
 
+/** "css": colours from CSS custom properties (set for the whole site from Site settings); "light"/"dark": fixed. */
 export type AuraPalette = "css" | "light" | "dark";
 
-const PALETTES = {
-  light: {
-    body1: "#ffffff",
-    body2: "#f1f5fb",
-    body3: "#d3ddec",
-    visor1: "#1d2946",
-    visor2: "#060a14",
-    shadow: "rgba(30,41,59,0.18)",
-    line: "#93a4be",
-    edge: "#c9d4e5",
-  },
-  dark: {
-    body1: "#f7f9fd",
-    body2: "#e3e9f4",
-    body3: "#b9c5da",
-    visor1: "#18223b",
-    visor2: "#03060d",
-    shadow: "rgba(0,0,0,0.5)",
-    line: "#6d7d99",
-    edge: "rgba(255,255,255,0)",
-  },
-};
+const SHADOW = { light: "rgba(30,41,59,0.18)", dark: "rgba(0,0,0,0.5)" };
 
 export interface AuraArtProps extends AuraLook {
   uid: string;
@@ -97,12 +96,18 @@ export interface AuraArtProps extends AuraLook {
   width?: number | string;
   height?: number | string;
   title?: string;
-  /** Words on a large placard held in front of her in both fins (draw her with the "holdWide" pose). */
+  /** Words on a large placard held in front of him in both hands (draw him with the "holdWide" pose). */
   placard?: string;
   /** Counts the placard's changes of text; each one flips it over. */
   placardFlip?: number;
-  /** The DIU shield pinned on her chest: its address (by default the bundled one), or false for none. */
+  /** The DIU shield pinned on his chest: its address (by default the bundled one), or false for none. */
   badge?: string | false;
+  /** Which build to draw (builds.ts): "auto" draws both, for CSS to show the one chosen in Site settings. */
+  build?: AuraBuildChoice;
+  /** With a fixed palette ("light"/"dark"): which colours. */
+  colors?: AuraColorKey;
+  /** Let a site-wide eye colour (--aura-eye, Site settings) replace `eyeColor`. Off when the colour was picked on purpose. */
+  eyeVar?: boolean;
 }
 
 export function AuraArt({
@@ -124,11 +129,14 @@ export function AuraArt({
   placard,
   placardFlip = 0,
   badge = withBase(DIU_SHIELD),
+  build = "auto",
+  colors = "steel",
+  eyeVar = true,
 }: AuraArtProps) {
   const id = (name: string) => `${uid}-${name}`;
   const url = (name: string) => `url(#${id(name)})`;
-  const col = (key: keyof (typeof PALETTES)["light"], cssVar: string) =>
-    palette === "css" ? `var(${cssVar}, ${PALETTES.light[key]})` : PALETTES[palette][key];
+  const fixed = AURA_COLORS[colors].colours;
+  const col = (key: keyof typeof fixed, cssVar: string) => (palette === "css" ? `var(${cssVar}, ${AURA_COLORS.steel.colours[key]})` : fixed[key]);
 
   const C = {
     body1: col("body1", "--aura-body-1"),
@@ -136,11 +144,16 @@ export function AuraArt({
     body3: col("body3", "--aura-body-3"),
     visor1: col("visor1", "--aura-visor-1"),
     visor2: col("visor2", "--aura-visor-2"),
-    shadow: col("shadow", "--aura-shadow"),
+    shadow: palette === "css" ? `var(--aura-shadow, ${SHADOW.light})` : SHADOW[palette],
     line: col("line", "--aura-line"),
     edge: col("edge", "--aura-edge"),
-    eye: eyeColor,
+    trim1: col("trim1", "--aura-trim-1"),
+    trim2: col("trim2", "--aura-trim-2"),
+    shine: col("shine", "--aura-shine"),
+    eye: palette === "css" && eyeVar ? `var(--aura-eye, ${eyeColor})` : eyeColor,
   };
+  const classic = inBuild(build, "classic");
+  const strong = inBuild(build, "strong");
 
   const arms = POSES[pose];
   const gripR = armTip(PIVOT_R, arms.r);
@@ -168,6 +181,10 @@ export function AuraArt({
           <stop offset="55%" stopColor={C.body2} />
           <stop offset="100%" stopColor={C.body3} />
         </radialGradient>
+        <linearGradient id={id("trim")} x1="0" y1="0" x2="0.4" y2="1">
+          <stop offset="0%" stopColor={C.trim1} />
+          <stop offset="100%" stopColor={C.trim2} />
+        </linearGradient>
         <linearGradient id={id("visor")} x1="0" y1="0" x2="0" y2="1">
           <stop offset="0%" stopColor={C.visor1} />
           <stop offset="100%" stopColor={C.visor2} />
@@ -212,6 +229,9 @@ export function AuraArt({
         <clipPath id={id("visorClip")}>
           <path d={VISOR_PATH} />
         </clipPath>
+        <clipPath id={id("strongVisorClip")}>
+          <path d={STRONG_VISOR_PATH} />
+        </clipPath>
         {/* Back and front halves of the orbit (behind and in front of the body), with room either side for the orbs. */}
         <clipPath id={id("orbitBack")}>
           <rect x="-40" y="0" width={AURA_W + 80} height="190" />
@@ -241,70 +261,78 @@ export function AuraArt({
           <ellipse className="aura-thrust" cx="130" cy="270" rx="22" ry="7" fill={url("thrust")} />
 
           {/* Body */}
-          <path d={BODY_PATH} fill={url("body")} stroke={C.edge} strokeWidth="1.4" />
-          <path
-            d="M84 176 C92 162 108 156 122 155"
-            fill="none"
-            stroke="#ffffff"
-            strokeOpacity="0.9"
-            strokeWidth="6"
-            strokeLinecap="round"
-          />
-          <path
-            d="M178 226 C170 246 152 258 134 260"
-            fill="none"
-            stroke={C.line}
-            strokeOpacity="0.25"
-            strokeWidth="3"
-            strokeLinecap="round"
-          />
+          {classic.show ? (
+            <g className={classic.className}>
+              <path d={BODY_PATH} fill={url("body")} stroke={C.edge} strokeWidth="1.4" />
+              <path d="M84 176 C92 162 108 156 122 155" fill="none" stroke="#ffffff" strokeOpacity={C.shine} strokeWidth="6" strokeLinecap="round" />
+              <path d="M178 226 C170 246 152 258 134 260" fill="none" stroke={C.line} strokeOpacity="0.25" strokeWidth="3" strokeLinecap="round" />
+            </g>
+          ) : null}
+          {strong.show ? <StrongBody C={C} url={url} className={strong.className} /> : null}
 
           {showEmblem ? <ChestEmblem kind={emblem} eye={C.eye} glow={url("glow")} /> : null}
           {wear === "stethoscope" ? <Stethoscope silver={url("silver")} /> : null}
-          {wear === "professor" ? <BowTie fill={url("pink")} /> : null}
-          {/* Lecturing, her fin with the laser pointer goes where the badge would be. */}
+          {wear === "professor" ? (
+            <>
+              {classic.show ? <BowTie fill={url("pink")} className={classic.className} /> : null}
+              {strong.show ? <NeckTie className={strong.className} /> : null}
+            </>
+          ) : null}
+          {/* Lecturing, his arm with the laser pointer goes where the badge would be. */}
           {badge && prop !== "poster" ? <Badge href={badge} edge={C.line} /> : null}
 
-          {/* Levitation glow between head and body */}
-          <ellipse cx="130" cy="147.5" rx="24" ry="2.6" fill={C.eye} opacity="0.35" />
+          {/* Levitation glow between the classic build's floating head and body */}
+          {classic.show ? <ellipse className={classic.className} cx="130" cy="147.5" rx="24" ry="2.6" fill={C.eye} opacity="0.35" /> : null}
 
           {/* Head */}
           <g className="aura-head-bob">
             <g className="aura-head">
-              <path d={HEAD_PATH} fill={url("body")} stroke={C.edge} strokeWidth="1.4" />
-              <path
-                d="M86 74 C96 63 110 58 124 57"
-                fill="none"
-                stroke="#ffffff"
-                strokeOpacity="0.95"
-                strokeWidth="5"
-                strokeLinecap="round"
-              />
-              <path d={VISOR_PATH} fill={url("visor")} />
-              <path
-                d="M95 82 C105 75 118 72 132 72"
-                fill="none"
-                stroke="#ffffff"
-                strokeOpacity="0.16"
-                strokeWidth="3"
-                strokeLinecap="round"
-              />
-              {showCheeks ? (
-                <g className="aura-cheeks" fill="#ff8fb8" opacity="0.55">
-                  <ellipse cx="93" cy="119" rx="7" ry="3.6" />
-                  <ellipse cx="167" cy="119" rx="7" ry="3.6" />
+              {classic.show ? (
+                <g className={classic.className}>
+                  <path d={HEAD_PATH} fill={url("body")} stroke={C.edge} strokeWidth="1.4" />
+                  <path d="M86 74 C96 63 110 58 124 57" fill="none" stroke="#ffffff" strokeOpacity={C.shine} strokeWidth="5" strokeLinecap="round" />
+                  <path d={VISOR_PATH} fill={url("visor")} />
+                  <path d="M95 82 C105 75 118 72 132 72" fill="none" stroke="#ffffff" strokeOpacity="0.16" strokeWidth="3" strokeLinecap="round" />
+                  {showCheeks ? (
+                    <g className="aura-cheeks" fill="#ff8fb8" opacity="0.55">
+                      <ellipse cx="93" cy="119" rx="7" ry="3.6" />
+                      <ellipse cx="167" cy="119" rx="7" ry="3.6" />
+                    </g>
+                  ) : null}
                 </g>
               ) : null}
+              {strong.show ? <StrongHead C={C} url={url} antenna={!headwear} className={strong.className} /> : null}
               <g className="aura-eyes">
-                <EyePair expression={expression} eye={C.eye} glow={url("glow")} magnify={prop === "magnifier"} />
+                <EyePair expression={expression} eye={C.eye} glow={url("glow")} magnify={prop === "magnifier"} build={build} />
               </g>
               {fx.has("scan") ? (
-                <g clipPath={url("visorClip")}>
-                  <rect className="aura-scan" x="80" y="70" width="100" height="3" rx="1.5" fill={C.eye} opacity="0.75" />
-                </g>
+                <>
+                  {classic.show ? (
+                    <g clipPath={url("visorClip")} className={classic.className}>
+                      <rect className="aura-scan" x="80" y="70" width="100" height="3" rx="1.5" fill={C.eye} opacity="0.75" />
+                    </g>
+                  ) : null}
+                  {strong.show ? (
+                    <g clipPath={url("strongVisorClip")} className={strong.className}>
+                      <rect className="aura-scan" x="80" y="70" width="100" height="3" rx="1.5" fill={C.eye} opacity="0.75" />
+                    </g>
+                  ) : null}
+                </>
               ) : null}
               {wear === "professor" ? <Spectacles /> : null}
-              {headwear ? <HeadwearArt kind={headwear} eye={C.eye} party={url("party")} /> : null}
+              {headwear === "hardHat" && build === "auto" ? (
+                // The strong build's helmet is wider: its hard hat is too.
+                <>
+                  <g className="aura-b-classic">
+                    <HeadwearArt kind={headwear} eye={C.eye} party={url("party")} />
+                  </g>
+                  <g className="aura-b-strong">
+                    <HeadwearArt kind={headwear} eye={C.eye} party={url("party")} strong />
+                  </g>
+                </>
+              ) : headwear ? (
+                <HeadwearArt kind={headwear} eye={C.eye} party={url("party")} strong={build === "strong"} />
+              ) : null}
             </g>
           </g>
 
@@ -322,9 +350,10 @@ export function AuraArt({
           ) : null}
           {placard ? <Placard key={placardFlip} flip={placardFlip > 0} text={placard} line={C.line} url={url} /> : null}
 
-          {/* Arms */}
-          <Arm pivot={PIVOT_L} deg={arms.l} side="l" fill={url("body")} edge={C.edge} anim={armAnim(arms, "l")} />
-          <Arm pivot={PIVOT_R} deg={arms.r} side="r" fill={url("body")} edge={C.edge} anim={armAnim(arms, "r")} />
+          {/* Arms, and the strong build's shoulder pads over their joints */}
+          <Arm pivot={PIVOT_L} deg={arms.l} side="l" C={C} url={url} build={build} anim={armAnim(arms, "l")} />
+          <Arm pivot={PIVOT_R} deg={arms.r} side="r" C={C} url={url} build={build} anim={armAnim(arms, "r")} />
+          {strong.show ? <ShoulderPads C={C} url={url} className={strong.className} /> : null}
           {prop === "poster" ? <PosterSheet gripL={gripL} gripR={gripR} line={C.line} screen={url("screen")} /> : null}
         </g>
       </g>
@@ -361,21 +390,29 @@ function armAnim(pose: ArmPose, side: "l" | "r") {
   return "";
 }
 
+type Colours = Record<"body1" | "body2" | "body3" | "visor1" | "visor2" | "shadow" | "line" | "edge" | "trim1" | "trim2" | "shine" | "eye", string>;
+type Url = (name: string) => string;
+
 function Arm({
   pivot,
   deg,
   side,
-  fill,
-  edge,
+  C,
+  url,
+  build,
   anim,
 }: {
   pivot: { x: number; y: number };
   deg: number;
   side: "l" | "r";
-  fill: string;
-  edge: string;
+  C: Colours;
+  url: Url;
+  build: AuraBuildChoice;
   anim: string;
 }) {
+  const classic = inBuild(build, "classic");
+  const strong = inBuild(build, "strong");
+  const out = side === "l" ? -1 : 1;
   return (
     <g transform={`translate(${pivot.x} ${pivot.y})`}>
       {/* The transform attribute renders the static pose (e.g. in OG images);
@@ -385,16 +422,85 @@ function Arm({
         transform={`rotate(${deg})`}
         style={{ "--rot": `${deg}deg` } as CSSProperties}
       >
-        <path d={ARM_PATH} fill={fill} stroke={edge} strokeWidth="1.4" />
-        <path
-          d={side === "l" ? "M-7 2 C-9 12 -9 24 -7 34" : "M7 2 C9 12 9 24 7 34"}
-          fill="none"
-          stroke="#ffffff"
-          strokeOpacity="0.85"
-          strokeWidth="3.5"
-          strokeLinecap="round"
-        />
+        {classic.show ? (
+          <g className={classic.className}>
+            <path d={ARM_PATH} fill={url("body")} stroke={C.edge} strokeWidth="1.4" />
+            <path d={side === "l" ? "M-7 2 C-9 12 -9 24 -7 34" : "M7 2 C9 12 9 24 7 34"} fill="none" stroke="#ffffff" strokeOpacity={C.shine} strokeWidth="3.5" strokeLinecap="round" />
+          </g>
+        ) : null}
+        {strong.show ? (
+          <g className={strong.className}>
+            {/* Upper arm and forearm, an elbow band, and a fist in armour at the grip. */}
+            <path d={STRONG_ARM_PATH} fill={url("body")} stroke={C.edge} strokeWidth="1.4" />
+            <path d={`M${-6 * out} 0 C${-7.5 * out} 10 ${-7.5 * out} 20 ${-6 * out} 30`} fill="none" stroke="#ffffff" strokeOpacity={C.shine} strokeWidth="3.2" strokeLinecap="round" />
+            <rect x="-11.6" y="15" width="23.2" height="6" rx="3" fill={url("trim")} />
+            <circle cy="46" r="12.5" fill={url("trim")} stroke={C.edge} strokeWidth="1.2" />
+            <path d="M-7 41 Q0 38.5 7 41" fill="none" stroke="#ffffff" strokeOpacity="0.35" strokeWidth="2.2" strokeLinecap="round" />
+            <path d={`M${-5.5 * out} 51 H${5.5 * out}`} fill="none" stroke={C.trim2} strokeOpacity="0.8" strokeWidth="1.6" strokeLinecap="round" />
+          </g>
+        ) : null}
       </g>
+    </g>
+  );
+}
+
+/** The strong build's neck joint, torso, chest plate, belt and thruster nozzle. */
+function StrongBody({ C, url, className }: { C: Colours; url: Url; className?: string }) {
+  return (
+    <g className={className}>
+      <rect x="112" y="136" width="36" height="22" rx="6" fill={C.visor1} />
+      <path d="M113 145 H147 M113 151 H147" stroke={C.line} strokeOpacity="0.55" strokeWidth="2" />
+      <path d="M116 262 H144 L139 273 H121 Z" fill={C.visor1} />
+      <path d={STRONG_BODY_PATH} fill={url("body")} stroke={C.edge} strokeWidth="1.4" />
+      <path d={STRONG_CHEST_PATH} fill="#ffffff" fillOpacity="0.16" stroke={C.line} strokeOpacity="0.32" strokeWidth="2" strokeLinejoin="round" />
+      <path d="M74 172 C82 160 98 156 112 156" fill="none" stroke="#ffffff" strokeOpacity={C.shine} strokeWidth="6" strokeLinecap="round" />
+      <path d="M86 243 C110 253 150 253 174 243" fill="none" stroke={C.line} strokeOpacity="0.35" strokeWidth="3" strokeLinecap="round" />
+      <path d="M186 214 C178 236 160 254 140 259" fill="none" stroke={C.line} strokeOpacity="0.22" strokeWidth="3" strokeLinecap="round" />
+    </g>
+  );
+}
+
+/** Armoured shoulder pads over the strong build's arm joints. */
+function ShoulderPads({ C, url, className }: { C: Colours; url: Url; className?: string }) {
+  return (
+    <g className={className}>
+      {[PIVOT_L, PIVOT_R].map((p, i) => (
+        <g key={i} transform={`translate(${p.x} ${p.y - 2})`}>
+          <ellipse rx="18" ry="15.5" fill={url("trim")} stroke={C.edge} strokeWidth="1.2" />
+          <path d={i ? "M-9 -9 C-3 -13 5 -13 10 -9" : "M-10 -9 C-5 -13 3 -13 9 -9"} fill="none" stroke="#ffffff" strokeOpacity="0.45" strokeWidth="2.6" strokeLinecap="round" />
+          <path d="M-12 5 Q0 10 12 5" fill="none" stroke={C.trim2} strokeOpacity="0.7" strokeWidth="1.6" strokeLinecap="round" />
+        </g>
+      ))}
+    </g>
+  );
+}
+
+/** The strong build's helmet: squared jaw, ear modules, a visor with a brow, a chin grille and (bare-headed) an antenna. */
+function StrongHead({ C, url, antenna, className }: { C: Colours; url: Url; antenna: boolean; className?: string }) {
+  return (
+    <g className={className}>
+      {antenna ? (
+        <g>
+          <path d="M150 50 L157 31" stroke={C.visor1} strokeWidth="3.4" strokeLinecap="round" />
+          <circle cx="157.5" cy="29" r="7" fill={url("glow")} className="aura-eye-glow" />
+          <circle cx="157.5" cy="29" r="4" fill={C.eye} />
+        </g>
+      ) : null}
+      {/* Ear modules */}
+      {[56, 190].map((x) => (
+        <g key={x}>
+          <rect x={x} y="84" width="14" height="36" rx="6" fill={url("trim")} stroke={C.edge} strokeWidth="1.2" />
+          <circle cx={x + 7} cy="102" r="3.2" fill={C.eye} opacity="0.85" />
+        </g>
+      ))}
+      <path d={STRONG_HEAD_PATH} fill={url("body")} stroke={C.edge} strokeWidth="1.4" />
+      <path d="M82 70 C88 59 98 54 112 53" fill="none" stroke="#ffffff" strokeOpacity={C.shine} strokeWidth="5" strokeLinecap="round" />
+      <path d="M102 60 C118 56.5 142 56.5 158 60" fill="none" stroke={C.line} strokeOpacity="0.25" strokeWidth="2" strokeLinecap="round" />
+      <path d={STRONG_VISOR_PATH} fill={url("visor")} stroke={C.trim2} strokeOpacity="0.5" strokeWidth="1.5" />
+      <path d="M92 84 L122 89" fill="none" stroke="#ffffff" strokeOpacity="0.14" strokeWidth="3" strokeLinecap="round" />
+      {/* Chin grille */}
+      <rect x="113" y="132" width="34" height="9" rx="3.5" fill={C.visor1} opacity="0.8" />
+      <path d="M120 134.5 V138.5 M126.7 134.5 V138.5 M133.3 134.5 V138.5 M140 134.5 V138.5" stroke={C.line} strokeOpacity="0.9" strokeWidth="1.6" strokeLinecap="round" />
     </g>
   );
 }
@@ -406,39 +512,72 @@ function EyePair({
   eye,
   glow,
   magnify,
+  build,
 }: {
   expression: Expression;
   eye: string;
   glow: string;
   magnify: boolean;
+  build: AuraBuildChoice;
 }) {
   const left: Expression = expression === "wink" ? "neutral" : expression;
   const right: Expression = expression === "wink" ? "happy" : expression;
-  return (
-    <>
-      <ellipse cx={EYE_L.x} cy={EYE_L.y} rx="19" ry="21" fill={glow} className="aura-eye-glow" />
-      <ellipse cx={EYE_R.x} cy={EYE_R.y} rx="19" ry="21" fill={glow} className="aura-eye-glow" />
+  // The strong build's shapes where they differ (resting eyes are wide, level bars); elsewhere they are shared.
+  const eyes = (b: AuraBuild | "both", className?: string) => (
+    <g className={className}>
       <g transform={`translate(${EYE_L.x} ${EYE_L.y})`}>
         <g className={blinks(left) ? "aura-eye aura-blink" : "aura-eye"}>
-          <EyeShape kind={left} side="l" eye={eye} />
+          <EyeShape kind={left} side="l" eye={eye} strong={b === "strong"} />
         </g>
       </g>
       <g transform={`translate(${EYE_R.x} ${EYE_R.y})${magnify ? " scale(1.45)" : ""}`}>
         <g className={blinks(right) ? "aura-eye aura-blink" : "aura-eye"}>
-          <EyeShape kind={right} side="r" eye={eye} />
+          <EyeShape kind={right} side="r" eye={eye} strong={b === "strong"} />
         </g>
       </g>
+    </g>
+  );
+  const differs = STRONG_EYES.has(left) || STRONG_EYES.has(right);
+  return (
+    <>
+      <ellipse cx={EYE_L.x} cy={EYE_L.y} rx="19" ry="21" fill={glow} className="aura-eye-glow" />
+      <ellipse cx={EYE_R.x} cy={EYE_R.y} rx="19" ry="21" fill={glow} className="aura-eye-glow" />
+      {build === "auto" && differs ? (
+        <>
+          {eyes("classic", "aura-b-classic")}
+          {eyes("strong", "aura-b-strong")}
+        </>
+      ) : (
+        eyes(build === "strong" ? "strong" : "classic")
+      )}
     </>
   );
 }
+
+/** Expressions the strong build draws its own way. */
+const STRONG_EYES = new Set<Expression>(["neutral", "wink", "curious", "confused", "surprised"]);
 
 function blinks(kind: Expression) {
   return !["happy", "sleepy", "code", "wink"].includes(kind);
 }
 
-function EyeShape({ kind, side, eye }: { kind: Expression; side: "l" | "r"; eye: string }) {
+function EyeShape({ kind, side, eye, strong = false }: { kind: Expression; side: "l" | "r"; eye: string; strong?: boolean }) {
   const hl = <circle cx="-3" cy="-5" r="2.4" fill="#ffffff" opacity="0.85" />;
   const stroke = { fill: "none", stroke: eye, strokeWidth: 5.5, strokeLinecap: "round" as const, strokeLinejoin: "round" as const };
+  if (strong && STRONG_EYES.has(kind)) {
+    // Level, wide LED bars, a little slanted towards the brow; curious lifts one, confused narrows one.
+    const tilt = side === "l" ? 5 : -5;
+    const bar = (w: number, h: number, dy = 0) => (
+      <g transform={`translate(0 ${dy}) rotate(${tilt})`}>
+        <rect x={-w / 2} y={-h / 2} width={w} height={h} rx={h / 2.4} fill={eye} />
+        <rect x={-w / 2 + 3} y={-h / 2 + 2} width={w * 0.35} height="2.2" rx="1.1" fill="#ffffff" opacity="0.7" />
+      </g>
+    );
+    if (kind === "surprised") return bar(19, 17);
+    if (kind === "curious") return side === "l" ? bar(22, 13) : bar(18, 10, -3);
+    if (kind === "confused") return side === "l" ? bar(22, 12) : bar(20, 6, -2);
+    return bar(23, 12);
+  }
   switch (kind) {
     case "happy":
       return <path d="M-9.5 4 Q0 -10 9.5 4" {...stroke} />;
@@ -606,7 +745,7 @@ function Stethoscope({ silver }: { silver: string }) {
   );
 }
 
-/** The professor's round spectacles, gold-rimmed over her visor. */
+/** The professor's round spectacles, gold-rimmed over his visor. */
 function Spectacles() {
   return (
     <g fill="none" stroke="#ffd166" strokeWidth="2.4" strokeLinecap="round">
@@ -619,19 +758,30 @@ function Spectacles() {
   );
 }
 
-/** The professor's bow tie, just under her floating head. */
-function BowTie({ fill }: { fill: string }) {
+/** The professor's bow tie, just under the classic build's floating head. */
+function BowTie({ fill, className }: { fill: string; className?: string }) {
   return (
-    <g transform="translate(130 160)">
+    <g transform="translate(130 160)" className={className}>
       <path d="M-3 0 L-19 -9 Q-22 0 -19 9 Z M3 0 L19 -9 Q22 0 19 9 Z" fill={fill} stroke="#d94f7f" strokeWidth="1.2" strokeLinejoin="round" />
       <rect x="-4.5" y="-5" width="9" height="10" rx="3" fill="#d94f7f" />
     </g>
   );
 }
 
+/** The strong build's professor wears a dark necktie under the chin grille, down his chest plate. */
+function NeckTie({ className }: { className?: string }) {
+  return (
+    <g className={className}>
+      <path d="M124 155 L136 155 L134.5 163 L125.5 163 Z" fill="#7a1f2b" stroke="#5a1520" strokeWidth="1" strokeLinejoin="round" />
+      <path d="M125.5 163 L134.5 163 L139 196 L130 206 L121 196 Z" fill="#9c2a38" stroke="#5a1520" strokeWidth="1" strokeLinejoin="round" />
+      <path d="M127 172 L136 182 M125 182 L137.5 195" stroke="#c8a24a" strokeWidth="1.8" strokeLinecap="round" opacity="0.8" />
+    </g>
+  );
+}
+
 /* ------------------------------------------------------------- Headwear -- */
 
-function HeadwearArt({ kind, eye, party }: { kind: Headwear; eye: string; party: string }) {
+function HeadwearArt({ kind, eye, party, strong = false }: { kind: Headwear; eye: string; party: string; strong?: boolean }) {
   switch (kind) {
     case "gradCap":
       return (
@@ -646,7 +796,7 @@ function HeadwearArt({ kind, eye, party }: { kind: Headwear; eye: string; party:
       );
     case "hardHat":
       return (
-        <g transform="translate(130 64)">
+        <g transform={strong ? "translate(130 60) scale(1.22 1.08)" : "translate(130 64)"}>
           <path d="M-44 2 C-44 -26 -22 -40 0 -40 C22 -40 44 -26 44 2 Z" fill="#ffcd3c" />
           <path d="M-7 -39.5 L-6 2 L6 2 L7 -39.5 Q0 -41 -7 -39.5 Z" fill="#ffe08a" />
           <path d="M-30 -22 C-24 -30 -16 -34 -10 -35" fill="none" stroke="#fff3c4" strokeWidth="3" strokeLinecap="round" />
@@ -689,8 +839,8 @@ function laser(grip: { x: number; y: number }) {
 }
 
 /**
- * A research poster unrolling from a rod held up in her left fin (its foot still rolled up), in front of
- * her, with the laser pointer's beam landing on its chart.
+ * A research poster unrolling from a rod held up in his left hand (its foot still rolled up), in front of
+ * him, with the laser pointer's beam landing on its chart.
  */
 function PosterSheet({ gripL, gripR, line, screen }: { gripL: { x: number; y: number }; gripR: { x: number; y: number }; line: string; screen: string }) {
   const { tip } = laser(gripR);
@@ -778,7 +928,7 @@ function PropArt({
         </g>
       );
     case "poster": {
-      // The laser pointer in her right fin; the poster it points at, and the beam, go in front of her fins.
+      // The laser pointer in his right hand; the poster it points at, and the beam, go in front of his arms.
       const { tip } = laser(gripR);
       return <line x1={gripR.x - (tip.x - gripR.x) * 0.4} y1={gripR.y - (tip.y - gripR.y) * 0.4} x2={tip.x} y2={tip.y} stroke="#2b3550" strokeWidth="5" strokeLinecap="round" />;
     }
@@ -978,7 +1128,7 @@ function PropArt({
 
 /* ---------------------------------------------------------------- Badge -- */
 
-/** The DIU shield on a white pin, so it reads on her in both themes. Props and fins held across her go over it. */
+/** The DIU shield on a white pin, so it reads on him in both themes, whatever his colours. Props and arms held across him go over it. */
 function Badge({ href, edge }: { href: string; edge: string }) {
   const { x, y, r } = BADGE;
   return (
@@ -1013,7 +1163,7 @@ function textWidth(text: string) {
 }
 
 /* The board, held in front of the body below the shoulders with its top corners in the fins of the
-   "holdWide" pose (her hover glow still shows beneath), and the room for text inside its frame, clear of the fins. */
+   "holdWide" pose (his hover glow still shows beneath), and the room for text inside its frame, clear of the fins. */
 const BOARD = { x: 12, y: 184, w: 236, h: 80 };
 const BOARD_TEXT = { cx: 130, cy: 226, w: 188, h: 50, max: 30, leading: 1.1 };
 
@@ -1034,7 +1184,7 @@ export function fitPlacard(text: string) {
 }
 
 /**
- * A large placard held in front of her, drawn before the arms so the fins grip its top corners. Each line
+ * A large placard held in front of him, drawn before the arms so his hands grip its top corners. Each line
  * is drawn at its measured width (textLength), so it fits the board whichever font has loaded.
  */
 function Placard({ text, line, url, flip = false }: { text: string; line: string; url: (name: string) => string; flip?: boolean }) {

@@ -10,10 +10,10 @@ import type { Role } from "@/lib/permissions";
  * the admin API routes.
  */
 
-export const AUTH_COOKIE = "aaiw_admin";
+export const AUTH_COOKIE = "diuai_admin";
 export const SESSION_DAYS = 7;
-const ISSUER = "aaiw";
-const AUDIENCE = "aaiw-admin";
+const ISSUER = "diuai";
+const AUDIENCE = "diuai-admin";
 
 export interface SessionClaims {
   sub: string;
@@ -25,7 +25,7 @@ export interface SessionClaims {
 }
 
 // Only used in development when AUTH_SECRET is not set. Never valid in production.
-const DEV_SECRET = "development-only-secret-do-not-use-in-production-aaiw-2026";
+const DEV_SECRET = "development-only-secret-do-not-use-in-production-diuai";
 let warned = false;
 
 /** Long, varied and not the development secret: e.g. `openssl rand -base64 48`. */

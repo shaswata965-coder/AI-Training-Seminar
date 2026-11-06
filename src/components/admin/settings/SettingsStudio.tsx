@@ -175,7 +175,7 @@ function Studio({ pages, start }: { pages: SettingsPage[]; start: SettingsPage }
         }
       }
       await clearPreview();
-      router.refresh(); // the admin sidebar shows the event name too
+      router.refresh(); // the admin sidebar shows the programme's name too
       toast("Saved. The website now shows your changes.", "success");
     } catch (e) {
       toast(e instanceof ApiError ? e.message : "Could not save.", "error");

@@ -4,14 +4,14 @@
  * samples (past participants, labs, partners), so pages are as full as they will be, opens registration,
  * publishes the schedule, and creates the organiser account the k6 scripts sign in with.
  *
- *   node loadtest/tools/prepare.mjs        (MONGODB_URI, default mongodb://127.0.0.1:27017/aaiw-loadtest)
+ *   node loadtest/tools/prepare.mjs        (MONGODB_URI, default mongodb://127.0.0.1:27017/diuai-loadtest)
  *
  * It refuses any database whose name doesn't contain "loadtest", so it can't wipe a real one.
  */
 import { execFileSync } from "node:child_process";
 import mongoose from "mongoose";
 
-const uri = process.env.MONGODB_URI ?? "mongodb://127.0.0.1:27017/aaiw-loadtest";
+const uri = process.env.MONGODB_URI ?? "mongodb://127.0.0.1:27017/diuai-loadtest";
 const admin = { email: process.env.LOADTEST_ADMIN_EMAIL ?? "loadtest-admin@example.com", password: process.env.LOADTEST_ADMIN_PASSWORD ?? "Load-test-organiser-2026" };
 
 await mongoose.connect(uri, { dbName: process.env.MONGODB_DB || undefined, serverSelectionTimeoutMS: 5000 });

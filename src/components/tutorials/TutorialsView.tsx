@@ -156,8 +156,8 @@ export function TutorialsView({ tutorials, demos }: { tutorials: Tutorial[]; dem
           <div className="card mt-6 flex flex-col items-center gap-5 p-8 text-center sm:flex-row sm:text-left">
             <Aura variant="tutorials" size={150} />
             <div>
-              <p className="font-display text-xl font-semibold text-fg">{tutorials.length ? "No labs for this programme yet" : "Lab line-up coming soon"}</p>
-              <p className="mt-1 max-w-lg text-muted">Titles, trainers, prerequisites (laptop, software, accounts) and material links will be published here.</p>
+              <p className="font-display text-xl font-semibold text-fg">{tutorials.length ? "No labs for this programme yet" : "Every batch is hands-on"}</p>
+              <p className="mt-1 max-w-lg text-muted">Each batch&apos;s labs, with their trainers, prerequisites (laptop, software, accounts) and material links, are listed here.</p>
             </div>
           </div>
         )}
@@ -208,8 +208,8 @@ export function TutorialsView({ tutorials, demos }: { tutorials: Tutorial[]; dem
           <div className="card mt-6 flex flex-col items-center gap-5 p-8 text-center sm:flex-row sm:text-left">
             <Aura variant="demos" size={150} />
             <div>
-              <p className="font-display text-xl font-semibold text-fg">{demos.length ? "No demos for this programme yet" : "Demo list coming soon"}</p>
-              <p className="mt-1 max-w-lg text-muted">Live demos of AI tools from the sessions will be listed here with images and videos.</p>
+              <p className="font-display text-xl font-semibold text-fg">{demos.length ? "No demos for this programme yet" : "Live demos in every batch"}</p>
+              <p className="mt-1 max-w-lg text-muted">Live demos of AI tools from the sessions are listed here with images and videos.</p>
             </div>
           </div>
         )}

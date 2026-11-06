@@ -4,6 +4,7 @@ import "./aura.css";
 import { createContext, useContext, useEffect, useId, useRef, useState, type AnimationEvent, type CSSProperties, type ReactNode } from "react";
 import { cn } from "@/lib/cn";
 import { AuraArt, AURA_H, AURA_W } from "./AuraArt";
+import type { AuraBuild } from "./builds";
 import { flyInOnView } from "./entrance";
 import { AURA_PRESETS } from "./presets";
 import { onIdleChange, trackLook } from "./look";
@@ -55,8 +56,10 @@ export interface AuraProps {
   sleepWhenIdle?: boolean;
   /** Fine-tune the preset (expression, prop, effects…). */
   overrides?: Partial<AuraLook>;
-  /** Words on a large placard Aura holds in front of her in both fins (she doesn't wave then). */
+  /** Words on a large placard Aura holds in front of him in both hands (he doesn't wave then). */
   placard?: string;
+  /** Draw this build whatever Site settings chose (the Meet Aura playground); by default the site's choice shows. */
+  build?: AuraBuild;
   onActivate?: () => void;
   /** Entrance animation (default "auto"). */
   entrance?: AuraEntrance;
@@ -80,6 +83,7 @@ export function Aura({
   sleepWhenIdle,
   overrides,
   placard,
+  build,
   onActivate,
   entrance = "auto",
   entranceFrom,
@@ -88,7 +92,7 @@ export function Aura({
 }: AuraProps) {
   const preset = AURA_PRESETS[variant];
   const sign = placard?.trim() || undefined;
-  // Both fins hold the placard, awake or asleep.
+  // Both hands hold the placard, awake or asleep.
   const base: AuraLook = { ...preset, ...overrides, ...(sign ? { pose: "holdWide" as const } : null) };
   const rest: Pose = sign ? "holdWide" : "idle";
   const lines = tips ?? preset.tips;
@@ -102,7 +106,7 @@ export function Aura({
   const lastReaction = useRef<"twirl" | "hop">("hop");
 
   const [tempExpression, setTempExpression] = useState<Expression | null>(null);
-  // After waving hello she rests (the pose `rest`).
+  // After waving hello he rests (the pose `rest`).
   const [relaxed, setRelaxed] = useState(false);
   const [reaction, setReaction] = useState<"twirl" | "hop" | null>(null);
   const [bubble, setBubble] = useState<string | null>(null);
@@ -116,7 +120,7 @@ export function Aura({
     setRelaxed(false);
   }
 
-  // Each new text on the placard flips it over (not the first one, which arrives with her).
+  // Each new text on the placard flips it over (not the first one, which arrives with him).
   const [prevSign, setPrevSign] = useState(sign);
   const [flips, setFlips] = useState(0);
   if (prevSign !== sign) {
@@ -237,6 +241,9 @@ export function Aura({
       placard={sign}
       placardFlip={flips}
       badge={badge ? undefined : false}
+      build={build ?? "auto"}
+      // An eye colour picked for this Aura (the playground) stays; otherwise one set for the whole site may replace it.
+      eyeVar={!overrides?.eyeColor}
     />
   );
 

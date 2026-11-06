@@ -30,10 +30,10 @@ export const BUILT_IN_HERO_PHOTOS = CAMPUS.map((c) => c.src);
 export const heroPhoto = (s: SiteSettings): string | undefined => (s.showHeroPhoto ? s.heroPhoto || BUILDING : undefined);
 
 /**
- * The built-in campus photo behind Aura, placed so that the university's sign sits just above her head and clear of
- * the text: --w is the photo's width, the sign is centred on her column, its top --y from the column's top. The
- * photo fades in from the left and out below, behind her; while the text is above her (below lg) it starts a little
- * above the sign, and her column leaves room for it. The agent network keeps off the sign.
+ * The built-in campus photo behind Aura, placed so that the university's sign sits just above his head and clear of
+ * the text: --w is the photo's width, the sign is centred on his column, its top --y from the column's top. The
+ * photo fades in from the left and out below, behind him; while the text is above him (below lg) it starts a little
+ * above the sign, and his column leaves room for it. The agent network keeps off the sign.
  */
 function BuildingSign() {
   return CAMPUS.map((c) => (
@@ -144,13 +144,13 @@ export function Hero({ s }: { s: SiteSettings }) {
           </dl>
         </div>
 
-        {/* data-launch-land: after the loading screen, Aura flies down into place from where her ship went up (loading.css).
-            She holds up the placards from Home → Hero announcements in turn. */}
+        {/* data-launch-land: after the loading screen, Aura flies down into place from where his ship went up (loading.css).
+            He holds up the placards from Home → Hero announcements in turn. */}
         <div data-launch-land="" data-edit="home.placard" className={`relative mx-auto flex w-full max-w-[460px] flex-col items-center lg:pt-0 ${photo === BUILDING ? "pt-20" : "pt-6"}`}>
           {photo === BUILDING ? <BuildingSign /> : null}
           <div aria-hidden className="absolute inset-[8%] -z-10 rounded-full bg-[conic-gradient(from_200deg,var(--azure-soft),var(--lilac-soft),var(--blush-soft),var(--mint-soft),var(--azure-soft))] blur-2xl" />
           <div aria-hidden className="absolute inset-[16%] -z-10 rounded-full border border-dashed border-border-strong opacity-60 animate-spin-slow" />
-          <HeroPlacards placards={placards} words={{ open: p.open, soon: p.soon, closed: p.closed }} />
+          <HeroPlacards placards={placards} words={{ open: p.open, closed: p.closed }} />
         </div>
 
         <RegisterChooser s={s} className="lg:col-span-2" />

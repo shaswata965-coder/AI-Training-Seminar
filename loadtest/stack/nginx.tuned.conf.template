@@ -37,13 +37,13 @@ http {
     access_log @RUN@/logs/nginx-access.log loadtest buffer=256k flush=2s;
 
     # ---- From README.md ------------------------------------------------------------------------------
-    upstream aaiw {
+    upstream diuai {
         server 127.0.0.1:@APP_PORT@;
         keepalive 64;
     }
-    proxy_cache_path @RUN@/cache levels=1:2 keys_zone=aaiw:10m max_size=512m inactive=7d use_temp_path=off;
-    map "$cookie_aaiw_admin$cookie___prerender_bypass" $aaiw_no_cache { default 1; "" 0; }
-    map $http_accept_encoding $aaiw_encoding { ~*gzip gzip; default ""; }
+    proxy_cache_path @RUN@/cache levels=1:2 keys_zone=diuai:10m max_size=512m inactive=7d use_temp_path=off;
+    map "$cookie_diuai_admin$cookie___prerender_bypass" $diuai_no_cache { default 1; "" 0; }
+    map $http_accept_encoding $diuai_encoding { ~*gzip gzip; default ""; }
 
     server {
         listen 443 ssl http2;
@@ -58,30 +58,30 @@ http {
         proxy_set_header X-Forwarded-Proto $scheme;
         proxy_set_header X-Forwarded-For $remote_addr;
 
-        location /api/  { proxy_pass http://aaiw; }
-        location /admin { proxy_pass http://aaiw; }
+        location /api/  { proxy_pass http://diuai; }
+        location /admin { proxy_pass http://diuai; }
 
         location /_next/static/ {
-            proxy_pass http://aaiw;
-            proxy_set_header Accept-Encoding $aaiw_encoding;
-            proxy_cache aaiw;
-            proxy_cache_key "$host$request_uri|$aaiw_encoding";
+            proxy_pass http://diuai;
+            proxy_set_header Accept-Encoding $diuai_encoding;
+            proxy_cache diuai;
+            proxy_cache_key "$host$request_uri|$diuai_encoding";
             proxy_cache_valid 200 30d;
             proxy_ignore_headers Vary;
         }
 
         location / {
-            proxy_pass http://aaiw;
-            proxy_set_header Accept-Encoding $aaiw_encoding;
-            proxy_cache aaiw;
-            proxy_cache_key "$host$request_uri|$aaiw_encoding|$http_rsc|$http_next_router_prefetch|$http_next_router_segment_prefetch|$http_next_router_state_tree|$http_next_url";
+            proxy_pass http://diuai;
+            proxy_set_header Accept-Encoding $diuai_encoding;
+            proxy_cache diuai;
+            proxy_cache_key "$host$request_uri|$diuai_encoding|$http_rsc|$http_next_router_prefetch|$http_next_router_segment_prefetch|$http_next_router_state_tree|$http_next_url";
             proxy_cache_valid 200 301 302 307 308 404 2s;
             proxy_ignore_headers Cache-Control Expires Vary;
             proxy_cache_lock on;
             proxy_cache_use_stale updating error timeout http_500 http_502 http_503 http_504;
             proxy_cache_background_update on;
-            proxy_cache_bypass $aaiw_no_cache;
-            proxy_no_cache $aaiw_no_cache;
+            proxy_cache_bypass $diuai_no_cache;
+            proxy_no_cache $diuai_no_cache;
         }
     }
     server { listen 80; server_name localhost; return 301 https://$host$request_uri; }

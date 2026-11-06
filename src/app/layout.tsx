@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import Script from "next/script";
 import "./globals.css";
+import { auraLookSettings, auraLookStyle } from "@/components/aura/builds";
 import { MicroInteractions } from "@/components/effects/MicroInteractions";
 import { launchFlagScript } from "@/components/loading/flag";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
@@ -85,14 +86,18 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
   const s = await getSettings();
   const gaId = /^G-[A-Z0-9]{4,}$/.test(s.gaId) ? s.gaId : /^G-[A-Z0-9]{4,}$/.test(process.env.NEXT_PUBLIC_GA_ID ?? "") ? process.env.NEXT_PUBLIC_GA_ID : "";
   const brandCss = themeStyle(s);
+  // Aura's look (Site settings → Site-wide → Aura): his build picks which drawing shows (globals.css), his colours are CSS variables.
+  const aura = auraLookSettings(s);
+  const auraCss = auraLookStyle(s);
   return (
-    <html lang="en" suppressHydrationWarning className={`${inter.variable} ${outfit.variable}`}>
+    <html lang="en" suppressHydrationWarning data-aura-build={aura.build} className={`${inter.variable} ${outfit.variable}`}>
       <head>
         {/* Lets CSS hide things that JS will animate in, so without JS nothing stays hidden. */}
         <Script id="js-flag" strategy="beforeInteractive">{`document.documentElement.classList.add("js")`}</Script>
         {/* Decides before the first paint whether the home page's loading screen shows (components/loading/flag.ts). */}
         {s.showLoader ? <script id="launch-flag" dangerouslySetInnerHTML={{ __html: launchFlagScript(BASE_PATH) }} /> : null}
         {brandCss ? <style id="brand-colour">{brandCss}</style> : null}
+        {auraCss ? <style id="aura-look">{auraCss}</style> : null}
       </head>
       <body className="min-h-dvh antialiased">
         <ThemeProvider>{children}</ThemeProvider>

@@ -7,11 +7,12 @@ import { InstagramIcon, LinkedInIcon, XIcon, YouTubeIcon } from "@/components/ui
 import type { SiteSettings } from "@/lib/content/types";
 import { brandName, eventCalendarLinks, registrationHref, venueLine } from "@/lib/event";
 import { copy } from "@/lib/copy";
-import { formatDateRange } from "@/lib/format";
-import { explorePages, homeNav, postEventNav, primaryNav, registrationNav, sectionNav } from "@/lib/nav";
+import { formatDate, formatDateRange } from "@/lib/format";
+import { explorePages, homeNav, pastBatchNav, primaryNav, registrationNav, sectionNav } from "@/lib/nav";
 import { absoluteUrl } from "@/lib/paths";
 import { isShown } from "@/lib/schema/section-order";
 import { BrandMark } from "./BrandMark";
+import { WithYear } from "./WithYear";
 
 export function SocialLinks({ s, className }: { s: SiteSettings; className?: string }) {
   const items = [
@@ -109,7 +110,7 @@ export function SiteFooter({ s }: { s: SiteSettings }) {
         <nav aria-label="Explore">
           <h2 className="font-display text-sm font-bold tracking-[0.12em] text-fg uppercase">{c.exploreHeading}</h2>
           <ul className="mt-4 space-y-2.5">
-            {[...sectionNav(nav, s.homeHidden), ...postEventNav(s, nav), { href: "/meet-aura", label: nav.meetAura }].map((i) => (
+            {[...sectionNav(nav, s.homeHidden), ...pastBatchNav(s, nav), { href: "/meet-aura", label: nav.meetAura }].map((i) => (
               <li key={i.href}>
                 <Link className={linkCls} href={i.href}>
                   {i.label}
@@ -137,7 +138,9 @@ export function SiteFooter({ s }: { s: SiteSettings }) {
       <div className="relative border-t border-border">
         <div className="container-site flex flex-col gap-3 py-6 text-sm text-subtle sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <p>{c.copyright}</p>
+            <p>
+              <WithYear text={c.copyright} fallback={formatDate(s.startDate, { year: "numeric" })} />
+            </p>
             {/* The built-in campus photos (public/hero, public/themes, public/posters) are from Wikimedia Commons; one is CC BY-SA, which asks for this credit. */}
             <p className="mt-1 text-xs">
               Campus photos via Wikimedia Commons:{" "}

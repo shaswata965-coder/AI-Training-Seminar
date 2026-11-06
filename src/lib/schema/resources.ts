@@ -1,3 +1,4 @@
+import { AURA_BUILD_OPTIONS, AURA_COLOR_KEYS, AURA_COLORS, AURA_EYE_CHOICES, AURA_EYE_KEYS } from "@/components/aura/builds";
 import {
   ATTENDEE_CATEGORIES,
   FAQ_CATEGORIES,
@@ -181,7 +182,7 @@ export const COLLECTIONS: CollectionDef[] = [
     model: "Session",
     label: "Schedule",
     singular: "Session",
-    description: "Day-wise schedule of the next batch. Set the schedule status (TBA / draft / final) in Site settings → Schedule → Schedule.",
+    description: "Day-wise schedule of the next batch. Set the schedule status (hidden / draft / final) in Site settings → Schedule → Schedule.",
     icon: "calendar",
     group: "Programme",
     titleKey: "title",
@@ -204,8 +205,8 @@ export const COLLECTIONS: CollectionDef[] = [
       time("end", "End time", { width: "third" }),
       select("type", "Type", opts(SESSION_TYPES, (k) => SESSION_TYPE_META[k].label), { required: true, width: "half" }),
       select("theme", "Programme", themeOptions, { width: "half" }),
-      text("room", "Room / lab", { width: "half", placeholder: "To be announced" }),
-      text("trainerNote", "Trainer text", { width: "half", help: "Shown when no trainer is linked, e.g. “Trainer to be announced”." }),
+      text("room", "Room / lab", { width: "half", placeholder: "Computer lab 3", help: "Leave blank to say the room is e-mailed before the batch." }),
+      text("trainerNote", "Trainer text", { width: "half", help: "Shown when no trainer is linked, e.g. “DIU CSE trainers”." }),
       refList("trainers", "Trainers", "trainers"),
       ref("moderator", "Moderator (discussions)", "trainers", { width: "half" }),
       refList("panelists", "Panelists (discussions)", "trainers"),
@@ -237,7 +238,7 @@ export const COLLECTIONS: CollectionDef[] = [
     fields: [
       text("title", "Title", { required: true }),
       text("slug", "URL slug", { width: "half", help: "Leave blank to generate from the title." }),
-      text("schedule", "When & where", { width: "half", placeholder: "Day 1 · 14:00–15:30 · Lab TBA" }),
+      text("schedule", "When & where", { width: "half", placeholder: "Day 1 · 14:00–15:30 · Computer lab 3" }),
       select("level", "Level", opts(LEVELS, (k) => LEVEL_META[k].label), { width: "third" }),
       text("duration", "Duration", { width: "third", placeholder: "90 minutes" }),
       select("theme", "Programme", themeOptions, { width: "third" }),
@@ -538,9 +539,8 @@ export interface SettingsPage {
 }
 
 const statusOptions = [
-  { value: "soon", label: "Opening soon" },
-  { value: "open", label: "Open" },
-  { value: "closed", label: "Closed" },
+  { value: "open", label: "Open: enrolling for the next batch" },
+  { value: "closed", label: "Paused: not taking registrations" },
 ];
 
 /** Built-in shades of the accent colours (light mode), shown as hints. */
@@ -563,7 +563,7 @@ export const SETTINGS_PAGES: SettingsPage[] = [
         "Programme details",
         undefined,
         [
-          text("eventName", "Name", { required: true, width: "half", help: "Used in the logo, page titles, e-mails and calendar invites. A year at the end (e.g. 2026) appears under the logo; without one, the next batch's year does." }),
+          text("eventName", "Name", { required: true, width: "half", help: "Used in the logo, page titles, e-mails and calendar invites. The training runs all year, so it is best without a year; one written at the end (e.g. 2027) appears under the logo." }),
           text("shortName", "Short name", { width: "half", help: "Used where space is tight: the admin panel and the name of the site when installed as an app." }),
           text("tagline", "Tagline"),
           textarea("description", "Short description", { help: "Used for search engines and social media previews.", maxLength: 300 }),
@@ -571,7 +571,7 @@ export const SETTINGS_PAGES: SettingsPage[] = [
           datetime("startDate", "Next batch starts", { required: true, width: "half", help: "Bangladesh Standard Time. The schedule's days and calendar invites follow it." }),
           datetime("endDate", "Next batch ends", { required: true, width: "half" }),
           text("venueName", "Venue", { width: "half" }),
-          text("venueHall", "Room / building", { width: "half", help: "Leave blank to show “to be announced”." }),
+          text("venueHall", "Room / building", { width: "half", help: "Leave blank to say the room is e-mailed before each batch." }),
           textarea("venueAddress", "Full address", { rows: 2 }),
         ],
         { anchor: "home.hero" },
@@ -615,7 +615,7 @@ export const SETTINGS_PAGES: SettingsPage[] = [
         [
           image("logoUniversity", "University logo", { width: "half", help: "Left corner of the navigation bar. Leave blank for the built-in DIU logo." }),
           image("logoDepartment", "Department logo", { width: "half", help: "Right corner of the navigation bar. Leave blank for the built-in Department of CSE seal." }),
-          image("eventLogo", "Event logo", { width: "half" }),
+          image("eventLogo", "Programme logo", { width: "half" }),
           image("ogImage", "Social preview image (optional)", { help: "1200×630 px. Leave blank to use the generated preview." }),
         ],
         { description: "The DIU logo and the Department of CSE seal are built in. Upload one here only to replace it.", anchor: "site.header" },
@@ -651,7 +651,23 @@ export const SETTINGS_PAGES: SettingsPage[] = [
         ],
         { anchor: "site.footer" },
       ),
+      section(
+        "aura",
+        "Aura",
+        undefined,
+        [
+          select("auraBuild", "Look", AURA_BUILD_OPTIONS, { required: true, help: "How Aura, the mascot, is drawn on every page, in the logo and in the social preview." }),
+          select("auraColor", "Colours", AURA_COLOR_KEYS.map((k) => ({ value: k, label: AURA_COLORS[k].label })), { required: true, width: "half" }),
+          select("auraEyes", "Eye colour", AURA_EYE_KEYS.map((k) => ({ value: k, label: AURA_EYE_CHOICES[k].label })), {
+            required: true,
+            width: "half",
+            help: "Each section's own colour matches its role (amber for AI for Professionals, mint for AI for Workspace…).",
+          }),
+        ],
+        { description: "Aura's look across the site. The preview shows the Meet Aura page, with every look he takes.", path: "/meet-aura", anchor: "meetAura.hero" },
+      ),
       section("features", "Features & past batches", undefined, [
+        bool("showAssistant", "Show “Ask Aura”, the site search, in the bottom-right corner of every page"),
         bool("showGallery", "Past batches: show the photo gallery"),
         bool("showTalks", "Past batches: show session slides & recordings"),
       ]),
@@ -668,7 +684,7 @@ export const SETTINGS_PAGES: SettingsPage[] = [
     sections: [
       section("loader", "Loading screen", "homeLoader", [bool("showLoader", "Show the loading screen while the site's files are cached")], {
         description:
-          "The first time someone opens the home page (and after the site is updated), the pages, scripts, styles and images are fetched and cached behind a loading screen, so the rest of the visit is quick. Aura's ship tries to take off as small Auras work on it and the ring around the window fills; once everything is cached she lifts off and the smoke clears to show the page. Visitors who ask for reduced motion get the caching without the screen. It isn't shown in this preview: open the home page in a private window to see it.",
+          "The first time someone opens the home page (and after the site is updated), the pages, scripts, styles and images are fetched and cached behind a loading screen, so the rest of the visit is quick. Aura's ship tries to take off as small Auras work on it and the ring around the window fills; once everything is cached he lifts off and the smoke clears to show the page. Visitors who ask for reduced motion get the caching without the screen. It isn't shown in this preview: open the home page in a private window to see it.",
       }),
       section("hero", "Hero", "homeHero", [
         bool("showHeroPhoto", "Show the photo of the DIU campus behind the hero"),
@@ -678,19 +694,19 @@ export const SETTINGS_PAGES: SettingsPage[] = [
       }),
       section("placard", "Hero announcements", "homePlacard", [], {
         description:
-          "Aura holds up two placards in turn in the hero: one for AI for Professionals, one for AI for Workspace. {status} in a placard becomes the registration status (Site-wide → Registration) in the words below, and turns to closed by itself at the deadline. Clear one placard to show only the other.",
+          "Aura holds up two placards in turn in the hero: one for AI for Professionals, one for AI for Workspace. {status} in a placard becomes the registration status (Site-wide → Registration) in the words below, and turns to paused by itself at the deadline. Clear one placard to show only the other.",
       }),
       section("register", "Registration choice", "homeRegister", [], {
         description: "The heading and two compact cards along the foot of the hero, one for each programme; each opens the registration form with its programme ticked. Their status comes from Site-wide → Registration.",
       }),
-      section("invite", "Registration open", "homeInvite", [image("invitePhoto", "Poster image", { help: "Leave it empty for the built-in photo of the DIU campus. An uploaded landscape picture (16:9, e.g. 1920×1080) replaces it across the top of the poster, under its label and badge, fading into the poster below." })], {
+      section("invite", "Enrolment", "homeInvite", [image("invitePhoto", "Poster image", { help: "Leave it empty for the built-in photo of the DIU campus. An uploaded landscape picture (16:9, e.g. 1920×1080) replaces it across the top of the poster, under its label and badge, fading into the poster below." })], {
         description:
-          "Under the hero: that registration is open, that places are limited and confirmed by the organising team, what to expect, the invitation to bring a real task, and the poster with its picture. Its dates and venue come from Site-wide → Programme details, and the date in {replyBy} from Site-wide → Registration.",
+          "Under the hero: that new batches start all year round and anyone can register at any time, that places are limited and confirmed by the organising team, what to expect, the invitation to bring a real task, and the poster with its picture. Its dates and venue come from Site-wide → Programme details, and the date in {replyBy} from Site-wide → Registration.",
       }),
       section("highlights", "Highlight strip", "homeHighlights", [
         objects("highlights", "Highlights", "Highlight", [
           text("label", "Label", { required: true, width: "third" }),
-          text("value", "Value", { width: "third", placeholder: "TBA" }),
+          text("value", "Value", { width: "third", placeholder: "2" }),
           select("icon", "Icon", iconOptions, { width: "third" }),
         ], { maxItems: 6 }),
       ]),
@@ -708,11 +724,11 @@ export const SETTINGS_PAGES: SettingsPage[] = [
           text("title", "Topic (two or three words)", { required: true, width: "half", maxLength: 24 }),
           select("icon", "Icon", iconOptions, { width: "half" }),
           textarea("description", "Summary (shown in Aura's speech bubble)", { rows: 2, maxLength: 150, help: "You can write {dates}, {venue} or {event}; they are filled in from these settings." }),
-        ], { maxItems: 8, help: "Up to 8 topics around Aura, each summarising part of the About page. Aura waits in a thinking pose; hovering or tapping a topic makes her point at it and answer with its summary." }),
+        ], { maxItems: 8, help: "Up to 8 topics around Aura, each summarising part of the About page. Aura waits in a thinking pose; hovering or tapping a topic makes him point at it and answer with its summary." }),
       ]),
       section("trainers", "Trainers", "homeTrainers", [
         num("featuredTrainers", "Featured trainers on the home page", { min: 0, max: 12, width: "half" }),
-        bool("showMoreTrainers", "Show the “More trainers to be announced” card"),
+        bool("showMoreTrainers", "Show the “More trainers” card after the trainers"),
       ], { description: "Trainers are added under Trainers; tick “Feature on the home page” to show them here." }),
       section("participants", "Past participants", "homeParticipants", [], { description: "Quotes from past participants (under Past participants, with “Feature their quote” ticked), and a link to the Past participants page." }),
       section("venue", "Venue & travel", "homeVenue", [], { description: "The routes on the map are edited in the Venue tab → Getting here." }),
@@ -757,7 +773,7 @@ export const SETTINGS_PAGES: SettingsPage[] = [
       section("overview", "At a glance", "programmeOverview"),
       section("schedule", "Schedule", "programmeSchedule", [
         select("programmeStatus", "Schedule status", [
-          { value: "tba", label: "To be announced (show placeholder)" },
+          { value: "tba", label: "Hidden: say each batch's schedule is e-mailed" },
           { value: "draft", label: "Draft (show sessions marked “subject to change”)" },
           { value: "final", label: "Final" },
         ]),
@@ -773,7 +789,7 @@ export const SETTINGS_PAGES: SettingsPage[] = [
     sections: [
       section("hero", "Hero", "trainersHero"),
       section("spotlight", "Lead trainer", "trainersSpotlight", [], { description: "The trainer marked “Lead trainer” under Trainers (the first one, if several are), shown large at the top of the page with their profile." }),
-      section("list", "Trainer list", "trainersList", [], { description: "Trainers are added under Trainers. The “More trainers to be announced” card is edited under Home → Trainers; the texts here show while there are no trainers yet." }),
+      section("list", "Trainer list", "trainersList", [], { description: "Trainers are added under Trainers. The “More trainers” card is edited under Home → Trainers; the texts here show while there are no trainers yet." }),
     ],
   },
   {
@@ -797,10 +813,10 @@ export const SETTINGS_PAGES: SettingsPage[] = [
       section("fees", "Fees", "registerFees", [
         objects("fees", "Fees", "Fee", [
           text("category", "Category", { required: true, width: "half", placeholder: "Students" }),
-          text("amount", "Amount", { width: "half", placeholder: "To be announced" }),
+          text("amount", "Amount", { width: "half", placeholder: "On request" }),
           text("note", "Note"),
         ]),
-        textarea("feeNote", "Fee note", { placeholder: "Fee details will be announced soon." }),
+        textarea("feeNote", "Fee note", { placeholder: "Group fees are available for teams from one organisation." }),
       ]),
       section("deadlines", "Deadlines", "registerDeadlines"),
     ],
@@ -837,8 +853,13 @@ export const SETTINGS_PAGES: SettingsPage[] = [
     sections: [
       section("hero", "Hero", "venueHero"),
       section("place", "The venue", "venuePlace", [
-        text("mapQuery", "Map location", { help: "Search text for the embedded Google Map, e.g. a building name." }),
-        url("mapEmbedUrl", "Custom map embed URL (optional)", { help: "Paste the src of a Google Maps “Embed a map” iframe." }),
+        text("mapPin", "Map pin (latitude, longitude)", {
+          width: "half",
+          placeholder: "23.8770, 90.3200",
+          help: "Where the embedded map, “Open map” and every “Directions” link point. In Google Maps, right-click the spot and click the numbers at the top to copy them. Leave blank to search for the map location below instead.",
+        }),
+        text("mapQuery", "Map location (search text)", { width: "half", help: "Used only when the map pin is blank, e.g. a building name and area." }),
+        url("mapEmbedUrl", "Custom map embed URL (optional)", { help: "Paste the src of a Google Maps “Embed a map” iframe. It replaces the embedded map only (the links still use the pin), and one showing a place outside Bangladesh is ignored." }),
         richtext("campusEntry", "Campus entry information"),
       ], { description: "The venue's name and address are under Site-wide → Programme details." }),
       section("routes", "Getting here", "venueRoutes", [

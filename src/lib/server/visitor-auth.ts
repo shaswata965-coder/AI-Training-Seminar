@@ -16,7 +16,7 @@ import { BASE_PATH } from "@/lib/paths";
  * This is separate from the admin panel's own sign-in (admin-auth.ts), which it never grants.
  */
 
-export const VISITOR_COOKIE = "aaiw_visitor";
+export const VISITOR_COOKIE = "diuai_visitor";
 const SESSION_DAYS = 30;
 /** People's sign-in codes shorter than this are not accepted. */
 export const MIN_CODE = 8;

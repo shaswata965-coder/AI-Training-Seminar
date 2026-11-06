@@ -25,7 +25,7 @@ set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$ROOT"
-export MONGODB_URI="${MONGODB_URI:-mongodb://127.0.0.1:27017/aaiw-loadtest}"
+export MONGODB_URI="${MONGODB_URI:-mongodb://127.0.0.1:27017/diuai-loadtest}"
 RUN_DIR="${LOADTEST_RUN_DIR:-$ROOT/loadtest/.run}"
 RESULTS="${RESULTS_DIR:-$ROOT/loadtest/results/$(date +%Y%m%d-%H%M%S)}"
 SERVER_CPUS="${SERVER_CPUS:-}"   # e.g. 0,1: the stack gets these CPUs …

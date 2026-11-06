@@ -7,7 +7,7 @@ import { check, fail } from "k6";
 import http from "k6/http";
 import { ADMIN, BASE } from "./config.js";
 
-const HEADERS = { Accept: "application/json", "User-Agent": "Mozilla/5.0 aaiw-loadtest organiser", "Sec-Fetch-Site": "same-origin" };
+const HEADERS = { Accept: "application/json", "User-Agent": "Mozilla/5.0 diuai-loadtest organiser", "Sec-Fetch-Site": "same-origin" };
 let cookie = "";
 
 /** Sign in once per virtual user. */
@@ -18,9 +18,9 @@ export function signIn() {
     responseType: "text",
     tags: { kind: "admin", name: "admin sign-in" },
   });
-  const token = res.cookies.aaiw_admin?.[0]?.value;
+  const token = res.cookies.diuai_admin?.[0]?.value;
   if (!check(res, { "admin: signed in": (r) => r.status === 200 && Boolean(token) })) fail(`admin sign-in failed: ${res.status} ${res.body}`);
-  cookie = `aaiw_admin=${token}`;
+  cookie = `diuai_admin=${token}`;
 }
 
 export function adminGet(path, name) {

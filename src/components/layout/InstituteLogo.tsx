@@ -12,7 +12,7 @@ const LOGOS = {
   shield: { src: "/logos/diu-shield.png", alt: "Daffodil International University", width: 256, height: 256 },
 };
 
-/** The DIU shield (on transparent), also pinned on Aura as her badge (AuraArt). */
+/** The DIU shield (on transparent), also pinned on Aura as his badge (AuraArt). */
 export const DIU_SHIELD = LOGOS.shield.src;
 
 /**

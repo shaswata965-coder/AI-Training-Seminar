@@ -186,7 +186,7 @@ html[data-launch="run"] body :not(.launch, .launch *) { animation-play-state: pa
 
 /* --------------------------------------------------------------- Ship -- */
 
-/* Above the smoke, so she stays in sight as she climbs out of it */
+/* Above the smoke, so he stays in sight as he climbs out of it */
 .lx-ship { position: absolute; z-index: 2; will-change: transform; }
 .lx-ship-try { position: relative; transform-origin: 50% 100%; animation: lx-attempt 3.2s infinite; will-change: transform; }
 .lx-ship-art { position: relative; display: block; width: 100%; height: auto; }
@@ -235,7 +235,7 @@ html[data-launch="run"] body :not(.launch, .launch *) { animation-play-state: pa
   transform: scaleY(0);
   transform-origin: 50% 0;
 }
-/* Her eyes in the visor: determined while trying, happy once she is off */
+/* His eyes in the visor: determined while trying, happy once he is off */
 .lx-eyes { position: absolute; inset: 0; transform-origin: 50% 20.6%; }
 .lx-eyes i { position: absolute; top: 18.2%; width: 7.5%; height: 4.8%; border-radius: 50%; background: #5fe3ff; box-shadow: 0 0 6px #5fe3ff; }
 .lx-eyes i:first-child { left: 37.25%; }
@@ -332,7 +332,7 @@ html[data-launch="run"] body :not(.launch, .launch *) { animation-play-state: pa
 .launch:not([data-phase="work"]) .lx-eyes-try { animation: none; opacity: 0; transition: opacity 0.2s; }
 .launch:not([data-phase="work"]) .lx-eyes-joy { opacity: 1; transition: opacity 0.2s; }
 
-/* Ignition: she crouches, then climbs out of sight on a long flame and its trail. */
+/* Ignition: he crouches, then climbs out of sight on a long flame and its trail. */
 .launch:not([data-phase="work"]) .launch-sky::after { animation: launch-flare 2.4s ease-out both; }
 /* The crouch is started from wherever the ship was by LoadingScreen.tsx (crouch()). */
 .launch:not([data-phase="work"]) .lx-ship-try { animation: none; }

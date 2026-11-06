@@ -44,14 +44,14 @@ export function trainingIcs(s: SiteSettings) {
 
 export function registrationEmail(s: SiteSettings, r: { name: string; email: string; regId: string }): MailInput {
   const dates = formatDateRange(s.startDate, s.endDate);
-  const review = `Places are limited, so the organising committee reviews every registration: you'll hear from us ${replyBy(s)} on whether we can offer you a place.`;
+  const review = `Places in each batch are limited, so the organising committee reviews every registration: you'll hear from us ${replyBy(s)} with your place in the next batch with free seats.`;
   const body = `<p>Hi ${esc(r.name)},</p>
 <p>Thank you for registering for the <strong>${esc(s.eventName)}</strong>. ${esc(review)}</p>
 ${box(`<p style="margin:0;font-size:13px;color:#64748b">Your registration ID</p><p style="margin:4px 0 0;font-size:22px;font-weight:700;letter-spacing:.06em;color:#3b5bdb">${esc(r.regId)}</p>`)}
-<p><strong>When:</strong> ${esc(dates)}<br/><strong>Where:</strong> ${esc(venueLine(s))}</p>
+<p><strong>Next batch:</strong> ${esc(dates)}<br/><strong>Where:</strong> ${esc(venueLine(s))}</p>
 <p>Keep this registration ID: once your place is confirmed, carry it and a valid photo ID to the campus gate, and bring a charged laptop to the hands-on sessions. The exact room and any updates will be shared on the website and by e-mail.</p>
 ${s.confirmationNote ? `<p>${esc(s.confirmationNote)}</p>` : ""}
-<p>We've attached a calendar file so you can keep the dates free. To build your own agenda of sessions, sign in on the website with this e-mail address and your registration ID.</p>
+<p>We've attached a calendar file with the next batch's dates. To build your own agenda of sessions, sign in on the website with this e-mail address and your registration ID.</p>
 <p>${button(absoluteUrl("/programme"), "View the schedule")}</p>
 <p style="margin-top:24px">Best wishes,<br/>The organising team</p>`;
   const text = `Hi ${r.name},
@@ -59,7 +59,7 @@ ${s.confirmationNote ? `<p>${esc(s.confirmationNote)}</p>` : ""}
 Thank you for registering for the ${s.eventName}. ${review}
 
 Your registration ID: ${r.regId}
-When: ${dates}
+Next batch: ${dates}
 Where: ${venueLine(s)}
 
 Keep this registration ID: once your place is confirmed, carry it and a valid photo ID to the campus gate, and bring a charged laptop.
@@ -84,7 +84,7 @@ const ENQUIRY_LABEL = { contact: "message", sponsor: "partnership enquiry" } as 
 /**
  * The acknowledgement goes to whatever address was typed into the form, so it
  * repeats nothing the visitor wrote: it can't be used to send someone else a
- * message from the event's address.
+ * message from the site's address.
  */
 export function enquiryAckEmail(s: SiteSettings, e: { email: string; type: keyof typeof ENQUIRY_LABEL }): MailInput {
   const label = ENQUIRY_LABEL[e.type];

@@ -1,7 +1,7 @@
 import type { NextConfig } from "next";
 
-// Optional sub-path hosting, e.g. https://scai.iitd.ac.in/agentic-ai-workshop
-// Set NEXT_PUBLIC_BASE_PATH=/agentic-ai-workshop at build time.
+// Optional sub-path hosting, e.g. https://cse.daffodilvarsity.edu.bd/ai-training
+// Set NEXT_PUBLIC_BASE_PATH=/ai-training at build time.
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH?.replace(/\/+$/, "") || undefined;
 
 // Where the site may load things from. Scripts: the site itself (Next.js needs inline scripts for its
@@ -47,10 +47,10 @@ const nextConfig: NextConfig = {
   poweredByHeader: false,
   // `standalone` output is used by the Docker image (see Dockerfile).
   output: process.env.NEXT_OUTPUT === "standalone" ? "standalone" : undefined,
-  // Fonts and the IIT Delhi emblem, read from disk by the social preview images.
+  // Fonts, the DIU shield and the Department of CSE seal, read from disk by the social preview images.
   outputFileTracingIncludes: {
-    "/opengraph-image": ["./assets/fonts/*.woff", "./public/logos/iit-delhi.svg"],
-    "/twitter-image": ["./assets/fonts/*.woff", "./public/logos/iit-delhi.svg"],
+    "/opengraph-image": ["./assets/fonts/*.woff", "./public/logos/diu-shield.png", "./public/logos/diu-cse.png"],
+    "/twitter-image": ["./assets/fonts/*.woff", "./public/logos/diu-shield.png", "./public/logos/diu-cse.png"],
   },
   cacheLife: {
     // Content managed from the admin panel. Saving in the admin expires the

@@ -31,11 +31,20 @@ const SECTIONS: { id: string; title: string; steps: (string | [string, string])[
     id: "event",
     title: "Programme details, batch dates & registration",
     steps: [
-      ["Site settings → Site-wide → Programme details", "Name, tagline, the next batch's dates, the venue and the room."],
-      ["Site settings → Site-wide → Registration", "Open or close registration, set its deadline (the form closes automatically once it passes) and the fees. Paste a Google Form link to use an external form instead of the built-in one."],
+      ["Site settings → Site-wide → Programme details", "Name, tagline, the next batch's dates, the venue and the room. The training runs continuously: when a batch starts, move the dates on to the next one."],
+      ["Site settings → Site-wide → Registration", "Open (enrolling for the next batch, the usual state) or paused, an optional deadline for the next batch (registration pauses by itself once it passes) and the fees. Paste a Google Form link to use an external form instead of the built-in one."],
       ["The forms' fields", "Registration → Form fields, Home → Contact form and Partners → Partner form. Click a field to change its name, guide, example and type of answer (text, e-mail, phone, number, link, date, a drop-down list, choices or a tick box), its choices, whether it is required, or to hide it. Add questions of your own with “Add a question”. Fields with a lock came with the site and can't be deleted."],
       ["Site settings → Site-wide → Colours and Logos", "Set the brand colour and the accent colours, and replace the built-in DIU logo and Department of CSE seal if ever needed."],
       ["Site settings → Site-wide → Contact & social", "Official e-mail, phone and social links shown in the footer and contact section."],
+    ],
+  },
+  {
+    id: "aura",
+    title: "Aura's look & Ask Aura",
+    steps: [
+      ["Site settings → Site-wide → Aura", "Aura's look everywhere on the site, in the logo and in the social preview: the Strong build (square jaw, broad shoulders, fists; the default) or the Classic rounded robot, his colours (steel, DIU blue, graphite or classic white) and his eyes (a colour for each section, or one colour everywhere). The Meet Aura page's playground lets you try every combination first."],
+      ["Ask Aura", "The button in the bottom-right corner of every page (or Ctrl/⌘ + K) searches the pages, FAQs, trainers, sessions and labs, with the next batch's dates at hand. Switch it off under Site settings → Site-wide → Features & past batches."],
+      ["Map pin", "Site settings → Venue → The venue: the latitude and longitude the venue's map and every “Directions” link point to."],
     ],
   },
   {
@@ -50,7 +59,7 @@ const SECTIONS: { id: string; title: string; steps: (string | [string, string])[
       ["Programmes", "Site settings → Home → Programmes: the titles, descriptions and photos of AI for Professionals and AI for Workspace. Sessions, labs, demos, trainers and past participants each pick a programme, or General for both."],
       ["Trainers", "Add each trainer with a photo, designation, affiliation, label (DIU faculty / Industry expert / Guest trainer), programme, profile, areas of expertise and what they teach. Tick “Lead trainer” for the one shown in the spotlight at the top of the Trainers page, and “Feature on the home page” for the home page carousel."],
       ["Schedule", "Add sessions with day, start/end time, type (opening, lecture, discussion, hands-on lab, demo, break), programme and room, and link their trainers."],
-      ["Schedule status", "Site settings → Schedule → Schedule. Keep “To be announced” until the schedule is ready; switch to “Draft” or “Final” to show it. The PDF download updates automatically."],
+      ["Schedule status", "Site settings → Schedule → Schedule. “Draft” or “Final” shows the sessions; “Hidden” shows a note that each batch's schedule is e-mailed instead. The PDF download updates automatically."],
     ],
   },
   {
@@ -76,7 +85,7 @@ const SECTIONS: { id: string; title: string; steps: (string | [string, string])[
     title: "Organisers & volunteers",
     steps: [
       "Organisers & volunteers → New person. Choose the group: Faculty coordinator, Student organiser or Volunteer.",
-      "A group shows on the Organisers page once it has someone in it; volunteers show a “Coming soon” card until you add the first one.",
+      "A group shows on the Organisers page once it has someone in it; volunteers show an “Open call” card inviting people to volunteer until you add the first one.",
       "Square photos (at least 400×400 px) look best. Uploads are compressed automatically.",
     ],
   },

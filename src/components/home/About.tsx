@@ -8,7 +8,7 @@ import { formatDateRange } from "@/lib/format";
 import { AboutOrbit } from "./AboutOrbit";
 
 /**
- * Home page About: Aura with About topics (Site settings → Home → About) around her. She thinks
+ * Home page About: Aura with About topics (Site settings → Home → About) around him. He thinks
  * quietly until you hover a topic, then points at it and answers with its summary. The full About
  * text lives on /about, which the portal under the orbit leads to.
  * Answers may use {dates}, {venue} and {event}, filled in from Site settings.

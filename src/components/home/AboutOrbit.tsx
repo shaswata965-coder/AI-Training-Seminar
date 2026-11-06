@@ -7,9 +7,9 @@ import { cn } from "@/lib/cn";
 import type { IconItem } from "@/lib/content/types";
 
 const TONES = ["azure", "lilac", "mint", "peach", "butter", "blush"] as const;
-// Aura's drawing is 260 × 300; her shoulders sit at (62, 170) and (198, 170) and her arms are 54 long.
+// Aura's drawing is 260 × 300; his shoulders sit at (62, 170) and (198, 170) and his arms are 54 long.
 const SHOULDER = { l: 62 / 260, r: 198 / 260, y: 170 / 300, arm: 54 / 260 };
-// How long she "thinks" (typing dots) before the answer appears.
+// How long he "thinks" (typing dots) before the answer appears.
 const THINK_MS = 800;
 // A short grace period when the mouse leaves a topic, so brushing past an edge doesn't flicker the answer.
 const LEAVE_MS = 120;
@@ -35,11 +35,11 @@ const useReducedMotion = () =>
   );
 
 /**
- * Aura in the middle of a circle of About topics. At rest she strikes a thinking pose and says
- * nothing. Hovering, focusing or tapping a topic makes her turn and point at it; then she answers:
- * a speech bubble unfolds above her head, shows a typing indicator, then the whole summary fades
+ * Aura in the middle of a circle of About topics. At rest he strikes a thinking pose and says
+ * nothing. Hovering, focusing or tapping a topic makes him turn and point at it; then he answers:
+ * a speech bubble unfolds above his head, shows a typing indicator, then the whole summary fades
  * into view at once.
- * Moving off the topic (or tapping elsewhere) sends her back to thinking.
+ * Moving off the topic (or tapping elsewhere) sends him back to thinking.
  * Circle size comes from --rx / --ry / --cy on the container.
  */
 export function AboutOrbit({ points }: { points: IconItem[] }) {
@@ -138,7 +138,7 @@ export function AboutOrbit({ points }: { points: IconItem[] }) {
   const deg = active === null ? null : large[active];
   const side = deg === null ? undefined : (pointing?.side ?? (Math.cos(rad(deg)) >= 0 ? "r" : "l"));
   const aim = deg === null ? 0 : (pointing?.aim ?? (side === "r" ? Math.min(deg - 90, -25) : Math.max(deg - 90, 25)));
-  // At rest she looks up and to the side with one eye narrowed, the way people do when they ponder.
+  // At rest he looks up and to the side with one eye narrowed, the way people do when they ponder.
   const look = deg === null ? { x: 0.5, y: -0.8 } : { x: Number((Math.cos(rad(deg)) * 0.85).toFixed(2)), y: Number((Math.sin(rad(deg)) * 0.6).toFixed(2)) };
 
   return (
@@ -153,7 +153,7 @@ export function AboutOrbit({ points }: { points: IconItem[] }) {
       <span aria-hidden className="orbit-spark" />
       <span aria-hidden className="orbit-spark" />
 
-      {/* Aura: thinking at rest; leans and points toward a topic, then answers in a speech bubble above her head. */}
+      {/* Aura: thinking at rest; leans and points toward a topic, then answers in a speech bubble above his head. */}
       <div
         ref={auraBox}
         className="about-aura absolute top-[var(--cy)] left-1/2 w-[30%] sm:w-[22%] lg:w-[260px]"

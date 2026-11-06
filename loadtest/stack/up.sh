@@ -8,7 +8,7 @@
 #   loadtest/stack/down.sh
 #
 # Settings (environment):
-#   MONGODB_URI          default mongodb://127.0.0.1:27017/aaiw-loadtest
+#   MONGODB_URI          default mongodb://127.0.0.1:27017/diuai-loadtest
 #   SERVER_CPUS          CPU list for nginx, Next.js and the SMTP sink (taskset), default: all
 #   NGINX_WORKERS        nginx worker_processes, default: the number of SERVER_CPUS ("auto" on that box)
 #   NGINX_PROFILE        tuned (default): the README's configuration (nginx.tuned.conf.template: more
@@ -23,7 +23,7 @@ set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
 RUN="${LOADTEST_RUN_DIR:-$ROOT/loadtest/.run}"
-export MONGODB_URI="${MONGODB_URI:-mongodb://127.0.0.1:27017/aaiw-loadtest}"
+export MONGODB_URI="${MONGODB_URI:-mongodb://127.0.0.1:27017/diuai-loadtest}"
 APP_PORT=3000
 SMTP_PORT=2525
 CPUS="${SERVER_CPUS:-}"
@@ -56,7 +56,7 @@ echo $! >"$RUN/smtp-sink.pid"
 (
   cd "$ROOT"
   export AUTH_SECRET="${AUTH_SECRET:-loadtest-secret-loadtest-secret-loadtest-0123456789}"
-  export SMTP_HOST=127.0.0.1 SMTP_PORT=$SMTP_PORT SMTP_SECURE=false MAIL_FROM="Agentic AI Workshop 2026 <no-reply@example.com>"
+  export SMTP_HOST=127.0.0.1 SMTP_PORT=$SMTP_PORT SMTP_SECURE=false MAIL_FROM="DIU AI Training Seminars <no-reply@example.com>"
   export NOTIFY_EMAIL=organisers@example.com NEXT_TELEMETRY_DISABLED=1
   pin npx next start -H 127.0.0.1 -p $APP_PORT >"$RUN/logs/next.log" 2>&1 &
   echo $! >"$RUN/next.pid"

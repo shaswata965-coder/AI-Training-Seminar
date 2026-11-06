@@ -18,11 +18,11 @@ export const metadata: Metadata = {
 };
 
 const WHERE: Partial<Record<AuraVariant, string>> = {
-  hero: "Home: waving hello", countdown: "Registration opening soon", announcements: "Announcements", thinker: "About: the agent loop",
+  hero: "Home: waving hello", announcements: "Announcements", thinker: "About: the agent loop",
   professionals: "Programme: AI for Professionals", workspace: "Programme: AI for Workspace",
   programme: "Schedule", trainers: "Trainers", tutorials: "Hands-on labs", demos: "Live demos", participants: "Past participants",
   registration: "Registration", success: "Registration complete", venue: "Venue", travel: "Travel tips",
-  sponsors: "Partners", organisers: "Organisers", volunteers: "Volunteers (coming soon)", faq: "FAQ", answer: "FAQ: answer found",
+  sponsors: "Partners", organisers: "Organisers", volunteers: "Volunteers", faq: "FAQ", answer: "FAQ: answer found",
   contact: "Contact form", notFound: "Page not found", sleep: "Footer", gallery: "Photo gallery", recordings: "Recordings", admin: "Admin panel", error: "Error page",
 };
 
@@ -42,7 +42,8 @@ export default async function MeetAuraPage() {
           playground: (
             <Section edit="meetAura.playground" tone={pg.tone} bg={pg.background} labelledBy="playground-title">
               <SectionHeading id="playground-title" eyebrow={pg.eyebrow} title={pg.title} description={pg.description} />
-              <AuraPlayground />
+              {/* Keyed by the site's look, so the playground starts over in it when Site settings change it (the admin's preview). */}
+              <AuraPlayground key={`${s.auraBuild}-${s.auraColor}`} build={s.auraBuild} color={s.auraColor} />
             </Section>
           ),
           looks: (

@@ -31,9 +31,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 function registrationText(s: SiteSettings) {
   const c = copy(s, "programmePlan");
-  if (s.workshopStatus === "open") return c.registrationOpen;
-  if (s.workshopStatus === "closed") return c.registrationClosed;
-  return c.registrationSoon;
+  return s.workshopStatus === "open" ? c.registrationOpen : c.registrationClosed;
 }
 
 export default async function ProgrammePage() {

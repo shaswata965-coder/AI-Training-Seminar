@@ -2,7 +2,7 @@
  * Settings shared by the scenarios, from the environment (k6 run -e NAME=value, or run.sh):
  *   BASE_URL   the site, default https://localhost (nginx in front of `next start`, see stack/up.sh)
  *   IP_MODE    distinct | shared | campus: only a label here; the addresses come from k6 --local-ips
- *   RUN_ID     makes e-mail addresses and team names unique to the run
+ *   RUN_ID     makes e-mail addresses unique to the run
  *   SCALE      multiplies the number of users (0.05 for a quick smoke run)
  *   PACE       multiplies every think time and phase length (0.2 for a quick smoke run)
  *   OUT_DIR    where handleSummary writes summary.json and summary.txt

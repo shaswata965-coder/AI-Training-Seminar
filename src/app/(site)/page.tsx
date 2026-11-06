@@ -13,8 +13,8 @@ import { InOrder } from "@/components/layout/InOrder";
 import { LoadingScreen } from "@/components/loading/LoadingScreen";
 import { getAnnouncements, getDemos, getFaqs, getParticipants, getPeople, getSettings, getSponsors, getTrainers } from "@/lib/content/queries";
 import { copy } from "@/lib/copy";
-import { eventJsonLd, JsonLd } from "@/lib/jsonld";
-import { explorePages, postEventNav, primaryNav, registrationNav } from "@/lib/nav";
+import { JsonLd, trainingJsonLd } from "@/lib/jsonld";
+import { explorePages, pastBatchNav, primaryNav, registrationNav } from "@/lib/nav";
 
 export default async function HomePage() {
   const [s, announcements, trainers, sponsors, faqs, demos, people, participants] = await Promise.all([
@@ -29,7 +29,7 @@ export default async function HomePage() {
   ]);
   // What the loading screen loads behind it: the main pages, and the uploaded images they show (the
   // gallery, which can be large, is left to load when visited).
-  const routes = [...primaryNav(s.siteNav), registrationNav(s.siteNav), ...explorePages(s.siteNav), ...postEventNav(s, s.siteNav)]
+  const routes = [...primaryNav(s.siteNav), registrationNav(s.siteNav), ...explorePages(s.siteNav), ...pastBatchNav(s, s.siteNav)]
     .map((n) => n.href)
     .filter((href) => href.startsWith("/"));
   const files = [
@@ -51,7 +51,7 @@ export default async function HomePage() {
   return (
     <>
       {s.showLoader ? <LoadingScreen eventName={s.eventName} routes={routes} files={files} text={copy(s, "homeLoader")} /> : null}
-      <JsonLd data={eventJsonLd(s)} />
+      <JsonLd data={trainingJsonLd(s)} />
       <Hero s={s} />
       <InOrder
         s={s}

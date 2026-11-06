@@ -51,12 +51,8 @@ export default async function RegisterPage() {
           {hero.open}
         </Badge>
       </DeadlineGate>
-    ) : s.workshopStatus === "closed" ? (
-      closedBadge
     ) : (
-      <Badge tone="butter" dot>
-        {hero.soon}
-      </Badge>
+      closedBadge
     );
 
   return (
@@ -96,11 +92,11 @@ export default async function RegisterPage() {
                   // The admin's live preview shows the form whatever the status, so its fields can be edited.
                   <RegistrationForm fields={fields} text={copy(s, "registerFormText")} calendar={eventCalendarLinks(s)} shareUrl={absoluteUrl("/")} eventName={s.eventName} />
                 ) : s.workshopStatus === "open" ? (
-                  <DeadlineGate deadline={s.workshopDeadline} closed={<StatusCard s={s} closed />}>
+                  <DeadlineGate deadline={s.workshopDeadline} closed={<PausedCard s={s} />}>
                     <RegistrationForm fields={fields} text={copy(s, "registerFormText")} calendar={eventCalendarLinks(s)} shareUrl={absoluteUrl("/")} eventName={s.eventName} />
                   </DeadlineGate>
                 ) : (
-                  <StatusCard s={s} closed={s.workshopStatus === "closed"} />
+                  <PausedCard s={s} />
                 )}
               </div>
             ) : null}
@@ -163,16 +159,15 @@ export default async function RegisterPage() {
   );
 }
 
-/** Shown instead of the form while registration is not open. */
-function StatusCard({ s, closed }: { s: SiteSettings; closed: boolean }) {
+/** Shown instead of the form while registration is paused (or past its deadline). */
+function PausedCard({ s }: { s: SiteSettings }) {
   const c = copy(s, "registerForm");
-  const text = closed ? c.closedText : c.soonText;
   return (
     <div className="card flex flex-col items-center gap-5 p-8 text-center sm:flex-row sm:text-left">
-      <Aura variant={closed ? "sleep" : "countdown"} size={160} interactive />
+      <Aura variant="sleep" size={160} interactive />
       <div>
-        <h2 className="font-display text-2xl font-bold text-fg">{closed ? c.closedTitle : c.soonTitle}</h2>
-        {text ? <p className="mt-2 max-w-lg text-muted">{text}</p> : null}
+        <h2 className="font-display text-2xl font-bold text-fg">{c.closedTitle}</h2>
+        {c.closedText ? <p className="mt-2 max-w-lg text-muted">{c.closedText}</p> : null}
         <div className="mt-5 flex flex-wrap gap-3">
           {c.announcements && isShown(s, "home", "news") ? (
             <ButtonLink href="/#news" variant="soft">

@@ -40,7 +40,7 @@ const failedThresholds = summary
 /* ---- MongoDB ----------------------------------------------------------------------------------- */
 // The next run empties the database, so `--reuse-db` takes these from the run's earlier report.json.
 async function readDb() {
-  await mongoose.connect(process.env.MONGODB_URI ?? "mongodb://127.0.0.1:27017/aaiw-loadtest", { serverSelectionTimeoutMS: 5000 });
+  await mongoose.connect(process.env.MONGODB_URI ?? "mongodb://127.0.0.1:27017/diuai-loadtest", { serverSelectionTimeoutMS: 5000 });
   const db = mongoose.connection.db;
   const duplicates = async (collection, field) => (await db.collection(collection).aggregate([{ $group: { _id: field, n: { $sum: 1 } } }, { $match: { n: { $gt: 1 } } }]).toArray()).length;
   const out = {

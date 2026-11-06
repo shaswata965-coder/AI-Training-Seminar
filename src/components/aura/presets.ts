@@ -75,15 +75,6 @@ export const AURA_PRESETS: Record<AuraVariant, AuraPreset> = {
       "Add any session straight to your calendar.",
     ],
   },
-  countdown: {
-    label: "Aura holding a stopwatch, waiting for registration to open",
-    expression: "focus",
-    pose: "hold",
-    prop: "stopwatch",
-    emblem: "clock",
-    eyeColor: AURA_EYES.azure,
-    tips: ["Tick tock! It opens soon: check back here.", "Add the dates to your calendar so you don't miss it."],
-  },
   trainers: {
     label: "Aura as a trainer in a mortarboard and spectacles, unfurling a poster and pointing at it with a laser pointer",
     expression: "happy",
@@ -116,7 +107,7 @@ export const AURA_PRESETS: Record<AuraVariant, AuraPreset> = {
     tips: ["Live demos of AI tools at work. Come and try them!"],
   },
   workspace: {
-    label: "Aura at her workspace, typing on a laptop with a headset",
+    label: "Aura at his workspace, typing on a laptop with a headset",
     expression: "code",
     pose: "type",
     prop: "laptop",
@@ -208,14 +199,14 @@ export const AURA_PRESETS: Record<AuraVariant, AuraPreset> = {
     tips: ["Meet the team behind the AI training programme!"],
   },
   volunteers: {
-    label: "Aura in a hard hat: volunteer list coming soon",
+    label: "Aura in a hard hat with a wrench, ready to help out",
     expression: "focus",
     pose: "raise",
     prop: "wrench",
     headwear: "hardHat",
     emblem: "gear",
     eyeColor: AURA_EYES.amber,
-    tips: ["Volunteer list coming soon. We're building it!"],
+    tips: ["Want to help at a session? Volunteer with us!", "Volunteers keep every batch running smoothly."],
   },
   faq: {
     label: "Aura thinking about a question",
@@ -296,6 +287,13 @@ export const AURA_PRESETS: Record<AuraVariant, AuraPreset> = {
     emblem: "play",
     eyeColor: AURA_EYES.lilac,
     tips: ["Missed a session? Catch the recording here."],
+  },
+  assistant: {
+    label: "Ask Aura, the site assistant",
+    expression: "neutral",
+    pose: "idle",
+    emblem: "spark",
+    tips: ["Need help? Ask me!"],
   },
   error: {
     label: "Aura looking puzzled after an error",

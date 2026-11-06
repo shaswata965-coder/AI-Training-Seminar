@@ -31,11 +31,10 @@ function Chip({ tone, live, children }: { tone: Tone; live?: boolean; children: 
   );
 }
 
-/** A registration's status as set in Site settings → Site-wide → Registration, closing by itself at the deadline. */
+/** A registration's status as set in Site settings → Site-wide → Registration, pausing by itself at the deadline. */
 function Status({ status, deadline, c }: { status: RegistrationStatus; deadline: string; c: Words }) {
   const closed = <Chip tone="blush">{c.closed}</Chip>;
-  if (status === "closed") return closed;
-  if (status !== "open") return <Chip tone="butter">{c.soon}</Chip>;
+  if (status !== "open") return closed;
   const until = deadline ? formatDate(deadline, { day: "numeric", month: "short" }) : "";
   return (
     <DeadlineGate deadline={deadline} closed={closed}>

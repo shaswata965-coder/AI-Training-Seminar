@@ -3,7 +3,7 @@
  * frame (components/layout/PreviewBridge.tsx). Both sides are the same origin.
  */
 
-export const PREVIEW_SOURCE = "aaiw-preview";
+export const PREVIEW_SOURCE = "diuai-preview";
 
 /** A layout problem found by measuring the previewed section. */
 export interface LayoutIssue {

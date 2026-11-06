@@ -1,3 +1,4 @@
+import type { AuraBuild, AuraColorKey, AuraEyeKey } from "@/components/aura/builds";
 import type {
   PeopleGroup,
   ProgrammeStatus,
@@ -66,6 +67,8 @@ export interface SiteSettings extends PageCopy, SectionOrders, HiddenSections, F
   schedulePdf: string;
 
   mapQuery: string;
+  /** "latitude, longitude" of the venue: the embedded map and the directions point exactly there. */
+  mapPin: string;
   mapEmbedUrl: string;
   directions: { mode: "air" | "rail" | "metro" | "road"; title: string; details: string }[];
   campusEntry: string;
@@ -94,6 +97,12 @@ export interface SiteSettings extends PageCopy, SectionOrders, HiddenSections, F
   ogImage: string;
 
   showMoreTrainers: boolean;
+  /** The "Ask Aura" helper in the bottom-right corner of every page. */
+  showAssistant: boolean;
+  /** Aura's look (components/aura/builds.ts): his build, his colours and his eye colour. */
+  auraBuild: AuraBuild;
+  auraColor: AuraColorKey;
+  auraEyes: AuraEyeKey;
   showGallery: boolean;
   showTalks: boolean;
   bannerText: string;

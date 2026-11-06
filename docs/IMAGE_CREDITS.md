@@ -1,6 +1,6 @@
 # Image credits
 
-The site's built-in pictures, and where they come from. Each can be replaced from the admin panel without code changes (Site settings → Home → Hero, Programmes and Registration open; Site-wide → Logos & images).
+The site's built-in pictures, and where they come from. Each can be replaced from the admin panel without code changes (Site settings → Home → Hero, Programmes and Enrolment; Site-wide → Logos & images).
 
 ## Campus photos (Wikimedia Commons)
 

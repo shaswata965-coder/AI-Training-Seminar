@@ -2,12 +2,13 @@ import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { ImageResponse } from "next/og";
 import { AuraArt } from "@/components/aura/AuraArt";
+import { AURA_EYE_CHOICES, auraLookSettings } from "@/components/aura/builds";
 import { auraLook } from "@/components/aura/presets";
 import { getSettings } from "@/lib/content/queries";
 import { formatDateRange } from "@/lib/format";
 import { svgDataUri, toSvgString } from "@/lib/svg-string";
 
-// A static string, so it describes the card rather than naming the event (the name is edited in the admin).
+// A static string, so it describes the card rather than naming the programme (the name is edited in the admin).
 export const alt = "The training programme's title, dates and tagline beside Aura, the robot guide, with the Daffodil International University and Department of CSE names";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
@@ -25,7 +26,10 @@ const seal = png("diu-cse.png");
 export default async function OpenGraphImage() {
   const [s, [regular, heavy], badge, cse] = await Promise.all([getSettings(), fonts, emblem, seal]);
   const look = auraLook("hero");
-  const aura = svgDataUri(toSvgString(<AuraArt uid="og" palette="light" {...look} badge={badge} width={400} height={462} />));
+  // Drawn in the look chosen in Site settings → Site-wide → Aura (the image has no stylesheet to switch it).
+  const { build, color, eyes } = auraLookSettings(s);
+  const eyeColor = AURA_EYE_CHOICES[eyes].colour ?? look.eyeColor;
+  const aura = svgDataUri(toSvgString(<AuraArt uid="og" palette="light" {...look} eyeColor={eyeColor} build={build} colors={color} badge={badge} width={400} height={462} />));
   return new ImageResponse(
     (
       <div

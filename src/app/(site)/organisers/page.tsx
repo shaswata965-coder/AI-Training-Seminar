@@ -74,7 +74,7 @@ export default async function OrganisersPage() {
         s={s}
         page="organisers"
         sections={{
-          // A group with nobody in it yet is left out (volunteers get a "coming soon" card instead).
+          // A group with nobody in it yet is left out (volunteers get an "open call" card instead).
           faculty: faculty.length ? (
             <Section edit="organisers.faculty" tone={fa.tone} bg={fa.background} labelledBy="faculty-title">
               <SectionHeading id="faculty-title" eyebrow={fa.eyebrow} title={fa.title} />

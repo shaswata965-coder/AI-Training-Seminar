@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1
-# Production image for the Agentic AI Workshop 2026 website.
+# Production image for the DIU AI Training Seminars website.
 #   docker compose up -d --build        (see docker-compose.yml and README.md)
 
 ARG NODE_VERSION=22

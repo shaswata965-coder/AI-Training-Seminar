@@ -52,7 +52,7 @@ export function PartnerCarousel({ sponsors }: { sponsors: Sponsor[] }) {
           })}
         </ul>
       </div>
-      {empty ? <p className="mt-4 text-center text-sm font-semibold text-muted">Partner announcements coming soon.</p> : null}
+      {empty ? <p className="mt-4 text-center text-sm font-semibold text-muted">Want your organisation here? Become a partner below.</p> : null}
     </div>
   );
 }

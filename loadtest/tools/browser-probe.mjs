@@ -52,12 +52,12 @@ async function attempt(browser, n) {
       ),
     );
     await page.getByLabel("Full name").fill("Probe Person");
-    await page.getByLabel("E-mail").fill(`aaiw-${RUN}-probe-${process.pid}-${n}@example.com`);
+    await page.getByLabel("E-mail").fill(`diuai-${RUN}-probe-${process.pid}-${n}@example.com`);
     await page.getByLabel("I am a…").selectOption("student");
-    await page.getByLabel("Institution / organisation").fill("IIT Delhi");
+    await page.getByLabel("Institution / organisation").fill("Daffodil International University");
     await page.getByRole("button", { name: "Continue" }).click();
     await page.getByRole("button", { name: "Continue" }).click();
-    await page.getByLabel("I agree to be contacted about this workshop").check();
+    await page.getByLabel("I agree to be contacted about this training").check();
     if (submits >= MAX_SUBMITS) {
       row.ok = true;
       row.outcome = "filled in (not sent: probe's own limit)";

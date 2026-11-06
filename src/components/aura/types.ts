@@ -100,7 +100,6 @@ export type AuraVariant =
   | "thinker"
   | "professionals"
   | "programme"
-  | "countdown"
   | "trainers"
   | "tutorials"
   | "demos"
@@ -123,6 +122,7 @@ export type AuraVariant =
   | "admin"
   | "gallery"
   | "recordings"
+  | "assistant"
   | "error";
 
 export interface AuraPreset extends AuraLook {

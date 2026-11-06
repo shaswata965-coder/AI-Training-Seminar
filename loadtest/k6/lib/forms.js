@@ -29,7 +29,7 @@ const digits = (n) => Array.from({ length: n }, () => Math.floor(Math.random() *
 /** A made-up person. `id` must be unique in the run. */
 export function person(id) {
   const name = `${pick(FIRST)} ${pick(LAST)}`;
-  return { name, email: `aaiw-${RUN_ID}-${id}@example.com`, phone: `+880 17${digits(8)}`, organisation: pick(ORGS) };
+  return { name, email: `diuai-${RUN_ID}-${id}@example.com`, phone: `+880 17${digits(8)}`, organisation: pick(ORGS) };
 }
 
 export function workshopPayload(id) {
@@ -77,7 +77,7 @@ function postParams(form, from) {
       "Sec-Fetch-Site": "same-origin",
       "Sec-Fetch-Mode": "cors",
       "Sec-Fetch-Dest": "empty",
-      "User-Agent": "Mozilla/5.0 aaiw-loadtest",
+      "User-Agent": "Mozilla/5.0 diuai-loadtest",
     },
     responseType: "text",
     // Sorted below; a 409 or 429 is an answer the site means to give, not a broken request.

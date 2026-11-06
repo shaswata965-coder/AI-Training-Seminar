@@ -1,5 +1,5 @@
 /*
- * Agentic AI Workshop: serves the site's cached files so pages open quickly.
+ * DIU AI Training: serves the site's cached files so pages open quickly.
  * Registered by components/loading/ServiceWorker.tsx; the home page's loading screen fills the same
  * cache (components/loading/cache-files.ts) and this worker adds to it as files are used.
  *   - Build files (/_next/static/, content-hashed) and uploads (/api/media/<id>) never change:
@@ -8,7 +8,7 @@
  *   - Everything else (pages, their data, the admin, the API) goes to the network as usual.
  */
 
-const CACHE = "aaiw-assets-v1"; // ASSET_CACHE in components/loading/cache-files.ts
+const CACHE = "diuai-assets-v1"; // ASSET_CACHE in components/loading/cache-files.ts
 const BASE = new URL(self.registration.scope).pathname.replace(/\/$/, "");
 
 self.addEventListener("install", () => self.skipWaiting());
@@ -16,7 +16,8 @@ self.addEventListener("install", () => self.skipWaiting());
 self.addEventListener("activate", (event) => {
   event.waitUntil(
     (async () => {
-      for (const name of await caches.keys()) if (name.startsWith("aaiw-") && name !== CACHE) await caches.delete(name);
+      // Caches of earlier versions of the site (any "…-assets-v<n>" but this one) are dropped.
+      for (const name of await caches.keys()) if (/-assets-v\d+$/.test(name) && name !== CACHE) await caches.delete(name);
       await self.clients.claim();
     })(),
   );

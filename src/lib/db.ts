@@ -14,8 +14,8 @@ type ConnCache = {
 };
 
 // Reuse one connection across hot reloads and route invocations.
-const g = globalThis as unknown as { __aaiwMongo?: ConnCache };
-const cache: ConnCache = (g.__aaiwMongo ??= { promise: null, failedAt: 0, boot: null });
+const g = globalThis as unknown as { __diuaiMongo?: ConnCache };
+const cache: ConnCache = (g.__diuaiMongo ??= { promise: null, failedAt: 0, boot: null });
 
 export const isDbConfigured = () => Boolean(process.env.MONGODB_URI);
 

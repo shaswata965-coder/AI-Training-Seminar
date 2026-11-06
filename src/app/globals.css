@@ -63,16 +63,19 @@
   --header-bg: rgb(246 248 252 / 0.78);
   --glass-mix: 72%;
 
-  /* Aura mascot */
-  --aura-body-1: #ffffff;
-  --aura-body-2: #f1f5fb;
-  --aura-body-3: #d3ddec;
-  --aura-visor-1: #1d2946;
-  --aura-visor-2: #060a14;
-  --aura-eye: #5fe3ff;
+  /* Aura mascot: the built-in "steel" colours (components/aura/builds.ts). Site settings → Site-wide → Aura can
+     replace them, and set --aura-eye for one eye colour everywhere (unset, each section has its own). */
+  --aura-body-1: #f5f8fc;
+  --aura-body-2: #c8d2df;
+  --aura-body-3: #8695ab;
+  --aura-visor-1: #16223b;
+  --aura-visor-2: #04080f;
   --aura-shadow: rgb(30 41 59 / 0.18);
-  --aura-line: #93a4be;
-  --aura-edge: #c9d4e5;
+  --aura-line: #4d5c75;
+  --aura-edge: #7d8ba1;
+  --aura-trim-1: #3e5486;
+  --aura-trim-2: #1c2a4d;
+  --aura-shine: 0.85;
 }
 
 .dark {
@@ -124,15 +127,14 @@
   --header-bg: rgb(7 11 22 / 0.8);
   --glass-mix: 90%;
 
-  --aura-body-1: #f7f9fd;
-  --aura-body-2: #e3e9f4;
-  --aura-body-3: #b9c5da;
-  --aura-visor-1: #18223b;
-  --aura-visor-2: #03060d;
   --aura-shadow: rgb(0 0 0 / 0.5);
-  --aura-line: #6d7d99;
-  --aura-edge: rgb(255 255 255 / 0);
 }
+
+/* Aura's build (Site settings → Site-wide → Aura): every Aura is drawn in both, and the one not chosen is hidden.
+   Without a choice the strong build shows. */
+.aura-b-classic { display: none; }
+html[data-aura-build="classic"] .aura-b-classic { display: inline; }
+html[data-aura-build="classic"] .aura-b-strong { display: none; }
 
 /* Section tones */
 .tone-azure { --accent: var(--azure); --accent-soft: var(--azure-soft); --accent-ink: var(--azure-ink); }
@@ -274,7 +276,7 @@
   -webkit-backdrop-filter: blur(14px) saturate(1.4);
 }
 
-/* Home hero text column: beside Aura (with her placard and its switch), as tall as she is, so the text sits
+/* Home hero text column: beside Aura (with his placard and its switch), as tall as he is, so the text sits
    in the middle of the space. Stacked on narrower screens, it needs no height of its own. */
 @utility hero-copy {
   @media (width >= 1024px) {
@@ -327,7 +329,7 @@
   }
 }
 
-/* Home About: Aura leans toward the topic she points at and swings that arm to it (aura.css animates arms through transform). */
+/* Home About: Aura leans toward the topic he points at and swings that arm to it (aura.css animates arms through transform). */
 .about-aura {
   translate: -50% -50%;
 }
@@ -341,7 +343,7 @@
   transform: rotate(var(--aim));
   animation: none;
 }
-/* At rest she ponders, tapping her chin. The delay lets her arm swing back from pointing first. */
+/* At rest he ponders, tapping his chin. The delay lets his arm swing back from pointing first. */
 .about-aura:not([data-aim]) .aura-svg .aura-arm-l {
   animation: aura-ponder 2.6s ease-in-out 0.6s infinite;
 }
@@ -354,7 +356,7 @@
     transform: rotate(-138deg);
   }
 }
-/* Answering: dots rise out of her head, the speech bubble unfolds upward, Aura "types" for a moment, then the whole answer fades into focus at once. */
+/* Answering: dots rise out of his head, the speech bubble unfolds upward, Aura "types" for a moment, then the whole answer fades into focus at once. */
 .rising-dot {
   animation: rise-dot 0.4s ease-out both;
 }
@@ -676,7 +678,7 @@
    Print (programme / schedule)
    ------------------------------------------------------------------------- */
 @media print {
-  .no-print, header[data-site-header], footer[data-site-footer] { display: none !important; }
+  .no-print, header[data-site-header], footer[data-site-footer], [data-aura-assistant] { display: none !important; }
   /* Scroll-driven reveals never "enter" on paper: show everything in its final state. */
   [data-reveal], .grow-bar { animation: none !important; opacity: 1 !important; transform: none !important; }
   body { background: #fff; color: #000; }
@@ -700,7 +702,7 @@ html[data-scroll-lock] { overflow: hidden; }
 dialog::backdrop { background: rgb(10 15 30 / 0.45); }
 
 /* Home hero: how long each of Aura's placards stays up (HeroPlacards.tsx), shown as a bar filling under its
-   switch. It holds while the pointer or focus is on her, the switch or a registration card. With reduced motion
+   switch. It holds while the pointer or focus is on him, the switch or a registration card. With reduced motion
    it doesn't run, so the placards change only when asked. */
 @media (prefers-reduced-motion: no-preference) {
   .placard-timer { transform-origin: left; animation: grow-x 6s linear both; }

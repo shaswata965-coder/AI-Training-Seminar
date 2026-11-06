@@ -34,7 +34,7 @@ export async function GET(req: NextRequest) {
   const body = buildIcs(
     [
       {
-        uid: `aaiw-session-${x.id}@${new URL(absoluteUrl("/")).hostname}`,
+        uid: `diuai-session-${x.id}@${new URL(absoluteUrl("/")).hostname}`,
         title: x.title,
         start,
         end: end.getTime() > start.getTime() ? end : new Date(start.getTime() + 30 * 60_000),

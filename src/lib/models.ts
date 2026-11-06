@@ -225,7 +225,7 @@ export const AdminSession = (mongoose.models.AdminSession as Model<SessionDoc>) 
 /* ------------------------------------------------------ Visitor accounts -- */
 
 /**
- * A browser signed in on the public site (to keep an agenda): anyone the event knows, by e-mail. The cookie
+ * A browser signed in on the public site (to keep an agenda): anyone the site knows, by e-mail. The cookie
  * holds a random token; only its SHA-256 is stored, as the id. Expired ones are removed by MongoDB (TTL).
  */
 export interface VisitorSessionDoc {
