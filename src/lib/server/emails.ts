@@ -1,16 +1,13 @@
 import "server-only";
-import { buildIcs } from "@/lib/calendar";
 import type { SiteSettings } from "@/lib/content/types";
 import { replyBy } from "@/lib/copy";
-import { batchDays, venueLine } from "@/lib/training";
-import { formatDateRange } from "@/lib/format";
+import { venueLine } from "@/lib/training";
 import { absoluteUrl } from "@/lib/paths";
 import type { MailInput } from "./mail";
 
 const esc = (s: string) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 
 function layout(s: SiteSettings, title: string, body: string) {
-  const dates = formatDateRange(s.startDate, s.endDate);
   return `<!doctype html><html><body style="margin:0;background:#f6f8fc;font-family:Inter,Segoe UI,Roboto,Arial,sans-serif;color:#0f172a">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="padding:24px 12px"><tr><td align="center">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:600px;background:#ffffff;border-radius:20px;overflow:hidden;border:1px solid #e1e7f1">
@@ -19,7 +16,7 @@ function layout(s: SiteSettings, title: string, body: string) {
 <h1 style="margin:8px 0 0;font-size:24px;line-height:1.25">${esc(title)}</h1></td></tr>
 <tr><td style="padding:28px 32px;font-size:15px;line-height:1.6;color:#334155">${body}</td></tr>
 <tr><td style="padding:20px 32px;background:#f3f6fb;font-size:13px;color:#64748b">
-${esc(dates)} · ${esc(venueLine(s))}<br/><a href="${absoluteUrl("/")}" style="color:#3b5bdb">${esc(absoluteUrl("/").replace(/^https?:\/\//, ""))}</a>
+${esc(s.organisedBy || "Daffodil International University")} · ${esc(venueLine(s))}<br/><a href="${absoluteUrl("/")}" style="color:#3b5bdb">${esc(absoluteUrl("/").replace(/^https?:\/\//, ""))}</a>
 </td></tr></table></td></tr></table></body></html>`;
 }
 
@@ -27,54 +24,34 @@ const box = (inner: string) => `<div style="margin:18px 0;padding:16px 18px;bord
 const button = (href: string, label: string) =>
   `<a href="${href}" style="display:inline-block;margin-top:8px;padding:12px 20px;border-radius:999px;background:#3b5bdb;color:#ffffff;text-decoration:none;font-weight:600">${esc(label)}</a>`;
 
-export function trainingIcs(s: SiteSettings) {
-  return buildIcs(
-    batchDays(s).map((d) => ({
-      uid: `diu-ai-training-day-${d.day}@${new URL(absoluteUrl("/")).hostname}`,
-      title: `${s.programmeName}, Day ${d.day}`,
-      start: d.start,
-      end: d.end,
-      description: `${s.tagline}\n${absoluteUrl("/programme")}`,
-      location: s.venueAddress || venueLine(s),
-      url: absoluteUrl("/"),
-    })),
-    s.programmeName,
-  );
-}
-
+/** The confirmation of a training request (the Contact us form). */
 export function registrationEmail(s: SiteSettings, r: { name: string; email: string; regId: string }): MailInput {
-  const dates = formatDateRange(s.startDate, s.endDate);
-  const review = `Places in each batch are limited, so the organising committee reviews every registration: you'll hear from us ${replyBy(s)} with your place in the next batch with free seats.`;
+  const next = `The organising team reads every request and will get back to you ${replyBy(s)} to agree the focus, length and format of your training, and to design the sessions around your team.`;
   const body = `<p>Hi ${esc(r.name)},</p>
-<p>Thank you for registering for the <strong>${esc(s.programmeName)}</strong>. ${esc(review)}</p>
-${box(`<p style="margin:0;font-size:13px;color:#64748b">Your registration ID</p><p style="margin:4px 0 0;font-size:22px;font-weight:700;letter-spacing:.06em;color:#3b5bdb">${esc(r.regId)}</p>`)}
-<p><strong>Next batch:</strong> ${esc(dates)}<br/><strong>Where:</strong> ${esc(venueLine(s))}</p>
-<p>Keep this registration ID: once your place is confirmed, carry it and a valid photo ID to the campus gate, and bring a charged laptop to the hands-on sessions. The exact room and any updates will be shared on the website and by e-mail.</p>
+<p>Thank you for contacting <strong>${esc(s.programmeName)}</strong> about a custom AI training. ${esc(next)}</p>
+${box(`<p style="margin:0;font-size:13px;color:#64748b">Your reference number</p><p style="margin:4px 0 0;font-size:22px;font-weight:700;letter-spacing:.06em;color:#3b5bdb">${esc(r.regId)}</p>`)}
+<p>Please quote this reference number when you write to us. Every session is hands-on, so everyone taking part brings a charged laptop; for sessions on campus, they also carry a valid photo ID to the gate.</p>
 ${s.confirmationNote ? `<p>${esc(s.confirmationNote)}</p>` : ""}
-<p>We've attached a calendar file with the next batch's dates. To build your own agenda of sessions, sign in on the website with this e-mail address and your registration ID.</p>
-<p>${button(absoluteUrl("/programme"), "View the schedule")}</p>
+<p>While you wait, the sample plan shows what a training can include.</p>
+<p>${button(absoluteUrl("/programme"), "See the sample plan")}</p>
 <p style="margin-top:24px">Best wishes,<br/>The organising team</p>`;
   const text = `Hi ${r.name},
 
-Thank you for registering for the ${s.programmeName}. ${review}
+Thank you for contacting ${s.programmeName} about a custom AI training. ${next}
 
-Your registration ID: ${r.regId}
-Next batch: ${dates}
-Where: ${venueLine(s)}
+Your reference number: ${r.regId}
 
-Keep this registration ID: once your place is confirmed, carry it and a valid photo ID to the campus gate, and bring a charged laptop.
+Please quote this reference number when you write to us. Every session is hands-on, so everyone taking part brings a charged laptop; for sessions on campus, they also carry a valid photo ID to the gate.
 ${s.confirmationNote ? `\n${s.confirmationNote}\n` : ""}
-To build your own agenda, sign in on the website with this e-mail address and your registration ID.
-Schedule: ${absoluteUrl("/programme")}
+Sample plan: ${absoluteUrl("/programme")}
 
 The organising team`;
   return {
     to: r.email,
-    subject: `Registration received: ${s.programmeName} (${r.regId})`,
-    html: layout(s, "We've received your registration", body),
+    subject: `Training request received: ${s.programmeName} (${r.regId})`,
+    html: layout(s, "We've received your training request", body),
     text,
     replyTo: s.contactEmail || undefined,
-    attachments: [{ filename: "diu-ai-training.ics", content: trainingIcs(s), contentType: "text/calendar; charset=utf-8; method=PUBLISH" }],
     visitor: true,
   };
 }

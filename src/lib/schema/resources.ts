@@ -86,7 +86,7 @@ export interface CollectionDef {
   singular: string;
   description: string;
   icon: AdminIcon;
-  group: "Content" | "Programme" | "People" | "Past batches";
+  group: "Content" | "Programme" | "People" | "Past trainings";
   fields: FieldDef[];
   columns: Column[];
   sort: Record<string, 1 | -1>;
@@ -137,7 +137,7 @@ export const COLLECTIONS: CollectionDef[] = [
     model: "Trainer",
     label: "Trainers",
     singular: "Trainer",
-    description: "The trainers of both programmes. Their cards appear on the Trainers page, the lead trainer in the spotlight at its top; featured trainers also appear on the home page.",
+    description: "The trainers. Their cards appear on the Trainers page, the lead trainer in the spotlight at its top; featured trainers also appear on the home page.",
     icon: "mic",
     group: "Programme",
     titleKey: "name",
@@ -166,7 +166,7 @@ export const COLLECTIONS: CollectionDef[] = [
       image("photo", "Photo", { help: "Square photos look best. Uploads are compressed automatically." }),
       richtext("bio", "Profile"),
       text("expertise", "Areas of expertise", { placeholder: "Machine learning, data science, software engineering" }),
-      richtext("teaching", "What they teach in the programmes"),
+      richtext("teaching", "What they teach"),
       url("website", "Profile page", { width: "half", help: "e.g. their faculty page on the DIU website." }),
       url("linkedin", "LinkedIn", { width: "half" }),
       url("x", "X / Twitter", { width: "half" }),
@@ -182,7 +182,7 @@ export const COLLECTIONS: CollectionDef[] = [
     model: "Session",
     label: "Schedule",
     singular: "Session",
-    description: "Day-wise schedule of the next batch. Set the schedule status (hidden / draft / final) in Site settings → Schedule → Schedule.",
+    description: "The sample plan: what a training can include, day by day (Day 1, Day 2…, no dates). Set its status (hidden / sample / final) in Site settings → Schedule → Schedule.",
     icon: "calendar",
     group: "Programme",
     titleKey: "title",
@@ -205,7 +205,7 @@ export const COLLECTIONS: CollectionDef[] = [
       time("end", "End time", { width: "third" }),
       select("type", "Type", opts(SESSION_TYPES, (k) => SESSION_TYPE_META[k].label), { required: true, width: "half" }),
       select("theme", "Programme", themeOptions, { width: "half" }),
-      text("room", "Room / lab", { width: "half", placeholder: "Computer lab 3", help: "Leave blank to say the room is e-mailed before the batch." }),
+      text("room", "Room / lab", { width: "half", placeholder: "Computer lab 3", help: "Leave blank to say the room is confirmed by e-mail." }),
       text("trainerNote", "Trainer text", { width: "half", help: "Shown when no trainer is linked, e.g. “DIU CSE trainers”." }),
       refList("trainers", "Trainers", "trainers"),
       ref("moderator", "Moderator (discussions)", "trainers", { width: "half" }),
@@ -350,7 +350,7 @@ export const COLLECTIONS: CollectionDef[] = [
       email("loginEmail", "Sign-in e-mail (optional, never shown)", {
         width: "half",
         private: true,
-        help: "With a sign-in code, lets them sign in on the website (to save their agenda), as they have no registration.",
+        help: "With a sign-in code, lets them sign in on the website (to save their agenda), as they have sent no training request.",
       }),
       text("loginCode", "Sign-in code", {
         width: "half",
@@ -393,9 +393,9 @@ export const COLLECTIONS: CollectionDef[] = [
     model: "GalleryItem",
     label: "Photo gallery",
     singular: "Photo",
-    description: "Photos from past batches. Turn the gallery on in Site settings → Site-wide → Features & past batches when ready.",
+    description: "Photos from past trainings. Turn the gallery on in Site settings → Site-wide → Features & past trainings when ready.",
     icon: "image",
-    group: "Past batches",
+    group: "Past trainings",
     titleKey: "caption",
     tags: ["gallery"],
     publicPath: "/gallery",
@@ -421,9 +421,9 @@ export const COLLECTIONS: CollectionDef[] = [
     model: "Talk",
     label: "Slides & recordings",
     singular: "Recording",
-    description: "Session slides and recordings from past batches. Turn this section on in Site settings → Site-wide → Features & past batches.",
+    description: "Session slides and recordings from past trainings. Turn this section on in Site settings → Site-wide → Features & past trainings.",
     icon: "video",
-    group: "Past batches",
+    group: "Past trainings",
     titleKey: "title",
     tags: ["talks"],
     publicPath: "/recordings",
@@ -450,9 +450,9 @@ export const COLLECTIONS: CollectionDef[] = [
     model: "Participant",
     label: "Past participants",
     singular: "Participant",
-    description: "People who completed a batch. They are listed on the Past participants page by batch and programme; those with a quote and “Feature their quote” ticked appear under “What participants say” and on the home page.",
+    description: "People who completed a training. They are listed on the Past participants page by training and focus area; those with a quote and “Feature their quote” ticked appear under “What participants say” and on the home page.",
     icon: "award",
-    group: "Past batches",
+    group: "Past trainings",
     titleKey: "name",
     tags: ["participants"],
     publicPath: "/past-participants",
@@ -462,7 +462,7 @@ export const COLLECTIONS: CollectionDef[] = [
       { key: "photo", label: "", kind: "image" },
       { key: "name", label: "Name" },
       { key: "organisation", label: "Organisation" },
-      { key: "batch", label: "Batch" },
+      { key: "batch", label: "Training" },
       { key: "theme", label: "Programme", kind: "option" },
       { key: "featured", label: "Quote", kind: "boolean" },
       { key: "published", label: "Published", kind: "boolean" },
@@ -471,9 +471,9 @@ export const COLLECTIONS: CollectionDef[] = [
       text("name", "Full name", { required: true, width: "half" }),
       text("designation", "Designation", { width: "half", placeholder: "Assistant Manager, HR" }),
       text("organisation", "Organisation", { width: "half" }),
-      select("theme", "Programme", themeOptions, { required: true, width: "half", help: "General: they completed both programmes." }),
-      text("batch", "Batch", { required: true, width: "half", placeholder: "Batch 1 · January 2026", help: "Participants with the same batch text are grouped together." }),
-      date("completed", "Completed on", { width: "half", help: "Orders the batches, newest first." }),
+      select("theme", "Focus area", themeOptions, { required: true, width: "half", help: "General: their training covered several focus areas." }),
+      text("batch", "Training", { required: true, width: "half", placeholder: "Office productivity training · Acme Bank", help: "Participants with the same training text are grouped together." }),
+      date("completed", "Completed on", { width: "half", help: "Orders the trainings, newest first (the date is not shown on the site)." }),
       image("photo", "Photo (optional)", { help: "Only with their permission. Square photos look best." }),
       textarea("quote", "What they said about the training (optional)", { maxLength: 400, rows: 3, help: "Only with their permission." }),
       bool("featured", "Feature their quote", { help: "Shows the quote under “What participants say” and on the home page." }),
@@ -539,8 +539,8 @@ export interface SettingsPage {
 }
 
 const statusOptions = [
-  { value: "open", label: "Open: enrolling for the next batch" },
-  { value: "closed", label: "Paused: not taking registrations" },
+  { value: "open", label: "Open: taking training requests" },
+  { value: "closed", label: "Paused: not taking requests" },
 ];
 
 /** Built-in shades of the accent colours (light mode), shown as hints. */
@@ -556,41 +556,34 @@ export const SETTINGS_PAGES: SettingsPage[] = [
     key: "site",
     title: "Site-wide",
     path: "/",
-    description: "Programme details, registration, colours and the parts every page shares: navigation, header, footer and banner.",
+    description: "Programme details, Contact us, colours and the parts every page shares: navigation, header, footer and banner.",
     sections: [
       section(
         "details",
         "Programme details",
         undefined,
         [
-          text("programmeName", "Name", { required: true, width: "half", help: "Used in the logo, page titles, e-mails and calendar invites. The training runs all year, so it is best without a year; one written at the end (e.g. 2027) appears under the logo." }),
+          text("programmeName", "Name", { required: true, width: "half", help: "Used in the logo, page titles and e-mails. The site shows no dates, so it is best without a year; one written at the end (e.g. 2027) appears under the logo." }),
           text("shortName", "Short name", { width: "half", help: "Used where space is tight: the admin panel and the name of the site when installed as an app." }),
           text("tagline", "Tagline"),
           textarea("description", "Short description", { help: "Used for search engines and social media previews.", maxLength: 300 }),
           text("organisedBy", "Organised by"),
-          datetime("startDate", "Next batch starts", { required: true, width: "half", help: "Bangladesh Standard Time. The schedule's days and calendar invites follow it." }),
-          datetime("endDate", "Next batch ends", { required: true, width: "half" }),
           text("venueName", "Venue", { width: "half" }),
-          text("venueHall", "Room / building", { width: "half", help: "Leave blank to say the room is e-mailed before each batch." }),
+          text("venueHall", "Room / building", { width: "half", help: "Leave blank to say the room is confirmed by e-mail." }),
           textarea("venueAddress", "Full address", { rows: 2 }),
         ],
         { anchor: "home.hero" },
       ),
       section(
         "registration",
-        "Registration",
+        "Contact us",
         undefined,
         [
-          select("registrationStatus", "Registration", statusOptions, { width: "half", help: "Also shown on Aura's placards and the registration cards on the home page." }),
-          datetime("registrationDeadline", "Registration deadline", { width: "half" }),
-          datetime("registrationReplyBy", "Places confirmed by", {
-            width: "half",
-            help: "The date by which the organising committee tells registrants whether they have a place. Texts that say {replyBy} show “by” and this date; leave it blank for “by e-mail”.",
-          }),
-          url("registrationUrl", "External registration form (optional)", { help: "Leave blank to use the built-in registration form." }),
+          select("registrationStatus", "Training requests", statusOptions, { width: "half", help: "Also shown on the Contact us cards on the home page." }),
+          url("registrationUrl", "External request form (optional)", { help: "Leave blank to use the built-in Contact us form." }),
           textarea("confirmationNote", "Extra text for the confirmation e-mail"),
         ],
-        { description: "Use the built-in form, or paste a link to an external form (Google Forms…).", path: "/register", anchor: "register.hero" },
+        { description: "Use the built-in training request form, or paste a link to an external form (Google Forms…).", path: "/contact", anchor: "register.hero" },
       ),
       section(
         "colours",
@@ -624,7 +617,7 @@ export const SETTINGS_PAGES: SettingsPage[] = [
       section("header", "Header", "siteHeader", [], { anchor: "site.header" }),
       section("account", "Sign-in", "siteAccount", [], {
         description:
-          "Visitors sign in (Sign in in the navigation bar, or by starring a session in the schedule) to keep their agenda. There is no sign-up: registered participants use their registration ID, volunteers their admin panel password, and coordinators the sign-in e-mail and code set on their entry under Organisers & volunteers.",
+          "Visitors sign in (Sign in in the navigation bar, or by starring a session in the schedule) to keep their agenda. There is no sign-up: participants use the reference number of their training request, volunteers their admin panel password, and coordinators the sign-in e-mail and code set on their entry under Organisers & volunteers.",
         anchor: "site.header",
       }),
       section("footer", "Footer", "siteFooter", [], { anchor: "site.footer" }),
@@ -642,7 +635,7 @@ export const SETTINGS_PAGES: SettingsPage[] = [
         [
           email("contactEmail", "Official e-mail", { width: "half" }),
           text("contactPhone", "Phone (optional)", { width: "half" }),
-          email("notifyEmail", "Send form notifications to", { width: "half", help: "New enquiries are e-mailed here (needs SMTP). Registrations are listed under Registrations." }),
+          email("notifyEmail", "Send form notifications to", { width: "half", help: "New enquiries are e-mailed here (needs SMTP). Training requests are listed under Registrations." }),
           url("website", "Website", { width: "half" }),
           url("linkedin", "LinkedIn", { width: "half" }),
           url("x", "X / Twitter", { width: "half" }),
@@ -661,15 +654,15 @@ export const SETTINGS_PAGES: SettingsPage[] = [
           select("auraEyes", "Eye colour", AURA_EYE_KEYS.map((k) => ({ value: k, label: AURA_EYE_CHOICES[k].label })), {
             required: true,
             width: "half",
-            help: "Each section's own colour matches its role (amber for AI for Professionals, mint for AI for Workspace…).",
+            help: "Each section's own colour matches its role (amber for professional work, mint for office work…).",
           }),
         ],
         { description: "Aura's look across the site. The preview shows the Meet Aura page, with every look he takes.", path: "/meet-aura", anchor: "meetAura.hero" },
       ),
-      section("features", "Features & past batches", undefined, [
+      section("features", "Features & past trainings", undefined, [
         bool("showAssistant", "Show “Ask Aura”, the site search, in the bottom-right corner of every page"),
-        bool("showGallery", "Past batches: show the photo gallery"),
-        bool("showTalks", "Past batches: show session slides & recordings"),
+        bool("showGallery", "Past trainings: show the photo gallery"),
+        bool("showTalks", "Past trainings: show session slides & recordings"),
       ]),
       section("seo", "SEO & analytics", undefined, [
         text("gaId", "Google Analytics measurement ID", { placeholder: "G-XXXXXXXXXX", width: "half" }),
@@ -690,18 +683,18 @@ export const SETTINGS_PAGES: SettingsPage[] = [
         bool("showHeroPhoto", "Show the photo of the DIU campus behind the hero"),
         image("heroPhoto", "Hero photo", { help: "Leave it empty for the built-in photo of DIU's academic building at Daffodil Smart City, framed so that its “Daffodil International University” sign shows above Aura. An uploaded landscape photo (16:9 works best) sits at the top right instead and fades into the background towards the title." }),
       ], {
-        description: "The name, tagline, batch dates and venue come from Site-wide → Programme details.",
+        description: "The name, tagline and venue come from Site-wide → Programme details.",
       }),
       section("placard", "Hero announcements", "homePlacard", [], {
         description:
-          "Aura holds up two placards in turn in the hero: one for AI for Professionals, one for AI for Workspace. {status} in a placard becomes the registration status (Site-wide → Registration) in the words below, and turns to paused by itself at the deadline. Clear one placard to show only the other.",
+          "Aura holds up two placards in turn in the hero: one for professional work, one for office work. {status} in a placard becomes whether training requests are open (Site-wide → Contact us), in the words below. Clear one placard to show only the other.",
       }),
-      section("register", "Registration choice", "homeRegister", [], {
-        description: "The heading and two compact cards along the foot of the hero, one for each programme; each opens the registration form with its programme ticked. Their status comes from Site-wide → Registration.",
+      section("register", "Contact us cards", "homeRegister", [], {
+        description: "The heading and two compact cards along the foot of the hero, one for each focus area; each opens the Contact us form with its focus area ticked. Their status comes from Site-wide → Contact us.",
       }),
-      section("invite", "Enrolment", "homeInvite", [image("invitePhoto", "Poster image", { help: "Leave it empty for the built-in photo of the DIU campus. An uploaded landscape picture (16:9, e.g. 1920×1080) replaces it across the top of the poster, under its label and badge, fading into the poster below." })], {
+      section("invite", "Custom training", "homeInvite", [image("invitePhoto", "Poster image", { help: "Leave it empty for the built-in photo of the DIU campus. An uploaded landscape picture (16:9, e.g. 1920×1080) replaces it across the top of the poster, under its label and badge, fading into the poster below." })], {
         description:
-          "Under the hero: that new batches start all year round and anyone can register at any time, that places are limited and confirmed by the organising team, what to expect, the invitation to bring a real task, and the poster with its picture. Its dates and venue come from Site-wide → Programme details, and the date in {replyBy} from Site-wide → Registration.",
+          "Under the hero: that every training is designed for the organisation that asks for it, how the sessions use the industry's own tasks, the efficiency gains they aim at, the Contact us button, and the poster with its picture. Its venue comes from Site-wide → Programme details.",
       }),
       section("highlights", "Highlight strip", "homeHighlights", [
         objects("highlights", "Highlights", "Highlight", [
@@ -711,19 +704,19 @@ export const SETTINGS_PAGES: SettingsPage[] = [
         ], { maxItems: 6 }),
       ]),
       section("news", "Announcements", "homeNews", [], { description: "The announcements themselves are added under Announcements." }),
-      section("themes", "Programmes", "homeThemes", [
-        objects("themes", "Programmes", "Programme", [
-          select("key", "Programme", themeOptions.filter((t) => t.value !== "general"), { required: true, width: "half" }),
+      section("themes", "What we train", "homeThemes", [
+        objects("themes", "Focus areas", "Focus area", [
+          select("key", "Focus area", themeOptions.filter((t) => t.value !== "general"), { required: true, width: "half" }),
           text("title", "Title", { required: true, width: "half" }),
           textarea("description", "Description (2–3 lines)", { rows: 3 }),
-          image("image", "Photo", { help: "A landscape photo (16:9 works best) across the top of the card, with Aura below it. Leave it empty to use the built-in photo for the programme." }),
+          image("image", "Photo", { help: "A landscape photo (16:9 works best) across the top of the card, with Aura below it. Leave it empty to use the built-in photo for the focus area." }),
         ], { titleKey: "title", maxItems: 2 }),
       ]),
       section("about", "About", "homeAbout", [
         objects("aboutPoints", "Topics around Aura", "Topic", [
           text("title", "Topic (two or three words)", { required: true, width: "half", maxLength: 24 }),
           select("icon", "Icon", iconOptions, { width: "half" }),
-          textarea("description", "Summary (shown in Aura's speech bubble)", { rows: 2, maxLength: 150, help: "You can write {dates}, {venue} or {programme}; they are filled in from these settings." }),
+          textarea("description", "Summary (shown in Aura's speech bubble)", { rows: 2, maxLength: 150, help: "You can write {venue} or {programme}; they are filled in from these settings." }),
         ], { maxItems: 8, help: "Up to 8 topics around Aura, each summarising part of the About page. Aura waits in a thinking pose; hovering or tapping a topic makes him point at it and answer with its summary." }),
       ]),
       section("trainers", "Trainers", "homeTrainers", [
@@ -769,15 +762,15 @@ export const SETTINGS_PAGES: SettingsPage[] = [
     title: "Schedule",
     path: "/programme",
     sections: [
-      section("hero", "Hero", "programmeHero", [file("schedulePdf", "Schedule PDF (optional)", { accept: "application/pdf", help: "Upload to replace the automatically generated PDF." })]),
+      section("hero", "Hero", "programmeHero", [file("schedulePdf", "Sample plan PDF (optional)", { accept: "application/pdf", help: "Upload to replace the automatically generated PDF." })]),
       section("overview", "At a glance", "programmeOverview"),
       section("schedule", "Schedule", "programmeSchedule", [
-        select("programmeStatus", "Schedule status", [
-          { value: "tba", label: "Hidden: say each batch's schedule is e-mailed" },
-          { value: "draft", label: "Draft (show sessions marked “subject to change”)" },
-          { value: "final", label: "Final" },
+        select("programmeStatus", "Sample plan status", [
+          { value: "tba", label: "Hidden: say every training is planned with you" },
+          { value: "draft", label: "Sample (show sessions marked “adapted for you”)" },
+          { value: "final", label: "Shown without that mark" },
         ]),
-        textarea("programmeNote", "Note above the schedule"),
+        textarea("programmeNote", "Note above the sample plan"),
       ], { description: "Sessions are added under Schedule." }),
       section("plan", "Plan your visit", "programmePlan"),
     ],
@@ -800,25 +793,25 @@ export const SETTINGS_PAGES: SettingsPage[] = [
   },
   {
     key: "register",
-    title: "Registration",
-    path: "/register",
+    title: "Contact us",
+    path: "/contact",
     sections: [
       section("hero", "Hero", "registerHero"),
-      section("form", "Form & status", "registerForm", [], { description: "Whether registration is open, and an external form link, are set under Site-wide → Registration." }),
+      section("form", "Form & status", "registerForm", [], { description: "Whether training requests are open, and an external form link, are set under Site-wide → Contact us." }),
       section("fields", "Form fields", "registerFormText", [formFieldList("registerFields", "Fields", "register", { help: FIELDS_HELP })], {
-        description: "The registration form's fields, in three steps, and its texts. The preview shows the form even while registration isn't open.",
+        description: "The training request form's fields, in three steps, and its texts. The preview shows the form even while requests are paused.",
         within: "form",
         anchor: "register.form",
       }),
-      section("fees", "Fees", "registerFees", [
-        objects("fees", "Fees", "Fee", [
-          text("category", "Category", { required: true, width: "half", placeholder: "Students" }),
+      section("fees", "Pricing", "registerFees", [
+        objects("fees", "Prices", "Price", [
+          text("category", "Training", { required: true, width: "half", placeholder: "Custom training" }),
           text("amount", "Amount", { width: "half", placeholder: "On request" }),
           text("note", "Note"),
         ]),
         textarea("feeNote", "Fee note", { placeholder: "Group fees are available for teams from one organisation." }),
       ]),
-      section("deadlines", "Deadlines", "registerDeadlines"),
+      section("deadlines", "How it works", "registerDeadlines"),
     ],
   },
   {
@@ -907,14 +900,14 @@ export const SETTINGS_PAGES: SettingsPage[] = [
     key: "gallery",
     title: "Photo gallery",
     path: "/gallery",
-    description: "Shown once “Past batches: show the photo gallery” is on (Site-wide → Features); the preview here shows it before that. Photos are added under Photo gallery.",
+    description: "Shown once “Past trainings: show the photo gallery” is on (Site-wide → Features); the preview here shows it before that. Photos are added under Photo gallery.",
     sections: [section("hero", "Page", "galleryHero")],
   },
   {
     key: "talks",
     title: "Slides & recordings",
     path: "/recordings",
-    description: "Shown once “Past batches: show session slides & recordings” is on (Site-wide → Features); the preview here shows it before that. Recordings are added under Slides & recordings.",
+    description: "Shown once “Past trainings: show session slides & recordings” is on (Site-wide → Features); the preview here shows it before that. Recordings are added under Slides & recordings.",
     sections: [section("hero", "Page", "talksHero")],
   },
   {
@@ -926,7 +919,7 @@ export const SETTINGS_PAGES: SettingsPage[] = [
       section("hero", "Hero", "participantsHero"),
       section("stats", "Numbers", "participantsStats", [], { description: "Counted from the participants listed under Past participants." }),
       section("testimonials", "What participants say", "participantsTestimonials", [], { description: "The quotes of participants with “Feature their quote” ticked." }),
-      section("list", "Participants by batch", "participantsList"),
+      section("list", "Participants by training", "participantsList"),
       section("cta", "Closing call to action", "participantsCta"),
     ],
   },
@@ -980,7 +973,7 @@ export const SETTINGS_DEF: SingletonDef = {
 
 export const SINGLETONS = { settings: SETTINGS_DEF } as const;
 
-/* Form option lists used by the public registration forms */
+/* Form option lists used by the public forms */
 export const attendeeCategoryKeys = ATTENDEE_CATEGORIES;
 export const registrationStatusKeys = REGISTRATION_STATUSES;
 export const programmeStatusKeys = PROGRAMME_STATUSES;

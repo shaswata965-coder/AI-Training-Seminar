@@ -5,11 +5,10 @@ import { AuraArt } from "@/components/aura/AuraArt";
 import { AURA_EYE_CHOICES, auraLookSettings } from "@/components/aura/builds";
 import { auraLook } from "@/components/aura/presets";
 import { getSettings } from "@/lib/content/queries";
-import { formatDateRange } from "@/lib/format";
 import { svgDataUri, toSvgString } from "@/lib/svg-string";
 
 // A static string, so it describes the card rather than naming the programme (the name is edited in the admin).
-export const alt = "The training programme's title, dates and tagline beside Aura, the robot guide, with the Daffodil International University and Department of CSE names";
+export const alt = "The training's name and tagline beside Aura, the robot guide, with the Daffodil International University and Department of CSE names";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -56,13 +55,13 @@ export default async function OpenGraphImage() {
           </div>
           <div style={{ display: "flex", flexDirection: "column" }}>
             <div style={{ display: "flex", fontSize: 30, fontWeight: 700, color: "#5b3cc4", letterSpacing: 2 }}>
-              {`Next batch · ${formatDateRange(s.startDate, s.endDate)}`.toUpperCase()}
+              {"Custom AI training for your team".toUpperCase()}
             </div>
             <div style={{ display: "flex", fontSize: 86, fontWeight: 800, lineHeight: 1.02, marginTop: 14 }}>{s.programmeName}</div>
             <div style={{ display: "flex", fontSize: 30, color: "#475569", marginTop: 22, lineHeight: 1.3 }}>{s.tagline}</div>
           </div>
           <div style={{ display: "flex", gap: 14, fontSize: 24, color: "#334155" }}>
-            {["AI for Professionals", "AI for Workspace", "Hands-on labs"].map((t) => (
+            {["Professional work", "Office work", "Efficiency gains"].map((t) => (
               <div key={t} style={{ display: "flex", flexShrink: 0, padding: "8px 16px 8px 14px", borderRadius: "0 8px 8px 0", borderLeft: "4px solid #8b6cf0", background: "rgba(255,255,255,0.7)" }}>
                 {t}
               </div>
@@ -72,7 +71,7 @@ export default async function OpenGraphImage() {
         <div style={{ display: "flex", flex: 1, alignItems: "center", justifyContent: "center" }}>
           <img src={aura} alt="" width={400} height={462} />
         </div>
-        <div style={{ position: "absolute", left: 64, bottom: 18, display: "flex", fontSize: 18, color: "#64748b" }}>{formatDateRange(s.startDate, s.endDate)} · {s.venueName}</div>
+        <div style={{ position: "absolute", left: 64, bottom: 18, display: "flex", fontSize: 18, color: "#64748b" }}>{s.organisedBy || "Daffodil International University"} · {s.venueName}</div>
       </div>
     ),
     {

@@ -1,8 +1,6 @@
 import { ExternalLink, Mail } from "lucide-react";
 import type { Metadata } from "next";
 import { Aura } from "@/components/aura/Aura";
-import { Deadline } from "@/components/forms/Deadline";
-import { DeadlineGate } from "@/components/forms/DeadlineGate";
 import { RegistrationForm } from "@/components/forms/RegistrationForm";
 import { PageHero } from "@/components/layout/PageHero";
 import { LoopArt } from "@/components/portals/PortalArt";
@@ -14,21 +12,19 @@ import { cn } from "@/lib/cn";
 import { getSettings, inPreview } from "@/lib/content/queries";
 import type { SiteSettings } from "@/lib/content/types";
 import { copy } from "@/lib/copy";
-import { batchCalendarLinks } from "@/lib/training";
-import { formatDateRange } from "@/lib/format";
 import { absoluteUrl } from "@/lib/paths";
 import { isShown } from "@/lib/schema/section-order";
 
 export async function generateMetadata(): Promise<Metadata> {
   const s = await getSettings();
   return {
-    title: "Registration",
-    description: `Register for the next batch of the ${s.programmeName} at Daffodil International University, ${formatDateRange(s.startDate, s.endDate)}. Fees, deadlines and the registration form.`,
-    alternates: { canonical: absoluteUrl("/register") },
+    title: "Contact us",
+    description: `Contact ${s.programmeName} at Daffodil International University for custom AI training designed around your industry, your office work and your team's tasks.`,
+    alternates: { canonical: absoluteUrl("/contact") },
   };
 }
 
-export default async function RegisterPage() {
+export default async function ContactPage() {
   const [s, preview] = await Promise.all([getSettings(), inPreview()]);
   const hero = copy(s, "registerHero");
   const form = copy(s, "registerForm");
@@ -46,11 +42,9 @@ export default async function RegisterPage() {
   );
   const status =
     s.registrationStatus === "open" ? (
-      <DeadlineGate deadline={s.registrationDeadline} closed={closedBadge}>
-        <Badge tone="mint" dot>
-          {hero.open}
-        </Badge>
-      </DeadlineGate>
+      <Badge tone="mint" dot>
+        {hero.open}
+      </Badge>
     ) : (
       closedBadge
     );
@@ -90,11 +84,9 @@ export default async function RegisterPage() {
                   </div>
                 ) : preview ? (
                   // The admin's live preview shows the form whatever the status, so its fields can be edited.
-                  <RegistrationForm fields={fields} text={copy(s, "registerFormText")} calendar={batchCalendarLinks(s)} shareUrl={absoluteUrl("/")} programmeName={s.programmeName} />
+                  <RegistrationForm fields={fields} text={copy(s, "registerFormText")} shareUrl={absoluteUrl("/")} programmeName={s.programmeName} />
                 ) : s.registrationStatus === "open" ? (
-                  <DeadlineGate deadline={s.registrationDeadline} closed={<PausedCard s={s} />}>
-                    <RegistrationForm fields={fields} text={copy(s, "registerFormText")} calendar={batchCalendarLinks(s)} shareUrl={absoluteUrl("/")} programmeName={s.programmeName} />
-                  </DeadlineGate>
+                  <RegistrationForm fields={fields} text={copy(s, "registerFormText")} shareUrl={absoluteUrl("/")} programmeName={s.programmeName} />
                 ) : (
                   <PausedCard s={s} />
                 )}
@@ -109,7 +101,7 @@ export default async function RegisterPage() {
                     <h2 className="font-display text-xl font-bold text-fg">{fees.title}</h2>
                     {s.fees.length ? (
                       <table className="mt-4 w-full text-left text-sm">
-                        <caption className="sr-only">Registration fees by category</caption>
+                        <caption className="sr-only">Training fees</caption>
                         <thead>
                           <tr className="text-xs tracking-[0.12em] text-subtle uppercase">
                             <th scope="col" className="pb-2 font-bold">
@@ -140,7 +132,7 @@ export default async function RegisterPage() {
                   <div data-edit="register.deadlines" className="grid content-start gap-5">
                     <div className="card grid gap-3 p-6">
                       <h2 className="font-display text-xl font-bold text-fg">{dl.title}</h2>
-                      {s.registrationDeadline ? <Deadline iso={s.registrationDeadline} label={dl.closes} /> : <p className="text-sm text-muted">{dl.rolling}</p>}
+                      {dl.rolling ? <p className="text-sm text-muted">{dl.rolling}</p> : null}
                     </div>
                     {dl.portalTitle && isShown(s, "home", "themes") ? (
                       <div>
@@ -159,7 +151,7 @@ export default async function RegisterPage() {
   );
 }
 
-/** Shown instead of the form while registration is paused (or past its deadline). */
+/** Shown instead of the form while training requests are paused. */
 function PausedCard({ s }: { s: SiteSettings }) {
   const c = copy(s, "registerForm");
   return (

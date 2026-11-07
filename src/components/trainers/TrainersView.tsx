@@ -238,7 +238,7 @@ export function TrainersView({
                       <CalendarDays size={15} aria-hidden /> {p.dayLabel} · {timeRange(p.start, p.end)}
                     </span>
                     <span className="inline-flex items-center gap-1.5">
-                      <MapPin size={15} aria-hidden /> {p.room || "Room e-mailed before your batch"}
+                      <MapPin size={15} aria-hidden /> {p.room || "Room confirmed by e-mail"}
                     </span>
                   </p>
                   <div className="mt-4 grid gap-2">
@@ -332,7 +332,7 @@ export function TrainersView({
                           <span>
                             <span className="block font-semibold text-fg">{a.title}</span>
                             <span className="text-sm text-muted">
-                              {a.dayLabel} · {timeRange(a.start, a.end)} · {a.room || "Room e-mailed before your batch"}
+                              {a.dayLabel} · {timeRange(a.start, a.end)} · {a.room || "Room confirmed by e-mail"}
                             </span>
                           </span>
                           <span className="btn-ico-r text-subtle">

@@ -10,7 +10,7 @@ import type { AdminUser } from "./admin-auth";
  * that only those pages' fields can change, whatever the request contains.
  */
 
-/** Shown on every page of the site, and used by placeholders such as {programme} and {dates}. */
+/** Shown on every page of the site, and used by placeholders such as {programme} and {venue}. */
 const PLACEHOLDER_FIELDS = ["programmeName", "shortName", "startDate", "endDate", "venueName", "venueHall", "tagline", "organisedBy"];
 
 /** The top-level settings fields a page tab edits: its sections' texts and colours, their other settings, and which are hidden. */

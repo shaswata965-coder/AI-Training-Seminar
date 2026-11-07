@@ -8,7 +8,6 @@ import { launchFlagScript } from "@/components/loading/flag";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import { getSettings } from "@/lib/content/queries";
 import type { SiteSettings } from "@/lib/content/types";
-import { formatDateRange } from "@/lib/format";
 import { BASE_PATH, SITE_ORIGIN, withBase } from "@/lib/paths";
 
 // Self-hosted variable fonts (latin), so builds don't depend on Google Fonts. See app/fonts/LICENSE.md.
@@ -39,7 +38,7 @@ export async function generateMetadata(): Promise<Metadata> {
     twitter: {
       card: "summary_large_image",
       title,
-      description: `${formatDateRange(s.startDate, s.endDate)} · ${s.venueName}`,
+      description: `Custom AI training for teams and professionals · ${s.venueName}`,
       ...(s.ogImage ? { images: [withBase(s.ogImage)] } : {}),
     },
     formatDetection: { telephone: false },

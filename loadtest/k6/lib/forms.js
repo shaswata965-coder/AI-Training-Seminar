@@ -20,8 +20,8 @@ export const submitTime = new Trend("submit_time", true);
 const FIRST = ["Ayesha", "Rahim", "Nusrat", "Tanvir", "Farhana", "Imran", "Sadia", "Karim", "Tasnim", "Arif", "Mitu", "Shakil", "Rumana", "Sabbir", "Lamia", "Fahim"];
 const LAST = ["Rahman", "Hossain", "Ahmed", "Islam", "Chowdhury", "Khan", "Akter", "Alam", "Sarker", "Das", "Roy", "Uddin", "Haque", "Begum"];
 const ORGS = ["Daffodil International University", "A Dhaka bank", "A garments exporter", "A telecom company", "A software firm", "A government office", "An NGO", "A school in Savar", "A start-up", "A hospital"];
-const CATEGORIES = ["Student", "Student", "Faculty / teacher", "Working professional", "Working professional", "Government / NGO staff", "Entrepreneur / business owner", "Other"];
-const PROGRAMMES = ["AI for Professionals", "AI for Workspace"];
+const CATEGORIES = ["A company or organisation", "A team or department", "A working professional", "A working professional", "A teacher / educational institution", "Government / NGO", "An entrepreneur / business owner", "Other"];
+const PROGRAMMES = ["AI for Professional Work", "AI for Office Work", "Saving time on routine tasks"];
 const CITIES = ["Dhaka", "Savar", "Gazipur", "Narayanganj", "Chattogram", "Sylhet"];
 
 const digits = (n) => Array.from({ length: n }, () => Math.floor(Math.random() * 10)).join("");
@@ -39,13 +39,14 @@ export function registrationPayload(id) {
     designation: pick(["Assistant Manager", "BSc student", "Lecturer", "Officer", "Founder", ""]),
     category: pick(CATEGORIES),
     city: pick(CITIES),
-    // At least one programme: the field is required.
+    // At least one focus area: the field is required.
     interests: Math.random() < 0.3 ? PROGRAMMES : [pick(PROGRAMMES)],
     experience: pick(["Never or hardly ever", "Now and then", "Every week", "Every day"]),
     tutorials: Math.random() < 0.6,
     accessibility: "",
     heardFrom: pick(["Social media", "E-mail", "Colleague or friend", "DIU website", "Other"]),
-    message: Math.random() < 0.2 ? "I'd like to use AI for the reports I write every week." : "",
+    // Required: what the team needs.
+    message: pick(["Our team of 12 writes weekly reports and wants AI to speed them up.", "Office staff of about 30: e-mails, spreadsheets and meeting notes.", "A bank branch team that wants to use AI safely with customer documents."]),
     consent: true,
     website: "", // the honeypot the real form leaves empty
   };

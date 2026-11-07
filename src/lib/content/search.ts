@@ -17,24 +17,24 @@ export async function buildAssistantIndex(s: SiteSettings): Promise<AssistantEnt
   const home = (key: string) => isShown(s, "home", key);
 
   const entries: AssistantEntry[] = [
-    { kind: "Page", title: n.home, href: "/", keywords: "home overview start next batch dates" },
-    { kind: "Page", title: n.programme, subtitle: "Each batch, day by day", href: "/programme", keywords: "schedule timetable agenda sessions day pdf calendar times rooms" },
-    { kind: "Page", title: n.trainers, subtitle: "DIU faculty who lead every batch", href: "/trainers", keywords: "trainers teachers faculty instructors lead profile" },
-    { kind: "Page", title: n.registration, subtitle: "Enrol any time for the next batch", href: s.registrationUrl || "/register", keywords: "register registration enrol enroll sign up apply seat fee fees deadline batch" },
+    { kind: "Page", title: n.home, href: "/", keywords: "home overview start custom ai training" },
+    { kind: "Page", title: n.programme, subtitle: "What a training can include, day by day", href: "/programme", keywords: "sample plan schedule timetable agenda sessions modules day pdf times" },
+    { kind: "Page", title: n.trainers, subtitle: "DIU faculty who lead every training", href: "/trainers", keywords: "trainers teachers faculty instructors lead profile" },
+    { kind: "Page", title: n.registration, subtitle: "Tell us what your team needs", href: s.registrationUrl || "/contact", keywords: "contact request custom training proposal quote price cost fee fees start team organisation register" },
     { kind: "Page", title: n.about, subtitle: n.aboutText, href: "/about", keywords: "about why what you will learn who should attend audience how it works" },
     { kind: "Page", title: n.tutorials, subtitle: n.tutorialsText, href: "/tutorials", keywords: "labs hands-on practical demos prerequisites laptop software materials" },
-    { kind: "Page", title: n.participants, subtitle: "Earlier batches, in their own words", href: "/past-participants", keywords: "past participants alumni testimonials quotes batches certificate" },
+    { kind: "Page", title: n.participants, subtitle: "People and teams we have trained", href: "/past-participants", keywords: "past participants alumni testimonials quotes trainings organisations certificate" },
     { kind: "Page", title: n.venue, subtitle: n.venueText, href: "/venue", keywords: "venue travel directions campus daffodil smart city savar birulia airport train metro bus road hotel stay entry gate id" },
     { kind: "Page", title: n.partners, subtitle: n.partnersText, href: "/partners", keywords: "partners sponsor sponsorship organisation company train your team" },
     { kind: "Page", title: n.organisers, subtitle: n.organisersText, href: "/organisers", keywords: "organisers team coordinators volunteers faculty students" },
     { kind: "Page", title: n.meetAura, subtitle: "Our mascot", href: "/meet-aura", keywords: "aura mascot robot" },
   ];
-  if (s.showGallery) entries.push({ kind: "Page", title: n.gallery, subtitle: n.galleryText, href: "/gallery", keywords: "photos pictures gallery past batches" });
-  if (s.showTalks) entries.push({ kind: "Page", title: n.talks, subtitle: n.talksText, href: "/recordings", keywords: "slides recordings videos past batches" });
+  if (s.showGallery) entries.push({ kind: "Page", title: n.gallery, subtitle: n.galleryText, href: "/gallery", keywords: "photos pictures gallery past trainings" });
+  if (s.showTalks) entries.push({ kind: "Page", title: n.talks, subtitle: n.talksText, href: "/recordings", keywords: "slides recordings videos past trainings" });
 
-  if (home("invite")) entries.push({ kind: "Section", title: "Enrol for the next batch", subtitle: "New batches start all year round", href: "/#join", keywords: "enrol enroll register next batch dates places continuous" });
-  if (home("themes")) entries.push({ kind: "Section", title: n.themes, subtitle: n.themesText, href: "/#themes", keywords: "programmes professionals workspace compare which programme" });
-  if (home("news")) entries.push({ kind: "Section", title: "Announcements", href: "/#news", keywords: "news updates announcements new batch" });
+  if (home("invite")) entries.push({ kind: "Section", title: "Custom training", subtitle: "Designed around your organisation", href: "/#join", keywords: "custom tailored industry organisation team efficiency contact" });
+  if (home("themes")) entries.push({ kind: "Section", title: n.themes, subtitle: n.themesText, href: "/#themes", keywords: "focus areas professional work office work efficiency what we train" });
+  if (home("news")) entries.push({ kind: "Section", title: "Announcements", href: "/#news", keywords: "news updates announcements" });
   if (home("venue")) entries.push({ kind: "Section", title: n.routeMap, subtitle: n.routeMapText, href: "/#venue", keywords: "map route directions airport railway metro road how to reach" });
   if (home("faq")) {
     entries.push({ kind: "Section", title: n.faq, subtitle: n.faqText, href: "/#faq", keywords: "faq questions help" });

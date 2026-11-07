@@ -73,7 +73,7 @@ refresh_website() {
   curl -sk -b "$jar" -o /dev/null -w "Refresh website: %{http_code}\n" -X POST https://localhost/api/admin/revalidate -H 'origin: https://localhost'
   rm -f "$jar"
   # Render each page once, as a site that has been up for a while has.
-  for p in / /about /programme /trainers /register /past-participants /partners /venue /organisers /tutorials /api/programme/pdf; do
+  for p in / /about /programme /trainers /contact /past-participants /partners /venue /organisers /tutorials /api/programme/pdf; do
     curl -sk -o /dev/null "https://localhost$p"; curl -sk -o /dev/null "https://localhost$p"
   done
 }

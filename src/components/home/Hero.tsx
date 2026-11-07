@@ -1,11 +1,10 @@
-import { CalendarDays, MapPin } from "lucide-react";
+import { MapPin, Sparkles } from "lucide-react";
 import type { CSSProperties, ReactNode } from "react";
 import { NetworkCanvas } from "@/components/effects/NetworkCanvas";
 import { Img } from "@/components/ui/Img";
 import type { SiteSettings } from "@/lib/content/types";
 import { copy } from "@/lib/copy";
 import { splitProgrammeName, venueLine } from "@/lib/training";
-import { formatDateRange } from "@/lib/format";
 import { HeroPlacards, type HeroPlacard } from "./HeroPlacards";
 import { RegisterChooser } from "./RegisterChooser";
 
@@ -78,10 +77,10 @@ export function Hero({ s }: { s: SiteSettings }) {
   const c = copy(s, "homeHero");
   const p = copy(s, "homePlacard");
   const tones = copy(s, "homeRegister");
-  // Aura's two placards, in turn: one per programme, both with the registration status ({status} is filled in as they show).
+  // Aura's two placards, in turn: one per focus area ({status}, if written, says whether requests are open).
   const placards: HeroPlacard[] = [
-    { key: "professionals" as const, text: p.text, tab: p.professionalsTab, tone: tones.professionalsTone, status: s.registrationStatus, deadline: s.registrationDeadline },
-    { key: "workspace" as const, text: p.workspace, tab: p.workspaceTab, tone: tones.workspaceTone, status: s.registrationStatus, deadline: s.registrationDeadline },
+    { key: "professionals" as const, text: p.text, tab: p.professionalsTab, tone: tones.professionalsTone, status: s.registrationStatus },
+    { key: "workspace" as const, text: p.workspace, tab: p.workspaceTab, tone: tones.workspaceTone, status: s.registrationStatus },
   ].filter((x) => x.text.trim());
   // "DIU AI Training Seminars 2026" → highlighted "DIU AI Training", then "Seminars", then a muted "2026".
   const { title, year } = splitProgrammeName(s.programmeName);
@@ -135,9 +134,11 @@ export function Hero({ s }: { s: SiteSettings }) {
           </div>
 
           <dl className="flex flex-wrap gap-x-10 gap-y-5">
-            <Fact label={c.when} icon={<CalendarDays size={14} aria-hidden />} tone="tone-azure">
-              <time dateTime={s.startDate}>{formatDateRange(s.startDate, s.endDate)}</time>
-            </Fact>
+            {c.formatText ? (
+              <Fact label={c.format} icon={<Sparkles size={14} aria-hidden />} tone="tone-azure">
+                {c.formatText}
+              </Fact>
+            ) : null}
             <Fact label={c.where} icon={<MapPin size={14} aria-hidden />} tone="tone-lilac">
               {venueLine(s)}
             </Fact>

@@ -1,4 +1,4 @@
-import { ArrowRight, BriefcaseBusiness, CalendarDays, Laptop, MapPin, Ticket } from "lucide-react";
+import { ArrowRight, Factory, Gauge, Laptop, Mail, MapPin, Sparkles } from "lucide-react";
 import Link from "next/link";
 import { ButtonLink } from "@/components/ui/Button";
 import { Poster } from "@/components/ui/Poster";
@@ -6,15 +6,14 @@ import { Section, SectionHeading } from "@/components/ui/Section";
 import type { SiteSettings } from "@/lib/content/types";
 import { copy } from "@/lib/copy";
 import { registrationHref, venueLine } from "@/lib/training";
-import { formatDateRange } from "@/lib/format";
 import { isShown } from "@/lib/schema/section-order";
 
-/** The poster's built-in picture (DIU's Knowledge Tower at Daffodil Smart City), shown until another is uploaded in Site settings → Home → Registration open. */
+/** The poster's built-in picture (DIU's Knowledge Tower at Daffodil Smart City), shown until another is uploaded in Site settings → Home → Custom training. */
 const POSTER_PHOTO = "/posters/campus.webp";
 
 /**
- * Registration is open: places are limited and confirmed by the organising team. The button, what to expect
- * and the invitation to bring a real task to the labs, beside the poster.
+ * Custom training: every training is designed for the organisation that asks for it. The Contact us button,
+ * how the sessions are built around the industry and the efficiency gains they aim at, beside the poster.
  */
 export function Invite({ s }: { s: SiteSettings }) {
   const c = copy(s, "homeInvite");
@@ -27,7 +26,7 @@ export function Invite({ s }: { s: SiteSettings }) {
           {c.free ? <p className="text-base font-semibold text-fg sm:text-lg">{c.free}</p> : null}
           {c.button ? (
             <div className="mt-4">
-              <ButtonLink href={registrationHref(s)} size="lg" icon={<Ticket size={18} aria-hidden />}>
+              <ButtonLink href={registrationHref(s)} size="lg" icon={<Mail size={18} aria-hidden />}>
                 {c.button}
               </ButtonLink>
             </div>
@@ -36,7 +35,7 @@ export function Invite({ s }: { s: SiteSettings }) {
             {c.expectTitle || c.expectText ? (
               <div className="card flex items-start gap-4 p-5">
                 <span className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-accent-soft text-accent-ink">
-                  <CalendarDays size={20} aria-hidden />
+                  <Factory size={20} aria-hidden />
                 </span>
                 <div>
                   {c.expectTitle ? <h3 className="font-display text-lg font-bold text-fg">{c.expectTitle}</h3> : null}
@@ -47,7 +46,7 @@ export function Invite({ s }: { s: SiteSettings }) {
             {c.researchTitle || c.researchText ? (
               <div className="card flex items-start gap-4 p-5">
                 <span className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-accent-soft text-accent-ink">
-                  <BriefcaseBusiness size={20} aria-hidden />
+                  <Gauge size={20} aria-hidden />
                 </span>
                 <div>
                   {c.researchTitle ? <h3 className="font-display text-lg font-bold text-fg">{c.researchTitle}</h3> : null}
@@ -77,7 +76,7 @@ export function Invite({ s }: { s: SiteSettings }) {
           title={c.posterTitle}
           text={c.posterText}
           facts={[
-            { icon: <CalendarDays size={17} aria-hidden />, label: c.when, value: formatDateRange(s.startDate, s.endDate) },
+            ...(c.formatText ? [{ icon: <Sparkles size={17} aria-hidden />, label: c.format, value: c.formatText }] : []),
             { icon: <MapPin size={17} aria-hidden />, label: c.where, value: venueLine(s) },
           ]}
           footnote={s.organisedBy}

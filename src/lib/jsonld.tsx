@@ -8,27 +8,20 @@ export function JsonLd({ data }: { data: Record<string, unknown> }) {
 const DIU = { "@type": "CollegeOrUniversity", name: "Daffodil International University", url: "https://daffodilvarsity.edu.bd" };
 
 /**
- * The training for search engines: a course that runs continuously, in batches, with the next batch (the dates in
- * Site settings → Programme details) as its scheduled instance.
+ * The training provider for search engines: an organisation of DIU offering custom AI training (no course with
+ * fixed dates: each training is designed with the organisation that asks for it).
  */
 export function trainingJsonLd(s: SiteSettings) {
   return {
     "@context": "https://schema.org",
-    "@type": "Course",
+    "@type": "EducationalOrganization",
     name: s.programmeName,
     description: s.description || s.tagline,
     url: absoluteUrl("/"),
     image: [absoluteUrl("/opengraph-image")],
-    provider: { ...DIU, department: { "@type": "Organization", name: s.organisedBy || "Department of Computer Science and Engineering, Daffodil International University" } },
-    hasCourseInstance: [
-      {
-        "@type": "CourseInstance",
-        name: `${s.programmeName}: next batch`,
-        courseMode: "Onsite",
-        startDate: s.startDate,
-        endDate: s.endDate,
-        location: { "@type": "Place", name: s.venueName, address: s.venueAddress || s.venueName },
-      },
-    ],
+    parentOrganization: { ...DIU, department: { "@type": "Organization", name: s.organisedBy || "Department of Computer Science and Engineering, Daffodil International University" } },
+    address: s.venueAddress || s.venueName,
+    knowsAbout: ["Custom AI training", "AI for professional work", "AI for office work", "Efficiency gains with AI"],
+    ...(s.contactEmail ? { email: s.contactEmail } : {}),
   };
 }

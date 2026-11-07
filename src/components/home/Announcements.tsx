@@ -7,7 +7,6 @@ import { SectionHeading } from "@/components/ui/Section";
 import type { Announcement, SiteSettings } from "@/lib/content/types";
 import { copy } from "@/lib/copy";
 import type { PageCopy } from "@/lib/schema/page-copy";
-import { formatDate } from "@/lib/format";
 
 const TONE = { info: "azure", important: "blush", success: "mint" } as const;
 
@@ -21,11 +20,6 @@ function Item({ a, c }: { a: Announcement; c: PageCopy["homeNews"] }) {
         <Badge tone={t.tone} size="xs" dot>
           {t.label}
         </Badge>
-        {a.date ? (
-          <time dateTime={a.date} className="font-semibold text-subtle">
-            {formatDate(a.date, { day: "numeric", month: "short", year: "numeric" })}
-          </time>
-        ) : null}
         {a.pinned ? (
           <span className="ml-auto inline-flex items-center gap-1 font-semibold text-subtle">
             <Pin size={13} aria-hidden /> {c.pinned}

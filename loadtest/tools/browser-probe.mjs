@@ -38,7 +38,7 @@ async function attempt(browser, n) {
   const page = await context.newPage();
   const row = { at: new Date().toISOString(), ok: false };
   try {
-    await page.goto(`${BASE}/register`, { waitUntil: "load", timeout: 60_000 });
+    await page.goto(`${BASE}/contact?programme=workspace`, { waitUntil: "load", timeout: 60_000 });
     Object.assign(
       row,
       await page.evaluate(
@@ -53,11 +53,15 @@ async function attempt(browser, n) {
     );
     await page.getByLabel("Full name").fill("Probe Person");
     await page.getByLabel("E-mail").fill(`diuai-${RUN}-probe-${process.pid}-${n}@example.com`);
-    await page.getByLabel("I am a…").selectOption("student");
-    await page.getByLabel("Institution / organisation").fill("Daffodil International University");
+    await page.getByLabel("Phone").fill("+880 1700000000");
+    await page.getByLabel("You are contacting us for…").selectOption("A team or department");
+    await page.getByLabel("Organisation / company").fill("Daffodil International University");
     await page.getByRole("button", { name: "Continue" }).click();
+    // The link ticks AI for Office Work; the needs and the team's use of AI are required.
+    await page.getByLabel("Tell us about your needs").fill("An office team of 20 that wants e-mails and reports done faster with AI.");
+    await page.getByLabel("Every week").check();
     await page.getByRole("button", { name: "Continue" }).click();
-    await page.getByLabel("I agree to be contacted about this training").check();
+    await page.getByLabel("I agree to be contacted about this request").check();
     if (submits >= MAX_SUBMITS) {
       row.ok = true;
       row.outcome = "filled in (not sent: probe's own limit)";
@@ -77,12 +81,12 @@ async function attempt(browser, n) {
 /** Send the form and wait for the confirmation, or a refusal or error. */
 async function send(page, row) {
   const sent = Date.now();
-  await page.getByRole("button", { name: "Complete registration" }).click();
+  await page.getByRole("button", { name: "Send request" }).click();
   // Either the confirmation, or a refusal or error in a toast (both sit in status regions).
   const outcome = await page
     .waitForFunction(
       () => {
-        if ([...document.querySelectorAll("h2")].some((h) => h.textContent?.includes("registered!"))) return "registered";
+        if ([...document.querySelectorAll("h2")].some((h) => h.textContent?.includes("Request received!"))) return "registered";
         const toast = [...document.querySelectorAll('[role="status"]')].map((e) => e.textContent?.trim()).find(Boolean);
         return toast ? `refused: ${toast.slice(0, 120)}` : null;
       },

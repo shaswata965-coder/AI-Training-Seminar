@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowRight, CalendarDays, CornerDownLeft, MapPin, Search, Sparkles } from "lucide-react";
+import { ArrowRight, CornerDownLeft, MapPin, Search, Sparkles } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useDeferredValue, useEffect, useId, useMemo, useRef, useState } from "react";
@@ -19,19 +19,17 @@ export interface AssistantEntry {
 
 export interface AssistantFacts {
   programmeName: string;
-  /** The next batch's dates. */
-  dates: string;
   venue: string;
   registerHref: string;
-  /** Where the programmes are compared (the home page's Programmes section), or "" when it is hidden. */
+  /** Where the focus areas are shown (the home page's What we train section), or "" when it is hidden. */
   programmesHref: string;
 }
 
 const QUICK = [
-  { label: "When's the next batch?", q: "next batch" },
-  { label: "How do I register?", q: "register" },
-  { label: "Which programme?", q: "programme" },
-  { label: "Schedule", q: "schedule" },
+  { label: "Is it custom?", q: "custom" },
+  { label: "How do we start?", q: "contact" },
+  { label: "What do you train?", q: "focus" },
+  { label: "Sample plan", q: "sample plan" },
   { label: "Getting there", q: "travel metro airport" },
   { label: "Contact", q: "contact" },
 ];
@@ -58,7 +56,7 @@ function score(entry: AssistantEntry, terms: string[]) {
 
 /**
  * "Ask Aura": a button in the bottom-right corner of every page (and Ctrl/⌘ + K) opening a search over the pages,
- * home sections, FAQs, trainers, sessions and labs, with the next batch's dates and venue at hand.
+ * home sections, FAQs, trainers, sessions and labs, with the venue and Contact us at hand.
  */
 export function AuraAssistant({ entries, facts }: { entries: AssistantEntry[]; facts: AssistantFacts }) {
   const router = useRouter();
@@ -103,7 +101,7 @@ export function AuraAssistant({ entries, facts }: { entries: AssistantEntry[]; f
       .map((r) => r.e);
   }, [entries, terms]);
 
-  const wantsFacts = /\b(when|date|dates|next|batch|batches|where|venue|location|time|start|starts)\b/.test(norm(deferred));
+  const wantsFacts = /\b(custom|contact|where|venue|location|start|price|cost|fee)\b/.test(norm(deferred));
   const mood = !query ? "assistant" : results.length ? "answer" : "notFound";
 
   function go(href: string) {
@@ -167,7 +165,7 @@ export function AuraAssistant({ entries, facts }: { entries: AssistantEntry[]; f
                     go(results[active].href);
                   }
                 }}
-                placeholder="Ask Aura, e.g. “next batch” or “metro”"
+                placeholder="Ask Aura, e.g. “custom training” or “metro”"
                 className="h-11 w-full bg-transparent text-base outline-none placeholder:text-subtle"
                 role="combobox"
                 aria-expanded="true"
@@ -200,23 +198,18 @@ export function AuraAssistant({ entries, facts }: { entries: AssistantEntry[]; f
               {wantsFacts || !query ? (
                 <div className="tone-aqua mb-3 rounded-2xl bg-accent-soft p-4">
                   <p className="flex items-center gap-2 text-sm font-bold text-accent-ink">
-                    <Sparkles size={16} aria-hidden /> {facts.programmeName}: new batches all year round
+                    <Sparkles size={16} aria-hidden /> {facts.programmeName}: custom AI training for your team
                   </p>
-                  {facts.dates ? (
-                    <p className="mt-2 flex items-center gap-2 text-[15px] text-fg">
-                      <CalendarDays size={16} aria-hidden className="text-subtle" /> Next batch: {facts.dates}
-                    </p>
-                  ) : null}
-                  <p className="mt-1 flex items-center gap-2 text-[15px] text-fg">
+                  <p className="mt-2 flex items-center gap-2 text-[15px] text-fg">
                     <MapPin size={16} aria-hidden className="text-subtle" /> {facts.venue}
                   </p>
                   <div className="mt-3 flex flex-wrap gap-2">
                     <Link href={facts.registerHref} onClick={() => setOpen(false)} className="key key-brand rounded-[0.7rem] bg-brand px-3.5 py-1.5 text-sm font-semibold text-brand-fg">
-                      Register
+                      Contact us
                     </Link>
                     {facts.programmesHref ? (
                       <Link href={facts.programmesHref} onClick={() => setOpen(false)} className="key key-line rounded-[0.7rem] border border-border-strong bg-surface px-3.5 py-1.5 text-sm font-semibold text-fg">
-                        Compare the programmes
+                        See what we train
                       </Link>
                     ) : null}
                   </div>

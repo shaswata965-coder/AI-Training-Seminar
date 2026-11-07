@@ -17,46 +17,6 @@ export function formatDateTime(iso: string | null | undefined) {
   return formatDate(iso, { day: "numeric", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit", hour12: false });
 }
 
-/** "15–16 December 2026" (or "30 Nov – 1 Dec 2026") */
-export function formatDateRange(startIso: string, endIso: string) {
-  const s = parse(startIso);
-  const e = parse(endIso);
-  if (!s) return "";
-  if (!e) return formatDate(startIso);
-  const part = (d: Date, o: Intl.DateTimeFormatOptions) => new Intl.DateTimeFormat("en-GB", { timeZone: EVENT_TZ, ...o }).format(d);
-  const sm = part(s, { month: "long", year: "numeric" });
-  const em = part(e, { month: "long", year: "numeric" });
-  if (sm === em) {
-    const sd = part(s, { day: "numeric" });
-    const ed = part(e, { day: "numeric" });
-    return sd === ed ? `${sd} ${sm}` : `${sd}–${ed} ${sm}`;
-  }
-  return `${part(s, { day: "numeric", month: "short" })} – ${part(e, { day: "numeric", month: "short", year: "numeric" })}`;
-}
-
-/** YYYY-MM-DD (BST) of the n-th day of the batch (1-based). */
-export function batchDayDate(startIso: string, day: number | string): string {
-  const s = parse(startIso);
-  if (!s) return "";
-  const local = new Date(s.getTime() + TZ_OFFSET_MIN * 60_000);
-  local.setUTCDate(local.getUTCDate() + (Number(day) - 1));
-  return local.toISOString().slice(0, 10);
-}
-
-/** Label for a day of the batch: "Tue, 15 Dec". */
-export function batchDayLabel(startIso: string, day: number | string, opts: Intl.DateTimeFormatOptions = { weekday: "short", day: "numeric", month: "short" }) {
-  const ymd = batchDayDate(startIso, day);
-  if (!ymd) return `Day ${day}`;
-  return formatDate(`${ymd}T12:00:00+06:00`, opts);
-}
-
-/** Convert a BST date (YYYY-MM-DD) + time (HH:mm) to a Date. */
-export function localDateTime(ymd: string, hhmm: string): Date | null {
-  if (!/^\d{4}-\d{2}-\d{2}$/.test(ymd) || !/^\d{1,2}:\d{2}$/.test(hhmm)) return null;
-  const [h, m] = hhmm.split(":");
-  return parse(`${ymd}T${h.padStart(2, "0")}:${m}:00+06:00`);
-}
-
 /** Admin datetime-local value ("2026-12-15T09:00") ⇄ stored ISO in BST. */
 export function localInputToIso(value: string): string {
   if (!value) return "";

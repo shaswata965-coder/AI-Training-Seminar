@@ -214,7 +214,7 @@ function SignInForm({ text, reason, onSignedIn, onLeave }: { text: PageCopy["sit
       </form>
       {text.register ? (
         <p className="mt-4 text-center text-sm">
-          <Link href="/register" onClick={onLeave} className="font-semibold text-brand underline underline-offset-2">
+          <Link href="/contact" onClick={onLeave} className="font-semibold text-brand underline underline-offset-2">
             {text.register}
           </Link>
         </p>

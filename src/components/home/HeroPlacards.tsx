@@ -4,10 +4,8 @@ import { BriefcaseBusiness, Laptop } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Aura } from "@/components/aura/Aura";
 import { SlidingPill, useSlidingPill } from "@/components/ui/SlidingPill";
-import { useNow } from "@/lib/client-hooks";
 import { cn } from "@/lib/cn";
 import type { RegistrationStatus, Tone } from "@/lib/content/constants";
-import { deadlinePassed } from "@/lib/training";
 
 export type PlacardKey = "professionals" | "workspace";
 
@@ -19,30 +17,26 @@ export interface HeroPlacard {
   tab: string;
   tone: Tone;
   status: RegistrationStatus;
-  deadline: string;
 }
 
 const ICONS = { professionals: BriefcaseBusiness, workspace: Laptop } as const;
 
 /**
- * The hero's Aura, holding up the two programmes' registration placards in turn. A placard
+ * The hero's Aura, holding up a placard for each focus area in turn. A placard
  * stays up while the bar on its switch fills (CSS, so it pauses with the page's other animations, and while
- * the pointer or focus is on Aura, the switch or a registration card); pointing at a registration card below
+ * the pointer or focus is on Aura, the switch or a card below it); pointing at a card below
  * (`data-placard-key`) brings its placard up. With reduced motion the bar never runs, so only the switch and
  * the cards change it. The hero section is marked `data-placard="<key>"` so the matching card lights up.
  */
 export function HeroPlacards({ placards, words }: { placards: HeroPlacard[]; words: Record<RegistrationStatus, string> }) {
-  const now = useNow();
   const [index, setIndex] = useState(0);
   const anchorRef = useRef<HTMLSpanElement>(null);
   const shown = placards.length ? placards[index % placards.length] : null;
   const { listRef, pillRef } = useSlidingPill(shown?.key, '[aria-pressed="true"]');
 
-  // Registration that is open closes on its placard too once the deadline passes.
-  const status = shown && shown.status === "open" && now !== null && deadlinePassed(shown.deadline, now) ? "closed" : shown?.status;
-  const text = shown && status ? shown.text.replaceAll("{status}", words[status]).replace(/\s+/g, " ").trim() : "";
+  const text = shown ? shown.text.replaceAll("{status}", words[shown.status]).replace(/\s+/g, " ").trim() : "";
 
-  // The same element every second (useNow ticks), so Aura only redraws when the words change.
+  // Aura only redraws when the words change.
   const aura = useMemo(
     () => (
       <Aura
@@ -51,7 +45,7 @@ export function HeroPlacards({ placards, words }: { placards: HeroPlacard[]; wor
         interactive
         entrance="load"
         placard={text}
-        label={text ? `Aura, the training programme's AI guide, holding a placard: “${text}”` : undefined}
+        label={text ? `Aura, DIU AI Training's guide, holding a placard: “${text}”` : undefined}
         className="max-w-[78vw]"
       />
     ),

@@ -5,8 +5,8 @@ import { stripMarkdown } from "@/components/ui/RichText";
 import { SESSION_TYPE_META, THEME_META } from "@/lib/content/constants";
 import { CONTENT_TAG, getSavedSettings, getSessions, getTrainers } from "@/lib/content/queries";
 import type { Session, SiteSettings, Trainer } from "@/lib/content/types";
-import { batchDays, venueLine } from "@/lib/training";
-import { batchDayLabel, formatDate, formatDateRange, timeRange } from "@/lib/format";
+import { planDays, venueLine } from "@/lib/training";
+import { timeRange } from "@/lib/format";
 import { absoluteUrl } from "@/lib/paths";
 
 const A4 = { w: 595.28, h: 841.89 };
@@ -65,7 +65,7 @@ function wrap(font: PDFFont, size: number, text: string, width: number): string[
   return lines.length ? lines : [""];
 }
 
-async function build(s: SiteSettings, sessions: Session[], trainers: Trainer[], generated: Date): Promise<Uint8Array> {
+async function build(s: SiteSettings, sessions: Session[], trainers: Trainer[]): Promise<Uint8Array> {
   const doc = await PDFDocument.create();
   doc.setTitle(`${s.programmeName} · Schedule`);
   doc.setAuthor(s.organisedBy || "Daffodil International University");
@@ -81,18 +81,18 @@ async function build(s: SiteSettings, sessions: Session[], trainers: Trainer[], 
   const header = (first: boolean) => {
     if (first) {
       page.drawRectangle({ x: 0, y: A4.h - 150, width: A4.w, height: 150, color: rgb(0.94, 0.95, 1) });
-      page.drawText(safe(bold, "PROGRAMME"), { x: M, y: A4.h - 52, size: 10, font: bold, color: BRAND });
+      page.drawText(safe(bold, "SAMPLE TRAINING PLAN"), { x: M, y: A4.h - 52, size: 10, font: bold, color: BRAND });
       page.drawText(safe(bold, s.programmeName), { x: M, y: A4.h - 82, size: 24, font: bold, color: INK });
-      page.drawText(safe(font, `${formatDateRange(s.startDate, s.endDate)}  ·  ${venueLine(s)}`), { x: M, y: A4.h - 104, size: 11, font, color: MUTED });
+      page.drawText(safe(font, `Custom AI training, planned with you  ·  ${venueLine(s)}`), { x: M, y: A4.h - 104, size: 11, font, color: MUTED });
       page.drawText(safe(font, s.organisedBy), { x: M, y: A4.h - 122, size: 9, font, color: SUBTLE });
       y = A4.h - 178;
       if (s.programmeStatus === "draft") {
         page.drawRectangle({ x: M, y: y - 6, width: A4.w - 2 * M, height: 22, color: TINT.butter });
-        page.drawText(safe(bold, "Draft schedule: sessions and timings may change. Check the website for the latest version."), { x: M + 8, y: y + 1, size: 9, font: bold, color: rgb(0.54, 0.37, 0) });
+        page.drawText(safe(bold, "A sample only: every training is planned with you, so its sessions and times follow your needs."), { x: M + 8, y: y + 1, size: 9, font: bold, color: rgb(0.54, 0.37, 0) });
         y -= 34;
       }
     } else {
-      page.drawText(safe(bold, `${s.programmeName} · Schedule (continued)`), { x: M, y: A4.h - M, size: 10, font: bold, color: SUBTLE });
+      page.drawText(safe(bold, `${s.programmeName} · Sample plan (continued)`), { x: M, y: A4.h - M, size: 10, font: bold, color: SUBTLE });
       y = A4.h - M - 26;
     }
   };
@@ -109,7 +109,7 @@ async function build(s: SiteSettings, sessions: Session[], trainers: Trainer[], 
   const sessionWidth = cols.type - cols.session - 12;
 
   if (s.programmeStatus === "tba" || sessions.length === 0) {
-    page.drawText(safe(bold, "Your batch's schedule is e-mailed before it starts"), { x: M, y, size: 20, font: bold, color: INK });
+    page.drawText(safe(bold, "Every training is planned with you"), { x: M, y, size: 20, font: bold, color: INK });
     y -= 26;
     for (const line of wrap(font, 11, s.programmeNote, A4.w - 2 * M)) {
       page.drawText(line, { x: M, y, size: 11, font, color: MUTED });
@@ -118,11 +118,11 @@ async function build(s: SiteSettings, sessions: Session[], trainers: Trainer[], 
     y -= 8;
     page.drawText(safe(font, `Latest updates: ${absoluteUrl("/programme")}`), { x: M, y, size: 11, font, color: BRAND });
   } else {
-    for (const d of batchDays(s)) {
-      const list = sessions.filter((x) => Number(x.day) === d.day);
+    for (const day of planDays(sessions)) {
+      const list = sessions.filter((x) => Number(x.day) === day);
       if (!list.length) continue;
       ensure(70);
-      page.drawText(safe(bold, `Day ${d.day}  ·  ${batchDayLabel(s.startDate, d.day, { weekday: "long", day: "numeric", month: "long", year: "numeric" })}`), { x: M, y, size: 14, font: bold, color: INK });
+      page.drawText(safe(bold, `Day ${day}`), { x: M, y, size: 14, font: bold, color: INK });
       y -= 20;
       page.drawLine({ start: { x: M, y: y + 6 }, end: { x: A4.w - M, y: y + 6 }, thickness: 1, color: LINE });
       for (const [label, x] of [["TIME", cols.time], ["SESSION", cols.session], ["TYPE", cols.type], ["ROOM", cols.room]] as const) {
@@ -171,18 +171,18 @@ async function build(s: SiteSettings, sessions: Session[], trainers: Trainer[], 
 
   const pages = doc.getPages();
   pages.forEach((p, i) => {
-    const footer = safe(font, `Generated ${formatDate(generated.toISOString(), { day: "numeric", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit", hour12: false })} BST  ·  ${absoluteUrl("/programme")}  ·  Page ${i + 1} of ${pages.length}`);
+    const footer = safe(font, `${absoluteUrl("/programme")}  ·  Page ${i + 1} of ${pages.length}`);
     p.drawText(footer, { x: M, y: 24, size: 8, font, color: SUBTLE });
   });
   return doc.save();
 }
 
-/** The training schedule as a PDF, regenerated automatically when sessions, trainers or settings change. */
+/** The sample training plan as a PDF, regenerated automatically when sessions, trainers or settings change. */
 export async function getSchedulePdf(): Promise<Uint8Array> {
   "use cache";
   cacheTag("sessions", "trainers", "settings", CONTENT_TAG);
   cacheLife("cms");
   const [s, sessions, trainers] = await Promise.all([getSavedSettings(), getSessions(), getTrainers()]);
   const plain = sessions.map((x) => ({ ...x, description: stripMarkdown(x.description) }));
-  return build(s, plain, trainers, new Date());
+  return build(s, plain, trainers);
 }

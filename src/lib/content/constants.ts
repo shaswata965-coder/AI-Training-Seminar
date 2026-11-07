@@ -2,7 +2,7 @@ import type { AuraVariant } from "@/components/aura/types";
 
 export type Tone = "azure" | "lilac" | "mint" | "peach" | "blush" | "butter" | "aqua";
 
-/** The training programmes (shown as "Programmes" on the site), plus "general" for sessions shared by both. */
+/** The focus areas a training can cover (shown as "Focus areas" on the site), plus "general" for sessions of any training. */
 export const THEME_KEYS = ["professionals", "workspace", "general"] as const;
 export type ThemeKey = (typeof THEME_KEYS)[number];
 
@@ -18,9 +18,9 @@ export const THEME_META: Record<
   ThemeKey,
   { label: string; short: string; tone: Tone; aura: AuraVariant; icon: "briefcase" | "laptop" | "spark" }
 > = {
-  professionals: { label: "AI for Professionals", short: "AI for Professionals", tone: "peach", aura: "professionals", icon: "briefcase" },
-  workspace: { label: "AI for Workspace", short: "AI for Workspace", tone: "mint", aura: "workspace", icon: "laptop" },
-  general: { label: "Both programmes", short: "General", tone: "azure", aura: "guide", icon: "spark" },
+  professionals: { label: "AI for Professional Work", short: "Professional work", tone: "peach", aura: "professionals", icon: "briefcase" },
+  workspace: { label: "AI for Office Work", short: "Office work", tone: "mint", aura: "workspace", icon: "laptop" },
+  general: { label: "General", short: "General", tone: "azure", aura: "guide", icon: "spark" },
 };
 
 export const SESSION_TYPES = ["opening", "lecture", "discussion", "tutorial", "demo", "break", "other"] as const;
@@ -77,13 +77,13 @@ export const LEVEL_META: Record<(typeof LEVELS)[number], { label: string; tone: 
 export const FAQ_CATEGORIES = ["general", "registration", "programme", "travel", "sponsorship"] as const;
 export const FAQ_CATEGORY_META: Record<(typeof FAQ_CATEGORIES)[number], string> = {
   general: "General",
-  registration: "Registration",
-  programme: "Programmes & schedule",
+  registration: "Getting started",
+  programme: "Training & sessions",
   travel: "Venue & travel",
   sponsorship: "Partnerships",
 };
 
-/** "open": enrolling for the next batch (the training runs continuously); "closed": registration paused. */
+/** "open": taking training requests (Contact us); "closed": requests paused. */
 export const REGISTRATION_STATUSES = ["open", "closed"] as const;
 export type RegistrationStatus = (typeof REGISTRATION_STATUSES)[number];
 

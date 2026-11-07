@@ -82,13 +82,13 @@ const NAV: { title: string; items: Item[] }[] = [
     items: [content("people", "Organisers & volunteers", Users), content("sponsors", "Partners", Handshake), content("faqs", "FAQs", CircleQuestionMark)],
   },
   {
-    title: "Past batches",
+    title: "Past trainings",
     items: [content("participants", "Past participants", Award), content("gallery", "Photo gallery", Images), content("talks", "Slides & recordings", Video)],
   },
   {
     title: "Responses",
     items: [
-      { href: "/admin/registrations", label: "Registrations", Icon: Ticket, permission: "registrations" },
+      { href: "/admin/registrations", label: "Training requests", Icon: Ticket, permission: "registrations" },
       { href: "/admin/enquiries", label: "Enquiries", Icon: Inbox, permission: "enquiries" },
     ],
   },

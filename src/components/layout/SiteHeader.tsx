@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronDown, Menu, Ticket, X } from "lucide-react";
+import { ChevronDown, Mail, Menu, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState, type CSSProperties } from "react";
@@ -44,7 +44,7 @@ export function SiteHeader({ logos, registerHref, extraNav, nav, text, homeHidde
   const exploreItems = [...explorePages, ...homeSections];
   const pages = [homeNav(nav), ...primaryNav(nav), registrationNav(nav)];
   const exploreActive = explorePages.some((item) => isActive(pathname, item.href));
-  // Phones: logo, then the buttons pushed right. Desktop: three columns, so the links and Register sit centred between the logos.
+  // Phones: logo, then the buttons pushed right. Desktop: three columns, so the links and Contact us sit centred between the logos.
   const barCls = "flex h-16 items-center gap-2 px-4 sm:gap-3 sm:px-6 lg:grid lg:h-[72px] lg:grid-cols-[1fr_auto_1fr] xl:px-8";
   // The DIU wordmark, on its own white tile in both themes, inside a ring in the site's colours.
   const universityLogo = (
@@ -201,10 +201,10 @@ export function SiteHeader({ logos, registerHref, extraNav, nav, text, homeHidde
           </div>
         </nav>
           <span aria-hidden className="mx-1 hidden h-6 w-px bg-border lg:block" />
-          {/* On phones the theme switch lives in the menu, and Register shrinks to its icon. */}
+          {/* On phones the theme switch lives in the menu, and Contact us shrinks to its icon. */}
           <ThemeToggle className="max-sm:hidden" />
           <AccountButton className="max-sm:hidden" />
-          <ButtonLink href={registerHref} size="sm" className="max-sm:w-9 max-sm:px-0" icon={<Ticket size={16} aria-hidden />}>
+          <ButtonLink href={registerHref} size="sm" className="max-sm:w-9 max-sm:px-0" icon={<Mail size={16} aria-hidden />}>
             <span className="max-sm:sr-only">{text.register}</span>
           </ButtonLink>
           <button
@@ -293,7 +293,7 @@ export function SiteHeader({ logos, registerHref, extraNav, nav, text, homeHidde
               </div>
               <AccountButton wide onNavigate={() => setMenuOpen(false)} className="sm:hidden" />
               <div className="flex flex-wrap items-center gap-3">
-                <ButtonLink href={registerHref} size="lg" onClick={() => setMenuOpen(false)} icon={<Ticket size={18} aria-hidden />}>
+                <ButtonLink href={registerHref} size="lg" onClick={() => setMenuOpen(false)} icon={<Mail size={18} aria-hidden />}>
                   {text.registerNow}
                 </ButtonLink>
               </div>

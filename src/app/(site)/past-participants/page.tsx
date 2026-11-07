@@ -1,4 +1,4 @@
-import { Award, Building2, Layers, Ticket, Users } from "lucide-react";
+import { Award, Building2, Layers, Mail, Users } from "lucide-react";
 import type { Metadata } from "next";
 import type { CSSProperties, ReactNode } from "react";
 import { Aura } from "@/components/aura/Aura";
@@ -21,7 +21,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const s = await getSettings();
   return {
     title: "Past participants",
-    description: `The people who have completed a batch of the ${s.programmeName} at Daffodil International University: AI for Professionals and AI for Workspace.`,
+    description: `The professionals, office teams and organisations who have trained with ${s.programmeName} at Daffodil International University, in their own words.`,
     alternates: { canonical: absoluteUrl("/past-participants") },
   };
 }
@@ -46,7 +46,7 @@ export default async function PastParticipantsPage() {
     <TagScope style="corner">
       <PageHero edit="participants.hero" home={s.siteNav.home} tone={hero.tone} crumb={hero.crumb} eyebrow={hero.eyebrow} title={hero.title} aura="participants" description={hero.description}>
         {hero.register ? (
-          <ButtonLink href={register} icon={<Ticket size={18} aria-hidden />}>
+          <ButtonLink href={register} icon={<Mail size={18} aria-hidden />}>
             {hero.register}
           </ButtonLink>
         ) : null}
@@ -103,7 +103,7 @@ export default async function PastParticipantsPage() {
                     {li.emptyText ? <p className="mt-2 max-w-lg text-muted">{li.emptyText}</p> : null}
                     {li.emptyButton ? (
                       <div className="mt-5">
-                        <ButtonLink href={register} icon={<Ticket size={18} aria-hidden />}>
+                        <ButtonLink href={register} icon={<Mail size={18} aria-hidden />}>
                           {li.emptyButton}
                         </ButtonLink>
                       </div>
@@ -124,7 +124,7 @@ export default async function PastParticipantsPage() {
                   {cta.text ? <p className="mt-2 max-w-xl text-muted">{cta.text}</p> : null}
                   {cta.button ? (
                     <div className="mt-5">
-                      <ButtonLink href={register} size="lg" icon={<Ticket size={18} aria-hidden />}>
+                      <ButtonLink href={register} size="lg" icon={<Mail size={18} aria-hidden />}>
                         {cta.button}
                       </ButtonLink>
                     </div>

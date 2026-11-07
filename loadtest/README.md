@@ -70,7 +70,7 @@ a day, nginx returned no 5xx and had enough connections, and the site logged no 
 ### The real browser
 
 During the busiest part of each scenario, [`tools/browser-probe.mjs`](tools/browser-probe.mjs) has two
-headless Chromium users open `/register` with nothing cached, fill in all three steps and submit, over and
+headless Chromium users open `/contact` (the Contact us form) with nothing cached, fill in all three steps and submit, over and
 over, recording page load, largest contentful paint and the time to the confirmation. It connects from
 `127.0.0.1`, so in the shared-IP modes it is a user elsewhere, not behind the shared address.
 

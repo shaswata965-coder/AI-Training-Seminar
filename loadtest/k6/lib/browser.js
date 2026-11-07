@@ -24,8 +24,8 @@ const UA = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Geck
 const COMMON = { "User-Agent": UA, "Accept-Language": "en-GB,en;q=0.9", "Accept-Encoding": "gzip, deflate, br" };
 
 /** The pages the home page's loading screen prefetches (warm.ts), and those in the navigation bar. */
-export const MAIN_ROUTES = ["/about", "/programme", "/trainers", "/register", "/past-participants", "/partners", "/venue", "/organisers", "/tutorials"];
-const NAV_ROUTES = ["/", "/about", "/programme", "/trainers", "/register"];
+export const MAIN_ROUTES = ["/about", "/programme", "/trainers", "/contact", "/past-participants", "/partners", "/venue", "/organisers", "/tutorials"];
+const NAV_ROUTES = ["/", "/about", "/programme", "/trainers", "/contact"];
 /** Pages a scenario may open; setup() reads each one's files. */
 export const PAGES = ["/", ...MAIN_ROUTES];
 

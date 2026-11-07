@@ -30,7 +30,7 @@ export const SETTINGS_AREAS: PermissionDef[] = SETTINGS_PAGES.map((p) => ({
   key: settingsPermission(p.key),
   label: p.title,
   href: `/admin/settings?page=${p.key}`,
-  hint: p.key === "site" ? "Programme name and batch dates, registration, colours and logos, contact and notification e-mails, navigation, footer, banner, features and SEO." : undefined,
+  hint: p.key === "site" ? "Programme name, Contact us, colours and logos, contact and notification e-mails, navigation, footer, banner, features and SEO." : undefined,
 }));
 export const SETTINGS_PERMISSIONS: Permission[] = SETTINGS_AREAS.map((a) => a.key);
 
@@ -40,7 +40,7 @@ export const PERMISSION_GROUPS: { title: string; hint?: string; items: Permissio
   { title: "News", items: [content("announcements")] },
   { title: "Programme", items: [content("sessions"), content("trainers"), content("tutorials"), content("demos")] },
   { title: "Content", items: [content("people"), content("sponsors"), content("faqs")] },
-  { title: "Past batches", items: [content("participants"), content("gallery"), content("talks")] },
+  { title: "Past trainings", items: [content("participants"), content("gallery"), content("talks")] },
   {
     title: "Responses",
     items: [

@@ -2,13 +2,15 @@ import { FORM_DEFAULTS, FORM_SETTINGS, formFields, type FormKey } from "@/lib/fo
 import { REGISTRATION_STATUSES } from "./constants";
 import { PAGE_COPY_DEFAULTS } from "@/lib/schema/page-copy";
 import { HIDDEN_SECTIONS_DEFAULTS, SECTION_ORDER_DEFAULTS } from "@/lib/schema/section-order";
+import { BATCH_ERA_DEFAULTS } from "./retired-batches";
 import type { Faq, Person, Session, SiteSettings, Trainer } from "./types";
 
 /*
  * Default content. Used when the database is not configured/reachable and to
  * bootstrap a fresh database on first run. Everything here can be edited in
- * the admin panel. The training runs continuously, in batches: the dates are
- * the next batch's, and its schedule is the plan every batch follows.
+ * the admin panel. The training is custom: each one is designed with the
+ * organisation that asks for it, so the site shows no dates, and its schedule is
+ * a sample plan.
  */
 
 export const DEFAULT_SETTINGS: SiteSettings = {
@@ -18,9 +20,9 @@ export const DEFAULT_SETTINGS: SiteSettings = {
   ...FORM_DEFAULTS,
   programmeName: "DIU AI Training Seminars",
   shortName: "DIU AI Training",
-  tagline: "Practical, hands-on AI training for professionals and the modern workspace.",
+  tagline: "Custom, hands-on AI training for organisations and professionals: faster office work, smarter professional practice.",
   description:
-    "Continuous AI training at Daffodil International University: AI for Professionals and AI for Workspace, hands-on batches led by faculty of the Department of Computer Science and Engineering, all year round.",
+    "Custom AI training from the Department of Computer Science and Engineering at Daffodil International University: hands-on sessions designed around your industry, your office work and your team's tasks, for real efficiency gains.",
   organisedBy: "Department of Computer Science and Engineering, Daffodil International University",
   startDate: "2026-12-11T09:30:00+06:00",
   endDate: "2026-12-12T17:00:00+06:00",
@@ -32,8 +34,8 @@ export const DEFAULT_SETTINGS: SiteSettings = {
   registrationDeadline: "",
   registrationReplyBy: "",
   registrationUrl: "",
-  fees: [{ category: "Everyone", amount: "On request", note: "Places in each batch are limited" }],
-  feeNote: "Ask the organisers for the current fee. Places in each batch are limited, so registrations are reviewed and confirmed by the organising team.",
+  fees: [{ category: "Custom training", amount: "On request", note: "Quoted for your team's needs" }],
+  feeNote: "Every training is quoted for its focus, length and group size. Tell us what you need and we'll send you a proposal.",
   confirmationNote: "",
 
   showLoader: true,
@@ -41,59 +43,59 @@ export const DEFAULT_SETTINGS: SiteSettings = {
   heroPhoto: "",
   invitePhoto: "",
   highlights: [
-    { label: "Programmes", value: "2", icon: "sparkles" },
+    { label: "Training", value: "Custom", icon: "sparkles" },
     { label: "Trainers", value: "9", icon: "users" },
-    { label: "Days per batch", value: "2", icon: "calendar" },
+    { label: "Focus", value: "Industry", icon: "briefcase" },
     { label: "Hands-on labs", value: "6", icon: "laptop" },
-    { label: "New batches", value: "All year", icon: "clock" },
+    { label: "Office work", value: "Faster", icon: "clock" },
   ],
   featuredTrainers: 9,
 
   motivation:
-    "AI tools have moved out of research labs and into everyday work. They draft documents, summarise reports, analyse data and answer questions in seconds, and people who know how to use them well get more done, with better results.\n\nThe AI Training Seminars at Daffodil International University help professionals, teachers, students and entrepreneurs make that shift with confidence. In two programmes, **AI for Professionals** and **AI for Workspace**, trainers from DIU's Department of Computer Science and Engineering show you how to use AI tools on real tasks, safely and responsibly.",
+    "AI tools have moved out of research labs and into everyday work. They draft documents, summarise reports, analyse data and answer questions in seconds, and teams that know how to use them well get more done, with better results.\n\nDIU AI Training helps organisations and professionals make that shift with confidence. Trainers from DIU's Department of Computer Science and Engineering design every training around the people taking it: their **industry**, their **office work** and their **professional tasks**, so the time AI saves shows up in their work the next day, safely and responsibly.",
   learningText:
-    "How today's AI assistants work and where they fall short; how to write clear instructions (prompts) and check the answers; how to use AI for **writing**, **research**, **data analysis**, **presentations** and **meetings**; and how to protect **privacy** and keep **your own judgement** in charge. Every session is hands-on, so you leave with skills you can use the next day.",
+    "How today's AI assistants work and where they fall short; how to write clear instructions (prompts) and check the answers; how to use AI for **writing**, **research**, **data analysis**, **presentations** and **meetings**; and how to protect **privacy** and keep **your own judgement** in charge; and how to find the routines where AI saves your team the most time. We choose the mix for each training, and every session is hands-on.",
   aboutPoints: [
     { title: "Why now", icon: "rocket", description: "AI tools now draft, summarise and analyse in seconds. Using them well is fast becoming a core skill at work." },
-    { title: "Two programmes", icon: "sparkles", description: "AI for Professionals and AI for Workspace: pick the one that fits how you work, or take both." },
+    { title: "Custom content", icon: "sparkles", description: "Every training is designed for its audience: your industry, your tools and the tasks your team does every day." },
     { title: "Hands-on", icon: "code", description: "Every session is practical: you use real AI tools on real tasks from the first hour." },
     { title: "Our trainers", icon: "landmark", description: "Faculty of the Department of Computer Science and Engineering at Daffodil International University." },
-    { title: "Who it is for", icon: "users", description: "Working professionals, teachers, students, entrepreneurs and office teams. No programming needed." },
-    { title: "All year round", icon: "calendar", description: "New batches start regularly: short lectures, hands-on labs and live demos at {venue}. The next one is {dates}." },
+    { title: "Who it is for", icon: "users", description: "Organisations, office teams, working professionals, teachers and entrepreneurs. No programming needed." },
+    { title: "Efficiency gains", icon: "clock", description: "We start from the routines that take your team the most time and show how AI gets them done faster." },
     { title: "Responsible use", icon: "heart", description: "Privacy, accuracy and judgement: using AI safely is part of every session." },
-    { title: "Past batches", icon: "award", description: "Meet the people who have trained with us on the Past participants page." },
+    { title: "Past participants", icon: "award", description: "Meet the people and teams who have trained with us on the Past participants page." },
   ],
   audience: [
+    { title: "Organisations & teams", icon: "landmark", description: "Companies, banks, NGOs and public offices that want their staff to work faster and better with AI." },
     { title: "Working professionals", icon: "briefcase", description: "Managers, analysts, engineers, bankers, lawyers, doctors and more who want AI to take on routine work." },
-    { title: "Teachers & faculty", icon: "graduation", description: "Prepare lessons, assessments and feedback faster, and guide students in using AI well." },
-    { title: "Students", icon: "sparkles", description: "Build the AI skills employers now look for, and use them in your studies." },
     { title: "Office & admin teams", icon: "monitor", description: "Write, plan, organise and report faster with AI in the tools you use every day." },
+    { title: "Teachers & faculty", icon: "graduation", description: "Prepare lessons, assessments and feedback faster, and guide students in using AI well." },
     { title: "Entrepreneurs", icon: "rocket", description: "Use AI for marketing, customer service and planning in a growing business." },
   ],
   activities: [
-    { title: "Short lectures", icon: "mic", description: "The ideas behind each tool, and when to use it." },
+    { title: "Your needs first", icon: "users", description: "We talk with you about your industry, your team and the work to speed up." },
+    { title: "Designed for you", icon: "briefcase", description: "Sessions, examples and pace chosen for your people and their tools." },
     { title: "Hands-on labs", icon: "laptop", description: "Guided practice on real tasks, with trainers on hand." },
     { title: "Live demos", icon: "monitor", description: "AI tools at work, from the first prompt to a finished result." },
-    { title: "Bring your own task", icon: "briefcase", description: "Work on something from your own job or studies." },
-    { title: "Discussions", icon: "users", description: "Using AI responsibly: privacy, accuracy and judgement." },
+    { title: "Responsible use", icon: "heart", description: "Privacy, accuracy and judgement in every session." },
   ],
   themes: [
     {
       key: "professionals",
-      title: "AI for Professionals",
+      title: "AI for Professional Work",
       description:
-        "For working professionals in any field: use AI to research, analyse, write reports and make better decisions, with privacy and accuracy in mind.",
+        "For professionals in any industry: use AI to research, analyse, write reports and make better decisions, with privacy and accuracy in mind, using the tasks and documents of your own field.",
     },
     {
       key: "workspace",
-      title: "AI for Workspace",
+      title: "AI for Office Work",
       description:
-        "For everyday office work: write e-mails and documents, build spreadsheets and slides, and take meeting notes faster with AI assistants.",
+        "For everyday office work: write e-mails and documents, build spreadsheets and slides and take meeting notes faster with AI, in the tools your team already uses.",
     },
   ],
 
   programmeStatus: "draft",
-  programmeNote: "The plan every batch follows. Rooms and trainers for your batch are confirmed by e-mail before it starts, and times may change a little.",
+  programmeNote: "An example only: every training is planned with you, so its sessions, times and trainers follow your team's needs.",
   schedulePdf: "",
 
   mapQuery: "Daffodil International University, Daffodil Smart City, Birulia, Savar, Dhaka",
@@ -127,7 +129,7 @@ export const DEFAULT_SETTINGS: SiteSettings = {
     },
   ],
   campusEntry:
-    "Daffodil Smart City is a secured campus. Please carry a valid photo ID and your registration ID (sent to you by e-mail). The building, room and entry gate for your batch will be shared here and by e-mail before it begins.",
+    "Daffodil Smart City is a secured campus. Please carry a valid photo ID and your reference number (sent to you by e-mail). The building, room and entry gate for your training are confirmed by e-mail before it begins.",
   accommodation: [
     { name: "Uttara", kind: "area", distance: "~15 km", url: "", note: "Hotels and guest houses near the airport and the metro rail." },
     { name: "Mirpur", kind: "area", distance: "~12 km", url: "", note: "Hotels and restaurants along the metro rail line." },
@@ -135,24 +137,24 @@ export const DEFAULT_SETTINGS: SiteSettings = {
     { name: "Ask the organisers", kind: "campus", distance: "On campus", url: "", note: "Travelling from outside Dhaka? Ask the organisers whether rooms on campus are available for participants." },
   ],
   localInfo: [
-    "December and January are cool and dry in Dhaka, with foggy mornings. A light jacket helps.",
+    "Dhaka is warm and humid for much of the year: light clothes help, with a light jacket in the cooler months.",
     "Dhaka's traffic is hard to predict: set out early, especially on weekday mornings.",
     "App-based cars and the metro rail are the easiest ways to get around the city.",
     "Bring a charged laptop and its charger to every session.",
   ],
 
   sponsorshipIntro:
-    "Partner with the AI Training Seminars at Daffodil International University to bring AI skills to professionals, teachers and students. Partnership packages can be tailored to your goals.",
+    "Partner with DIU AI Training to bring practical AI skills to professionals and office teams. Partnership packages can be tailored to your goals.",
   sponsorTiers: [
     {
-      name: "Programme partner",
+      name: "Training partner",
       price: "On request",
-      perks: ["Your name with the programme on the website and banners", "A dedicated batch for your staff", "A speaking slot at the opening session"],
+      perks: ["Your name with our training on the website and banners", "A training designed for your staff", "A speaking slot at an opening session"],
     },
     {
-      name: "Batch sponsor",
+      name: "Training sponsor",
       price: "On request",
-      perks: ["Logo on the website and banners of the batch", "Seats for your staff or community", "Meet motivated participants"],
+      perks: ["Logo on the website and banners of a training you support", "Seats for your staff or community", "Meet motivated professionals"],
     },
     { name: "Community & media partners", price: "On request", perks: ["Logo on the website", "Outreach to your community"] },
   ],
@@ -187,12 +189,14 @@ export const DEFAULT_SETTINGS: SiteSettings = {
   gaId: "",
   keywords: [
     "AI training",
-    "AI for Professionals",
-    "AI for Workspace",
+    "custom AI training",
+    "corporate AI training",
+    "AI for office work",
+    "AI for professionals",
     "Daffodil International University",
     "DIU",
     "Department of CSE",
-    "AI course Dhaka",
+    "AI training Dhaka",
     "Bangladesh",
   ],
 };
@@ -213,7 +217,7 @@ const trainer = (name: string, slug: string, extra: Partial<NewDoc<Trainer>> = {
   theme: "general",
   lead: false,
   photo: "",
-  bio: `${name} is a faculty member of the ${CSE} at Daffodil International University and a trainer on the DIU AI Training Seminars.`,
+  bio: `${name} is a faculty member of the ${CSE} at Daffodil International University and a trainer with DIU AI Training.`,
   expertise: "",
   teaching: "",
   website: "",
@@ -230,7 +234,7 @@ export const DEFAULT_TRAINERS: NewDoc<Trainer>[] = [
   trainer("Professor Dr. Sheak Rashed Haider Noori", "sheak-rashed-haider-noori", {
     designation: `Professor, ${CSE}`,
     lead: true,
-    bio: `Professor Dr. Sheak Rashed Haider Noori is a Professor in the ${CSE} at Daffodil International University and leads the trainers of the DIU AI Training Seminars.`,
+    bio: `Professor Dr. Sheak Rashed Haider Noori is a Professor in the ${CSE} at Daffodil International University and leads the trainers of DIU AI Training.`,
   }),
   trainer("Dr. S. M. Aminul Haque", "s-m-aminul-haque"),
   trainer("Dr. Arif Mahmud", "arif-mahmud"),
@@ -248,34 +252,38 @@ export const DEFAULT_PEOPLE: NewDoc<Person>[] = [];
 export const DEFAULT_FAQS: NewDoc<Faq>[] = [
   {
     category: "general",
-    question: "Who can join the training?",
-    answer: "Anyone who wants to use AI in their work or studies: working professionals, teachers, students, entrepreneurs and office teams. No programming or technical background is needed.",
+    question: "Who is the training for?",
+    answer: "Organisations, teams and individual professionals who want to use AI in their work: office and admin staff, managers, analysts, teachers, entrepreneurs and more. No programming or technical background is needed.",
   },
   {
     category: "general",
-    question: "What is the difference between the two programmes?",
+    question: "Is there a fixed course?",
     answer:
-      "**AI for Professionals** is for people who want AI to help with the core of their work: research, analysis, reports and decisions. **AI for Workspace** focuses on everyday office tasks: e-mail, documents, spreadsheets, slides and meetings. You can join one or both.",
+      "No. Every training is designed for the people taking it. We start from your industry and your daily tasks, and focus on **AI for professional work** (research, analysis, reports and decisions), **AI for office work** (e-mail, documents, spreadsheets, slides and meetings), or a mix of both, always aimed at real efficiency gains.",
   },
   {
     category: "registration",
-    question: "How do I register?",
-    answer: "Use the registration form on this site and pick the programme you'd like to join. Places are limited, so the organising team reviews every registration and lets you know whether we can offer you a place.",
+    question: "How do we get started?",
+    answer: "Use the Contact us page to tell us about your organisation, your team and what you'd like AI to help with. The organising team reads every request and replies by e-mail to plan the training with you.",
   },
   {
     category: "registration",
-    question: "When does the next batch start?",
-    answer: "New batches start throughout the year, and you can register at any time. The next batch's dates are on the home page; we place you in the next batch with free seats and confirm it by e-mail.",
+    question: "How long is a training, and when does it take place?",
+    answer: "That depends on what your team needs: we agree the focus, length, timing and format with you when we plan the training together.",
   },
-  { category: "registration", question: "Is there a fee?", answer: "See the Registration page for the current fee, or ask the organisers." },
-  { category: "programme", question: "What should I bring?", answer: "A charged laptop and its charger. Tell us in the registration form if you will need a computer in the lab instead." },
-  { category: "programme", question: "Do I need to know programming?", answer: "No. Both programmes are designed for non-programmers: if you can use a web browser and an office suite, you can follow every session." },
+  { category: "registration", question: "How much does it cost?", answer: "Every training is quoted for its focus, length and group size. Contact us and we'll send you a proposal." },
+  { category: "programme", question: "What should we bring?", answer: "A charged laptop and its charger for everyone taking part. Tell us when you contact us if your team will need computers in the lab instead." },
+  { category: "programme", question: "Do we need to know programming?", answer: "No. Every training is designed for non-programmers: if you can use a web browser and an office suite, you can follow every session." },
   {
     category: "programme",
     question: "Which AI tools will we use?",
-    answer: "Widely available AI assistants and the AI features of everyday office tools. The trainers share the list, and any accounts you need, before the batch starts.",
+    answer: "Widely available AI assistants and the AI features of the office tools your team already uses. We agree the list with you, and share any accounts needed, before the training.",
   },
-  { category: "programme", question: "Will the sessions be recorded?", answer: "Selected slides and recordings may be shared on this website after a batch." },
+  {
+    category: "programme",
+    question: "Can the training use examples from our industry?",
+    answer: "Yes, that is how we work. We use tasks and documents from your field (without confidential data), so what your team learns applies to their work the next day.",
+  },
   {
     category: "travel",
     question: "How do I reach Daffodil Smart City?",
@@ -283,22 +291,22 @@ export const DEFAULT_FAQS: NewDoc<Faq>[] = [
   },
   {
     category: "sponsorship",
-    question: "Can you run a batch for our organisation?",
-    answer: "Yes. Use the “Become a partner” form on the Partners page, or e-mail the organisers, and we will get back to you with the options.",
+    question: "Can you train several teams in our organisation?",
+    answer: "Yes. Each team can have a training designed for its own work. Contact us, or use the “Become a partner” form on the Partners page for a longer partnership, and we will get back to you with the options.",
   },
 ].map((f, i) => ({ ...f, order: i + 1, published: true }));
 
 /*
- * The plan every batch follows: Day 1 for AI for Professionals, Day 2 for AI for Workspace, with the rooms and
- * each batch's trainers e-mailed to its participants. Added once to a site without sessions (bootstrap.ts),
- * shown as a draft ("subject to change"); every session is then edited under Schedule in the admin panel.
+ * A sample plan of what a training can include: a day of AI for professional work and a day of AI for office
+ * work. Each real training is planned with the organisation that asks for it. Added once to a site without
+ * sessions (bootstrap.ts), shown as a sample; every session is then edited under Schedule in the admin panel.
  */
 type Slot = { type: Session["type"]; title: string; theme?: Session["theme"]; description?: string };
 const slot = (day: "1" | "2", start: string, end: string, session: Slot) => ({ day, start, end, ...session });
 const TRAINERS = "DIU CSE trainers";
 
 export const DEFAULT_SESSIONS: NewDoc<Session>[] = [
-  slot("1", "09:30", "10:00", { type: "opening", title: "Registration and welcome", description: "Meet the trainers and the rest of the batch, and see what you'll be able to do by the end." }),
+  slot("1", "09:30", "10:00", { type: "opening", title: "Welcome and your team's goals", description: "Meet the trainers, share what your team wants AI to help with and see what you'll be able to do by the end." }),
   slot("1", "10:00", "11:00", { type: "lecture", theme: "professionals", title: "AI in your profession: what today's tools can and can't do" }),
   slot("1", "11:00", "11:15", { type: "break", title: "Tea break" }),
   slot("1", "11:15", "12:30", { type: "tutorial", theme: "professionals", title: "Prompting for professional work: clear instructions, better answers" }),
@@ -361,7 +369,6 @@ const RETIRED: Retired = {
     "homeInvite.posterKicker": ["Registration open"],
     "homeInvite.posterText": ["AI for Professionals and AI for Workspace: practical, hands-on AI training at Daffodil International University."],
     "homeInvite.title": ["Registration for the next batch is open"],
-    "homeInvite.when": ["When"],
     "homeNews.emptyText": ["Check back soon: registration and batch news will be posted here."],
     "homeParticipants.emptyText": ["Participants are listed here once their batch is completed. Want to be in the first one?"],
     "homeParticipants.emptyTitle": ["Our first batch is on its way"],
@@ -387,12 +394,10 @@ const RETIRED: Retired = {
     "programmePlan.registrationClosed": ["Registration has closed."],
     "programmePlan.registrationOpen": ["Registration is open. Save your seat."],
     "programmeSchedule.tbaBadge": ["Coming soon"],
-    "programmeSchedule.tbaCalendar": ["Add the dates to your calendar"],
     "programmeSchedule.tbaRegister": ["Register to get updates"],
     "programmeSchedule.tbaText": ["Session times, rooms and trainers will appear here, with filters by programme and format, a personal agenda and calendar links."],
     "programmeSchedule.tbaTitle": ["Schedule to be announced"],
     "registerDeadlines.title": ["Deadlines"],
-    "registerDeadlines.closes": ["Registration closes"],
     "registerDeadlines.rolling": ["Registration deadline: to be announced."],
     "registerFees.tba": ["TBA"],
     "registerForm.closedText": ["Thank you for your interest! Registration for this batch has closed. Follow the announcements for the next one."],
@@ -408,14 +413,52 @@ const RETIRED: Retired = {
     "venuePlace.hallTba": ["to be announced"],
   },
   texts: {
-    highlights: { "Seats per batch": "New batches", TBA: "All year" },
-    fees: { "To be announced": "On request", "Places are limited": "Places in each batch are limited" },
+    highlights: {
+      "Seats per batch": "Office work",
+      "TBA": "Faster",
+      "New batches": "Office work",
+      "All year": "Faster",
+    },
+    fees: {
+      "To be announced": "On request",
+      "Places are limited": "Quoted for your team's needs",
+      "Places in each batch are limited": "Quoted for your team's needs",
+      "Everyone": "Custom training",
+    },
     aboutPoints: {
-      "Each batch": "All year round",
-      "{dates}: short lectures, hands-on labs and live demos at {venue}.": "New batches start regularly: short lectures, hands-on labs and live demos at {venue}. The next one is {dates}.",
+      "Two programmes": "Custom content",
+      "AI for Professionals and AI for Workspace: pick the one that fits how you work, or take both.": "Every training is designed for its audience: your industry, your tools and the tasks your team does every day.",
+      "Working professionals, teachers, students, entrepreneurs and office teams. No programming needed.": "Organisations, office teams, working professionals, teachers and entrepreneurs. No programming needed.",
+      "All year round": "Efficiency gains",
+      "New batches start regularly: short lectures, hands-on labs and live demos at {venue}. The next one is {dates}.": "We start from the routines that take your team the most time and show how AI gets them done faster.",
+      "Past batches": "Past participants",
+      "Meet the people who have trained with us on the Past participants page.": "Meet the people and teams who have trained with us on the Past participants page.",
+      "Each batch": "Efficiency gains",
+      "{dates}: short lectures, hands-on labs and live demos at {venue}.": "We start from the routines that take your team the most time and show how AI gets them done faster.",
+    },
+    themes: {
+      "AI for Professionals": "AI for Professional Work",
+      "For working professionals in any field: use AI to research, analyse, write reports and make better decisions, with privacy and accuracy in mind.": "For professionals in any industry: use AI to research, analyse, write reports and make better decisions, with privacy and accuracy in mind, using the tasks and documents of your own field.",
+      "AI for Workspace": "AI for Office Work",
+      "For everyday office work: write e-mails and documents, build spreadsheets and slides, and take meeting notes faster with AI assistants.": "For everyday office work: write e-mails and documents, build spreadsheets and slides and take meeting notes faster with AI, in the tools your team already uses.",
+    },
+    sponsorTiers: {
+      "Programme partner": "Training partner",
+      "Your name with the programme on the website and banners": "Your name with our training on the website and banners",
+      "A dedicated batch for your staff": "A training designed for your staff",
+      "A speaking slot at the opening session": "A speaking slot at an opening session",
+      "Batch sponsor": "Training sponsor",
+      "Logo on the website and banners of the batch": "Logo on the website and banners of a training you support",
+      "Meet motivated participants": "Meet motivated professionals",
+    },
+    localInfo: {
+      "December and January are cool and dry in Dhaka, with foggy mornings. A light jacket helps.": "Dhaka is warm and humid for much of the year: light clothes help, with a light jacket in the cooler months.",
     },
   },
 };
+
+// Then the defaults of the batch-era version (two programmes, dates, registration), before custom training.
+for (const [path, was] of Object.entries(BATCH_ERA_DEFAULTS)) RETIRED.values[path] = [...(RETIRED.values[path] ?? []), ...was];
 
 const same = (a: unknown, b: unknown) => JSON.stringify(a) === JSON.stringify(b);
 
@@ -506,8 +549,8 @@ function withWholeForms<T extends object>(settings: T): T {
 }
 
 /**
- * Registration is either open (enrolling for the next batch) or paused. A status from before (such as "soon",
- * when the site waited for one batch to open) reads as open: the training enrols continuously.
+ * Training requests (Contact us) are either open or paused. A status from before (such as "soon", when the
+ * site waited for one batch to open) reads as open.
  */
 function withCurrentStatus<T extends object>(settings: T): T {
   const out = settings as Record<string, unknown>;

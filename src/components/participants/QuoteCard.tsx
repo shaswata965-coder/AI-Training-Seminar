@@ -5,7 +5,7 @@ import { cn } from "@/lib/cn";
 import { THEME_META } from "@/lib/content/constants";
 import type { Participant } from "@/lib/content/types";
 
-/** A past participant's words about the training, with who said it, their programme and batch. */
+/** A past participant's words about the training, with who said it, its focus area and the training they took. */
 export function QuoteCard({ p, className }: { p: Participant; className?: string }) {
   const programme = THEME_META[p.theme] ?? THEME_META.general;
   const role = [p.designation, p.organisation].filter(Boolean).join(", ");
@@ -20,7 +20,7 @@ export function QuoteCard({ p, className }: { p: Participant; className?: string
           {role ? <span className="block text-sm text-muted">{role}</span> : null}
           <span className="mt-1.5 flex flex-wrap gap-1.5">
             <Badge tone={programme.tone} size="xs">
-              {p.theme === "general" ? "Both programmes" : programme.short}
+              {programme.short}
             </Badge>
             {p.batch ? (
               <Badge tone="neutral" size="xs">

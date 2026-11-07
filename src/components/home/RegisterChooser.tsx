@@ -1,13 +1,11 @@
 import { ArrowRight, ArrowUpRight, BriefcaseBusiness, Laptop } from "lucide-react";
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { DeadlineGate } from "@/components/forms/DeadlineGate";
 import { cn } from "@/lib/cn";
 import type { RegistrationStatus, Tone } from "@/lib/content/constants";
 import type { SiteSettings } from "@/lib/content/types";
 import { copy } from "@/lib/copy";
 import { registrationHref } from "@/lib/training";
-import { formatDate } from "@/lib/format";
 import type { PageCopy } from "@/lib/schema/page-copy";
 import type { PlacardKey } from "./HeroPlacards";
 
@@ -31,18 +29,13 @@ function Chip({ tone, live, children }: { tone: Tone; live?: boolean; children: 
   );
 }
 
-/** A registration's status as set in Site settings → Site-wide → Registration, pausing by itself at the deadline. */
-function Status({ status, deadline, c }: { status: RegistrationStatus; deadline: string; c: Words }) {
-  const closed = <Chip tone="blush">{c.closed}</Chip>;
-  if (status !== "open") return closed;
-  const until = deadline ? formatDate(deadline, { day: "numeric", month: "short" }) : "";
+/** Whether training requests are open, as set in Site settings → Site-wide → Contact us. */
+function Status({ status, c }: { status: RegistrationStatus; c: Words }) {
+  if (status !== "open") return <Chip tone="blush">{c.closed}</Chip>;
   return (
-    <DeadlineGate deadline={deadline} closed={closed}>
-      <Chip tone="mint" live>
-        {c.open}
-        {until ? <span className="font-medium opacity-80">{c.until ? `${c.until} ${until}` : until}</span> : null}
-      </Chip>
-    </DeadlineGate>
+    <Chip tone="mint" live>
+      {c.open}
+    </Chip>
   );
 }
 
@@ -54,18 +47,17 @@ interface Choice {
   title: string;
   href: string;
   status: RegistrationStatus;
-  deadline: string;
 }
 
-/** The registration form with a programme ticked; an external form is linked as it is. */
+/** The Contact us form with a focus area ticked; an external form is linked as it is. */
 function programmeHref(s: SiteSettings, programme: PlacardKey) {
   const href = registrationHref(s);
-  return href === "/register" ? `/register?programme=${programme}` : href;
+  return href === "/contact" ? `/contact?programme=${programme}` : href;
 }
 
 /**
- * Along the foot of the home hero: a short heading and one compact ticket for each programme, both leading to
- * the one registration form with that programme ticked. The whole ticket is the link. Its spinning edge lights
+ * Along the foot of the home hero: a short heading and one compact ticket for each focus area, both leading to
+ * the one Contact us form with that focus area ticked. The whole ticket is the link. Its spinning edge lights
  * up on the ticket whose placard Aura is holding up (the hero section's data-placard, set by HeroPlacards), and
  * pointing at a ticket brings its placard up.
  */
@@ -80,7 +72,6 @@ export function RegisterChooser({ s, className }: { s: SiteSettings; className?:
       title: c.professionalsTitle,
       href: programmeHref(s, "professionals"),
       status: s.registrationStatus,
-      deadline: s.registrationDeadline,
     },
     {
       key: "workspace",
@@ -90,7 +81,6 @@ export function RegisterChooser({ s, className }: { s: SiteSettings; className?:
       title: c.workspaceTitle,
       href: programmeHref(s, "workspace"),
       status: s.registrationStatus,
-      deadline: s.registrationDeadline,
     },
   ];
   return (
@@ -114,7 +104,7 @@ export function RegisterChooser({ s, className }: { s: SiteSettings; className?:
                 <span className="relative min-w-0 flex-1">
                   <span className="flex flex-wrap items-center gap-x-2.5 gap-y-1">
                     <span className="text-[11px] font-bold tracking-[0.16em] text-accent-ink uppercase">{x.kicker}</span>
-                    <Status status={x.status} deadline={x.deadline} c={c} />
+                    <Status status={x.status} c={c} />
                   </span>
                   <span className="mt-1 block font-display text-[1.05rem] leading-snug font-bold text-fg sm:text-lg">{x.title}</span>
                 </span>

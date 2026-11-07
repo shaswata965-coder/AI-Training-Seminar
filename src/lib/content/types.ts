@@ -237,9 +237,9 @@ export interface Participant extends Doc {
   organisation: string;
   /** The programme they completed; "general" for both. */
   theme: ThemeKey;
-  /** Their batch, as written in the admin ("Batch 1 · January 2026"): participants with the same text are grouped. */
+  /** The training they took, as written in the admin (“Office productivity training · Acme Bank”): participants with the same text are grouped. Stored as `batch`, its earlier name. */
   batch: string;
-  /** YYYY-MM-DD the batch was completed, to order the batches. */
+  /** YYYY-MM-DD the training was completed, to order the trainings (not shown on the site). */
   completed: string;
   photo: string;
   quote: string;

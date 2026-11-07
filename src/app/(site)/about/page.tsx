@@ -5,7 +5,6 @@ import type { CSSProperties } from "react";
 import { WorkflowLoop } from "@/components/home/WorkflowLoop";
 import { InOrder } from "@/components/layout/InOrder";
 import { PageHero } from "@/components/layout/PageHero";
-import { AddToCalendar } from "@/components/share/AddToCalendar";
 import { ShareButtons } from "@/components/share/ShareButtons";
 import { CmsIcon } from "@/components/ui/Icon";
 import { RichText } from "@/components/ui/RichText";
@@ -13,26 +12,26 @@ import { Section, SectionHeading } from "@/components/ui/Section";
 import { TagScope } from "@/components/ui/Tag";
 import { getSettings } from "@/lib/content/queries";
 import { copy } from "@/lib/copy";
-import { batchCalendarLinks } from "@/lib/training";
-import { formatDateRange } from "@/lib/format";
 import { absoluteUrl } from "@/lib/paths";
+import { registrationHref } from "@/lib/training";
 
 export async function generateMetadata(): Promise<Metadata> {
   const s = await getSettings();
   return {
     title: "About",
-    description: `Why the ${s.programmeName} matters, what you will learn, who should attend and how a batch runs.`,
+    description: `How ${s.programmeName} designs custom AI training around your industry, your office work and your team's tasks, and who it is for.`,
     alternates: { canonical: absoluteUrl("/about") },
   };
 }
 
 const TONES = ["azure", "lilac", "mint", "peach", "butter", "blush"] as const;
 
-function activityHref(title: string) {
+function activityHref(title: string, registration: string) {
   if (/lecture|trainer/i.test(title)) return "/trainers";
   if (/lab|tutorial|hands-on|own task/i.test(title)) return "/tutorials";
   if (/demo/i.test(title)) return "/tutorials#demos";
-  if (/participant|batch/i.test(title)) return "/past-participants";
+  if (/participant|past/i.test(title)) return "/past-participants";
+  if (/need|request|contact/i.test(title)) return registration;
   return "/programme";
 }
 
@@ -45,8 +44,7 @@ export default async function AboutPage() {
   return (
     <TagScope style="underline">
       <PageHero edit="about.hero" home={s.siteNav.home} tone={hero.tone} crumb={hero.crumb} eyebrow={hero.eyebrow} title={hero.title} aura="guide" description={hero.description}>
-        <AddToCalendar links={batchCalendarLinks(s)} variant="outline" size="sm" />
-        <ShareButtons url={absoluteUrl("/")} text={`${s.programmeName} at Daffodil International University, ${formatDateRange(s.startDate, s.endDate)}`} />
+        <ShareButtons url={absoluteUrl("/")} text={`${s.programmeName}: custom AI training from Daffodil International University`} />
       </PageHero>
 
       <InOrder
@@ -100,7 +98,7 @@ export default async function AboutPage() {
                 {s.activities.map((a, i) => (
                   <li key={a.title} data-reveal style={{ "--reveal-delay": `${i * 60}ms` } as CSSProperties}>
                     <Link
-                      href={activityHref(a.title)}
+                      href={activityHref(a.title, registrationHref(s))}
                       data-glow=""
                       className={`tone-${TONES[(i + 2) % 6]} card group flex h-full items-start gap-4 p-5 transition-[translate,scale,box-shadow] duration-300 hover:-translate-y-1 hover:shadow-card-lg`}
                     >

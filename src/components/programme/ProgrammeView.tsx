@@ -1,25 +1,21 @@
 "use client";
 
-import { CalendarPlus, ChevronDown, Search, Star, X } from "lucide-react";
+import { ChevronDown, Search, Star, X } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { useAccount } from "@/components/account/Account";
 import { Aura } from "@/components/aura/Aura";
-import { Badge } from "@/components/ui/Badge";
 import { RichText } from "@/components/ui/RichText";
 import { useToast } from "@/components/ui/Toast";
 import { cn } from "@/lib/cn";
 import { currentSessionType, currentThemeKey, SESSION_TYPE_META, SESSION_TYPES, THEME_KEYS, THEME_META, type SessionType, type ThemeKey } from "@/lib/content/constants";
 import type { Session } from "@/lib/content/types";
 import { timeRange } from "@/lib/format";
-import { replaceQuery, useNow, useUrlHash, useUrlParam } from "@/lib/client-hooks";
-import { withBase } from "@/lib/paths";
+import { replaceQuery, useUrlHash, useUrlParam } from "@/lib/client-hooks";
 import { SessionBadges, SessionRoom } from "./SessionMeta";
 
-export interface ProgrammeSession extends Session {
-  startIso: string;
-  endIso: string;
-}
+/** A session of the sample plan, as the page passes it. */
+export type ProgrammeSession = Session;
 export interface MiniTrainer {
   id: string;
   name: string;
@@ -57,10 +53,9 @@ export function ProgrammeView({
 }: {
   sessions: ProgrammeSession[];
   trainers: Record<string, MiniTrainer>;
-  days: { day: number; label: string }[];
+  days: { day: number }[];
 }) {
   const toast = useToast();
-  const now = useNow();
   // Initial filters come from the URL (?day=2&theme=workspace&type=discussion or #session-id);
   // once the visitor changes something, local state takes over.
   const urlDay = useUrlParam("day");
@@ -163,14 +158,6 @@ export function ProgrammeView({
     return [...map.entries()];
   }, [filtered]);
   const shownCount = filtered.length;
-  const dayLabel = days.find((d) => d.day === day)?.label ?? "";
-
-  const upcomingId = useMemo(() => {
-    if (now === null) return null;
-    // Only meaningful during a batch: flag the next session when it starts within 12 hours.
-    const soon = sessions.filter((s) => Date.parse(s.startIso) > now && Date.parse(s.startIso) - now < 12 * 3_600_000);
-    return soon.sort((a, b) => Date.parse(a.startIso) - Date.parse(b.startIso))[0]?.id ?? null;
-  }, [now, sessions]);
 
   const activeFilters = themes.size + types.size + (q ? 1 : 0) + (agendaOnly ? 1 : 0);
   const presentTypes = SESSION_TYPES.filter((t) => sessions.some((s) => s.type === t));
@@ -179,7 +166,7 @@ export function ProgrammeView({
   return (
     <div>
       {/* Day tabs */}
-      <div role="tablist" aria-label="Programme day" className="flex flex-wrap gap-2">
+      <div role="tablist" aria-label="Day of the sample plan" className="flex flex-wrap gap-2">
         {days.map((d) => {
           const on = d.day === day;
           const count = sessions.filter((s) => Number(s.day) === d.day).length;
@@ -202,7 +189,7 @@ export function ProgrammeView({
               <span className="leading-tight">
                 <span className="block text-sm font-bold">Day {d.day}</span>
                 <span className={cn("block text-xs", on ? "opacity-85" : "text-subtle")}>
-                  {d.label} · {count} sessions
+                  {count === 1 ? "1 session" : `${count} sessions`}
                 </span>
               </span>
             </button>
@@ -252,7 +239,7 @@ export function ProgrammeView({
           ) : null}
         </div>
         {presentThemes.length > 1 ? (
-          <div className="flex flex-wrap items-center gap-2" role="group" aria-label="Filter by theme">
+          <div className="flex flex-wrap items-center gap-2" role="group" aria-label="Filter by focus area">
             <span className="mr-1 text-xs font-bold tracking-[0.12em] text-subtle uppercase">Theme</span>
             {presentThemes.map((t) => (
               <Chip key={t} on={themes.has(t)} onClick={() => setThemes(toggle(themes, t))} tone={`tone-${THEME_META[t].tone}`}>
@@ -277,7 +264,6 @@ export function ProgrammeView({
       <div id="programme-panel" role="tabpanel" aria-labelledby={`day-tab-${day}`} className="mt-8">
         <h2 className="sr-only">
           Day {day}
-          {dayLabel ? ` · ${dayLabel}` : ""}
         </h2>
         <p className="sr-only" role="status">
           {shownCount === 1 ? "1 session shown" : `${shownCount} sessions shown`}
@@ -294,8 +280,6 @@ export function ProgrammeView({
                 </div>
                 <ul className={cn("grid gap-3", list.length > 1 && "lg:grid-cols-2")}>
                   {list.map((s) => {
-                    const live = now !== null && now >= Date.parse(s.startIso) && now < Date.parse(s.endIso);
-                    const next = s.id === upcomingId;
                     const starred = agenda.has(s.id);
                     const isBreak = s.type === "break";
                     const people = (s.type === "discussion" ? s.panelists : s.trainers).map((id) => trainers[id]).filter(Boolean);
@@ -309,34 +293,14 @@ export function ProgrammeView({
                           `tone-${(SESSION_TYPE_META[s.type] ?? SESSION_TYPE_META.other).tone}`,
                           "scroll-mt-28 rounded-3xl border p-5 transition-[box-shadow,translate]",
                           isBreak ? "border-dashed border-border-strong bg-accent-soft/50" : "card hover:-translate-y-0.5 hover:shadow-card-lg",
-                          live && "ring-2 ring-mint",
                         )}
                       >
                         <div className="flex flex-wrap items-start justify-between gap-3">
                           <div className="flex flex-wrap items-center gap-2">
                             <SessionBadges session={s} />
-                            {live ? (
-                              <Badge tone="mint" size="xs" dot>
-                                Live now
-                              </Badge>
-                            ) : next ? (
-                              <Badge tone="butter" size="xs" dot>
-                                Up next
-                              </Badge>
-                            ) : null}
                           </div>
                           {!isBreak ? (
                             <div className="flex items-center gap-1">
-                              <a
-                                href={withBase(`/api/calendar?session=${encodeURIComponent(s.id)}`)}
-                                download
-                                data-ripple=""
-                                className="grid h-9 w-9 place-items-center rounded-lg text-subtle transition hover:-translate-y-0.5 hover:bg-surface-2 hover:text-fg"
-                                aria-label={`Add “${s.title}” to your calendar`}
-                                title="Add to calendar"
-                              >
-                                <CalendarPlus size={17} aria-hidden />
-                              </a>
                               <button
                                 type="button"
                                 onClick={() => star(s.id, s.title)}

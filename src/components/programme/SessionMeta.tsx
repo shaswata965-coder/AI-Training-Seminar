@@ -77,7 +77,7 @@ export function SessionPeople({ session, byId, linked = true }: { session: Sessi
 export function SessionRoom({ room }: { room: string }) {
   return (
     <span className="inline-flex items-center gap-1 text-sm text-subtle">
-      <MapPin size={14} aria-hidden /> {room || "Room e-mailed before your batch"}
+      <MapPin size={14} aria-hidden /> {room || "Room confirmed by e-mail"}
     </span>
   );
 }

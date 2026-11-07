@@ -1,12 +1,12 @@
 import type { SiteSettings } from "@/lib/content/types";
 import { venueLine } from "@/lib/training";
-import { formatDate, formatDateRange } from "@/lib/format";
 import type { CopyKey, PageCopy } from "@/lib/schema/page-copy";
 
 /*
  * Section texts from Site settings (src/lib/schema/page-copy.ts), with their
- * placeholders filled in: {programme}, {short}, {dates}, {venue}, {venueName},
+ * placeholders filled in: {programme}, {short}, {venue}, {venueName},
  * {tagline}, {organiser}, {replyBy}, plus any a section passes itself (e.g. {count}).
+ * The site shows no dates: an earlier text's {dates} is left out.
  */
 
 export type Vars = Record<string, string | number>;
@@ -20,7 +20,7 @@ export function siteVars(s: SiteSettings): Vars {
   return {
     programme: s.programmeName,
     short: s.shortName,
-    dates: formatDateRange(s.startDate, s.endDate),
+    dates: "",
     venue: venueLine(s),
     venueName: s.venueName,
     tagline: s.tagline,
@@ -29,10 +29,10 @@ export function siteVars(s: SiteSettings): Vars {
   };
 }
 
-/** When registrants hear whether they have a place: "by 20 November 2026", or "by e-mail" before the date is set. */
+/** How the organisers reply to a training request: by e-mail (the site shows no dates). */
 export function replyBy(s: SiteSettings) {
-  const date = formatDate(s.registrationReplyBy);
-  return date ? `by ${date}` : "by e-mail";
+  void s;
+  return "by e-mail";
 }
 
 /** One section's texts and colours, placeholders filled in. */

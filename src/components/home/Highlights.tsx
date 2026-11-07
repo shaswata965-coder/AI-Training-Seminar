@@ -12,7 +12,7 @@ export function Highlights({ s }: { s: SiteSettings }) {
   if (!highlights.length) return null;
   const odd = highlights.length % 2 === 1;
   return (
-    <section data-edit="home.highlights" aria-label="Programme highlights" className="container-site relative z-10 py-8 sm:py-10">
+    <section data-edit="home.highlights" aria-label="Training highlights" className="container-site relative z-10 py-8 sm:py-10">
       <div className="drop-shadow-[0_16px_22px_rgb(30_41_59/0.12)] dark:drop-shadow-[0_16px_26px_rgb(0_0_0/0.55)]">
         <ul className="grid grid-cols-2 gap-y-3 sm:grid-cols-3 lg:flex lg:gap-y-0">
           <li aria-hidden className="ticket-stub hidden w-16 shrink-0 items-center justify-center bg-[linear-gradient(180deg,var(--brand),color-mix(in_oklab,var(--brand)_55%,var(--lilac)))] lg:flex">

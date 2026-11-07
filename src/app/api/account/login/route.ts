@@ -13,7 +13,7 @@ const schema = z.object({
 });
 
 const WINDOW = 15 * 60_000;
-const FAILED = "That e-mail and password, registration ID or sign-in code don't match.";
+const FAILED = "That e-mail and password, reference number or sign-in code don't match.";
 
 /**
  * Sign in on the public site (see visitor-auth.ts for who can). Failed attempts are limited per address,
@@ -25,7 +25,7 @@ export async function POST(req: NextRequest) {
   if (!rateLimit(`visitor-login:${ip}`, 30, WINDOW).ok || isLimited(`visitor-fail:${ip}`, 10, WINDOW).limited) return error(429, "Too many sign-in attempts. Please wait 15 minutes.");
 
   const parsed = schema.safeParse(await readJson(req, 16 * 1024));
-  if (!parsed.success) return error(400, "Enter your e-mail and your password, registration ID or sign-in code.");
+  if (!parsed.success) return error(400, "Enter your e-mail and your password, reference number or sign-in code.");
   const { email, code, agenda } = parsed.data;
   const fromHere = `visitor-fail:${email}:${ip}`;
   const anywhere = `visitor-fail:${email}`;

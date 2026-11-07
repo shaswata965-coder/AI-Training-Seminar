@@ -27,16 +27,16 @@ const NOTE_PLAIN = "Sample content to preview the layout. Edit or delete it in t
 
 /* ---------------------------------------------------------------- Data -- */
 
-/** Sample past participants, two batches, both programmes; a few with quotes for “What participants say”. */
+/** Sample past participants, two trainings, both focus areas; a few with quotes for “What participants say”. */
 const PARTICIPANTS = [
-  { name: "Ayesha Sample", designation: "Assistant Manager, HR (sample)", organisation: "Example Bank PLC", theme: "professionals", batch: "Batch 1 · Sample", completed: "2026-06-14", featured: true, quote: "Sample quote: I now draft job descriptions and summarise interview notes in minutes, and I know what to check before I use them." },
-  { name: "Rahim Placeholder", designation: "Lecturer (sample)", organisation: "Sample College", theme: "workspace", batch: "Batch 1 · Sample", completed: "2026-06-14", featured: true, quote: "Sample quote: the spreadsheet lab alone saved me hours of marking every week." },
-  { name: "Nusrat Example", designation: "Software Engineer (sample)", organisation: "Placeholder Tech Ltd", theme: "general", batch: "Batch 1 · Sample", completed: "2026-06-14", featured: false, quote: "" },
-  { name: "Tanvir Demo", designation: "Entrepreneur (sample)", organisation: "Demo Foods", theme: "professionals", batch: "Batch 1 · Sample", completed: "2026-06-14", featured: false, quote: "" },
-  { name: "Farhana Sample", designation: "Executive Officer (sample)", organisation: "Example NGO", theme: "workspace", batch: "Batch 2 · Sample", completed: "2026-09-20", featured: true, quote: "Sample quote: meeting notes, reports and e-mails used to take my whole afternoon. Not any more." },
-  { name: "Imran Placeholder", designation: "Student, BSc in CSE (sample)", organisation: "Daffodil International University", theme: "general", batch: "Batch 2 · Sample", completed: "2026-09-20", featured: false, quote: "" },
-  { name: "Sadia Mock", designation: "Data Analyst (sample)", organisation: "Sample Telecom", theme: "professionals", batch: "Batch 2 · Sample", completed: "2026-09-20", featured: false, quote: "" },
-  { name: "Karim Example", designation: "Office Administrator (sample)", organisation: "Placeholder Garments Ltd", theme: "workspace", batch: "Batch 2 · Sample", completed: "2026-09-20", featured: false, quote: "" },
+  { name: "Ayesha Sample", designation: "Assistant Manager, HR (sample)", organisation: "Example Bank PLC", theme: "professionals", batch: "Office productivity training · Sample", completed: "2026-06-14", featured: true, quote: "Sample quote: I now draft job descriptions and summarise interview notes in minutes, and I know what to check before I use them." },
+  { name: "Rahim Placeholder", designation: "Lecturer (sample)", organisation: "Sample College", theme: "workspace", batch: "Office productivity training · Sample", completed: "2026-06-14", featured: true, quote: "Sample quote: the spreadsheet lab alone saved me hours of marking every week." },
+  { name: "Nusrat Example", designation: "Software Engineer (sample)", organisation: "Placeholder Tech Ltd", theme: "general", batch: "Office productivity training · Sample", completed: "2026-06-14", featured: false, quote: "" },
+  { name: "Tanvir Demo", designation: "Entrepreneur (sample)", organisation: "Demo Foods", theme: "professionals", batch: "Office productivity training · Sample", completed: "2026-06-14", featured: false, quote: "" },
+  { name: "Farhana Sample", designation: "Executive Officer (sample)", organisation: "Example NGO", theme: "workspace", batch: "AI for professional work · Sample", completed: "2026-09-20", featured: true, quote: "Sample quote: meeting notes, reports and e-mails used to take my whole afternoon. Not any more." },
+  { name: "Imran Placeholder", designation: "Student, BSc in CSE (sample)", organisation: "Daffodil International University", theme: "general", batch: "AI for professional work · Sample", completed: "2026-09-20", featured: false, quote: "" },
+  { name: "Sadia Mock", designation: "Data Analyst (sample)", organisation: "Sample Telecom", theme: "professionals", batch: "AI for professional work · Sample", completed: "2026-09-20", featured: false, quote: "" },
+  { name: "Karim Example", designation: "Office Administrator (sample)", organisation: "Placeholder Garments Ltd", theme: "workspace", batch: "AI for professional work · Sample", completed: "2026-09-20", featured: false, quote: "" },
 ];
 
 const TUTORIALS = [
@@ -48,7 +48,7 @@ const TUTORIALS = [
     theme: "professionals",
     instructors: [{ name: "DIU CSE trainer", affiliation: "Department of CSE, DIU", url: "" }],
     description: `Write clear instructions for an AI assistant, give it the right context and check what comes back, on tasks from your own work.\n\n${NOTE}`,
-    prerequisites: ["Laptop with a modern web browser", "A free account with an AI assistant (details sent before the batch)"],
+    prerequisites: ["Laptop with a modern web browser", "A free account with an AI assistant (details sent before the training)"],
     materials: [{ label: "Sample materials (placeholder link)", url: "https://example.com/materials" }],
     capacity: "40 seats (sample)",
   },
@@ -71,7 +71,7 @@ const TUTORIALS = [
     duration: "60 minutes",
     theme: "general",
     instructors: [{ name: "DIU CSE trainers", affiliation: "Department of CSE, DIU", url: "" }],
-    description: `Work on a real task from your job or studies with a trainer beside you, using what you learnt in the programme.\n\n${NOTE}`,
+    description: `Work on a real task from your job or studies with a trainer beside you, using what you learnt in the training.\n\n${NOTE}`,
     prerequisites: ["Laptop", "A task you'd like to speed up"],
     materials: [],
     capacity: "All participants (sample)",
@@ -95,7 +95,7 @@ const PEOPLE = [
 ];
 
 const ANNOUNCEMENTS = [
-  { title: "Sample announcement: registration for the next batch is open", body: "This is sample content added by the demo seed to preview the announcements box.", tone: "info", linkUrl: "/register", linkLabel: "Register now", pinned: true },
+  { title: "Sample announcement: a new focus area for office teams", body: "This is sample content added by the demo seed to preview the announcements box.", tone: "info", linkUrl: "/contact", linkLabel: "Contact us", pinned: true },
 ];
 
 /* ------------------------------------------------------------- Helpers -- */

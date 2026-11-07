@@ -69,6 +69,10 @@ const nextConfig: NextConfig = {
       },
     },
   },
+  // Training is custom, so the registration page became Contact us; old links (with ?programme=…) still work.
+  async redirects() {
+    return [{ source: "/register", destination: "/contact", permanent: true }];
+  },
   async headers() {
     return [
       { source: "/:path*", headers: securityHeaders },

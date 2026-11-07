@@ -24,16 +24,16 @@ const SECTIONS: { id: string; title: string; steps: (string | [string, string])[
       ["Live preview", "The real page beside the form shows your changes as you type, on desktop or phone. Visitors only see them once you press Save changes."],
       ["Hiding a section", "Every section below a page's hero has a “Show this section on the page” switch at the top of its tab. Switch it off to take the whole section off the page; its texts are kept for when you switch it back on."],
       ["Layout check", "Each text has a counter. Too much or too little text, or a title wrapping onto many lines, text spilling out of its box or the page scrolling sideways, is flagged on the field, the tabs and in the Layout check box."],
-      "In many texts you can write `{programme}`, `{dates}` or `{venue}`: they are filled in from Programme details.",
+      "In many texts you can write `{programme}` or `{venue}`: they are filled in from Programme details. The site shows no dates: every training is custom.",
     ],
   },
   {
     id: "details",
-    title: "Programme details, batch dates & registration",
+    title: "Programme details & Contact us",
     steps: [
-      ["Site settings → Site-wide → Programme details", "Name, tagline, the next batch's dates, the venue and the room. The training runs continuously: when a batch starts, move the dates on to the next one."],
-      ["Site settings → Site-wide → Registration", "Open (enrolling for the next batch, the usual state) or paused, an optional deadline for the next batch (registration pauses by itself once it passes) and the fees. Paste a Google Form link to use an external form instead of the built-in one."],
-      ["The forms' fields", "Registration → Form fields, Home → Contact form and Partners → Partner form. Click a field to change its name, guide, example and type of answer (text, e-mail, phone, number, link, date, a drop-down list, choices or a tick box), its choices, whether it is required, or to hide it. Add questions of your own with “Add a question”. Fields with a lock came with the site and can't be deleted."],
+      ["Site settings → Site-wide → Programme details", "Name, tagline, the venue and the room. The site shows no dates: each training is planned with the organisation that asks for it."],
+      ["Site settings → Site-wide → Contact us", "Training requests open (the usual state) or paused. Paste a Google Form link to use an external form instead of the built-in one. The pricing is under Site settings → Contact us."],
+      ["The forms' fields", "Contact us → Form fields, Home → Contact form and Partners → Partner form. Click a field to change its name, guide, example and type of answer (text, e-mail, phone, number, link, date, a drop-down list, choices or a tick box), its choices, whether it is required, or to hide it. Add questions of your own with “Add a question”. Fields with a lock came with the site and can't be deleted."],
       ["Site settings → Site-wide → Colours and Logos", "Set the brand colour and the accent colours, and replace the built-in DIU logo and Department of CSE seal if ever needed."],
       ["Site settings → Site-wide → Contact & social", "Official e-mail, phone and social links shown in the footer and contact section."],
     ],
@@ -43,23 +43,23 @@ const SECTIONS: { id: string; title: string; steps: (string | [string, string])[
     title: "Aura's look & Ask Aura",
     steps: [
       ["Site settings → Site-wide → Aura", "Aura's look everywhere on the site, in the logo and in the social preview: the Strong build (square jaw, broad shoulders, fists; the default) or the Classic rounded robot, his colours (steel, DIU blue, graphite or classic white) and his eyes (a colour for each section, or one colour everywhere). The Meet Aura page's playground lets you try every combination first."],
-      ["Ask Aura", "The button in the bottom-right corner of every page (or Ctrl/⌘ + K) searches the pages, FAQs, trainers, sessions and labs, with the next batch's dates at hand. Switch it off under Site settings → Site-wide → Features & past batches."],
+      ["Ask Aura", "The button in the bottom-right corner of every page (or Ctrl/⌘ + K) searches the pages, FAQs, trainers, sessions and labs, with the venue and Contact us at hand. Switch it off under Site settings → Site-wide → Features & past trainings."],
       ["Map pin", "Site settings → Venue → The venue: the latitude and longitude the venue's map and every “Directions” link point to."],
     ],
   },
   {
     id: "news",
     title: "Announcements",
-    steps: ["Announcements → New announcement. Pin important news to keep it on top.", "Add an optional link (for example to the registration page or a PDF)."],
+    steps: ["Announcements → New announcement. Pin important news to keep it on top.", "Add an optional link (for example to the Contact us page or a PDF)."],
   },
   {
     id: "programme",
-    title: "Programmes, schedule & trainers",
+    title: "Focus areas, sample plan & trainers",
     steps: [
-      ["Programmes", "Site settings → Home → Programmes: the titles, descriptions and photos of AI for Professionals and AI for Workspace. Sessions, labs, demos, trainers and past participants each pick a programme, or General for both."],
+      ["Focus areas", "Site settings → Home → What we train: the titles, descriptions and photos of AI for Professional Work and AI for Office Work. Sessions, labs, demos, trainers and past participants each pick a focus area, or General."],
       ["Trainers", "Add each trainer with a photo, designation, affiliation, label (DIU faculty / Industry expert / Guest trainer), programme, profile, areas of expertise and what they teach. Tick “Lead trainer” for the one shown in the spotlight at the top of the Trainers page, and “Feature on the home page” for the home page carousel."],
       ["Schedule", "Add sessions with day, start/end time, type (opening, lecture, discussion, hands-on lab, demo, break), programme and room, and link their trainers."],
-      ["Schedule status", "Site settings → Schedule → Schedule. “Draft” or “Final” shows the sessions; “Hidden” shows a note that each batch's schedule is e-mailed instead. The PDF download updates automatically."],
+      ["Sample plan status", "Site settings → Schedule → Schedule. “Sample” or “Shown without that mark” shows the sessions of the sample plan (Day 1, Day 2…, no dates); “Hidden” shows a note that every training is planned with you instead. The PDF download updates automatically."],
     ],
   },
   {
@@ -75,9 +75,9 @@ const SECTIONS: { id: string; title: string; steps: (string | [string, string])[
     id: "participants",
     title: "Past participants",
     steps: [
-      "Past participants → New participant, once their batch is completed: name, designation, organisation, the programme they completed (General for both) and the batch, written the same way for everyone in it (e.g. “Batch 1 · January 2026”), with the date it was completed to put the batches in order.",
+      "Past participants → New participant, once their training is completed: name, designation, organisation, the focus area (General for several) and the training, written the same way for everyone in it (e.g. “Office productivity training · Acme Bank”), with the date it was completed to put the trainings in order (the date is not shown on the site).",
       "A photo, a quote and a profile link are optional: add them only with the participant's permission. Tick “Feature their quote” to show it under “What participants say” and on the home page.",
-      "The numbers at the top of the Past participants page (participants, batches, organisations) are counted from the list.",
+      "The numbers at the top of the Past participants page (participants, trainings, organisations) are counted from the list.",
     ],
   },
   {
@@ -91,18 +91,18 @@ const SECTIONS: { id: string; title: string; steps: (string | [string, string])[
   },
   {
     id: "responses",
-    title: "Registrations & enquiries",
+    title: "Training requests & enquiries",
     steps: [
-      "Registrations lists everyone who registered on the website. Change a status (e.g. confirmed / waitlisted), add notes, or download a CSV for Excel.",
-      "Places are limited, so registrations are reviewed: new ones are “registered” until the organising team sets them to confirmed or waitlisted. Registrants are told they'll hear by the date in Site settings → Site-wide → Registration → Places confirmed by (or “by e-mail” while it is blank).",
+      "Training requests lists every request sent with the Contact us form. Change a status (e.g. confirmed / waitlisted), add notes, or download a CSV for Excel.",
+      "New requests are “registered” until the organising team sets them to confirmed or waitlisted. Everyone who sends one is told the team will reply by e-mail to plan the training.",
       "Enquiries collects contact-form messages and partnership requests. Use “Reply” to answer by e-mail.",
       "Confirmation e-mails are sent automatically when e-mail (SMTP) is configured on the server.",
     ],
   },
   {
     id: "post",
-    title: "After a batch",
-    steps: ["Upload photos under Photo gallery and add slides / YouTube links under Slides & recordings.", "Then switch them on in Site settings → Site-wide → Features & past batches."],
+    title: "After a training",
+    steps: ["Upload photos under Photo gallery and add slides / YouTube links under Slides & recordings.", "Then switch them on in Site settings → Site-wide → Features & past trainings."],
   },
   {
     id: "access",

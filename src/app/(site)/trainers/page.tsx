@@ -10,7 +10,7 @@ import { Eyebrow } from "@/components/ui/Section";
 import { TagScope } from "@/components/ui/Tag";
 import { getSessions, getSettings, getTrainers } from "@/lib/content/queries";
 import { copy } from "@/lib/copy";
-import { batchDayLabel } from "@/lib/format";
+import { dayLabel } from "@/lib/training";
 import { absoluteUrl } from "@/lib/paths";
 import { isShown } from "@/lib/schema/section-order";
 
@@ -38,7 +38,7 @@ export default async function TrainersPage() {
     trainers: x.trainers,
     panelists: x.panelists,
     moderator: x.moderator,
-    dayLabel: batchDayLabel(s.startDate, x.day),
+    dayLabel: dayLabel(x.day),
   }));
   const hero = copy(s, "trainersHero");
   const list = copy(s, "trainersList");

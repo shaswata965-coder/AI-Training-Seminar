@@ -18,7 +18,7 @@ export const primaryNav = (n: NavCopy): NavItem[] => [
   { href: "/past-participants", label: n.participants },
 ];
 
-export const registrationNav = (n: NavCopy): NavItem => ({ href: "/register", label: n.registration });
+export const registrationNav = (n: NavCopy): NavItem => ({ href: "/contact", label: n.registration });
 
 /** Dedicated pages listed under Explore, next to the home page sections. */
 export const explorePages = (n: NavCopy): NavItem[] => [

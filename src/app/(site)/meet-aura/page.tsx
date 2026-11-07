@@ -13,15 +13,15 @@ import { absoluteUrl } from "@/lib/paths";
 
 export const metadata: Metadata = {
   title: "Meet Aura",
-  description: "Aura is the AI training programme's mascot: a friendly hovering robot who changes for every part of the site.",
+  description: "Aura is DIU AI Training's mascot: a friendly hovering robot who changes for every part of the site.",
   alternates: { canonical: absoluteUrl("/meet-aura") },
 };
 
 const WHERE: Partial<Record<AuraVariant, string>> = {
   hero: "Home: waving hello", announcements: "Announcements", thinker: "About: working with AI",
-  professionals: "Programme: AI for Professionals", workspace: "Programme: AI for Workspace",
-  programme: "Schedule", trainers: "Trainers", tutorials: "Hands-on labs", demos: "Live demos", participants: "Past participants",
-  registration: "Registration", success: "Registration complete", venue: "Venue", travel: "Travel tips",
+  professionals: "Focus area: AI for Professional Work", workspace: "Focus area: AI for Office Work",
+  programme: "Sample plan", trainers: "Trainers", tutorials: "Hands-on labs", demos: "Live demos", participants: "Past participants",
+  registration: "Contact us", success: "Request sent", venue: "Venue", travel: "Travel tips",
   sponsors: "Partners", organisers: "Organisers", volunteers: "Volunteers", faq: "FAQ", answer: "FAQ: answer found",
   contact: "Contact form", notFound: "Page not found", sleep: "Footer", gallery: "Photo gallery", recordings: "Recordings", admin: "Admin panel", error: "Error page",
 };

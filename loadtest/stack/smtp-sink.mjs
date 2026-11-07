@@ -18,7 +18,7 @@ const delayMs = Number(process.env.SMTP_SINK_DELAY_MS ?? 0);
 const maxConnections = Number(process.env.SMTP_SINK_MAX_CONNECTIONS) || Infinity;
 
 const KINDS = [
-  ["registration-confirmation", /^Registration received:/],
+  ["registration-confirmation", /^Training request received:/],
   ["enquiry-ack", /^We received your/],
   ["organiser-enquiry-notice", /^(Contact message|Partnership enquiry) from/],
 ];

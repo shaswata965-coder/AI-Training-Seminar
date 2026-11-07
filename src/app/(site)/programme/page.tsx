@@ -1,13 +1,12 @@
-import { ArrowRight, Download, GraduationCap, MapPin, Mic, Printer, Ticket } from "lucide-react";
+import { ArrowRight, Download, GraduationCap, Mail, MapPin, Mic, Printer } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import type { CSSProperties, ReactNode } from "react";
 import { InOrder } from "@/components/layout/InOrder";
 import { PageHero } from "@/components/layout/PageHero";
 import { ProgrammeOverview } from "@/components/programme/ProgrammeOverview";
-import { ProgrammeView, type MiniTrainer, type ProgrammeSession } from "@/components/programme/ProgrammeView";
+import { ProgrammeView, type MiniTrainer } from "@/components/programme/ProgrammeView";
 import { ScheduleTba } from "@/components/programme/ScheduleTba";
-import { AddToCalendar } from "@/components/share/AddToCalendar";
 import { Badge } from "@/components/ui/Badge";
 import { ButtonLink } from "@/components/ui/Button";
 import { Section, SectionHeading } from "@/components/ui/Section";
@@ -15,16 +14,15 @@ import { TagScope } from "@/components/ui/Tag";
 import { getSessions, getSettings, getTrainers } from "@/lib/content/queries";
 import type { SiteSettings } from "@/lib/content/types";
 import { copy } from "@/lib/copy";
-import { batchCalendarLinks, batchDays, registrationHref } from "@/lib/training";
-import { batchDayDate, batchDayLabel, formatDateRange } from "@/lib/format";
+import { planDays, registrationHref } from "@/lib/training";
 import { absoluteUrl } from "@/lib/paths";
 import { shownSections } from "@/lib/schema/section-order";
 
 export async function generateMetadata(): Promise<Metadata> {
   const s = await getSettings();
   return {
-    title: "Schedule",
-    description: `Day-wise schedule of the next batch of the ${s.programmeName}: lectures, hands-on labs and live demos for AI for Professionals and AI for Workspace, ${formatDateRange(s.startDate, s.endDate)}.`,
+    title: "Sample plan",
+    description: `What a custom training from ${s.programmeName} can include, day by day: lectures, hands-on labs and live demos on AI for professional work and AI for office work, adapted to your team.`,
     alternates: { canonical: absoluteUrl("/programme") },
   };
 }
@@ -36,12 +34,8 @@ function registrationText(s: SiteSettings) {
 
 export default async function ProgrammePage() {
   const [s, sessions, trainers] = await Promise.all([getSettings(), getSessions(), getTrainers()]);
-  const days = batchDays(s).map((d) => ({ day: d.day, label: batchDayLabel(s.startDate, d.day) }));
+  const days = planDays(sessions).map((day) => ({ day }));
   const tba = s.programmeStatus === "tba" || sessions.length === 0;
-  const withTimes: ProgrammeSession[] = sessions.map((x) => {
-    const date = batchDayDate(s.startDate, x.day);
-    return { ...x, startIso: `${date}T${x.start || "00:00"}:00+06:00`, endIso: `${date}T${x.end || x.start || "23:59"}:00+06:00` };
-  });
   const mini: Record<string, MiniTrainer> = Object.fromEntries(trainers.map((sp) => [sp.id, { id: sp.id, name: sp.name, slug: sp.slug, affiliation: sp.affiliation }]));
   const pdfHref = s.schedulePdf || "/api/programme/pdf";
   const hero = copy(s, "programmeHero");
@@ -58,7 +52,7 @@ export default async function ProgrammePage() {
     .filter((j) => j.label);
   const plan: { href: string; title: string; text: string; icon: ReactNode; tone: string }[] = [
     { href: "/venue", title: pl.venueTitle, text: pl.venueText, icon: <MapPin size={21} aria-hidden />, tone: "tone-mint" },
-    { href: registrationHref(s), title: pl.registrationTitle, text: registrationText(s), icon: <Ticket size={21} aria-hidden />, tone: "tone-butter" },
+    { href: registrationHref(s), title: pl.registrationTitle, text: registrationText(s), icon: <Mail size={21} aria-hidden />, tone: "tone-butter" },
     { href: "/tutorials", title: pl.tutorialsTitle, text: pl.tutorialsText, icon: <GraduationCap size={21} aria-hidden />, tone: "tone-lilac" },
     { href: "/trainers", title: pl.trainersTitle, text: pl.trainersText, icon: <Mic size={21} aria-hidden />, tone: "tone-peach" },
   ];
@@ -71,7 +65,6 @@ export default async function ProgrammePage() {
             {hero.pdf}
           </ButtonLink>
         ) : null}
-        <AddToCalendar links={batchCalendarLinks(s)} />
       </PageHero>
 
       <nav aria-label="On this page" className="border-b border-border bg-bg-soft">
@@ -117,7 +110,7 @@ export default async function ProgrammePage() {
                     ) : null}
                   </div>
                   {sc.filterHint ? <p className="mb-6 max-w-2xl text-sm text-muted">{sc.filterHint}</p> : null}
-                  <ProgrammeView sessions={withTimes} trainers={mini} days={days} />
+                  <ProgrammeView sessions={sessions} trainers={mini} days={days} />
                 </>
               )}
             </Section>

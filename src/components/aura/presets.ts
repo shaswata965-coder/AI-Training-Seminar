@@ -17,16 +17,16 @@ export const AURA_EYES = {
  */
 export const AURA_PRESETS: Record<AuraVariant, AuraPreset> = {
   hero: {
-    label: "Aura, the AI training programme's guide, waving hello",
+    label: "Aura, DIU AI Training's guide, waving hello",
     expression: "happy",
     pose: "wave",
     emblem: "spark",
     effects: ["orbit", "sparkles"],
     tips: [
       "Hi! I'm Aura, your guide to AI training at Daffodil International University.",
-      "Two programmes: AI for Professionals and AI for Workspace.",
+      "Every training is custom: built around your industry and your team's work.",
       "Hands-on sessions with DIU's own trainers, at the Daffodil Smart City campus.",
-      "Tap Register to ask for your seat in the next batch!",
+      "Tap Contact us and tell us what your team needs!",
     ],
   },
   guide: {
@@ -58,8 +58,8 @@ export const AURA_PRESETS: Record<AuraVariant, AuraPreset> = {
     effects: ["bulb"],
     eyeColor: AURA_EYES.amber,
     tips: [
-      "AI for Professionals: put AI to work in your own field, safely.",
-      "From prompts to workflows: bring a real task from your job.",
+      "AI for professional work: put AI to work in your own field, safely.",
+      "From prompts to workflows: we use real tasks from your industry.",
     ],
   },
   programme: {
@@ -70,9 +70,9 @@ export const AURA_PRESETS: Record<AuraVariant, AuraPreset> = {
     emblem: "clock",
     eyeColor: AURA_EYES.azure,
     tips: [
-      "Filter sessions by programme or type to find yours.",
-      "Star ☆ sessions to build your own agenda.",
-      "Add any session straight to your calendar.",
+      "This is a sample: every training is planned with you.",
+      "Filter sessions by focus area or type.",
+      "Star ☆ the sessions you'd like in your training.",
     ],
   },
   trainers: {
@@ -116,7 +116,7 @@ export const AURA_PRESETS: Record<AuraVariant, AuraPreset> = {
     effects: ["code"],
     eyeColor: AURA_EYES.mint,
     tips: [
-      "AI for Workspace: write, plan, analyse and meet faster with AI.",
+      "AI for office work: write, plan, analyse and meet faster with AI.",
       "Documents, spreadsheets, e-mail and slides: AI helps with all of them.",
       "Bring a laptop: every session is hands-on.",
     ],
@@ -129,7 +129,7 @@ export const AURA_PRESETS: Record<AuraVariant, AuraPreset> = {
     emblem: "star",
     effects: ["confetti"],
     eyeColor: AURA_EYES.amber,
-    tips: ["Congratulations to everyone who has completed a programme!", "Every participant who completes a programme gets a certificate."],
+    tips: ["Congratulations to everyone who has trained with us!", "Every participant who completes a training gets a certificate."],
   },
   registration: {
     label: "Aura holding an admission ticket",
@@ -139,7 +139,7 @@ export const AURA_PRESETS: Record<AuraVariant, AuraPreset> = {
     emblem: "check",
     effects: ["sparkles"],
     eyeColor: AURA_EYES.peach,
-    tips: ["It only takes two minutes to register!", "You'll get an e-mail with your registration ID."],
+    tips: ["It only takes two minutes to tell us what you need!", "You'll get an e-mail with your reference number."],
   },
   success: {
     label: "Aura celebrating with a party hat and confetti",
@@ -169,7 +169,7 @@ export const AURA_PRESETS: Record<AuraVariant, AuraPreset> = {
     emblem: "pin",
     effects: ["pulse"],
     eyeColor: AURA_EYES.mint,
-    tips: ["DIU's transport buses run to campus from across Dhaka.", "Carry your registration ID to the campus gate."],
+    tips: ["DIU's transport buses run to campus from across Dhaka.", "Carry your reference number to the campus gate."],
   },
   travel: {
     label: "Aura ready to travel with a suitcase",
@@ -196,7 +196,7 @@ export const AURA_PRESETS: Record<AuraVariant, AuraPreset> = {
     emblem: "heart",
     effects: ["sparkles"],
     eyeColor: AURA_EYES.blush,
-    tips: ["Meet the team behind the AI training programme!"],
+    tips: ["Meet the team behind DIU AI Training!"],
   },
   volunteers: {
     label: "Aura in a hard hat with a wrench, ready to help out",
@@ -206,7 +206,7 @@ export const AURA_PRESETS: Record<AuraVariant, AuraPreset> = {
     headwear: "hardHat",
     emblem: "gear",
     eyeColor: AURA_EYES.amber,
-    tips: ["Want to help at a session? Volunteer with us!", "Volunteers keep every batch running smoothly."],
+    tips: ["Want to help at a session? Volunteer with us!", "Volunteers keep every training running smoothly."],
   },
   faq: {
     label: "Aura thinking about a question",

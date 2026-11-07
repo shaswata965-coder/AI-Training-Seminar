@@ -1,17 +1,15 @@
 "use client";
 
-import { ArrowLeft, ArrowRight, Ticket } from "lucide-react";
+import { ArrowLeft, ArrowRight, Send } from "lucide-react";
 import { useMemo, useRef, useState, type FormEvent } from "react";
 import { Aura } from "@/components/aura/Aura";
 import type { AuraVariant } from "@/components/aura/types";
 import { Confetti } from "@/components/effects/Confetti";
-import { AddToCalendar } from "@/components/share/AddToCalendar";
 import { ShareButtons } from "@/components/share/ShareButtons";
 import { Button } from "@/components/ui/Button";
 import { useToast } from "@/components/ui/Toast";
 import { fill } from "@/lib/copy";
 import { useUrlParam } from "@/lib/client-hooks";
-import type { CalendarLinks } from "@/lib/training";
 import { checkAnswers, emptyAnswer, type Answer, type FormField } from "@/lib/forms";
 import type { PageCopy } from "@/lib/schema/page-copy";
 import { AnswerFields } from "./AnswerField";
@@ -21,15 +19,15 @@ import { postJson } from "./submit";
 
 const STEP_AURA: AuraVariant[] = ["registration", "thinker", "guide"];
 
-/** The programme a link to the form can pick (/register?programme=…), by the choice it ticks in “interests”. */
-const PROGRAMME_CHOICE: Record<string, string> = { professionals: "AI for Professionals", workspace: "AI for Workspace" };
+/** The focus area a link to the form can pick (/contact?programme=…), by the choice it ticks in “interests”. */
+const PROGRAMME_CHOICE: Record<string, string> = { professionals: "AI for Professional Work", workspace: "AI for Office Work" };
 
 /**
- * Training registration in up to three steps, with the fields and texts set in Site settings → Registration →
- * Form fields (a step with no fields shown is left out). Answers are checked here as on the server. A link with
- * ?programme=professionals or ?programme=workspace ticks that programme until the visitor changes it.
+ * The training request (Contact us) in up to three steps, with the fields and texts set in Site settings →
+ * Contact us → Form fields (a step with no fields shown is left out). Answers are checked here as on the server.
+ * A link with ?programme=professionals or ?programme=workspace ticks that focus area until the visitor changes it.
  */
-export function RegistrationForm({ fields, text, calendar, shareUrl, programmeName }: { fields: FormField[]; text: PageCopy["registerFormText"]; calendar: CalendarLinks; shareUrl: string; programmeName: string }) {
+export function RegistrationForm({ fields, text, shareUrl, programmeName }: { fields: FormField[]; text: PageCopy["registerFormText"]; shareUrl: string; programmeName: string }) {
   const toast = useToast();
   const shown = useMemo(() => fields.filter((f) => !f.hidden), [fields]);
   const steps = [1, 2, 3].filter((n) => shown.some((f) => f.step === n));
@@ -72,7 +70,7 @@ export function RegistrationForm({ fields, text, calendar, shareUrl, programmeNa
       // Back to the first step with a problem.
       const at = steps.findIndex((n) => shown.some((f) => f.step === n && fe[f.key]));
       if (at >= 0) setStep(at);
-      toast(res.message ?? "Registration failed", "error");
+      toast(res.message ?? "Your request could not be sent", "error");
       return;
     }
     setDone({ regId: res.data.regId, email: typeof values.email === "string" ? values.email : "", emailSent: res.data.emailSent });
@@ -96,10 +94,7 @@ export function RegistrationForm({ fields, text, calendar, shareUrl, programmeNa
           ) : null}
           <p className="mt-4 max-w-md text-sm text-muted">{fill(!done.regId ? text.doneQueued : done.emailSent ? text.doneMailed : text.doneNoMail, vars)}</p>
           {text.doneReview ? <p className="mt-3 max-w-md text-sm font-semibold text-fg">{text.doneReview}</p> : null}
-          <div className="mt-6 flex flex-wrap justify-center gap-3">
-            <AddToCalendar links={calendar} />
-          </div>
-          {text.share ? <ShareButtons className="mt-5 justify-center" url={shareUrl} text={fill(text.shareText, { programme: programmeName })} label={text.share} /> : null}
+          {text.share ? <ShareButtons className="mt-6 justify-center" url={shareUrl} text={fill(text.shareText, { programme: programmeName })} label={text.share} /> : null}
         </div>
       </div>
     );
@@ -139,7 +134,7 @@ export function RegistrationForm({ fields, text, calendar, shareUrl, programmeNa
               {text.next}
             </Button>
           ) : (
-            <Button type="submit" disabled={pending} icon={<Ticket size={18} aria-hidden />}>
+            <Button type="submit" disabled={pending} icon={<Send size={18} aria-hidden />}>
               {pending ? text.sending : text.submit}
             </Button>
           )}

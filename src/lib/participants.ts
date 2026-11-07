@@ -1,7 +1,7 @@
 import type { ThemeKey } from "@/lib/content/constants";
 import type { Participant } from "@/lib/content/types";
 
-/** Participants grouped by their batch, newest first (by the date it was completed, then by name). Shared by client and server code. */
+/** Participants grouped by the training they took (their `batch` field), newest first (by the date it was completed, then by name). Shared by client and server code. */
 export function batchesOf(participants: Participant[]) {
   const groups = new Map<string, { batch: string; completed: string; people: Participant[] }>();
   for (const p of participants) {

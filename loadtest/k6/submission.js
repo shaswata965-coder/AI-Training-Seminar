@@ -31,7 +31,7 @@ export const options = {
   },
 };
 
-const FORM_PAGE = { register: "/register", enquiry: "/" };
+const FORM_PAGE = { register: "/contact", enquiry: "/" };
 const PAYLOAD = { register: registrationPayload, enquiry: (id) => enquiryPayload(id, "contact") };
 
 export function setup() {

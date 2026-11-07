@@ -2,7 +2,7 @@ import { ATTENDEE_CATEGORY_META, currentThemeKey, THEME_META } from "@/lib/conte
 import { cleanLine, cleanText } from "@/lib/safe-text";
 
 /*
- * The site's public forms (training registration, and the contact and partner enquiries) are lists of
+ * The site's public forms (training requests, and the contact and partner enquiries) are lists of
  * fields that organisers edit in Site settings: each field's name, its guide (help under it and an example
  * inside it), the type of answer, whether it is required or shown, and the choices of a list; they can add
  * questions of their own. Built-in fields are the ones the site relies on (the e-mail address a
@@ -92,7 +92,7 @@ interface FormSpec {
   fields: BuiltIn[];
 }
 
-const ATTENDEE_OPTIONS = ["Student", "Faculty / teacher", "Working professional", "Government / NGO staff", "Entrepreneur / business owner", "Other"];
+const ATTENDEE_OPTIONS = ["A company or organisation", "A team or department", "A working professional", "A teacher / educational institution", "Government / NGO", "An entrepreneur / business owner", "Other"];
 const NAME = { label: "Name", type: "text", types: ["text"], always: true, max: 120, autoComplete: "name", why: "Used to address them in e-mails." } satisfies Omit<BuiltIn, "key">;
 const EMAIL = { label: "E-mail", type: "email", types: ["email"], always: true, max: 160, autoComplete: "email", why: "Replies and confirmations go to this address." } satisfies Omit<BuiltIn, "key">;
 const PHONE = { label: "Phone", type: "tel", max: 30, autoComplete: "tel" } satisfies Omit<BuiltIn, "key">;
@@ -107,33 +107,50 @@ const enquiry = (organisation: Partial<BuiltIn>, message: Partial<BuiltIn>, subj
 
 export const FORMS: Record<FormKey, FormSpec> = {
   register: {
-    title: "Training registration",
+    title: "Training request (Contact us)",
     steps: ["Step 1", "Step 2", "Step 3"],
     fields: [
       { key: "name", ...NAME, label: "Full name" },
-      { key: "email", ...EMAIL, why: "The confirmation goes to this address, and each address registers once." },
+      { key: "email", ...EMAIL, why: "The confirmation goes to this address, and each address sends one request." },
       { key: "phone", ...PHONE, required: true },
-      { key: "category", label: "I am a…", type: "select", options: ATTENDEE_OPTIONS, placeholder: "Choose one", required: true },
-      { key: "organisation", label: "Institution / organisation", type: "text", required: true, max: 160, autoComplete: "organization" },
-      { key: "designation", label: "Designation / department", type: "text", placeholder: "e.g. Assistant Manager, HR", max: 120 },
+      { key: "category", label: "You are contacting us for…", type: "select", options: ATTENDEE_OPTIONS, placeholder: "Choose one", required: true },
+      { key: "organisation", label: "Organisation / company", type: "text", required: true, max: 160, autoComplete: "organization" },
+      { key: "designation", label: "Your designation / department", type: "text", placeholder: "e.g. Assistant Manager, HR", max: 120 },
       { key: "city", label: "City", type: "text", placeholder: "e.g. Dhaka", max: 80, autoComplete: "address-level2" },
       { key: "country", label: "Country", type: "text", placeholder: "e.g. Bangladesh", max: 80, autoComplete: "country-name", hidden: true },
-      { key: "interests", label: "Which programme would you like to join?", help: "Pick one, or both.", type: "checkboxes", types: ["checkboxes"], options: ["AI for Professionals", "AI for Workspace"], required: true, step: 2 },
+      {
+        key: "interests",
+        label: "What should the training focus on?",
+        help: "Pick one or more: we combine them for your team.",
+        type: "checkboxes",
+        types: ["checkboxes"],
+        options: ["AI for Professional Work", "AI for Office Work", "Saving time on routine tasks"],
+        required: true,
+        step: 2,
+      },
+      {
+        key: "message",
+        label: "Tell us about your needs",
+        help: "Your industry, the tasks you'd like AI to speed up, the tools your team uses and how many people would take part.",
+        type: "textarea",
+        max: 1000,
+        required: true,
+        step: 2,
+      },
       {
         key: "experience",
-        label: "How much have you used AI tools so far?",
+        label: "How much does your team use AI tools today?",
         type: "radio",
         types: ["radio", "select"],
         options: ["Never or hardly ever", "Now and then", "Every week", "Every day"],
         required: true,
         step: 2,
       },
-      { key: "tutorials", label: "I'll bring my own laptop to the hands-on labs", help: "Every session is hands-on. Tell us if you'll need a computer from the lab.", type: "checkbox", types: ["checkbox"], step: 2 },
-      { key: "heardFrom", label: "How did you hear about the training?", type: "select", options: ["Social media", "E-mail", "Colleague or friend", "DIU website", "Other"], placeholder: "Choose one", step: 2 },
+      { key: "tutorials", label: "We'll bring our own laptops to the hands-on labs", help: "Every session is hands-on. Tell us if your team will need computers from the lab.", type: "checkbox", types: ["checkbox"], step: 3 },
+      { key: "heardFrom", label: "How did you hear about us?", type: "select", options: ["Social media", "E-mail", "Colleague or friend", "DIU website", "Other"], placeholder: "Choose one", step: 3 },
       { key: "dietary", label: "Dietary preference", help: "For the refreshments served during the sessions.", type: "select", options: ["No preference", "Vegetarian", "Vegan", "Other"], placeholder: "No preference", step: 3, hidden: true },
-      { key: "accessibility", label: "Accessibility requirements", help: "Let us know if you need any assistance at the venue.", type: "textarea", max: 500, step: 3 },
-      { key: "message", label: "What would you like to get out of the training?", type: "textarea", max: 1000, step: 3 },
-      { key: "consent", label: "I agree to be contacted about this training", help: "Your details are used only to organise the training and are not shared with third parties.", type: "checkbox", types: ["checkbox"], always: true, step: 3, why: "Registrations need this consent." },
+      { key: "accessibility", label: "Accessibility requirements", help: "Let us know if anyone taking part needs assistance at the venue.", type: "textarea", max: 500, step: 3 },
+      { key: "consent", label: "I agree to be contacted about this request", help: "Your details are used only to plan the training and are not shared with third parties.", type: "checkbox", types: ["checkbox"], always: true, step: 3, why: "Training requests need this consent." },
     ],
   },
   contact: { title: "Contact form", steps: ["Form"], fields: enquiry({}, { placeholder: "How can we help?" }, {}) },

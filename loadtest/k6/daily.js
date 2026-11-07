@@ -35,8 +35,8 @@ export const options = {
   },
 };
 
-const LANDING = { "/": 55, "/programme": 12, "/trainers": 10, "/register": 12, "/past-participants": 6, "/about": 5 };
-const BROWSE = { "/": 2, "/about": 3, "/programme": 4, "/trainers": 3, "/register": 2, "/past-participants": 3, "/partners": 1, "/venue": 2, "/tutorials": 1, "/organisers": 1 };
+const LANDING = { "/": 55, "/programme": 12, "/trainers": 10, "/contact": 12, "/past-participants": 6, "/about": 5 };
+const BROWSE = { "/": 2, "/about": 3, "/programme": 4, "/trainers": 3, "/contact": 2, "/past-participants": 3, "/partners": 1, "/venue": 2, "/tutorials": 1, "/organisers": 1 };
 
 export function setup() {
   const programme = http.get(`${BASE}/programme`, { responseType: "text" }).body;
@@ -60,7 +60,7 @@ export function visitor({ manifest, sessions }) {
 
   const action = weighted({ none: 93, register: 5, enquiry: 2 });
   if (action !== "none") {
-    const form = action === "enquiry" ? "/" : "/register";
+    const form = action === "enquiry" ? "/" : "/contact";
     if (page !== form) openPage(manifest, form, { from: page });
     sleep(between(30, 90) * PACE); // filling in the form
     const payload = action === "register" ? registrationPayload(id) : enquiryPayload(id, "contact");

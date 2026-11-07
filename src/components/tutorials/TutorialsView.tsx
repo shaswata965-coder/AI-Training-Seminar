@@ -42,7 +42,7 @@ export function TutorialsView({ tutorials, demos }: { tutorials: Tutorial[]; dem
   return (
     <div>
       {themes.length > 1 ? (
-        <div className="mb-10 flex flex-wrap gap-2" role="group" aria-label="Filter by programme">
+        <div className="mb-10 flex flex-wrap gap-2" role="group" aria-label="Filter by focus area">
           {(["all", ...themes] as const).map((t) => (
             <button
               key={t}
@@ -56,7 +56,7 @@ export function TutorialsView({ tutorials, demos }: { tutorials: Tutorial[]; dem
                 theme === t ? "bg-accent-soft text-accent-ink border-[color-mix(in_oklab,var(--accent)_55%,transparent)] [--key-edge:color-mix(in_oklab,var(--accent)_70%,var(--accent-ink))]" : "key-line border-border bg-surface text-muted hover:text-fg",
               )}
             >
-              {t === "all" ? "All programmes" : THEME_META[t].short}
+              {t === "all" ? "All focus areas" : THEME_META[t].short}
             </button>
           ))}
         </div>
@@ -156,8 +156,8 @@ export function TutorialsView({ tutorials, demos }: { tutorials: Tutorial[]; dem
           <div className="card mt-6 flex flex-col items-center gap-5 p-8 text-center sm:flex-row sm:text-left">
             <Aura variant="tutorials" size={150} />
             <div>
-              <p className="font-display text-xl font-semibold text-fg">{tutorials.length ? "No labs for this programme yet" : "Every batch is hands-on"}</p>
-              <p className="mt-1 max-w-lg text-muted">Each batch&apos;s labs, with their trainers, prerequisites (laptop, software, accounts) and material links, are listed here.</p>
+              <p className="font-display text-xl font-semibold text-fg">{tutorials.length ? "No labs for this focus area yet" : "Every training is hands-on"}</p>
+              <p className="mt-1 max-w-lg text-muted">Our labs, with their trainers, prerequisites (laptop, software, accounts) and material links, are listed here.</p>
             </div>
           </div>
         )}
@@ -208,7 +208,7 @@ export function TutorialsView({ tutorials, demos }: { tutorials: Tutorial[]; dem
           <div className="card mt-6 flex flex-col items-center gap-5 p-8 text-center sm:flex-row sm:text-left">
             <Aura variant="demos" size={150} />
             <div>
-              <p className="font-display text-xl font-semibold text-fg">{demos.length ? "No demos for this programme yet" : "Live demos in every batch"}</p>
+              <p className="font-display text-xl font-semibold text-fg">{demos.length ? "No demos for this focus area yet" : "Live demos in every training"}</p>
               <p className="mt-1 max-w-lg text-muted">Live demos of AI tools from the sessions are listed here with images and videos.</p>
             </div>
           </div>

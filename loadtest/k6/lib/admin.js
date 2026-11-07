@@ -36,7 +36,7 @@ export function announce(n) {
     body: "Registration for the next batch is open. Places are limited.",
     date: new Date().toISOString(),
     tone: "info",
-    linkUrl: "/register",
+    linkUrl: "/contact",
     linkLabel: "Register now",
     pinned: false,
     published: true,

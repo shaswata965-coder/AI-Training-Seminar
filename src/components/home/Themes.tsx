@@ -21,7 +21,7 @@ const THEME_PHOTOS: Record<Theme["key"], string> = {
 export const themePhoto = (t: Theme): string | undefined => t.image || THEME_PHOTOS[t.key];
 
 /**
- * The two training programmes as cards, each with its photo across the top and Aura, dressed for the programme,
+ * The focus areas a custom training can cover, as cards, each with its photo across the top and Aura, dressed for it,
  * stepping out of its lower edge across from its number. A programme without a photo shows Aura on his own. Side by
  * side, the cards share one grid's rows (subgrid), so their titles, texts and links line up however long each one is.
  */

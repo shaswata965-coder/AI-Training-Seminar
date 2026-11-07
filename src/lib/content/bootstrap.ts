@@ -3,6 +3,7 @@ import { getCollectionModel, Singleton } from "@/lib/models";
 import { objectSchema } from "@/lib/schema/field-validation";
 import { COLLECTION_MAP } from "@/lib/schema/resources";
 import { DEFAULT_FAQS, DEFAULT_PEOPLE, DEFAULT_SESSIONS, DEFAULT_SETTINGS, DEFAULT_TRAINERS } from "./defaults";
+import { BATCH_ERA_FAQS, BATCH_ERA_SESSIONS } from "./retired-batches";
 
 /*
  * Default content (programme facts, trainers, FAQs). Stored automatically the first time the site
@@ -12,8 +13,10 @@ import { DEFAULT_FAQS, DEFAULT_PEOPLE, DEFAULT_SESSIONS, DEFAULT_SETTINGS, DEFAU
 
 /** Marks that the tentative schedule was offered to this site, so it is added at most once. */
 const PROGRAMME_PLAN_KEY = "programme-plan";
+/** Marks that the batch-era FAQs and sample session were brought up to date, so it happens at most once. */
+const CUSTOM_TRAINING_KEY = "custom-training-content";
 
-async function insertSingleton(key: "settings" | typeof PROGRAMME_PLAN_KEY, data: object): Promise<boolean> {
+async function insertSingleton(key: "settings" | typeof PROGRAMME_PLAN_KEY | typeof CUSTOM_TRAINING_KEY, data: object): Promise<boolean> {
   try {
     const res = await Singleton.updateOne({ key }, { $setOnInsert: { key, data } }, { upsert: true });
     return res.upsertedCount > 0;
@@ -32,11 +35,31 @@ async function fillCollection(key: "people" | "faqs" | "trainers", items: object
   return true;
 }
 
+/**
+ * A site set up while the training ran in batches stores that version's default FAQs and sample session, which
+ * speak of batches, two programmes and registration. Each one still exactly as it was stored is given today's
+ * text; anything an organiser has edited or added is left as it is. Returns how many were updated.
+ */
+async function refreshBatchEraContent(): Promise<number> {
+  const Faqs = getCollectionModel("faqs");
+  const Sessions = getCollectionModel("sessions");
+  let n = 0;
+  for (const { from, to } of BATCH_ERA_FAQS) n += (await Faqs.updateMany(from, { $set: to })).modifiedCount;
+  for (const { from, to } of BATCH_ERA_SESSIONS) n += (await Sessions.updateMany(from, { $set: to })).modifiedCount;
+  return n;
+}
+
 /** Returns a description of everything that was created. */
 export async function ensureDefaultContent({ fillEmpty = false }: { fillEmpty?: boolean } = {}): Promise<string[]> {
   const created: string[] = [];
   const freshSite = await insertSingleton("settings", DEFAULT_SETTINGS);
   if (freshSite) created.push("site settings");
+
+  // Once per database: the batch-era FAQs and session still unedited get today's texts.
+  if (await insertSingleton(CUSTOM_TRAINING_KEY, { at: new Date().toISOString() })) {
+    const updated = await refreshBatchEraContent();
+    if (updated) created.push(`today's texts for ${updated} unedited FAQs and sessions`);
+  }
 
   // The tentative schedule goes to a site without sessions: once, or whenever asked for. Deleting it in the
   // admin doesn't bring it back after a restart.

@@ -6,8 +6,8 @@ import { Section, SectionHeading } from "@/components/ui/Section";
 import { SESSION_TYPE_META, THEME_META, type SessionType } from "@/lib/content/constants";
 import type { Session, SiteSettings } from "@/lib/content/types";
 import { copy, plural } from "@/lib/copy";
-import { batchDays } from "@/lib/training";
-import { batchDayLabel, formatDate, timeRange } from "@/lib/format";
+import { dayLabel, planDays } from "@/lib/training";
+import { timeRange } from "@/lib/format";
 
 /** The session formats explained on the page, and where to read more about each. */
 const FORMATS: { type: SessionType & ("opening" | "lecture" | "discussion" | "tutorial" | "demo"); href?: string }[] = [
@@ -18,20 +18,18 @@ const FORMATS: { type: SessionType & ("opening" | "lecture" | "discussion" | "tu
   { type: "demo", href: "/tutorials#demos" },
 ];
 
-const hhmm = (d: Date) => formatDate(d.toISOString(), { hour: "2-digit", minute: "2-digit", hour12: false });
-
-/** The batch in numbers: each day, the session formats and the programmes, before the full schedule. */
+/** The sample plan in numbers: each day, the session formats and the focus areas, before the full plan. */
 export function ProgrammeOverview({ s, sessions, tba }: { s: SiteSettings; sessions: Session[]; tba: boolean }) {
   const shown = tba ? [] : sessions;
   const talks = shown.filter((x) => x.type !== "break");
-  const days = batchDays(s).map((d) => {
-    const list = shown.filter((x) => String(x.day) === String(d.day));
+  const days = planDays(sessions).map((day) => {
+    const list = shown.filter((x) => String(x.day) === String(day));
     const starts = list.map((x) => x.start).filter(Boolean).sort();
     const ends = list.map((x) => x.end || x.start).filter(Boolean).sort();
     return {
-      day: d.day,
-      label: batchDayLabel(s.startDate, d.day, { weekday: "long", day: "numeric", month: "long" }),
-      hours: starts.length ? timeRange(starts[0], ends.at(-1)) : timeRange(hhmm(d.start), hhmm(d.end)),
+      day,
+      label: dayLabel(day),
+      hours: starts.length ? timeRange(starts[0], ends.at(-1)) : "",
       count: list.filter((x) => x.type !== "break").length,
       types: [...new Set(list.map((x) => x.type))].filter((t) => t !== "break" && t !== "other"),
     };
@@ -56,13 +54,14 @@ export function ProgrammeOverview({ s, sessions, tba }: { s: SiteSettings; sessi
               <div aria-hidden className="pointer-events-none absolute inset-y-0 left-0 w-1.5 bg-[var(--accent)]" />
               <p className="font-display text-5xl leading-none font-extrabold text-accent-ink tabular sm:text-6xl">{String(d.day).padStart(2, "0")}</p>
               <div className="min-w-0">
-                <p className="font-mono text-[11px] font-bold tracking-[0.16em] text-subtle uppercase">{c.day ? `${c.day} ${d.day}` : d.day}</p>
-                <h3 className="mt-1 font-display text-xl font-semibold text-fg">{d.label}</h3>
+                <h3 className="font-display text-xl font-semibold text-fg">{c.day ? `${c.day} ${d.day}` : d.label}</h3>
                 <p className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-muted">
-                  <span className="inline-flex items-center gap-1.5 tabular">
-                    <Clock size={14} aria-hidden className="text-accent-ink" />
-                    {d.hours} BST
-                  </span>
+                  {d.hours ? (
+                    <span className="inline-flex items-center gap-1.5 tabular">
+                      <Clock size={14} aria-hidden className="text-accent-ink" />
+                      {d.hours} BST
+                    </span>
+                  ) : null}
                   <span>{d.count ? plural(d.count, "session") : c.noSessions}</span>
                 </p>
                 {d.types.length ? (

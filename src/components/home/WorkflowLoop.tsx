@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { Aura } from "@/components/aura/Aura";
 import { cn } from "@/lib/cn";
 
-/** How a professional puts AI to work on a real task, the method both programmes teach. */
+/** How a professional puts AI to work on a real task, the method every training teaches. */
 const STEPS: { title: string; text: string; Icon: LucideIcon; tone: string }[] = [
   { title: "Frame", text: "Start from a real task at work: the goal, who it is for and what a good result looks like.", Icon: Target, tone: "tone-azure" },
   { title: "Brief", text: "Give the AI clear instructions and the context it needs, without sharing confidential data.", Icon: MessageSquareText, tone: "tone-lilac" },

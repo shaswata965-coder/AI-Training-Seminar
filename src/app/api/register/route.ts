@@ -1,7 +1,6 @@
 import { after, type NextRequest } from "next/server";
 import { getSavedSettings } from "@/lib/content/queries";
 import { connectDb, isDuplicateKeyError } from "@/lib/db";
-import { deadlinePassed } from "@/lib/training";
 import { Registration } from "@/lib/models";
 import { registrationEmail } from "@/lib/server/emails";
 import { formLimit } from "@/lib/server/form-limits";
@@ -30,9 +29,8 @@ export async function POST(req: NextRequest) {
   if ((body as { website?: string }).website) return mailConfigured() ? accepted() : json({ data: { regId: "DIUAI-THANKS", emailSent: false } }, { status: 201 });
 
   const s = await getSavedSettings();
-  if (s.registrationUrl) return error(409, "Registration is handled through the official external form.");
-  if (s.registrationStatus !== "open") return error(403, "Registration is paused for now. New batches run all year: please try again later.");
-  if (deadlinePassed(s.registrationDeadline)) return error(403, "Registration for the next batch has closed: its deadline has passed.");
+  if (s.registrationUrl) return error(409, "Training requests are handled through our external form.");
+  if (s.registrationStatus !== "open") return error(403, "We're not taking new training requests right now: please try again later, or send us a message.");
 
   const parsed = checkRegistration(s, body);
   if (!parsed.ok) return error(422, "Please check the highlighted fields.", { fieldErrors: parsed.fieldErrors });
@@ -41,7 +39,7 @@ export async function POST(req: NextRequest) {
   try {
     await connectDb();
   } catch {
-    return error(503, "Registration is temporarily unavailable. Please try again shortly.");
+    return error(503, "Training requests are temporarily unavailable. Please try again shortly.");
   }
 
   const mail = mailConfigured();
@@ -51,7 +49,7 @@ export async function POST(req: NextRequest) {
       if (rateLimit(`resend:${data.email}`, 1, 30 * 60_000).ok) after(() => sendMail(registrationEmail(s, { name: existing.name, email: existing.email, regId: existing.regId })));
       return accepted();
     }
-    return error(409, "This e-mail address is already registered. Contact the organisers if you need your registration details.", { fieldErrors: { email: "Already registered" } });
+    return error(409, "This e-mail address has already sent a request. Contact the organisers if you need its details.", { fieldErrors: { email: "Already sent a request" } });
   }
 
   for (let attempt = 0; attempt < 5; attempt++) {
@@ -66,11 +64,11 @@ export async function POST(req: NextRequest) {
     } catch (err) {
       if (!isDuplicateKeyError(err)) {
         console.error("[register]", err);
-        return error(500, "Something went wrong while saving your registration.");
+        return error(500, "Something went wrong while saving your request.");
       }
       const dupEmail = /email/.test(String((err as { message?: string }).message));
-      if (dupEmail) return mail ? accepted() : error(409, "This e-mail address is already registered.", { fieldErrors: { email: "Already registered" } });
+      if (dupEmail) return mail ? accepted() : error(409, "This e-mail address has already sent a request.", { fieldErrors: { email: "Already sent a request" } });
     }
   }
-  return error(500, "Could not generate a registration ID. Please try again.");
+  return error(500, "Could not generate a reference number. Please try again.");
 }

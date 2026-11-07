@@ -1,13 +1,11 @@
-import { CalendarDays, Mail, MapPin, Phone } from "lucide-react";
+import { Mail, MapPin, Phone } from "lucide-react";
 import Link from "next/link";
 import { Aura } from "@/components/aura/Aura";
-import { AddToCalendar } from "@/components/share/AddToCalendar";
 import { ShareButtons } from "@/components/share/ShareButtons";
 import { InstagramIcon, LinkedInIcon, XIcon, YouTubeIcon } from "@/components/ui/BrandIcons";
 import type { SiteSettings } from "@/lib/content/types";
-import { brandName, batchCalendarLinks, registrationHref, venueLine } from "@/lib/training";
+import { brandName, registrationHref, venueLine } from "@/lib/training";
 import { copy } from "@/lib/copy";
-import { formatDate, formatDateRange } from "@/lib/format";
 import { explorePages, homeNav, pastBatchNav, primaryNav, registrationNav, sectionNav } from "@/lib/nav";
 import { absoluteUrl } from "@/lib/paths";
 import { isShown } from "@/lib/schema/section-order";
@@ -65,10 +63,6 @@ export function SiteFooter({ s }: { s: SiteSettings }) {
           <p className="mt-4 max-w-sm text-[15px] text-muted">{s.tagline}</p>
           <ul className="mt-5 space-y-2 text-[15px] text-muted">
             <li className="flex gap-2">
-              <CalendarDays size={18} aria-hidden className="mt-0.5 shrink-0 text-subtle" />
-              <span>{formatDateRange(s.startDate, s.endDate)}</span>
-            </li>
-            <li className="flex gap-2">
               <MapPin size={18} aria-hidden className="mt-0.5 shrink-0 text-subtle" />
               <span>{venueLine(s)}</span>
             </li>
@@ -90,8 +84,7 @@ export function SiteFooter({ s }: { s: SiteSettings }) {
             ) : null}
           </ul>
           <div className="mt-5 grid justify-items-start gap-3">
-            <AddToCalendar links={batchCalendarLinks(s)} variant="outline" size="sm" />
-            <ShareButtons url={absoluteUrl("/")} text={`${s.programmeName} at Daffodil International University, ${formatDateRange(s.startDate, s.endDate)}`} />
+            <ShareButtons url={absoluteUrl("/")} text={`${s.programmeName}: custom AI training from Daffodil International University`} />
           </div>
           <SocialLinks s={s} className="mt-5 flex gap-2" />
         </div>
@@ -139,7 +132,7 @@ export function SiteFooter({ s }: { s: SiteSettings }) {
         <div className="container-site flex flex-col gap-3 py-6 text-sm text-subtle sm:flex-row sm:items-center sm:justify-between">
           <div>
             <p>
-              <WithYear text={c.copyright} fallback={formatDate(s.startDate, { year: "numeric" })} />
+              <WithYear text={c.copyright} fallback="" />
             </p>
             {/* The built-in campus photos (public/hero, public/themes, public/posters) are from Wikimedia Commons; one is CC BY-SA, which asks for this credit. */}
             <p className="mt-1 text-xs">

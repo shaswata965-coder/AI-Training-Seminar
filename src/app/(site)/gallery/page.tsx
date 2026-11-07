@@ -12,7 +12,7 @@ export const metadata: Metadata = { title: "Photo gallery", alternates: { canoni
 
 export default async function GalleryPage() {
   const [s, items, preview] = await Promise.all([getSettings(), getGallery(), inPreview()]);
-  // Hidden until switched on after a batch; the admin's live preview shows it anyway.
+  // Hidden until switched on after a training; the admin's live preview shows it anyway.
   if (!s.showGallery && !preview) notFound();
   const c = copy(s, "galleryHero");
   return (
