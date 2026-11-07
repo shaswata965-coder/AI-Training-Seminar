@@ -22,11 +22,10 @@ export interface HeroPlacard {
 const ICONS = { professionals: BriefcaseBusiness, workspace: Laptop } as const;
 
 /**
- * The hero's Aura, holding up a placard for each focus area in turn. A placard
- * stays up while the bar on its switch fills (CSS, so it pauses with the page's other animations, and while
- * the pointer or focus is on Aura, the switch or a card below it); pointing at a card below
- * (`data-placard-key`) brings its placard up. With reduced motion the bar never runs, so only the switch and
- * the cards change it. The hero section is marked `data-placard="<key>"` so the matching card lights up.
+ * The hero's Aura, holding up a placard for each focus area in turn. A placard stays up while the bar on its
+ * switch fills (CSS, so it pauses with the page's other animations, and while the pointer or focus is on Aura or
+ * the switch). With reduced motion the bar never runs, so only the switch changes it. The hero section is marked
+ * `data-placard="<key>"` (the CSS that pauses the bar keys on it).
  */
 export function HeroPlacards({ placards, words }: { placards: HeroPlacard[]; words: Record<RegistrationStatus, string> }) {
   const [index, setIndex] = useState(0);
@@ -52,29 +51,11 @@ export function HeroPlacards({ placards, words }: { placards: HeroPlacard[]; wor
     [text],
   );
 
-  const keys = placards.map((p) => p.key).join(" ");
   useEffect(() => {
     const section = anchorRef.current?.closest("section");
     if (!section || !shown) return;
     section.dataset.placard = shown.key;
   }, [shown]);
-
-  useEffect(() => {
-    const section = anchorRef.current?.closest("section");
-    if (!section) return;
-    const order = keys.split(" ");
-    const pick = (e: Event) => {
-      const key = (e.target as Element | null)?.closest<HTMLElement>("[data-placard-key]")?.dataset.placardKey;
-      const i = key ? order.indexOf(key) : -1;
-      if (i >= 0) setIndex(i);
-    };
-    section.addEventListener("pointerover", pick);
-    section.addEventListener("focusin", pick);
-    return () => {
-      section.removeEventListener("pointerover", pick);
-      section.removeEventListener("focusin", pick);
-    };
-  }, [keys]);
 
   return (
     <>

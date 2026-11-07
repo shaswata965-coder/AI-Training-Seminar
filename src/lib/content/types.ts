@@ -141,13 +141,15 @@ export interface Trainer extends Doc {
   bio: string;
   /** Areas of expertise, in a line. */
   expertise: string;
-  /** What they teach in the programmes. */
+  /** What they teach. */
   teaching: string;
   website: string;
   linkedin: string;
   x: string;
   scholar: string;
   github: string;
+  /** Their CV (an uploaded PDF, or a link), offered for download in their pop-up profile; empty for none. */
+  cv: string;
   featured: boolean;
 }
 

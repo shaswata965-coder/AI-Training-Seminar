@@ -2,7 +2,7 @@ import { isDuplicateKeyError } from "@/lib/db";
 import { getCollectionModel, Singleton } from "@/lib/models";
 import { objectSchema } from "@/lib/schema/field-validation";
 import { COLLECTION_MAP } from "@/lib/schema/resources";
-import { DEFAULT_FAQS, DEFAULT_PEOPLE, DEFAULT_SESSIONS, DEFAULT_SETTINGS, DEFAULT_TRAINERS } from "./defaults";
+import { DEFAULT_FAQS, DEFAULT_PEOPLE, DEFAULT_SESSIONS, DEFAULT_SETTINGS, DEFAULT_TRAINERS, REMOVED_TRAINER_SLUGS } from "./defaults";
 import { BATCH_ERA_FAQS, BATCH_ERA_SESSIONS } from "./retired-batches";
 
 /*
@@ -15,8 +15,13 @@ import { BATCH_ERA_FAQS, BATCH_ERA_SESSIONS } from "./retired-batches";
 const PROGRAMME_PLAN_KEY = "programme-plan";
 /** Marks that the batch-era FAQs and sample session were brought up to date, so it happens at most once. */
 const CUSTOM_TRAINING_KEY = "custom-training-content";
+/** Marks that the trainer list was updated from the trainers' CVs, so it happens at most once. */
+const TRAINERS_FROM_CVS_KEY = "trainers-from-cvs";
 
-async function insertSingleton(key: "settings" | typeof PROGRAMME_PLAN_KEY | typeof CUSTOM_TRAINING_KEY, data: object): Promise<boolean> {
+async function insertSingleton(
+  key: "settings" | typeof PROGRAMME_PLAN_KEY | typeof CUSTOM_TRAINING_KEY | typeof TRAINERS_FROM_CVS_KEY,
+  data: object,
+): Promise<boolean> {
   try {
     const res = await Singleton.updateOne({ key }, { $setOnInsert: { key, data } }, { upsert: true });
     return res.upsertedCount > 0;
@@ -47,6 +52,28 @@ async function refreshBatchEraContent(): Promise<number> {
   for (const { from, to } of BATCH_ERA_FAQS) n += (await Faqs.updateMany(from, { $set: to })).modifiedCount;
   for (const { from, to } of BATCH_ERA_SESSIONS) n += (await Sessions.updateMany(from, { $set: to })).modifiedCount;
   return n;
+}
+
+/**
+ * The trainer list as the organisers asked for it: the two trainers from their CVs first, then Professor Dr.
+ * Sheak Rashed Haider Noori (kept as is, now third), and the other trainers of the earlier built-in list
+ * removed. A trainer already on the site under the same slug is left as it is. Returns what was done.
+ */
+async function updateTrainersFromCvs(): Promise<string[]> {
+  const Trainers = getCollectionModel("trainers");
+  const def = COLLECTION_MAP.trainers;
+  const done: string[] = [];
+  const removed = (await Trainers.deleteMany({ slug: { $in: REMOVED_TRAINER_SLUGS } })).deletedCount;
+  if (removed) done.push(`removed ${removed} trainers`);
+  for (const t of DEFAULT_TRAINERS) {
+    if (t.lead) {
+      await Trainers.updateOne({ slug: t.slug }, { $set: { order: t.order } });
+    } else if (!(await Trainers.exists({ slug: t.slug }))) {
+      await Trainers.create(objectSchema(def.fields).parse({ ...def.defaults, ...t }));
+      done.push(`added ${t.name}`);
+    }
+  }
+  return done;
 }
 
 /** Returns a description of everything that was created. */
@@ -82,5 +109,8 @@ export async function ensureDefaultContent({ fillEmpty = false }: { fillEmpty?: 
     if (DEFAULT_PEOPLE.length && (await fillCollection("people", DEFAULT_PEOPLE))) created.push(`${DEFAULT_PEOPLE.length} organisers`);
     if (await fillCollection("faqs", DEFAULT_FAQS)) created.push(`${DEFAULT_FAQS.length} FAQs`);
   }
+
+  // Once per database, after a new site's own trainers are in: the trainer list from the CVs.
+  if (await insertSingleton(TRAINERS_FROM_CVS_KEY, { at: new Date().toISOString() })) created.push(...(await updateTrainersFromCvs()));
   return created;
 }

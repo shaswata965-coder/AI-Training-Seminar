@@ -3,8 +3,10 @@
 import { ArrowRight, ChevronLeft, ChevronRight, Pause, Play, Star } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useRef, useState, type CSSProperties, type KeyboardEvent, type MouseEvent, type PointerEvent, type ReactNode, type WheelEvent } from "react";
+import { TrainerProfile, type TrainerProfileData } from "@/components/trainers/TrainerProfile";
 import { Avatar } from "@/components/ui/Avatar";
 import { Badge } from "@/components/ui/Badge";
+import { Modal } from "@/components/ui/Modal";
 import { cn } from "@/lib/cn";
 import type { Tone } from "@/lib/content/constants";
 
@@ -21,6 +23,8 @@ export interface TrainerSlide {
   tone: Tone;
   theme?: { label: string; tone: Tone };
   expertise: string;
+  /** What their pop-up profile shows. */
+  profile: TrainerProfileData;
 }
 
 type Slide = { kind: "trainer"; id: string; sp: TrainerSlide } | { kind: "more"; id: string };
@@ -38,7 +42,7 @@ const NAV =
 const STRETCH =
   "after:absolute after:inset-0 after:z-[1] after:rounded-[1.75rem] focus-visible:outline-none focus-visible:after:outline-2 focus-visible:after:outline-offset-[-2px] focus-visible:after:outline-[var(--ring)] focus-visible:after:outline-solid";
 
-function TrainerCard({ sp, front, link }: { sp: TrainerSlide; front: boolean; link: string }) {
+function TrainerCard({ sp, front, link, onOpen }: { sp: TrainerSlide; front: boolean; link: string; onOpen: (id: string) => void }) {
   return (
     <div className={cn(`tone-${sp.tone}`, "sp-card relative isolate flex h-full overflow-hidden rounded-[1.75rem] p-[2px] shadow-card-lg")}>
       {/* The edge: a conic gradient spinning behind the front card, seen only in the 2px around it. */}
@@ -65,8 +69,21 @@ function TrainerCard({ sp, front, link }: { sp: TrainerSlide; front: boolean; li
         </div>
         <div className="flex flex-1 flex-col items-center px-5 pt-4 pb-5 text-center">
           <h3 className="font-display text-xl leading-snug font-bold text-fg">
-            {/* On a side card the click is left to the slide, which brings it to the front. */}
-            <Link href={sp.href} draggable={false} tabIndex={front ? undefined : -1} onClick={front ? undefined : (e) => e.preventDefault()} className={STRETCH} data-stretch="">
+            {/* The front card opens the trainer's profile in a pop-up (the link is the Trainers page's, for a new tab);
+                on a side card the click is left to the slide, which brings it to the front. */}
+            <Link
+              href={sp.href}
+              draggable={false}
+              tabIndex={front ? undefined : -1}
+              aria-haspopup={front ? "dialog" : undefined}
+              onClick={(e) => {
+                if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
+                e.preventDefault();
+                if (front) onOpen(sp.id);
+              }}
+              className={STRETCH}
+              data-stretch=""
+            >
               {sp.name}
               <span className="sr-only">, {link}</span>
             </Link>
@@ -90,7 +107,8 @@ function TrainerCard({ sp, front, link }: { sp: TrainerSlide; front: boolean; li
  * The home page's trainers as a looping cover flow: the front card faces you with its edge spinning, the
  * others turn away round it, dimmed. Arrows, the dots, a swipe or drag, a sideways trackpad scroll and the
  * arrow keys turn it; pointing at a side card and clicking brings it to the front, and clicking the front
- * card opens that trainer's profile. It turns by itself while a bar fills in the dot of the front card (CSS,
+ * card opens that trainer's profile in a pop-up (photo, profile, Download CV), where Previous / Next and the
+ * arrow keys go through the trainers; the carousel holds still while it is open. It turns by itself while a bar fills in the dot of the front card (CSS,
  * so it holds while the pointer or focus is on the carousel, while it is off screen, after Pause, and never
  * runs with reduced motion). A slide that would have to cross behind the others to keep its place in the
  * loop fades back in at its new place instead.
@@ -102,6 +120,7 @@ export function TrainerCarousel({ trainers, more, label, link }: { trainers: Tra
   const [playing, setPlaying] = useState(true);
   const [inView, setInView] = useState(false);
   const [said, setSaid] = useState("");
+  const [openId, setOpenId] = useState<string | null>(null);
   const rootRef = useRef<HTMLDivElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
   const drag = useRef<{ id: number; x: number; y: number; dx: number; on: boolean } | null>(null);
@@ -201,15 +220,30 @@ export function TrainerCarousel({ trainers, more, label, link }: { trainers: Tra
     go(to, true);
   }
 
+  // The pop-up: the trainer open in it, and Previous / Next (also ← →) through the trainers.
+  const openAt = trainers.findIndex((t) => t.id === openId);
+  const current = openAt >= 0 ? trainers[openAt].profile : undefined;
+  const step = (d: 1 | -1) => setOpenId(trainers[(openAt + d + trainers.length) % trainers.length].id);
+  useEffect(() => {
+    if (!current || trainers.length < 2) return;
+    const onKey = (e: globalThis.KeyboardEvent) => {
+      if (e.key === "ArrowRight") step(1);
+      if (e.key === "ArrowLeft") step(-1);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  });
+
   if (!n) return null;
   const controls = n > 1;
   return (
+    <>
     <div
       ref={rootRef}
       role="region"
       aria-roledescription="carousel"
       aria-label={label}
-      data-hold={inView ? undefined : ""}
+      data-hold={inView && !openId ? undefined : ""}
       onKeyDown={onKeyDown}
       className="sp-carousel group/carousel"
     >
@@ -242,7 +276,7 @@ export function TrainerCarousel({ trainers, more, label, link }: { trainers: Tra
               onClick={front ? undefined : () => go(i, true)}
               className={cn("sp-slide group/slide relative col-start-1 row-start-1 justify-self-center", !front && "cursor-pointer")}
             >
-              {s.kind === "trainer" ? <TrainerCard sp={s.sp} front={front} link={link} /> : more}
+              {s.kind === "trainer" ? <TrainerCard sp={s.sp} front={front} link={link} onOpen={setOpenId} /> : more}
             </div>
           );
         })}
@@ -301,5 +335,9 @@ export function TrainerCarousel({ trainers, more, label, link }: { trainers: Tra
         {said}
       </p>
     </div>
+    <Modal open={Boolean(current)} onClose={() => setOpenId(null)} labelledBy="trainer-modal-title" size="xl">
+      {current ? <TrainerProfile trainer={current} onStep={trainers.length > 1 ? step : undefined} /> : null}
+    </Modal>
+    </>
   );
 }

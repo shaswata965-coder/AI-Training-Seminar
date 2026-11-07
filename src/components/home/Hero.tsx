@@ -1,12 +1,10 @@
-import { MapPin, Sparkles } from "lucide-react";
-import type { CSSProperties, ReactNode } from "react";
+import type { CSSProperties } from "react";
 import { NetworkCanvas } from "@/components/effects/NetworkCanvas";
 import { Img } from "@/components/ui/Img";
 import type { SiteSettings } from "@/lib/content/types";
 import { copy } from "@/lib/copy";
-import { splitProgrammeName, venueLine } from "@/lib/training";
+import { splitProgrammeName } from "@/lib/training";
 import { HeroPlacards, type HeroPlacard } from "./HeroPlacards";
-import { RegisterChooser } from "./RegisterChooser";
 
 /**
  * The built-in photos of Daffodil International University's campus at Daffodil Smart City (public/hero, from
@@ -60,27 +58,13 @@ function BuildingSign() {
   ));
 }
 
-/** One fact under the title: a coloured rule, a small label and the value. */
-function Fact({ label, icon, tone, children }: { label: string; icon: ReactNode; tone: string; children: ReactNode }) {
-  return (
-    <div data-graph-avoid="" className={`${tone} border-t-2 border-[color-mix(in_oklab,var(--accent)_60%,var(--accent-ink))] pt-3`}>
-      <dt className="flex items-center gap-1.5 text-[11px] font-bold tracking-[0.14em] text-subtle uppercase">
-        <span className="text-accent-ink">{icon}</span>
-        {label}
-      </dt>
-      <dd className="mt-1 font-display text-lg font-semibold text-fg">{children}</dd>
-    </div>
-  );
-}
-
 export function Hero({ s }: { s: SiteSettings }) {
   const c = copy(s, "homeHero");
   const p = copy(s, "homePlacard");
-  const tones = copy(s, "homeRegister");
   // Aura's two placards, in turn: one per focus area ({status}, if written, says whether requests are open).
   const placards: HeroPlacard[] = [
-    { key: "professionals" as const, text: p.text, tab: p.professionalsTab, tone: tones.professionalsTone, status: s.registrationStatus },
-    { key: "workspace" as const, text: p.workspace, tab: p.workspaceTab, tone: tones.workspaceTone, status: s.registrationStatus },
+    { key: "professionals" as const, text: p.text, tab: p.professionalsTab, tone: p.professionalsTone, status: s.registrationStatus },
+    { key: "workspace" as const, text: p.workspace, tab: p.workspaceTab, tone: p.workspaceTone, status: s.registrationStatus },
   ].filter((x) => x.text.trim());
   // "DIU AI Training Seminars 2026" → highlighted "DIU AI Training", then "Seminars", then a muted "2026".
   const { title, year } = splitProgrammeName(s.programmeName);
@@ -132,17 +116,6 @@ export function Hero({ s }: { s: SiteSettings }) {
               {s.tagline}
             </p>
           </div>
-
-          <dl className="flex flex-wrap gap-x-10 gap-y-5">
-            {c.formatText ? (
-              <Fact label={c.format} icon={<Sparkles size={14} aria-hidden />} tone="tone-azure">
-                {c.formatText}
-              </Fact>
-            ) : null}
-            <Fact label={c.where} icon={<MapPin size={14} aria-hidden />} tone="tone-lilac">
-              {venueLine(s)}
-            </Fact>
-          </dl>
         </div>
 
         {/* data-launch-land: after the loading screen, Aura flies down into place from where his ship went up (loading.css).
@@ -153,8 +126,6 @@ export function Hero({ s }: { s: SiteSettings }) {
           <div aria-hidden className="absolute inset-[16%] -z-10 rounded-full border border-dashed border-border-strong opacity-60 animate-spin-slow" />
           <HeroPlacards placards={placards} words={{ open: p.open, closed: p.closed }} />
         </div>
-
-        <RegisterChooser s={s} className="lg:col-span-2" />
       </div>
     </section>
   );

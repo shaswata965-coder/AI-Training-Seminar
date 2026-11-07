@@ -1,15 +1,13 @@
 "use client";
 
-import { ArrowLeft, ArrowRight, CalendarDays, Globe, GraduationCap, MapPin, Mic2, Search, Star, Users } from "lucide-react";
+import { ArrowRight, CalendarDays, MapPin, Mic2, Search, Star, Users } from "lucide-react";
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { MoreTrainersCard } from "@/components/home/TrainersPreview";
 import { Avatar } from "@/components/ui/Avatar";
 import { Badge } from "@/components/ui/Badge";
-import { GitHubIcon, LinkedInIcon, XIcon } from "@/components/ui/BrandIcons";
 import { Modal } from "@/components/ui/Modal";
 import { PersonCard } from "@/components/ui/PersonCard";
-import { RichText } from "@/components/ui/RichText";
 import { SlidingPill, useSlidingPill } from "@/components/ui/SlidingPill";
 import { cn } from "@/lib/cn";
 import { replaceQuery, useUrlParam } from "@/lib/client-hooks";
@@ -17,6 +15,7 @@ import { TRAINER_CATEGORIES, TRAINER_CATEGORY_META, THEME_META } from "@/lib/con
 import type { Session, Trainer } from "@/lib/content/types";
 import { timeRange } from "@/lib/format";
 import { OPEN_TRAINER_EVENT } from "./OpenProfile";
+import { TrainerProfile } from "./TrainerProfile";
 
 export interface TrainerSession extends Pick<Session, "id" | "title" | "type" | "theme" | "day" | "start" | "end" | "room" | "trainers" | "panelists" | "moderator"> {
   dayLabel: string;
@@ -28,37 +27,6 @@ const PROGRAMME_FILTERS = [
   { id: "professionals", label: THEME_META.professionals.short },
   { id: "workspace", label: THEME_META.workspace.short },
 ] as const;
-
-function Links({ sp }: { sp: Trainer }) {
-  const items = [
-    { href: sp.website, label: "Website", Icon: Globe },
-    { href: sp.linkedin, label: "LinkedIn", Icon: LinkedInIcon },
-    { href: sp.x, label: "X", Icon: XIcon },
-    { href: sp.scholar, label: "Google Scholar", Icon: GraduationCap },
-    { href: sp.github, label: "GitHub", Icon: GitHubIcon },
-  ].filter((i) => i.href);
-  if (!items.length) return null;
-  return (
-    <ul className="flex flex-wrap gap-2">
-      {items.map(({ href, label, Icon }) => (
-        <li key={label}>
-          <a
-            href={href}
-            target="_blank"
-            rel="noopener noreferrer"
-            data-ripple=""
-            className="inline-flex items-center gap-1.5 rounded-md border border-border bg-surface px-3 py-1.5 text-sm font-semibold text-muted transition hover:-translate-y-0.5 hover:border-brand hover:text-brand"
-          >
-            <span className="btn-ico-l">
-              <Icon size={15} aria-hidden />
-            </span>{" "}
-            {label}
-          </a>
-        </li>
-      ))}
-    </ul>
-  );
-}
 
 export function TrainersView({
   trainers,
@@ -279,90 +247,30 @@ export function TrainersView({
 
       <Modal open={Boolean(current)} onClose={() => open(null)} labelledBy="trainer-modal-title" size="xl">
         {current ? (
-          <div>
-            <div className={`tone-${(TRAINER_CATEGORY_META[current.category] ?? TRAINER_CATEGORY_META.faculty).tone} relative overflow-hidden rounded-t-[1.75rem] bg-accent-soft px-6 pt-8 pb-6 sm:px-10`}>
-              <div aria-hidden className="bg-dots absolute inset-0 opacity-60" />
-              <div className="relative flex flex-col items-start gap-5 sm:flex-row sm:items-center">
-                <Avatar name={current.name} src={current.photo} size={120} className="ring-4 ring-surface" />
-                <div>
-                  <div className="flex flex-wrap gap-2">
-                    {current.lead ? (
-                      <Badge tone="butter" size="xs">
-                        Lead trainer
-                      </Badge>
-                    ) : null}
-                    <Badge tone={(TRAINER_CATEGORY_META[current.category] ?? TRAINER_CATEGORY_META.faculty).tone} size="xs">
-                      {(TRAINER_CATEGORY_META[current.category] ?? TRAINER_CATEGORY_META.faculty).label}
-                    </Badge>
-                    {current.theme && current.theme !== "general" ? (
-                      <Badge tone="neutral" size="xs">
-                        {THEME_META[current.theme].short}
-                      </Badge>
-                    ) : null}
-                  </div>
-                  <h2 id="trainer-modal-title" className="mt-2 font-display text-3xl font-bold text-fg">
-                    {current.name}
-                  </h2>
-                  <p className="text-muted">{[current.designation, current.affiliation].filter(Boolean).join(", ")}</p>
-                </div>
+          <TrainerProfile trainer={current} onStep={list.length > 1 ? go : undefined}>
+            {appearances.length ? (
+              <div>
+                <p className="text-xs font-bold tracking-[0.14em] text-subtle uppercase">In the sample plan</p>
+                <ul className="mt-2 grid gap-2">
+                  {appearances.map((a) => (
+                    <li key={a.id}>
+                      <Link href={`/programme?day=${a.day}#session-${a.id}`} className="flex items-center justify-between gap-3 rounded-2xl border border-border p-3 hover:-translate-y-0.5 hover:border-brand hover:shadow-card">
+                        <span>
+                          <span className="block font-semibold text-fg">{a.title}</span>
+                          <span className="text-sm text-muted">
+                            {a.dayLabel} · {timeRange(a.start, a.end)} · {a.room || "Room confirmed by e-mail"}
+                          </span>
+                        </span>
+                        <span className="btn-ico-r text-subtle">
+                          <ArrowRight size={17} aria-hidden />
+                        </span>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
               </div>
-            </div>
-            <div className="grid gap-6 px-6 py-6 sm:px-10 sm:py-8">
-              <Links sp={current} />
-              {current.expertise || current.teaching ? (
-                <div className="rounded-2xl border border-border bg-surface-2 p-5">
-                  <p className="text-xs font-bold tracking-[0.14em] text-subtle uppercase">{current.expertise ? "Expertise" : "Teaches"}</p>
-                  {current.expertise ? <p className="mt-1 font-display text-xl font-semibold text-fg">{current.expertise}</p> : null}
-                  <RichText text={current.teaching} className="mt-2 text-[15px] leading-relaxed text-muted" />
-                </div>
-              ) : null}
-              {current.bio ? (
-                <div>
-                  <p className="text-xs font-bold tracking-[0.14em] text-subtle uppercase">Profile</p>
-                  <RichText text={current.bio} className="mt-2 text-[15px] leading-relaxed text-muted" />
-                </div>
-              ) : null}
-              {appearances.length ? (
-                <div>
-                  <p className="text-xs font-bold tracking-[0.14em] text-subtle uppercase">In the schedule</p>
-                  <ul className="mt-2 grid gap-2">
-                    {appearances.map((a) => (
-                      <li key={a.id}>
-                        <Link href={`/programme?day=${a.day}#session-${a.id}`} className="flex items-center justify-between gap-3 rounded-2xl border border-border p-3 hover:-translate-y-0.5 hover:border-brand hover:shadow-card">
-                          <span>
-                            <span className="block font-semibold text-fg">{a.title}</span>
-                            <span className="text-sm text-muted">
-                              {a.dayLabel} · {timeRange(a.start, a.end)} · {a.room || "Room confirmed by e-mail"}
-                            </span>
-                          </span>
-                          <span className="btn-ico-r text-subtle">
-                            <ArrowRight size={17} aria-hidden />
-                          </span>
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ) : null}
-              {list.length > 1 ? (
-                <div className="flex items-center justify-between border-t border-border pt-5">
-                  <button type="button" onClick={() => go(-1)} className="inline-flex items-center gap-1.5 text-sm font-semibold text-muted hover:text-fg">
-                    <span className="btn-ico-back">
-                      <ArrowLeft size={16} aria-hidden />
-                    </span>{" "}
-                    Previous
-                  </button>
-                  <span className="text-xs text-subtle">Use ← → keys</span>
-                  <button type="button" onClick={() => go(1)} className="inline-flex items-center gap-1.5 text-sm font-semibold text-muted hover:text-fg">
-                    Next{" "}
-                    <span className="btn-ico-r">
-                      <ArrowRight size={16} aria-hidden />
-                    </span>
-                  </button>
-                </div>
-              ) : null}
-            </div>
-          </div>
+            ) : null}
+          </TrainerProfile>
         ) : null}
       </Modal>
     </div>

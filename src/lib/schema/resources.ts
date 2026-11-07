@@ -163,7 +163,8 @@ export const COLLECTIONS: CollectionDef[] = [
       select("category", "Label", opts(TRAINER_CATEGORIES, (k) => TRAINER_CATEGORY_META[k].label), { required: true, width: "third" }),
       select("theme", "Programme", themeOptions, { width: "third", help: "The programme they teach; General for both." }),
       bool("lead", "Lead trainer", { width: "third", help: "Shown in the spotlight at the top of the Trainers page." }),
-      image("photo", "Photo", { help: "Square photos look best. Uploads are compressed automatically." }),
+      image("photo", "Photo", { help: "Square photos look best. Uploads are compressed automatically. Shown on their card and in their pop-up profile." }),
+      file("cv", "CV (PDF)", { accept: "application/pdf", help: "Upload their CV: a “Download CV” button appears in their pop-up profile. Leave empty for none." }),
       richtext("bio", "Profile"),
       text("expertise", "Areas of expertise", { placeholder: "Machine learning, data science, software engineering" }),
       richtext("teaching", "What they teach"),
@@ -688,9 +689,6 @@ export const SETTINGS_PAGES: SettingsPage[] = [
       section("placard", "Hero announcements", "homePlacard", [], {
         description:
           "Aura holds up two placards in turn in the hero: one for professional work, one for office work. {status} in a placard becomes whether training requests are open (Site-wide → Contact us), in the words below. Clear one placard to show only the other.",
-      }),
-      section("register", "Contact us cards", "homeRegister", [], {
-        description: "The heading and two compact cards along the foot of the hero, one for each focus area; each opens the Contact us form with its focus area ticked. Their status comes from Site-wide → Contact us.",
       }),
       section("invite", "Custom training", "homeInvite", [image("invitePhoto", "Poster image", { help: "Leave it empty for the built-in photo of the DIU campus. An uploaded landscape picture (16:9, e.g. 1920×1080) replaces it across the top of the poster, under its label and badge, fading into the poster below." })], {
         description:

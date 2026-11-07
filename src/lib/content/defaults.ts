@@ -44,7 +44,7 @@ export const DEFAULT_SETTINGS: SiteSettings = {
   invitePhoto: "",
   highlights: [
     { label: "Training", value: "Custom", icon: "sparkles" },
-    { label: "Trainers", value: "9", icon: "users" },
+    { label: "Trainers", value: "3", icon: "users" },
     { label: "Focus", value: "Industry", icon: "briefcase" },
     { label: "Hands-on labs", value: "6", icon: "laptop" },
     { label: "Office work", value: "Faster", icon: "clock" },
@@ -204,8 +204,9 @@ export const DEFAULT_SETTINGS: SiteSettings = {
 type NewDoc<T> = Omit<T, "id">;
 
 /*
- * The trainers: the members of the Department of CSE's list, in its order, the convener first as the lead
- * trainer. Their designations, photos and profiles are edited under Trainers in the admin panel.
+ * The trainers: Shaswata Bhattacharya and Md. Sazzadur Ahamed (from their CVs, which are their built-in CV
+ * downloads in public/trainers/cv), then Professor Dr. Sheak Rashed Haider Noori as the lead trainer. Photos,
+ * profiles and CVs are edited under Trainers in the admin panel.
  */
 const CSE = "Department of Computer Science and Engineering";
 const trainer = (name: string, slug: string, extra: Partial<NewDoc<Trainer>> = {}): NewDoc<Trainer> => ({
@@ -225,26 +226,52 @@ const trainer = (name: string, slug: string, extra: Partial<NewDoc<Trainer>> = {
   x: "",
   scholar: "",
   github: "",
+  cv: "",
   featured: true,
   published: true,
   ...extra,
 });
 
-export const DEFAULT_TRAINERS: NewDoc<Trainer>[] = [
-  trainer("Professor Dr. Sheak Rashed Haider Noori", "sheak-rashed-haider-noori", {
-    designation: `Professor, ${CSE}`,
-    lead: true,
-    bio: `Professor Dr. Sheak Rashed Haider Noori is a Professor in the ${CSE} at Daffodil International University and leads the trainers of DIU AI Training.`,
-  }),
-  trainer("Dr. S. M. Aminul Haque", "s-m-aminul-haque"),
-  trainer("Dr. Arif Mahmud", "arif-mahmud"),
-  trainer("Dr. Abdus Sattar", "abdus-sattar"),
-  trainer("Dr. Masud Rana Rashel", "masud-rana-rashel"),
-  trainer("Mr. Shahdat Hossain", "shahdat-hossain"),
-  trainer("Mr. Saiful Islam", "saiful-islam"),
-  trainer("Mr. Mohammad Jahangir Alam", "mohammad-jahangir-alam"),
-  trainer("Kridita Ray", "kridita-ray"),
-].map((t, i) => ({ ...t, order: i + 1 }));
+const SHASWATA = trainer("Shaswata Bhattacharya", "shaswata-bhattacharya", {
+  designation: `Lecturer, ${CSE}`,
+  expertise: "Large language models, RLHF & model evaluation, generative AI for productivity, AI in teaching & assessment",
+  bio: [
+    "Lecturer in Computer Science and Engineering at Daffodil International University, teaching Artificial Intelligence and Computer Vision. Shaswata's work connects three sides of AI: research on making large language models more efficient, hands-on model training through Reinforcement Learning from Human Feedback (RLHF), and practical training for the people who use these tools, to help professionals and educators use generative AI confidently, critically and well.",
+    "**AI training & speaking**",
+    "- **AI Trainer, Titas Gas Engineers AI Training Seminar:** trained practising engineers in AI content generation (Google Vids, Gemini), AI-assisted development (Bubble AI, Claude Code) and personal AI assistants built with Gemini Gems.\n- **Speaker, National School Science Teachers' Conference:** developing AI-based assessment tools and lesson planning with AI chatbots, Kahoot!, Google Vids and MagicSchool AI.",
+    "**Industry & research**",
+    "- **AI Trainer (Software Engineer), Scale Labs AI · Outlier platform:** RLHF work that makes frontier AI models more accurate, safe and aligned: evaluating AI-generated code, writing prompts that probe model reasoning, correcting model-written code and annotating training data.\n- **Co-author, research on LLM efficiency:** [QEvict: Recoverable Quantized KV Eviction for Attention-Drift-Robust Long-Context Decoding](https://arxiv.org/abs/2608.05326), a three-tier KV-cache scheme that lets an LLM recover compressed context when attention shifts.\n- **Machine learning, Stanford University Online (Coursera):** supervised learning, advanced learning algorithms, and unsupervised learning, recommenders and reinforcement learning.",
+  ].join("\n\n"),
+  teaching:
+    "At DIU: Artificial Intelligence, Computer Vision, and Software Architecture & Design Patterns. In AI training: generative AI for productivity (Gemini, Gemini Gems, Claude, Google Vids), AI-assisted development (Claude Code, Bubble AI, Figma AI) and AI in teaching and assessment (MagicSchool AI, Kahoot!, Mentimeter, Google Forms & Sheets).",
+  cv: "/trainers/cv/shaswata-bhattacharya-cv.pdf",
+});
+
+const SAZZADUR = trainer("Md. Sazzadur Ahamed", "md-sazzadur-ahamed", {
+  designation: `Assistant Professor, ${CSE}`,
+  expertise: "AI & machine learning, generative AI, prompt engineering, decision support systems, data analysis",
+  bio: [
+    "Assistant Professor of Computer Science and Engineering at Daffodil International University, with more than 10 years of academic and research experience in Artificial Intelligence and Machine Learning and 22 peer-reviewed journal and conference publications. Md. Sazzadur Ahamed delivers practical AI, Generative AI and Prompt Engineering training to corporate professionals and educators.",
+    "**Corporate & educator training**",
+    "- **COATS Bangladesh:** session trainer for “Prompt Engineering, Communication & Documentation” in the AI-Powered Workplace Productivity & Smart Office Practices programme, with Copilot-based workplace exercises.\n- **TITAS Gas:** training facilitator for the AI-Powered Productivity Transformation & Strategic Leadership Training programme for corporate professionals ([see the training](https://www.facebook.com/share/p/1GyCHvHhxm/)).\n- **National School Science Teachers' Conference:** facilitated sessions on AI-based assessment tools and course planning for educators.",
+    "**Highlights**",
+    "- 22 journal and conference publications\n- Excellence in Teaching Award, DIU\n- Best Teacher Award, DIU\n- Vice Chancellor Gold Medal for an outstanding B.Sc. academic result",
+  ].join("\n\n"),
+  teaching:
+    "Practical prompt engineering, AI-assisted professional communication, document drafting, meeting summaries, workplace analysis and the responsible use of Generative AI. Research areas: decision support systems, data analysis and statistical modelling, and medical image analysis.",
+  cv: "/trainers/cv/md-sazzadur-ahamed-cv.pdf",
+});
+
+const NOORI = trainer("Professor Dr. Sheak Rashed Haider Noori", "sheak-rashed-haider-noori", {
+  designation: `Professor, ${CSE}`,
+  lead: true,
+  bio: `Professor Dr. Sheak Rashed Haider Noori is a Professor in the ${CSE} at Daffodil International University and leads the trainers of DIU AI Training.`,
+});
+
+export const DEFAULT_TRAINERS: NewDoc<Trainer>[] = [SHASWATA, SAZZADUR, NOORI].map((t, i) => ({ ...t, order: i + 1 }));
+
+/** The trainers built in before the list was updated from the CVs, removed from a site once (bootstrap.ts). */
+export const REMOVED_TRAINER_SLUGS = ["s-m-aminul-haque", "arif-mahmud", "abdus-sattar", "masud-rana-rashel", "shahdat-hossain", "saiful-islam", "mohammad-jahangir-alam", "kridita-ray"];
 
 /** Faculty coordinators, student organisers and volunteers: none until the organisers add them. */
 export const DEFAULT_PEOPLE: NewDoc<Person>[] = [];
@@ -374,9 +401,6 @@ const RETIRED: Retired = {
     "homeParticipants.emptyTitle": ["Our first batch is on its way"],
     "homePlacard.closed": ["closed"],
     "homePlacard.open": ["now open!"],
-    "homeRegister.closed": ["Closed"],
-    "homeRegister.description": ["Register once and pick AI for Professionals, AI for Workspace, or both. Places are confirmed by the organising team {replyBy}."],
-    "homeRegister.open": ["Open"],
     "homeTrainers.emptyText": ["We are finalising the trainers for each programme. Follow the announcements for updates."],
     "homeTrainers.emptyTitle": ["Trainers will be announced soon"],
     "homeTrainers.moreText": ["New trainers join as the programmes grow. Stay tuned!"],
@@ -457,6 +481,14 @@ const RETIRED: Retired = {
   },
 };
 
+// The highlights of the first custom-training version, before the trainer list came from the CVs (nine trainers).
+RETIRED.values.highlights.push([
+  { label: "Training", value: "Custom", icon: "sparkles" },
+  { label: "Trainers", value: "9", icon: "users" },
+  { label: "Focus", value: "Industry", icon: "briefcase" },
+  { label: "Hands-on labs", value: "6", icon: "laptop" },
+  { label: "Office work", value: "Faster", icon: "clock" },
+]);
 // Then the defaults of the batch-era version (two programmes, dates, registration), before custom training.
 for (const [path, was] of Object.entries(BATCH_ERA_DEFAULTS)) RETIRED.values[path] = [...(RETIRED.values[path] ?? []), ...was];
 

@@ -702,25 +702,11 @@ html[data-scroll-lock] { overflow: hidden; }
 dialog::backdrop { background: rgb(10 15 30 / 0.45); }
 
 /* Home hero: how long each of Aura's placards stays up (HeroPlacards.tsx), shown as a bar filling under its
-   switch. It holds while the pointer or focus is on him, the switch or a registration card. With reduced motion
-   it doesn't run, so the placards change only when asked. */
+   switch. It holds while the pointer or focus is on him or the switch. With reduced motion it doesn't run, so
+   the placards change only when asked. */
 @media (prefers-reduced-motion: no-preference) {
   .placard-timer { transform-origin: left; animation: grow-x 6s linear both; }
-  [data-placard]:has([data-launch-land]:hover, [data-launch-land]:focus-within, [data-placard-key]:hover, [data-placard-key]:focus-visible) .placard-timer { animation-play-state: paused; }
-}
-
-/* Home registration tickets (RegisterChooser.tsx): the edge spins on the ticket whose placard Aura is holding up,
-   and on the one under the pointer; the other rests, dimmed. */
-.reg-choice-ring { transition: opacity 0.5s ease; }
-@media (prefers-reduced-motion: no-preference) {
-  .reg-choice-ring { animation: spin-slow 5s linear infinite; will-change: transform; }
-}
-[data-placard] .reg-choice:not(:hover, :focus-visible) .reg-choice-ring { opacity: 0.22; animation-play-state: paused; }
-[data-placard="professionals"] .reg-choice[data-placard-key="professionals"] .reg-choice-ring,
-[data-placard="workspace"] .reg-choice[data-placard-key="workspace"] .reg-choice-ring { opacity: 1; animation-play-state: running; }
-[data-placard="professionals"] .reg-choice[data-placard-key="professionals"],
-[data-placard="workspace"] .reg-choice[data-placard-key="workspace"] {
-  box-shadow: 0 18px 40px -22px color-mix(in oklab, var(--accent) 85%, transparent), var(--card-shadow);
+  [data-placard]:has([data-launch-land]:hover, [data-launch-land]:focus-within) .placard-timer { animation-play-state: paused; }
 }
 
 /* Home trainers (TrainerCarousel.tsx): a cover flow. Every slide shares one grid cell and is moved out to its

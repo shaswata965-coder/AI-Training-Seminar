@@ -44,7 +44,7 @@ Requirements: **Node.js 20.9+** (22 LTS recommended) and **MongoDB 6+**, either 
 npm install
 cp .env.example .env.local      # set MONGODB_URI, ADMIN_EMAIL, ADMIN_PASSWORD (AUTH_SECRET optional in dev)
 npm run seed                    # stores the default content (also happens automatically on first start):
-                                # the nine trainers (DEFAULT_TRAINERS), FAQs and the tentative two-day schedule
+                                # the three trainers (DEFAULT_TRAINERS), FAQs and the two-day sample plan
                                 # (DEFAULT_SESSIONS in src/lib/content/defaults.ts, shown as a draft)
 npm run dev                     # http://localhost:3000
 ```
@@ -264,7 +264,7 @@ docs/                  admin guide, requirements checklist, image credits
 
 **Focus areas:** AI for Professional Work and AI for Office Work are the content's *themes* in the code (`THEME_KEYS` in `src/lib/content/constants.ts`: `professionals`, `workspace` and `general`), with their labels, colours and Aura looks in `THEME_META`. Sessions, labs, demos, trainers and past participants each have a `theme` field; the home page's focus-area cards are `themes` in the settings. Links may name a programme (`/programme?theme=workspace`, `/register?programme=professionals`, which ticks it on the form).
 
-**Trainers and past participants:** the trainers of the department's list are `DEFAULT_TRAINERS` (`src/lib/content/defaults.ts`), stored on a site's first start and shown from the code while there is no database; the one marked `lead` is the Trainers page's spotlight (`components/trainers/TrainerSpotlight.tsx`). Past participants are the `participants` collection, grouped by their `batch` text and ordered by `completed` (`src/lib/participants.ts`); those with a quote and `featured` appear in *What participants say* and on the home page.
+**Trainers and past participants:** the built-in trainers are `DEFAULT_TRAINERS` (`src/lib/content/defaults.ts`): Shaswata Bhattacharya and Md. Sazzadur Ahamed, written from their CVs (their CV downloads are in `public/trainers/cv/`), and Professor Dr. Sheak Rashed Haider Noori, the lead. They are stored on a site's first start and shown from the code while there is no database; a site set up with the earlier list of nine is updated once (`updateTrainersFromCvs` in `src/lib/content/bootstrap.ts`). The one marked `lead` is the Trainers page's spotlight (`components/trainers/TrainerSpotlight.tsx`). Clicking a trainer, on the home page's carousel or the Trainers page, opens their profile in a pop-up (`components/trainers/TrainerProfile.tsx`) with their photo, profile, expertise and a *Download CV* button for the CV uploaded under Trainers → CV. Past participants are the `participants` collection, grouped by their `batch` text and ordered by `completed` (`src/lib/participants.ts`); those with a quote and `featured` appear in *What participants say* and on the home page.
 
 **Adding a field to a content type** (for example a "pronouns" field for trainers): add it to the collection's `fields` in `src/lib/schema/resources.ts` and to its type in `src/lib/content/types.ts`, then render it. The admin form, validation and database schema follow automatically.
 

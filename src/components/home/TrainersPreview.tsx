@@ -5,6 +5,7 @@ import { Portal } from "@/components/ui/Portal";
 import { Section, SectionHeading } from "@/components/ui/Section";
 import { TRAINER_CATEGORY_META, THEME_META } from "@/lib/content/constants";
 import type { SiteSettings, Trainer } from "@/lib/content/types";
+import { profileData } from "@/lib/trainer-profile";
 import { copy, plural } from "@/lib/copy";
 import { TrainerCarousel, type TrainerSlide } from "./TrainerCarousel";
 
@@ -23,7 +24,7 @@ export function TrainersPreview({ s, trainers }: { s: SiteSettings; trainers: Tr
   const featured = trainers.filter((sp) => sp.featured);
   const list = (featured.length ? featured : trainers).slice(0, limit);
   const c = copy(s, "homeTrainers", { count: plural(trainers.length, "trainer") });
-  // Only what the cards show goes to the browser.
+  // Only what the cards and the pop-up profiles show goes to the browser.
   const slides: TrainerSlide[] = list.map((sp) => {
     const cat = TRAINER_CATEGORY_META[sp.category] ?? TRAINER_CATEGORY_META.faculty;
     const theme = sp.theme && sp.theme !== "general" ? THEME_META[sp.theme] : undefined;
@@ -40,6 +41,7 @@ export function TrainersPreview({ s, trainers }: { s: SiteSettings; trainers: Tr
       tone: cat.tone,
       theme: theme ? { label: theme.short, tone: theme.tone } : undefined,
       expertise: sp.expertise,
+      profile: profileData(sp),
     };
   });
   return (
