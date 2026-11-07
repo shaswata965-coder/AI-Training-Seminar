@@ -36,7 +36,7 @@ export function NetworkCanvas({ className, density = 1, avoid }: { className?: s
 
     const readPalette = () => {
       const cs = getComputedStyle(document.documentElement);
-      palette = ["--azure", "--lilac", "--mint", "--peach", "--blush"].map((v) => cs.getPropertyValue(v).trim() || "#8cc8ff");
+      palette = ["--azure", "--lilac", "--mint", "--peach", "--aqua"].map((v) => cs.getPropertyValue(v).trim() || "#8cc8ff");
     };
 
     const resize = () => {

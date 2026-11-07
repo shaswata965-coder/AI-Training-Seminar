@@ -3,7 +3,7 @@ import { REGISTRATION_STATUSES } from "./constants";
 import { PAGE_COPY_DEFAULTS } from "@/lib/schema/page-copy";
 import { HIDDEN_SECTIONS_DEFAULTS, SECTION_ORDER_DEFAULTS } from "@/lib/schema/section-order";
 import { BATCH_ERA_DEFAULTS } from "./retired-batches";
-import type { Faq, Person, Session, SiteSettings, Trainer } from "./types";
+import type { Faq, PastTraining, Person, Session, SiteSettings, Trainer } from "./types";
 
 /*
  * Default content. Used when the database is not configured/reachable and to
@@ -218,7 +218,7 @@ const trainer = (name: string, slug: string, extra: Partial<NewDoc<Trainer>> = {
   theme: "general",
   lead: false,
   photo: "",
-  bio: `${name} is a faculty member of the ${CSE} at Daffodil International University and a trainer with DIU AI Training.`,
+  bio: `**Current role**\n- Faculty member, ${CSE}, Daffodil International University\n- Trainer with DIU AI Training`,
   expertise: "",
   teaching: "",
   website: "",
@@ -232,46 +232,139 @@ const trainer = (name: string, slug: string, extra: Partial<NewDoc<Trainer>> = {
   ...extra,
 });
 
+/** A profile as headings with bullet points: [heading, bullets][] → "**Heading**\n- bullet…" (see profileSections). */
+const highlights = (sections: [string, string[]][]) => sections.map(([h, items]) => [`**${h}**`, ...items.map((i) => `- ${i}`)].join("\n")).join("\n\n");
+
 const SHASWATA = trainer("Shaswata Bhattacharya", "shaswata-bhattacharya", {
   designation: `Lecturer, ${CSE}`,
-  expertise: "Large language models, RLHF & model evaluation, generative AI for productivity, AI in teaching & assessment",
-  bio: [
-    "Lecturer in Computer Science and Engineering at Daffodil International University, teaching Artificial Intelligence and Computer Vision. Shaswata's work connects three sides of AI: research on making large language models more efficient, hands-on model training through Reinforcement Learning from Human Feedback (RLHF), and practical training for the people who use these tools, to help professionals and educators use generative AI confidently, critically and well.",
-    "**AI training & speaking**",
-    "- **AI Trainer, Titas Gas Engineers AI Training Seminar:** trained practising engineers in AI content generation (Google Vids, Gemini), AI-assisted development (Bubble AI, Claude Code) and personal AI assistants built with Gemini Gems.\n- **Speaker, National School Science Teachers' Conference:** developing AI-based assessment tools and lesson planning with AI chatbots, Kahoot!, Google Vids and MagicSchool AI.",
-    "**Industry & research**",
-    "- **AI Trainer (Software Engineer), Scale Labs AI · Outlier platform:** RLHF work that makes frontier AI models more accurate, safe and aligned: evaluating AI-generated code, writing prompts that probe model reasoning, correcting model-written code and annotating training data.\n- **Co-author, research on LLM efficiency:** [QEvict: Recoverable Quantized KV Eviction for Attention-Drift-Robust Long-Context Decoding](https://arxiv.org/abs/2608.05326), a three-tier KV-cache scheme that lets an LLM recover compressed context when attention shifts.\n- **Machine learning, Stanford University Online (Coursera):** supervised learning, advanced learning algorithms, and unsupervised learning, recommenders and reinforcement learning.",
-  ].join("\n\n"),
-  teaching:
-    "At DIU: Artificial Intelligence, Computer Vision, and Software Architecture & Design Patterns. In AI training: generative AI for productivity (Gemini, Gemini Gems, Claude, Google Vids), AI-assisted development (Claude Code, Bubble AI, Figma AI) and AI in teaching and assessment (MagicSchool AI, Kahoot!, Mentimeter, Google Forms & Sheets).",
+  expertise: "Large language models, RLHF & model evaluation, Generative AI for productivity, AI in teaching & assessment",
+  bio: highlights([
+    ["Current role", [
+      "Lecturer, Department of CSE, Daffodil International University",
+      "Teaches Artificial Intelligence, Computer Vision, and Software Architecture & Design Patterns",
+    ]],
+    ["AI training & speaking", [
+      "**AI Trainer:** Titas Gas Engineers AI Training Seminar",
+      "Trained engineers in AI content generation, AI-assisted development and personal AI assistants",
+      "**Speaker:** National School Science Teachers' Conference, on AI-based assessment and lesson planning",
+    ]],
+    ["Industry experience", [
+      "**AI Trainer (Software Engineer):** Scale Labs AI · Outlier platform",
+      "RLHF for frontier AI models: evaluating and correcting AI-generated code",
+      "Prompts that probe and strengthen model reasoning on programming tasks",
+    ]],
+    ["Research", [
+      "Co-author, [QEvict](https://arxiv.org/abs/2608.05326): recoverable quantized KV-cache eviction for long-context LLMs",
+      "LLM inference efficiency and attention dynamics",
+    ]],
+    ["Tools & platforms", [
+      "Gemini, Gemini Gems, Claude, Google Vids",
+      "Claude Code, Bubble AI, Figma AI",
+      "MagicSchool AI, Kahoot!, Mentimeter, Google Forms & Sheets",
+    ]],
+    ["Education", [
+      "Stanford University Online (Coursera): Supervised Machine Learning",
+      "Advanced Learning Algorithms",
+      "Unsupervised Learning, Recommenders, Reinforcement Learning",
+    ]],
+  ]),
   cv: "/trainers/cv/shaswata-bhattacharya-cv.pdf",
 });
 
 const SAZZADUR = trainer("Md. Sazzadur Ahamed", "md-sazzadur-ahamed", {
   designation: `Assistant Professor, ${CSE}`,
-  expertise: "AI & machine learning, generative AI, prompt engineering, decision support systems, data analysis",
-  bio: [
-    "Assistant Professor of Computer Science and Engineering at Daffodil International University, with more than 10 years of academic and research experience in Artificial Intelligence and Machine Learning and 22 peer-reviewed journal and conference publications. Md. Sazzadur Ahamed delivers practical AI, Generative AI and Prompt Engineering training to corporate professionals and educators.",
-    "**Corporate & educator training**",
-    "- **COATS Bangladesh:** session trainer for “Prompt Engineering, Communication & Documentation” in the AI-Powered Workplace Productivity & Smart Office Practices programme, with Copilot-based workplace exercises.\n- **TITAS Gas:** training facilitator for the AI-Powered Productivity Transformation & Strategic Leadership Training programme for corporate professionals ([see the training](https://www.facebook.com/share/p/1GyCHvHhxm/)).\n- **National School Science Teachers' Conference:** facilitated sessions on AI-based assessment tools and course planning for educators.",
-    "**Highlights**",
-    "- 22 journal and conference publications\n- Excellence in Teaching Award, DIU\n- Best Teacher Award, DIU\n- Vice Chancellor Gold Medal for an outstanding B.Sc. academic result",
-  ].join("\n\n"),
-  teaching:
-    "Practical prompt engineering, AI-assisted professional communication, document drafting, meeting summaries, workplace analysis and the responsible use of Generative AI. Research areas: decision support systems, data analysis and statistical modelling, and medical image analysis.",
+  expertise: "AI & machine learning, Generative AI, Prompt engineering, Decision support systems, Data analysis",
+  bio: highlights([
+    ["Current role", [
+      "Assistant Professor, Department of CSE, Daffodil International University",
+      "10+ years of academic and research experience in AI & Machine Learning",
+    ]],
+    ["Corporate & educator training", [
+      "**COATS Bangladesh:** Prompt Engineering, Communication & Documentation, with Copilot-based workplace exercises",
+      "**TITAS Gas:** AI-Powered Productivity Transformation & Strategic Leadership ([see the training](https://www.facebook.com/share/p/1GyCHvHhxm/))",
+      "**National School Science Teachers' Conference:** AI-based assessment tools and course planning",
+    ]],
+    ["Highlights", [
+      "22 journal and conference publications",
+      "Excellence in Teaching Award, DIU",
+      "Best Teacher Award, DIU",
+      "Vice Chancellor Gold Medal for an outstanding B.Sc. result",
+    ]],
+    ["Training focus", [
+      "Practical prompt engineering",
+      "AI-assisted professional communication and document drafting",
+      "Meeting summaries and workplace analysis",
+      "Responsible use of Generative AI",
+    ]],
+    ["Research areas", ["Decision support systems", "Data analysis & statistical modelling", "Medical image analysis"]],
+  ]),
   cv: "/trainers/cv/md-sazzadur-ahamed-cv.pdf",
 });
 
 const NOORI = trainer("Professor Dr. Sheak Rashed Haider Noori", "sheak-rashed-haider-noori", {
   designation: `Professor, ${CSE}`,
   lead: true,
-  bio: `Professor Dr. Sheak Rashed Haider Noori is a Professor in the ${CSE} at Daffodil International University and leads the trainers of DIU AI Training.`,
+  bio: highlights([["Current role", [`Professor, ${CSE}, Daffodil International University`, "Leads the trainers of DIU AI Training"]]]),
 });
 
 export const DEFAULT_TRAINERS: NewDoc<Trainer>[] = [SHASWATA, SAZZADUR, NOORI].map((t, i) => ({ ...t, order: i + 1 }));
 
 /** The trainers built in before the list was updated from the CVs, removed from a site once (bootstrap.ts). */
 export const REMOVED_TRAINER_SLUGS = ["s-m-aminul-haque", "arif-mahmud", "abdus-sattar", "masud-rana-rashel", "shahdat-hossain", "saiful-islam", "mohammad-jahangir-alam", "kridita-ray"];
+
+/*
+ * Past training sessions: COATS Bangladesh, with photos from the training (public/trainings, from the organisers'
+ * photo folder), and Titas Gas, showing empty photo spots until its photos are added under Past training sessions.
+ */
+const COATS = "/trainings/coats-bangladesh";
+const coatsPhoto = (n: number, caption: string, alt: string) => ({ image: `${COATS}/coats-${String(n).padStart(2, "0")}.webp`, caption, alt });
+
+export const DEFAULT_TRAININGS: NewDoc<PastTraining>[] = [
+  {
+    name: "COATS Bangladesh",
+    slug: "coats-bangladesh",
+    programme: "AI-Powered Workplace Productivity & Smart Office Practices",
+    label: "Corporate training",
+    summary: "Hands-on AI training for COATS Bangladesh professionals, built around their everyday office work.",
+    highlights: [
+      "Prompt engineering, communication & documentation",
+      "Copilot-based workplace exercises",
+      "Smart office practices for everyday tasks",
+      "Certificates for every participant",
+    ],
+    trainerNames: "Md. Sazzadur Ahamed and the DIU CSE trainers",
+    link: "",
+    photos: [
+      coatsPhoto(1, "Everyone together after the training", "Participants and trainers on the campus steps behind an AI for Professionals banner"),
+      coatsPhoto(2, "A certificate and a gift for every participant", "A participant receives a certificate and a gift bag from the trainers"),
+      coatsPhoto(3, "At the Department of Computer Science & Engineering", "Group photo of the participants in the department's lobby"),
+      coatsPhoto(4, "Certificate handover", "A participant receives a certificate from the trainers"),
+      coatsPhoto(5, "Participants and trainers on the steps", "Large group of participants waving on the campus steps with the training banner"),
+      coatsPhoto(6, "Completing the training", "A participant receives a certificate in the training lab"),
+      coatsPhoto(7, "Celebrating every participant", "A participant holds a certificate beside the trainers"),
+      coatsPhoto(8, "Applause in the lab", "Colleagues applaud as a participant receives a certificate"),
+      coatsPhoto(9, "Thank-you gifts from the trainers", "A participant receives a gift bag and certificate"),
+    ],
+    emptySpots: 0,
+  },
+  {
+    name: "Titas Gas",
+    slug: "titas-gas",
+    programme: "AI-Powered Productivity Transformation & Strategic Leadership",
+    label: "Corporate training",
+    summary: "AI training for engineers and corporate professionals of Titas Gas, from generative AI tools to AI-powered leadership.",
+    highlights: [
+      "AI content generation with Google Vids and Gemini",
+      "AI-assisted development with Bubble AI and Claude Code",
+      "Personal AI assistants built with Gemini Gems",
+      "AI-powered productivity and strategic leadership",
+    ],
+    trainerNames: "Md. Sazzadur Ahamed, Shaswata Bhattacharya",
+    link: "https://www.facebook.com/share/p/1GyCHvHhxm/",
+    photos: [],
+    emptySpots: 6,
+  },
+].map((t, i) => ({ ...t, order: i + 1, published: true }));
 
 /** Faculty coordinators, student organisers and volunteers: none until the organisers add them. */
 export const DEFAULT_PEOPLE: NewDoc<Person>[] = [];
@@ -481,6 +574,9 @@ const RETIRED: Retired = {
   },
 };
 
+// Section colours of the version before the DIU blue-and-green palette, where the rose tint was decorative.
+RETIRED.values["homeFaq.contactTone"] = [...(RETIRED.values["homeFaq.contactTone"] ?? []), "blush"];
+RETIRED.values["organisersHero.tone"] = [...(RETIRED.values["organisersHero.tone"] ?? []), "blush"];
 // The highlights of the first custom-training version, before the trainer list came from the CVs (nine trainers).
 RETIRED.values.highlights.push([
   { label: "Training", value: "Custom", icon: "sparkles" },

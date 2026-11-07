@@ -165,9 +165,12 @@ export const COLLECTIONS: CollectionDef[] = [
       bool("lead", "Lead trainer", { width: "third", help: "Shown in the spotlight at the top of the Trainers page." }),
       image("photo", "Photo", { help: "Square photos look best. Uploads are compressed automatically. Shown on their card and in their pop-up profile." }),
       file("cv", "CV (PDF)", { accept: "application/pdf", help: "Upload their CV: a “Download CV” button appears in their pop-up profile. Leave empty for none." }),
-      richtext("bio", "Profile"),
-      text("expertise", "Areas of expertise", { placeholder: "Machine learning, data science, software engineering" }),
-      richtext("teaching", "What they teach"),
+      richtext("bio", "Profile (headings and bullet points)", {
+        rows: 12,
+        help: "Their highlights, shown as cards in two columns in their pop-up: a line **Heading**, then its points on lines starting with “- ”. Points may use **bold** and [links](https://…). Any other line is shown as a point too.",
+      }),
+      text("expertise", "Areas of expertise", { placeholder: "Machine learning, data science, software engineering", help: "Separated by commas: shown as tags under their name." }),
+      richtext("teaching", "What they teach", { help: "Optional: shown as a “Teaches” card, a point per line." }),
       url("website", "Profile page", { width: "half", help: "e.g. their faculty page on the DIU website." }),
       url("linkedin", "LinkedIn", { width: "half" }),
       url("x", "X / Twitter", { width: "half" }),
@@ -447,6 +450,44 @@ export const COLLECTIONS: CollectionDef[] = [
     ],
   },
   {
+    key: "trainings",
+    model: "PastTraining",
+    label: "Past training sessions",
+    singular: "Training",
+    description:
+      "Trainings delivered for organisations, shown under “Past training sessions” on the home page: the organisation, the programme, its highlights and photos. A training without photos shows empty photo spots, as many as you set, until photos are added.",
+    icon: "image",
+    group: "Past trainings",
+    titleKey: "name",
+    slugFrom: "name",
+    tags: ["trainings"],
+    publicPath: "/#trainings",
+    sort: { order: 1, name: 1 },
+    defaults: { published: true, order: 100, emptySpots: 6, label: "Corporate training" },
+    columns: [
+      { key: "name", label: "Organisation" },
+      { key: "programme", label: "Programme" },
+      { key: "published", label: "Published", kind: "boolean" },
+    ],
+    fields: [
+      text("name", "Organisation", { required: true, width: "half", placeholder: "COATS Bangladesh" }),
+      text("slug", "URL slug", { width: "half", help: "Leave blank to generate from the name." }),
+      text("programme", "Programme", { width: "half", placeholder: "AI-Powered Workplace Productivity & Smart Office Practices" }),
+      text("label", "Label", { width: "half", placeholder: "Corporate training" }),
+      textarea("summary", "Summary (one or two lines)", { rows: 2, maxLength: 300 }),
+      list("highlights", "Highlights", { help: "One point per line: what the training covered." }),
+      text("trainerNames", "Trainers", { width: "half", placeholder: "Md. Sazzadur Ahamed" }),
+      url("link", "Link (optional)", { width: "half", help: "e.g. a post about the training; shown as “See the training”." }),
+      objects("photos", "Photos", "Photo", [image("image", "Photo", { required: true }), text("caption", "Caption"), text("alt", "Alt text (describe the photo)")], {
+        titleKey: "caption",
+        help: "The first photo is shown large. Landscape photos (16:9) look best.",
+      }),
+      num("emptySpots", "Empty photo spots", { width: "third", min: 0, max: 6, help: "Shown while the training has no photos (up to 6)." }),
+      order,
+      published,
+    ],
+  },
+  {
     key: "participants",
     model: "Participant",
     label: "Past participants",
@@ -545,7 +586,7 @@ const statusOptions = [
 ];
 
 /** Built-in shades of the accent colours (light mode), shown as hints. */
-export const PALETTE_DEFAULTS: Record<Tone, string> = { azure: "#8cc8ff", lilac: "#c3b1ff", mint: "#8fe0c0", peach: "#ffbf99", blush: "#ffa9c1", butter: "#ffdc73", aqua: "#67e3f9" };
+export const PALETTE_DEFAULTS: Record<Tone, string> = { azure: "#93bdea", lilac: "#a9bbef", mint: "#9dd8a4", peach: "#94cfec", blush: "#efb7c4", butter: "#cde38f", aqua: "#8dd6cc" };
 
 const section = (key: string, title: string, copy: CopyKey | undefined, fields: FieldDef[] = [], extra: Partial<SettingsSection> = {}): SettingsSection => ({ key, title, copy, fields, ...extra });
 
@@ -710,6 +751,9 @@ export const SETTINGS_PAGES: SettingsPage[] = [
           image("image", "Photo", { help: "A landscape photo (16:9 works best) across the top of the card, with Aura below it. Leave it empty to use the built-in photo for the focus area." }),
         ], { titleKey: "title", maxItems: 2 }),
       ]),
+      section("trainings", "Past training sessions", "homeTrainings", [], {
+        description: "The trainings themselves (organisation, programme, highlights, photos) are added under Past training sessions.",
+      }),
       section("about", "About", "homeAbout", [
         objects("aboutPoints", "Topics around Aura", "Topic", [
           text("title", "Topic (two or three words)", { required: true, width: "half", maxLength: 24 }),

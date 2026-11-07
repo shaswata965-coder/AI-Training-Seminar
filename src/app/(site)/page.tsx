@@ -6,18 +6,19 @@ import { Highlights } from "@/components/home/Highlights";
 import { Invite } from "@/components/home/Invite";
 import { ParticipantsTeaser } from "@/components/home/ParticipantsTeaser";
 import { Partners } from "@/components/home/Partners";
+import { PastTrainings } from "@/components/home/PastTrainings";
 import { TrainersPreview } from "@/components/home/TrainersPreview";
 import { themePhoto, Themes } from "@/components/home/Themes";
 import { Venue } from "@/components/home/Venue";
 import { InOrder } from "@/components/layout/InOrder";
 import { LoadingScreen } from "@/components/loading/LoadingScreen";
-import { getAnnouncements, getDemos, getFaqs, getParticipants, getPeople, getSettings, getSponsors, getTrainers } from "@/lib/content/queries";
+import { getAnnouncements, getDemos, getFaqs, getParticipants, getPastTrainings, getPeople, getSettings, getSponsors, getTrainers } from "@/lib/content/queries";
 import { copy } from "@/lib/copy";
 import { JsonLd, trainingJsonLd } from "@/lib/jsonld";
 import { explorePages, pastBatchNav, primaryNav, registrationNav } from "@/lib/nav";
 
 export default async function HomePage() {
-  const [s, announcements, trainers, sponsors, faqs, demos, people, participants] = await Promise.all([
+  const [s, announcements, trainers, sponsors, faqs, demos, people, participants, trainings] = await Promise.all([
     getSettings(),
     getAnnouncements(),
     getTrainers(),
@@ -26,6 +27,7 @@ export default async function HomePage() {
     getDemos(),
     getPeople(),
     getParticipants(),
+    getPastTrainings(),
   ]);
   // What the loading screen loads behind it: the main pages, and the uploaded images they show (the
   // gallery, which can be large, is left to load when visited).
@@ -45,6 +47,8 @@ export default async function HomePage() {
         ...sponsors.map((x) => x.logo),
         ...demos.map((x) => x.image),
         ...participants.filter((x) => x.featured).map((x) => x.photo),
+        // The first photo of each past training (the rest load when the section comes into view).
+        ...trainings.map((x) => x.photos[0]?.image),
       ].filter((src): src is string => typeof src === "string" && src.startsWith("/")),
     ),
   ];
@@ -61,6 +65,7 @@ export default async function HomePage() {
           highlights: <Highlights s={s} />,
           news: <Announcements s={s} items={announcements} />,
           themes: <Themes s={s} />,
+          trainings: <PastTrainings s={s} trainings={trainings} />,
           about: <About s={s} />,
           trainers: <TrainersPreview s={s} trainers={trainers} />,
           participants: <ParticipantsTeaser s={s} participants={participants} />,

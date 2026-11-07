@@ -24,7 +24,7 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-const TONES = ["butter", "lilac", "peach", "azure", "mint", "blush"] as const;
+const TONES = ["butter", "lilac", "peach", "azure", "mint", "aqua"] as const;
 
 export default async function PartnersPage() {
   const [s, sponsors] = await Promise.all([getSettings(), getSponsors()]);

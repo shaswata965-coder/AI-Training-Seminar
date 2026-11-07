@@ -37,7 +37,7 @@ export default async function OpenGraphImage() {
           width: "100%",
           height: "100%",
           padding: "56px 64px",
-          background: "linear-gradient(135deg, #eaf5ff 0%, #f2eeff 55%, #ffeef3 100%)",
+          background: "linear-gradient(135deg, #eaf3fc 0%, #e8f6fd 50%, #ebf7ec 100%)",
           fontFamily: "Outfit",
           color: "#0f172a",
         }}
@@ -54,7 +54,7 @@ export default async function OpenGraphImage() {
             </div>
           </div>
           <div style={{ display: "flex", flexDirection: "column" }}>
-            <div style={{ display: "flex", fontSize: 30, fontWeight: 700, color: "#5b3cc4", letterSpacing: 2 }}>
+            <div style={{ display: "flex", fontSize: 30, fontWeight: 700, color: "#1b5a9c", letterSpacing: 2 }}>
               {"Custom AI training for your team".toUpperCase()}
             </div>
             <div style={{ display: "flex", fontSize: 86, fontWeight: 800, lineHeight: 1.02, marginTop: 14 }}>{s.programmeName}</div>
@@ -62,7 +62,7 @@ export default async function OpenGraphImage() {
           </div>
           <div style={{ display: "flex", gap: 14, fontSize: 24, color: "#334155" }}>
             {["Professional work", "Office work", "Efficiency gains"].map((t) => (
-              <div key={t} style={{ display: "flex", flexShrink: 0, padding: "8px 16px 8px 14px", borderRadius: "0 8px 8px 0", borderLeft: "4px solid #8b6cf0", background: "rgba(255,255,255,0.7)" }}>
+              <div key={t} style={{ display: "flex", flexShrink: 0, padding: "8px 16px 8px 14px", borderRadius: "0 8px 8px 0", borderLeft: "4px solid #3bb34a", background: "rgba(255,255,255,0.7)" }}>
                 {t}
               </div>
             ))}

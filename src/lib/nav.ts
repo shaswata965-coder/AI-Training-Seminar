@@ -33,6 +33,7 @@ export const explorePages = (n: NavCopy): NavItem[] => [
 export const sectionNav = (n: NavCopy, hidden: readonly string[] = []): NavItem[] =>
   (
     [
+      ["trainings", { href: "/#trainings", label: n.trainings, description: n.trainingsText }],
       ["themes", { href: "/#themes", label: n.themes, description: n.themesText }],
       ["venue", { href: "/#venue", label: n.routeMap, description: n.routeMapText }],
       ["faq", { href: "/#faq", label: n.faq, description: n.faqText }],

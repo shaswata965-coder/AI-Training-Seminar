@@ -4,7 +4,8 @@ import { Aura } from "@/components/aura/Aura";
 import { Avatar } from "@/components/ui/Avatar";
 import { Badge } from "@/components/ui/Badge";
 import { ButtonLink } from "@/components/ui/Button";
-import { RichText } from "@/components/ui/RichText";
+import { InlineText } from "@/components/ui/RichText";
+import { expertiseTags, profileSections } from "@/lib/trainer-profile";
 import { Eyebrow, Section } from "@/components/ui/Section";
 import { THEME_META } from "@/lib/content/constants";
 import type { SiteSettings, Trainer } from "@/lib/content/types";
@@ -22,10 +23,9 @@ export const leadTrainer = (trainers: Trainer[]) => trainers.find((t) => t.lead)
 export function TrainerSpotlight({ s, lead, trainers, teaches }: { s: SiteSettings; lead: Trainer; trainers: Trainer[]; teaches: boolean }) {
   const team = trainers.filter((t) => t.id !== lead.id);
   const c = copy(s, "trainersSpotlight", { count: plural(team.length, "trainer") });
-  const expertise = lead.expertise
-    .split(/[,;]/)
-    .map((x) => x.trim())
-    .filter(Boolean);
+  const expertise = expertiseTags(lead.expertise);
+  // The first few points of their profile; the pop-up shows them all.
+  const points = profileSections(lead.bio).flatMap((s) => s.items).slice(0, 4);
   const programmes = lead.theme && lead.theme !== "general" ? [THEME_META[lead.theme]] : [THEME_META.professionals, THEME_META.workspace];
   return (
     <Section edit="trainers.spotlight" tone={c.tone} bg={c.background} labelledBy="lead-trainer-title" tags="ribbon">
@@ -61,7 +61,18 @@ export function TrainerSpotlight({ s, lead, trainers, teaches }: { s: SiteSettin
               </Badge>
             ))}
           </div>
-          <RichText text={lead.bio} className="mt-6 max-w-3xl text-[16.5px] leading-relaxed text-fg" />
+          {points.length ? (
+            <ul className="mt-6 grid max-w-3xl gap-2.5">
+              {points.map((x, i) => (
+                <li key={i} className="flex gap-3 text-[16px] leading-snug text-fg [&_a]:font-semibold [&_a]:text-brand [&_a]:underline">
+                  <span aria-hidden className="mt-2 h-2 w-2 shrink-0 rounded-full bg-[var(--accent)]" />
+                  <span>
+                    <InlineText text={x} />
+                  </span>
+                </li>
+              ))}
+            </ul>
+          ) : null}
           {expertise.length ? (
             <ul className="mt-5 flex flex-wrap gap-2" aria-label="Areas of expertise">
               {expertise.map((x) => (

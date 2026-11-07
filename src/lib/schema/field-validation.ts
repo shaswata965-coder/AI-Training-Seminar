@@ -49,7 +49,7 @@ function fieldSchema(f: FieldDef): ZodType {
         .refine((v) => !v || SAFE_LINK.test(v), msg(f, "enter a full link starting with https:// (or upload a file)"))
         .default("");
     case "color":
-      return z.string().trim().refine((v) => !v || /^#[0-9a-fA-F]{6}$/.test(v), msg(f, "use a hex colour like #3b5bdb")).default("");
+      return z.string().trim().refine((v) => !v || /^#[0-9a-fA-F]{6}$/.test(v), msg(f, "use a hex colour like #2c6cb5")).default("");
     case "number":
       return z.preprocess(
         (v) => (v === "" || v === null || v === undefined ? null : Number(v)),

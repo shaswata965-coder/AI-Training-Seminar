@@ -158,8 +158,8 @@ function FieldInput({ field: f, value, onChange, errors, path }: { field: FieldD
         <div>
           <Label htmlFor={id} field={f} />
           <div className="flex items-center gap-2">
-            <input type="color" value={/^#[0-9a-f]{6}$/i.test(str) ? str : "#3b5bdb"} onChange={(e) => onChange(e.target.value)} className="h-11 w-14 cursor-pointer rounded-xl border border-border bg-surface p-1" aria-label={`${f.label} picker`} />
-            <input {...common} value={str} placeholder="#3b5bdb" onChange={(e) => onChange(e.target.value.trim())} className={cn(inputClass, "h-11")} />
+            <input type="color" value={/^#[0-9a-f]{6}$/i.test(str) ? str : "#2c6cb5"} onChange={(e) => onChange(e.target.value)} className="h-11 w-14 cursor-pointer rounded-xl border border-border bg-surface p-1" aria-label={`${f.label} picker`} />
+            <input {...common} value={str} placeholder="#2c6cb5" onChange={(e) => onChange(e.target.value.trim())} className={cn(inputClass, "h-11")} />
             {str ? (
               <button type="button" onClick={() => onChange("")} className="grid h-11 w-11 shrink-0 place-items-center rounded-xl border border-border text-subtle hover:text-fg" aria-label="Clear colour">
                 <X size={16} />

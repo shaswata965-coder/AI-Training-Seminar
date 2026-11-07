@@ -4,13 +4,14 @@ import { initials } from "@/lib/format";
 import { withBase } from "@/lib/paths";
 
 const GRADIENTS: [string, string][] = [
-  ["#c3b1ff", "#8cc8ff"],
-  ["#ffa9c1", "#ffbf99"],
-  ["#8fe0c0", "#8cc8ff"],
-  ["#ffdc73", "#ffbf99"],
-  ["#67e3f9", "#c3b1ff"],
-  ["#ffbf99", "#ffa9c1"],
-  ["#b9e4a8", "#67e3f9"],
+  // Light DIU blues and greens.
+  ["#a9bbef", "#93bdea"],
+  ["#93bdea", "#9dd8a4"],
+  ["#9dd8a4", "#8dd6cc"],
+  ["#cde38f", "#9dd8a4"],
+  ["#8dd6cc", "#94cfec"],
+  ["#94cfec", "#a9bbef"],
+  ["#b9e4a8", "#8dd6cc"],
 ];
 
 function hash(s: string) {

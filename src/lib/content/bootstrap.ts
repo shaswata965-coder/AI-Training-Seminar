@@ -2,8 +2,8 @@ import { isDuplicateKeyError } from "@/lib/db";
 import { getCollectionModel, Singleton } from "@/lib/models";
 import { objectSchema } from "@/lib/schema/field-validation";
 import { COLLECTION_MAP } from "@/lib/schema/resources";
-import { DEFAULT_FAQS, DEFAULT_PEOPLE, DEFAULT_SESSIONS, DEFAULT_SETTINGS, DEFAULT_TRAINERS, REMOVED_TRAINER_SLUGS } from "./defaults";
-import { BATCH_ERA_FAQS, BATCH_ERA_SESSIONS } from "./retired-batches";
+import { DEFAULT_FAQS, DEFAULT_PEOPLE, DEFAULT_SESSIONS, DEFAULT_SETTINGS, DEFAULT_TRAINERS, DEFAULT_TRAININGS, REMOVED_TRAINER_SLUGS } from "./defaults";
+import { BATCH_ERA_FAQS, BATCH_ERA_SESSIONS, EARLIER_TRAINER_TEXTS } from "./retired-batches";
 
 /*
  * Default content (programme facts, trainers, FAQs). Stored automatically the first time the site
@@ -17,9 +17,19 @@ const PROGRAMME_PLAN_KEY = "programme-plan";
 const CUSTOM_TRAINING_KEY = "custom-training-content";
 /** Marks that the trainer list was updated from the trainers' CVs, so it happens at most once. */
 const TRAINERS_FROM_CVS_KEY = "trainers-from-cvs";
+/** Marks that the built-in trainers' profiles became headings with bullet points, so it happens at most once. */
+const TRAINER_HIGHLIGHTS_KEY = "trainer-highlights";
+/** Marks that the past training sessions (COATS Bangladesh, Titas Gas) were added, so it happens at most once. */
+const PAST_TRAININGS_KEY = "past-trainings";
 
 async function insertSingleton(
-  key: "settings" | typeof PROGRAMME_PLAN_KEY | typeof CUSTOM_TRAINING_KEY | typeof TRAINERS_FROM_CVS_KEY,
+  key:
+    | "settings"
+    | typeof PROGRAMME_PLAN_KEY
+    | typeof CUSTOM_TRAINING_KEY
+    | typeof TRAINERS_FROM_CVS_KEY
+    | typeof TRAINER_HIGHLIGHTS_KEY
+    | typeof PAST_TRAININGS_KEY,
   data: object,
 ): Promise<boolean> {
   try {
@@ -76,6 +86,37 @@ async function updateTrainersFromCvs(): Promise<string[]> {
   return done;
 }
 
+/**
+ * The built-in trainers' profile, expertise and teaching texts, each still as it was first stored (written as
+ * paragraphs), get today's (headings with bullet points). Anything an organiser has edited is left as it is.
+ */
+async function refreshTrainerHighlights(): Promise<number> {
+  const Trainers = getCollectionModel("trainers");
+  let n = 0;
+  for (const was of EARLIER_TRAINER_TEXTS) {
+    const now = DEFAULT_TRAINERS.find((t) => t.slug === was.slug);
+    if (!now) continue;
+    for (const field of ["bio", "teaching", "expertise"] as const) {
+      if (was[field] === now[field]) continue;
+      n += (await Trainers.updateOne({ slug: was.slug, [field]: was[field] }, { $set: { [field]: now[field] } })).modifiedCount;
+    }
+  }
+  return n;
+}
+
+/** The built-in past training sessions, each added unless one with its slug is already on the site. */
+async function addPastTrainings(): Promise<number> {
+  const Trainings = getCollectionModel("trainings");
+  const def = COLLECTION_MAP.trainings;
+  let n = 0;
+  for (const t of DEFAULT_TRAININGS) {
+    if (await Trainings.exists({ slug: t.slug })) continue;
+    await Trainings.create(objectSchema(def.fields).parse({ ...def.defaults, ...t }));
+    n++;
+  }
+  return n;
+}
+
 /** Returns a description of everything that was created. */
 export async function ensureDefaultContent({ fillEmpty = false }: { fillEmpty?: boolean } = {}): Promise<string[]> {
   const created: string[] = [];
@@ -112,5 +153,15 @@ export async function ensureDefaultContent({ fillEmpty = false }: { fillEmpty?: 
 
   // Once per database, after a new site's own trainers are in: the trainer list from the CVs.
   if (await insertSingleton(TRAINERS_FROM_CVS_KEY, { at: new Date().toISOString() })) created.push(...(await updateTrainersFromCvs()));
+  // Once per database: the past training sessions (a deleted one doesn't come back after a restart).
+  if (await insertSingleton(PAST_TRAININGS_KEY, { at: new Date().toISOString() })) {
+    const added = await addPastTrainings();
+    if (added) created.push(`${added} past training sessions`);
+  }
+  // Then, once: the built-in trainers' profiles as headings with bullet points, where never edited.
+  if (await insertSingleton(TRAINER_HIGHLIGHTS_KEY, { at: new Date().toISOString() })) {
+    const updated = await refreshTrainerHighlights();
+    if (updated) created.push(`today's profiles for ${updated} trainer texts`);
+  }
   return created;
 }

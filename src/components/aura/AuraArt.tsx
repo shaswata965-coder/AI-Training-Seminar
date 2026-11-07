@@ -972,7 +972,7 @@ function PropArt({
           <rect x="-31" y="-23" width="62" height="46" rx="8" fill="#2b3550" />
           <rect x="-27" y="-19" width="54" height="38" rx="5" fill={url("screen")} />
           <circle r="10" fill="#ffffff" opacity="0.92" />
-          <path d="M-3.5 -5.5 L6 0 L-3.5 5.5 Z" fill="#5b3cc4" />
+          <path d="M-3.5 -5.5 L6 0 L-3.5 5.5 Z" fill="#1b5a9c" />
         </g>
       );
     case "laptop":
@@ -1313,8 +1313,8 @@ function QuestionBubble({ eye, line }: { eye: string; line: string }) {
       <circle cx="196" cy="70" r="3" fill="#ffffff" stroke={line} strokeWidth="1.5" />
       <circle cx="206" cy="58" r="4.5" fill="#ffffff" stroke={line} strokeWidth="1.5" />
       <circle cx="222" cy="36" r="17" fill="#ffffff" stroke={line} strokeWidth="1.8" />
-      <path d="M216.5 30 C216.5 24 227.5 24 227.5 30 C227.5 34.5 222 35 222 40" fill="none" stroke={eye === "#5fe3ff" ? "#5b3cc4" : eye} strokeWidth="3.4" strokeLinecap="round" />
-      <circle cx="222" cy="46" r="2.2" fill={eye === "#5fe3ff" ? "#5b3cc4" : eye} />
+      <path d="M216.5 30 C216.5 24 227.5 24 227.5 30 C227.5 34.5 222 35 222 40" fill="none" stroke={eye === "#5fe3ff" ? "#1b5a9c" : eye} strokeWidth="3.4" strokeLinecap="round" />
+      <circle cx="222" cy="46" r="2.2" fill={eye === "#5fe3ff" ? "#1b5a9c" : eye} />
     </g>
   );
 }

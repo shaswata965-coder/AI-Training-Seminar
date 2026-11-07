@@ -11,7 +11,7 @@ const STEPS: { title: string; text: string; Icon: LucideIcon; tone: string }[] =
   { title: "Brief", text: "Give the AI clear instructions and the context it needs, without sharing confidential data.", Icon: MessageSquareText, tone: "tone-lilac" },
   { title: "Draft", text: "Let it produce a first version in minutes: a report, an analysis, a summary, a letter or slides.", Icon: PenLine, tone: "tone-mint" },
   { title: "Check", text: "Verify the facts, figures and sources. The AI assists; your professional judgement decides.", Icon: ShieldCheck, tone: "tone-peach" },
-  { title: "Apply", text: "Refine it, put it to work, and keep the prompt to reuse on the next task.", Icon: Rocket, tone: "tone-blush" },
+  { title: "Apply", text: "Refine it, put it to work, and keep the prompt to reuse on the next task.", Icon: Rocket, tone: "tone-aqua" },
 ];
 
 /** Interactive frame → brief → draft → check → apply loop, Aura at its centre: working with AI as a professional. */

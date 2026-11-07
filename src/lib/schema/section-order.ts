@@ -8,7 +8,7 @@
  */
 
 export const SECTION_ORDER = {
-  home: ["invite", "themes", "trainers", "news", "about", "participants", "highlights", "venue", "partners", "faq"],
+  home: ["invite", "themes", "trainings", "trainers", "news", "about", "participants", "highlights", "venue", "partners", "faq"],
   about: ["motivation", "audience", "activities"],
   programme: ["overview", "schedule", "plan"],
   participants: ["stats", "testimonials", "list", "cta"],

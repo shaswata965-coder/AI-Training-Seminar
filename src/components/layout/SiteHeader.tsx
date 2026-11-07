@@ -49,7 +49,7 @@ export function SiteHeader({ logos, registerHref, extraNav, nav, text, homeHidde
   // The DIU wordmark, on its own white tile in both themes, inside a ring in the site's colours.
   const universityLogo = (
     <Link href="/" aria-label="Daffodil International University, home page" className="group/logo flex shrink-0 items-center justify-self-start rounded-xl">
-      <span className="rounded-[0.85rem] bg-[conic-gradient(from_210deg,var(--azure),var(--lilac),var(--blush),var(--mint),var(--azure))] p-[2px] shadow-card transition-[scale] duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover/logo:scale-105">
+      <span className="rounded-[0.85rem] bg-[conic-gradient(from_210deg,var(--azure),var(--aqua),var(--mint),var(--lilac),var(--azure))] p-[2px] shadow-card transition-[scale] duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover/logo:scale-105">
         <span className="flex rounded-xl bg-white px-2 py-1">
           <InstituteLogo kind="university" upload={logos.university} className="h-8 lg:h-10" />
         </span>
@@ -69,7 +69,7 @@ export function SiteHeader({ logos, registerHref, extraNav, nav, text, homeHidde
       onClick={() => setExploreOpen(false)}
       aria-current={isActive(pathname, item.href) ? "page" : undefined}
       style={{ "--i": i } as CSSProperties}
-      className={cn("group block rounded-2xl p-3 transition-colors hover:bg-accent-soft", ["tone-mint", "tone-lilac", "tone-peach", "tone-aqua", "tone-butter", "tone-blush"][i % 6])}
+      className={cn("group block rounded-2xl p-3 transition-colors hover:bg-accent-soft", ["tone-mint", "tone-lilac", "tone-peach", "tone-aqua", "tone-butter", "tone-azure"][i % 6])}
     >
       <span className="flex items-center gap-2 font-display text-[15px] font-semibold text-fg transition-[translate,color] duration-200 group-hover:translate-x-0.5 group-hover:text-accent-ink">
         <span aria-hidden className="h-2 w-2 rounded-full bg-[var(--accent)] transition-[scale] duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover:scale-150" />
@@ -222,7 +222,7 @@ export function SiteHeader({ logos, registerHref, extraNav, nav, text, homeHidde
       </div>
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-x-0 bottom-0 h-[2px] origin-left bg-[linear-gradient(90deg,var(--brand),var(--lilac),var(--blush))]"
+        className="pointer-events-none absolute inset-x-0 bottom-0 h-[2px] origin-left bg-[linear-gradient(90deg,var(--brand),var(--aqua),var(--mint))]"
         style={{ transform: "scaleX(var(--progress, 0))" }}
       />
 
@@ -282,7 +282,7 @@ export function SiteHeader({ logos, registerHref, extraNav, nav, text, homeHidde
                         data-ripple=""
                         className={cn(
                           "block rounded-2xl bg-accent-soft px-3 py-3 text-[15px] font-semibold text-accent-ink",
-                          ["tone-mint", "tone-lilac", "tone-peach", "tone-aqua", "tone-butter", "tone-blush"][i % 6],
+                          ["tone-mint", "tone-lilac", "tone-peach", "tone-aqua", "tone-butter", "tone-azure"][i % 6],
                         )}
                       >
                         {item.label}

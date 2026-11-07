@@ -1,33 +1,6 @@
 "use client";
 
-import {
-  Award,
-  BookOpen,
-  CalendarDays,
-  CircleQuestionMark,
-  ExternalLink,
-  GraduationCap,
-  Handshake,
-  HandHeart,
-  Images,
-  Inbox,
-  KeyRound,
-  LayoutDashboard,
-  ListChecks,
-  Lock,
-  LogOut,
-  Megaphone,
-  Menu,
-  Mic,
-  MonitorPlay,
-  Settings,
-  Ticket,
-  UserCog,
-  Users,
-  Video,
-  X,
-  type LucideIcon,
-} from "lucide-react";
+import { Award, BookOpen, CalendarDays, CircleQuestionMark, ExternalLink, GraduationCap, HandHeart, Handshake, Images, Inbox, KeyRound, LayoutDashboard, ListChecks, Lock, LogOut, Megaphone, Menu, Mic, MonitorPlay, Presentation, Settings, Ticket, UserCog, Users, Video, X, type LucideIcon } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { createContext, Suspense, useContext, useState, type ReactNode } from "react";
@@ -83,7 +56,7 @@ const NAV: { title: string; items: Item[] }[] = [
   },
   {
     title: "Past trainings",
-    items: [content("participants", "Past participants", Award), content("gallery", "Photo gallery", Images), content("talks", "Slides & recordings", Video)],
+    items: [content("trainings", "Past training sessions", Presentation), content("participants", "Past participants", Award), content("gallery", "Photo gallery", Images), content("talks", "Slides & recordings", Video)],
   },
   {
     title: "Responses",

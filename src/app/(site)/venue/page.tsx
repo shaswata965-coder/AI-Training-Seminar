@@ -208,7 +208,7 @@ export default async function VenuePage() {
               </div>
               {isShown(s, "home", "faq") ? (
                 <div className="mt-10 flex">
-                  <Portal href="/#faq" tone="blush" kicker={st.portalKicker} title={st.portalTitle} text={st.portalText} art={<FaqArt />} className="w-full max-w-xl" />
+                  <Portal href="/#faq" tone="aqua" kicker={st.portalKicker} title={st.portalTitle} text={st.portalText} art={<FaqArt />} className="w-full max-w-xl" />
                 </div>
               ) : null}
             </Section>

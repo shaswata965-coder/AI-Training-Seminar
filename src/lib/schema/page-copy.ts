@@ -81,6 +81,8 @@ export const PAGE_COPY = {
     partnersText: note("Partners: description", "Organisations we work with, and how to join them"),
     organisers: label("Organisers", "Organisers"),
     organisersText: note("Organisers: description", "Coordinators, student organisers and volunteers"),
+    trainings: label("Home: Past training sessions", "Past trainings"),
+    trainingsText: note("Past training sessions: description", "COATS Bangladesh, Titas Gas and more"),
     themes: label("Home: What we train", "What we train"),
     themesText: note("What we train: description", "Professional work, office work and efficiency"),
     routeMap: label("Home: Route map", "Route map"),
@@ -212,6 +214,19 @@ export const PAGE_COPY = {
     talks: label("Link: sessions", "Sample sessions"),
     tutorials: label("Link: hands-on labs", "Hands-on labs"),
   },
+  homeTrainings: {
+    tone: tone("azure"),
+    background: bg("plain"),
+    eyebrow: eyebrow("Past training sessions"),
+    title: title("Training delivered for industry"),
+    description: intro("Custom trainings we have run for organisations: what each one covered, and moments from the sessions."),
+    photos: label("Button: view the photos", "View the photos"),
+    more: short("Last photo tile: more photos", "+{count} photos", "{count} is the number of photos not shown in the grid."),
+    emptySpot: label("Empty photo spot", "Photo"),
+    emptyNote: text("Training without photos: note", "Photos from this training will be added here."),
+    trainers: label("Trainers label", "Trainers"),
+    link: label("Link to the training", "See the training"),
+  },
   homeAbout: {
     tone: tone("mint"),
     background: bg("wash"),
@@ -271,7 +286,7 @@ export const PAGE_COPY = {
     eyebrow: eyebrow("FAQ"),
     title: title("Questions, answered"),
     description: intro("Can't find what you're looking for? Send us a message."),
-    contactTone: tone("blush", "Contact card colour"),
+    contactTone: tone("aqua", "Contact card colour"),
     contactTitle: heading("Contact card: title", "Contact the organisers"),
     noEmail: text("Contact card without an e-mail address", "Write to the organisers with the form below: we reply by e-mail."),
   },
@@ -562,7 +577,7 @@ export const PAGE_COPY = {
 
   /* ------------------------------------------------------ Organisers -- */
   organisersHero: {
-    tone: tone("blush"),
+    tone: tone("aqua"),
     crumb: crumb("Organisers"),
     eyebrow: eyebrow("The team"),
     title: title("Organisers"),
@@ -691,13 +706,13 @@ export const PAGE_COPY_DEFAULTS = Object.fromEntries(
 /* ------------------------------------------------------------ Fields -- */
 
 export const TONE_OPTIONS: { value: Tone; label: string }[] = [
-  { value: "azure", label: "Azure (blue)" },
-  { value: "lilac", label: "Lilac (purple)" },
+  { value: "azure", label: "Azure (DIU blue)" },
+  { value: "lilac", label: "Lilac (periwinkle blue)" },
   { value: "mint", label: "Mint (green)" },
-  { value: "peach", label: "Peach (orange)" },
-  { value: "blush", label: "Blush (pink)" },
-  { value: "butter", label: "Butter (yellow)" },
-  { value: "aqua", label: "Aqua (cyan)" },
+  { value: "peach", label: "Peach (sky blue)" },
+  { value: "blush", label: "Blush (rose, for warnings)" },
+  { value: "butter", label: "Butter (leaf green)" },
+  { value: "aqua", label: "Aqua (teal)" },
 ];
 
 export const BACKGROUND_OPTIONS: { value: Background; label: string }[] = [

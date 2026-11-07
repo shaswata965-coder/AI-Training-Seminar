@@ -103,7 +103,16 @@ The newest announcements appear in the box on the home page.
 
 The **PDF of the sample plan** is generated automatically, without dates. To use your own PDF instead, upload it under *Sample plan PDF*.
 
-## 7. Past participants
+## 7. Past training sessions
+
+**Past training sessions → New training** shows a training delivered for an organisation under *Past training sessions* on the home page:
+- Organisation, programme, label (e.g. *Corporate training*), a one- or two-line summary, **highlights** (one per line), trainers and an optional link (e.g. a post about the training).
+- **Photos:** add as many as you like, each with a caption and alt text; the first is shown large. Visitors open any photo in a lightbox and go through them all. Landscape photos (16:9) look best.
+- **Empty photo spots:** while a training has no photos it shows this many empty frames (up to 6). *COATS Bangladesh* comes with photos from the training; *Titas Gas* shows empty spots until you add its photos.
+
+**Trainer profiles** are written as headings with bullet points: a line `**Current role**`, then its points on lines starting with `- `. The pop-up shows each heading as a card, in two columns.
+
+## 7b. Past participants
 
 **Past participants → New participant**, once their training is completed:
 - Name, designation, organisation, the **focus area** (*General* for several) and the **training**, written the same way for everyone in it (e.g. "Office productivity training · Acme Bank"), with **Completed on**, the date that puts the trainings in order, newest first (it is not shown on the website).

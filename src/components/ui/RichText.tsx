@@ -79,6 +79,11 @@ export function RichText({ text, className }: { text?: string | null; className?
   return <div className={cn("rich", className)}>{blocks.map((b, i) => block(b, i))}</div>;
 }
 
+/** One line of the same Markdown subset (bold, italic, code, links), without a paragraph around it. */
+export function InlineText({ text }: { text: string }) {
+  return <>{inline(text, "i")}</>;
+}
+
 /** Plain-text version (for meta descriptions, PDFs, e-mails). */
 export function stripMarkdown(text: string) {
   return text

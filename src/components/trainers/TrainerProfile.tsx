@@ -6,9 +6,9 @@ import { Avatar } from "@/components/ui/Avatar";
 import { Badge } from "@/components/ui/Badge";
 import { GitHubIcon, LinkedInIcon, XIcon } from "@/components/ui/BrandIcons";
 import { ButtonLink } from "@/components/ui/Button";
-import { RichText } from "@/components/ui/RichText";
+import { InlineText } from "@/components/ui/RichText";
 import { TRAINER_CATEGORY_META, THEME_META } from "@/lib/content/constants";
-import type { TrainerProfileData } from "@/lib/trainer-profile";
+import { expertiseTags, profileSections, type TrainerProfileData } from "@/lib/trainer-profile";
 
 export type { TrainerProfileData };
 
@@ -47,13 +47,16 @@ function Links({ sp }: { sp: TrainerProfileData }) {
 }
 
 /**
- * A trainer's full profile, inside a Modal: the photo, name and designation, a button to download the CV the
- * admin uploaded (Trainers → CV), their links, profile, expertise and what they teach, then anything the page
- * adds (`children`, e.g. their sessions) and Previous / Next when `onStep` is given. The title has the id
- * `trainer-modal-title`, for the Modal's labelledBy.
+ * A trainer's full profile, inside a Modal: the photo, name, designation and expertise tags, a button to download
+ * the CV the admin uploaded (Trainers → CV) and their links, then their highlights: the profile's headings, each
+ * with its bullet points, as cards in two columns (one on phones), and what they teach. No paragraphs. Then
+ * anything the page adds (`children`, e.g. their sessions) and Previous / Next when `onStep` is given. The title
+ * has the id `trainer-modal-title`, for the Modal's labelledBy.
  */
 export function TrainerProfile({ trainer: t, onStep, children }: { trainer: TrainerProfileData; onStep?: (d: 1 | -1) => void; children?: ReactNode }) {
   const cat = TRAINER_CATEGORY_META[t.category] ?? TRAINER_CATEGORY_META.faculty;
+  const sections = [...profileSections(t.bio), ...profileSections(t.teaching, "Teaches")];
+  const tags = expertiseTags(t.expertise);
   return (
     <div>
       <div className={`tone-${cat.tone} relative overflow-hidden rounded-t-[1.75rem] bg-accent-soft px-6 pt-8 pb-6 sm:px-10`}>
@@ -80,6 +83,15 @@ export function TrainerProfile({ trainer: t, onStep, children }: { trainer: Trai
               {t.name}
             </h2>
             <p className="text-muted">{[t.designation, t.affiliation].filter(Boolean).join(", ")}</p>
+            {tags.length ? (
+              <ul aria-label="Expertise" className="mt-3 flex flex-wrap gap-1.5">
+                {tags.map((tag) => (
+                  <li key={tag} className="rounded-lg bg-surface/80 px-2.5 py-1 text-xs font-semibold text-accent-ink ring-1 ring-[color-mix(in_oklab,var(--accent)_45%,transparent)] ring-inset">
+                    {tag}
+                  </li>
+                ))}
+              </ul>
+            ) : null}
           </div>
         </div>
       </div>
@@ -94,18 +106,27 @@ export function TrainerProfile({ trainer: t, onStep, children }: { trainer: Trai
             <Links sp={t} />
           </div>
         ) : null}
-        {t.bio ? (
-          <div>
-            <p className="text-xs font-bold tracking-[0.14em] text-subtle uppercase">Profile</p>
-            <RichText text={t.bio} className="mt-2 text-[15px] leading-relaxed text-muted" />
-          </div>
-        ) : null}
-        {t.expertise || t.teaching ? (
-          <div className="rounded-2xl border border-border bg-surface-2 p-5">
-            <p className="text-xs font-bold tracking-[0.14em] text-subtle uppercase">{t.expertise ? "Expertise" : "Teaches"}</p>
-            {t.expertise ? <p className="mt-1 font-display text-xl font-semibold text-fg">{t.expertise}</p> : null}
-            {t.expertise && t.teaching ? <p className="mt-4 text-xs font-bold tracking-[0.14em] text-subtle uppercase">Teaches</p> : null}
-            <RichText text={t.teaching} className="mt-2 text-[15px] leading-relaxed text-muted" />
+        {sections.length ? (
+          // Cards flow down two columns, each kept whole, so a long one doesn't leave a gap beside a short one.
+          <div className={`tone-${cat.tone} gap-4 sm:columns-2`}>
+            {sections.map((s, i) => (
+              <section key={`${s.title}-${i}`} aria-label={s.title} className="mb-4 break-inside-avoid rounded-2xl border border-border bg-surface-2/70 p-5">
+                <h3 className="flex items-center gap-2 font-display text-[15px] font-bold tracking-wide text-fg uppercase">
+                  <span aria-hidden className="h-4 w-1 rounded-full bg-[var(--accent)]" />
+                  {s.title}
+                </h3>
+                <ul className="mt-3 grid gap-2">
+                  {s.items.map((item, j) => (
+                    <li key={j} className="flex gap-2.5 text-[14.5px] leading-snug text-muted [&_a]:font-semibold [&_a]:text-brand [&_a]:underline [&_a]:underline-offset-2 [&_strong]:text-fg">
+                      <span aria-hidden className="mt-[0.45rem] h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--accent-ink)]" />
+                      <span>
+                        <InlineText text={item} />
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            ))}
           </div>
         ) : null}
         {children}

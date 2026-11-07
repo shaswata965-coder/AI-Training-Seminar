@@ -40,7 +40,7 @@ export const PERMISSION_GROUPS: { title: string; hint?: string; items: Permissio
   { title: "News", items: [content("announcements")] },
   { title: "Programme", items: [content("sessions"), content("trainers"), content("tutorials"), content("demos")] },
   { title: "Content", items: [content("people"), content("sponsors"), content("faqs")] },
-  { title: "Past trainings", items: [content("participants"), content("gallery"), content("talks")] },
+  { title: "Past trainings", items: [content("trainings"), content("participants"), content("gallery"), content("talks")] },
   {
     title: "Responses",
     items: [

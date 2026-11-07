@@ -34,6 +34,7 @@ export async function buildAssistantIndex(s: SiteSettings): Promise<AssistantEnt
 
   if (home("invite")) entries.push({ kind: "Section", title: "Custom training", subtitle: "Designed around your organisation", href: "/#join", keywords: "custom tailored industry organisation team efficiency contact" });
   if (home("themes")) entries.push({ kind: "Section", title: n.themes, subtitle: n.themesText, href: "/#themes", keywords: "focus areas professional work office work efficiency what we train" });
+  if (home("trainings")) entries.push({ kind: "Section", title: n.trainings, subtitle: n.trainingsText, href: "/#trainings", keywords: "past training sessions photos coats bangladesh titas gas clients organisations corporate" });
   if (home("news")) entries.push({ kind: "Section", title: "Announcements", href: "/#news", keywords: "news updates announcements" });
   if (home("venue")) entries.push({ kind: "Section", title: n.routeMap, subtitle: n.routeMapText, href: "/#venue", keywords: "map route directions airport railway metro road how to reach" });
   if (home("faq")) {

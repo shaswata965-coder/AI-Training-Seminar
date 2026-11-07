@@ -4,7 +4,7 @@ import { cn } from "@/lib/cn";
 import type { SiteSettings } from "@/lib/content/types";
 import { StatValue } from "./StatValue";
 
-const TONES = ["azure", "lilac", "mint", "peach", "butter", "blush"] as const;
+const TONES = ["azure", "mint", "lilac", "aqua", "butter", "peach"] as const;
 
 /** The highlight figures as one tear-off ticket: notched stubs joined by perforated seams. */
 export function Highlights({ s }: { s: SiteSettings }) {

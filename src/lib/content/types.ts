@@ -249,6 +249,27 @@ export interface Participant extends Doc {
   profileUrl: string;
 }
 
+export interface PastTrainingPhoto {
+  image: string;
+  caption: string;
+  alt: string;
+}
+
+/** A training delivered for an organisation, shown under “Past training sessions” on the home page. */
+export interface PastTraining extends Doc {
+  name: string;
+  slug: string;
+  programme: string;
+  label: string;
+  summary: string;
+  highlights: string[];
+  trainerNames: string;
+  link: string;
+  photos: PastTrainingPhoto[];
+  /** Empty photo spots shown while it has no photos. */
+  emptySpots: number | null;
+}
+
 export interface CollectionTypes {
   announcements: Announcement;
   trainers: Trainer;
@@ -261,5 +282,6 @@ export interface CollectionTypes {
   gallery: GalleryItem;
   talks: Talk;
   participants: Participant;
+  trainings: PastTraining;
 }
 export type CollectionKey = keyof CollectionTypes;

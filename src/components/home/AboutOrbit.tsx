@@ -6,7 +6,7 @@ import { CmsIcon } from "@/components/ui/Icon";
 import { cn } from "@/lib/cn";
 import type { IconItem } from "@/lib/content/types";
 
-const TONES = ["azure", "lilac", "mint", "peach", "butter", "blush"] as const;
+const TONES = ["azure", "mint", "lilac", "aqua", "butter", "peach"] as const;
 // Aura's drawing is 260 × 300; his shoulders sit at (62, 170) and (198, 170) and his arms are 54 long.
 const SHOULDER = { l: 62 / 260, r: 198 / 260, y: 170 / 300, arm: 54 / 260 };
 // How long he "thinks" (typing dots) before the answer appears.

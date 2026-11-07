@@ -4,7 +4,7 @@ import { connectDb, isDbConfigured, once } from "@/lib/db";
 import { getCollectionModel, Singleton } from "@/lib/models";
 import { COLLECTION_MAP } from "@/lib/schema/resources";
 import { ensureDefaultContent } from "./bootstrap";
-import { DEFAULT_FAQS, DEFAULT_PEOPLE, DEFAULT_SESSIONS, DEFAULT_SETTINGS, DEFAULT_TRAINERS, withCurrentDefaults, withCurrentNames } from "./defaults";
+import { DEFAULT_FAQS, DEFAULT_PEOPLE, DEFAULT_SESSIONS, DEFAULT_SETTINGS, DEFAULT_TRAINERS, DEFAULT_TRAININGS, withCurrentDefaults, withCurrentNames } from "./defaults";
 import { fillDefaults, mergeDefaults, stripEmDashes, toPlain } from "./normalize";
 import type { CollectionKey, CollectionTypes, SiteSettings } from "./types";
 
@@ -90,6 +90,7 @@ const FALLBACKS: Partial<Record<CollectionKey, object[]>> = {
   people: DEFAULT_PEOPLE.map((p, i) => ({ ...p, id: `default-person-${i}` })),
   faqs: DEFAULT_FAQS.map((f, i) => ({ ...f, id: `default-faq-${i}` })),
   sessions: DEFAULT_SESSIONS.map((s, i) => ({ ...s, id: `default-session-${i}` })),
+  trainings: DEFAULT_TRAININGS.map((t, i) => ({ ...t, id: `default-training-${i}` })),
 };
 
 async function listPublished(key: CollectionKey): Promise<object[]> {
@@ -125,3 +126,4 @@ export const getFaqs = () => list("faqs");
 export const getGallery = () => list("gallery");
 export const getTalks = () => list("talks");
 export const getParticipants = () => list("participants");
+export const getPastTrainings = () => list("trainings");

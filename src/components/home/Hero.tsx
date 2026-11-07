@@ -122,7 +122,7 @@ export function Hero({ s }: { s: SiteSettings }) {
             He holds up the placards from Home → Hero announcements in turn. */}
         <div data-launch-land="" data-edit="home.placard" className={`relative mx-auto flex w-full max-w-[460px] flex-col items-center lg:pt-0 ${photo === BUILDING ? "pt-20" : "pt-6"}`}>
           {photo === BUILDING ? <BuildingSign /> : null}
-          <div aria-hidden className="absolute inset-[8%] -z-10 rounded-full bg-[conic-gradient(from_200deg,var(--azure-soft),var(--lilac-soft),var(--blush-soft),var(--mint-soft),var(--azure-soft))] blur-2xl" />
+          <div aria-hidden className="absolute inset-[8%] -z-10 rounded-full bg-[conic-gradient(from_200deg,var(--azure-soft),var(--lilac-soft),var(--aqua-soft),var(--mint-soft),var(--azure-soft))] blur-2xl" />
           <div aria-hidden className="absolute inset-[16%] -z-10 rounded-full border border-dashed border-border-strong opacity-60 animate-spin-slow" />
           <HeroPlacards placards={placards} words={{ open: p.open, closed: p.closed }} />
         </div>

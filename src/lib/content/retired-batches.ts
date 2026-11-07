@@ -287,3 +287,28 @@ export const BATCH_ERA_SESSIONS: { from: { title: string; description: string };
     }
   }
 ];
+
+/**
+ * The built-in trainers' texts as they were written from the CVs as paragraphs, before their profiles became
+ * headings with bullet points; each still unedited on a site is given today's text once (bootstrap.ts).
+ */
+export const EARLIER_TRAINER_TEXTS: { slug: string; bio: string; teaching: string; expertise: string }[] = [
+  {
+    "slug": "shaswata-bhattacharya",
+    "bio": "Lecturer in Computer Science and Engineering at Daffodil International University, teaching Artificial Intelligence and Computer Vision. Shaswata's work connects three sides of AI: research on making large language models more efficient, hands-on model training through Reinforcement Learning from Human Feedback (RLHF), and practical training for the people who use these tools, to help professionals and educators use generative AI confidently, critically and well.\n\n**AI training & speaking**\n\n- **AI Trainer, Titas Gas Engineers AI Training Seminar:** trained practising engineers in AI content generation (Google Vids, Gemini), AI-assisted development (Bubble AI, Claude Code) and personal AI assistants built with Gemini Gems.\n- **Speaker, National School Science Teachers' Conference:** developing AI-based assessment tools and lesson planning with AI chatbots, Kahoot!, Google Vids and MagicSchool AI.\n\n**Industry & research**\n\n- **AI Trainer (Software Engineer), Scale Labs AI · Outlier platform:** RLHF work that makes frontier AI models more accurate, safe and aligned: evaluating AI-generated code, writing prompts that probe model reasoning, correcting model-written code and annotating training data.\n- **Co-author, research on LLM efficiency:** [QEvict: Recoverable Quantized KV Eviction for Attention-Drift-Robust Long-Context Decoding](https://arxiv.org/abs/2608.05326), a three-tier KV-cache scheme that lets an LLM recover compressed context when attention shifts.\n- **Machine learning, Stanford University Online (Coursera):** supervised learning, advanced learning algorithms, and unsupervised learning, recommenders and reinforcement learning.",
+    "teaching": "At DIU: Artificial Intelligence, Computer Vision, and Software Architecture & Design Patterns. In AI training: generative AI for productivity (Gemini, Gemini Gems, Claude, Google Vids), AI-assisted development (Claude Code, Bubble AI, Figma AI) and AI in teaching and assessment (MagicSchool AI, Kahoot!, Mentimeter, Google Forms & Sheets).",
+    "expertise": "Large language models, RLHF & model evaluation, generative AI for productivity, AI in teaching & assessment"
+  },
+  {
+    "slug": "md-sazzadur-ahamed",
+    "bio": "Assistant Professor of Computer Science and Engineering at Daffodil International University, with more than 10 years of academic and research experience in Artificial Intelligence and Machine Learning and 22 peer-reviewed journal and conference publications. Md. Sazzadur Ahamed delivers practical AI, Generative AI and Prompt Engineering training to corporate professionals and educators.\n\n**Corporate & educator training**\n\n- **COATS Bangladesh:** session trainer for “Prompt Engineering, Communication & Documentation” in the AI-Powered Workplace Productivity & Smart Office Practices programme, with Copilot-based workplace exercises.\n- **TITAS Gas:** training facilitator for the AI-Powered Productivity Transformation & Strategic Leadership Training programme for corporate professionals ([see the training](https://www.facebook.com/share/p/1GyCHvHhxm/)).\n- **National School Science Teachers' Conference:** facilitated sessions on AI-based assessment tools and course planning for educators.\n\n**Highlights**\n\n- 22 journal and conference publications\n- Excellence in Teaching Award, DIU\n- Best Teacher Award, DIU\n- Vice Chancellor Gold Medal for an outstanding B.Sc. academic result",
+    "teaching": "Practical prompt engineering, AI-assisted professional communication, document drafting, meeting summaries, workplace analysis and the responsible use of Generative AI. Research areas: decision support systems, data analysis and statistical modelling, and medical image analysis.",
+    "expertise": "AI & machine learning, generative AI, prompt engineering, decision support systems, data analysis"
+  },
+  {
+    "slug": "sheak-rashed-haider-noori",
+    "bio": "Professor Dr. Sheak Rashed Haider Noori is a Professor in the Department of Computer Science and Engineering at Daffodil International University and leads the trainers of DIU AI Training.",
+    "teaching": "",
+    "expertise": ""
+  }
+];

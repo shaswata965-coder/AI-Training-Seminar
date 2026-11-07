@@ -11,25 +11,25 @@ function layout(s: SiteSettings, title: string, body: string) {
   return `<!doctype html><html><body style="margin:0;background:#f6f8fc;font-family:Inter,Segoe UI,Roboto,Arial,sans-serif;color:#0f172a">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="padding:24px 12px"><tr><td align="center">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:600px;background:#ffffff;border-radius:20px;overflow:hidden;border:1px solid #e1e7f1">
-<tr><td style="padding:28px 32px;background:linear-gradient(135deg,#eaf5ff,#f2eeff);">
-<p style="margin:0;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#5b3cc4;font-weight:700">${esc(s.programmeName)}</p>
+<tr><td style="padding:28px 32px;background:linear-gradient(135deg,#eaf3fc,#ebf7ec);">
+<p style="margin:0;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#1b5a9c;font-weight:700">${esc(s.programmeName)}</p>
 <h1 style="margin:8px 0 0;font-size:24px;line-height:1.25">${esc(title)}</h1></td></tr>
 <tr><td style="padding:28px 32px;font-size:15px;line-height:1.6;color:#334155">${body}</td></tr>
 <tr><td style="padding:20px 32px;background:#f3f6fb;font-size:13px;color:#64748b">
-${esc(s.organisedBy || "Daffodil International University")} · ${esc(venueLine(s))}<br/><a href="${absoluteUrl("/")}" style="color:#3b5bdb">${esc(absoluteUrl("/").replace(/^https?:\/\//, ""))}</a>
+${esc(s.organisedBy || "Daffodil International University")} · ${esc(venueLine(s))}<br/><a href="${absoluteUrl("/")}" style="color:#2c6cb5">${esc(absoluteUrl("/").replace(/^https?:\/\//, ""))}</a>
 </td></tr></table></td></tr></table></body></html>`;
 }
 
 const box = (inner: string) => `<div style="margin:18px 0;padding:16px 18px;border-radius:14px;background:#f3f6fb;border:1px solid #e1e7f1">${inner}</div>`;
 const button = (href: string, label: string) =>
-  `<a href="${href}" style="display:inline-block;margin-top:8px;padding:12px 20px;border-radius:999px;background:#3b5bdb;color:#ffffff;text-decoration:none;font-weight:600">${esc(label)}</a>`;
+  `<a href="${href}" style="display:inline-block;margin-top:8px;padding:12px 20px;border-radius:999px;background:#2c6cb5;color:#ffffff;text-decoration:none;font-weight:600">${esc(label)}</a>`;
 
 /** The confirmation of a training request (the Contact us form). */
 export function registrationEmail(s: SiteSettings, r: { name: string; email: string; regId: string }): MailInput {
   const next = `The organising team reads every request and will get back to you ${replyBy(s)} to agree the focus, length and format of your training, and to design the sessions around your team.`;
   const body = `<p>Hi ${esc(r.name)},</p>
 <p>Thank you for contacting <strong>${esc(s.programmeName)}</strong> about a custom AI training. ${esc(next)}</p>
-${box(`<p style="margin:0;font-size:13px;color:#64748b">Your reference number</p><p style="margin:4px 0 0;font-size:22px;font-weight:700;letter-spacing:.06em;color:#3b5bdb">${esc(r.regId)}</p>`)}
+${box(`<p style="margin:0;font-size:13px;color:#64748b">Your reference number</p><p style="margin:4px 0 0;font-size:22px;font-weight:700;letter-spacing:.06em;color:#2c6cb5">${esc(r.regId)}</p>`)}
 <p>Please quote this reference number when you write to us. Every session is hands-on, so everyone taking part brings a charged laptop; for sessions on campus, they also carry a valid photo ID to the gate.</p>
 ${s.confirmationNote ? `<p>${esc(s.confirmationNote)}</p>` : ""}
 <p>While you wait, the sample plan shows what a training can include.</p>
